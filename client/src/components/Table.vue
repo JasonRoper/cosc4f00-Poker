@@ -38,10 +38,9 @@ export default {
 
     }
   },
-  
   components: {
-    player: Player
-
+    player: Player,
+    actions: TableActions
   }
 }
 </script>
