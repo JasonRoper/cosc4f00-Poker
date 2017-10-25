@@ -1,6 +1,6 @@
-.clubs .ace {
-  background: url("./assets/cards/logo.png");
+.clubs.ace {
+  background: url("../cards/Clubs 1.png");
 }
-.clubs .two {
-  background: url("./assets/cards/logo.png");
+.clubs.two {
+  background: url("../cards/Clubs 2.png");
 }
