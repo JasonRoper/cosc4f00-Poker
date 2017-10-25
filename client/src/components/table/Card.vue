@@ -1,24 +1,17 @@
 <template>
-
-  <div class="card" :class="card">
-    <div class='Pcard'>
-    {{this.card}} 
-    </div>
+  <div>
+    {{ card }}
   </div>
 </template>
 
 <script>
 export default {
-  props: ['card'],
-  data () {
-    return {
-      blank: 'a'
-    }
-  }
+  props: ['card']
 }
 </script>
 
-
-<style src="@/assets/css/cards.css">
+<style>
 
 </style>
+<style scoped src="./assets/css/cards.css"></style>
+
