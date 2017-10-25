@@ -10,7 +10,8 @@
 <script>
 
 import Player from '@/components/table/Player'
-import TableActions from '@components/table/Button'
+import Card from '@/components/table/Card'
+import TableActions from '@components/table/TableActions'
 
 export default {
   data () {
@@ -29,18 +30,18 @@ export default {
         cards: ['S1', 'D1']
       },
       state: {
-        active: true
+        active: 2
       }
     }
   },
   methods: {
     send_event () {
-
     }
   },
   components: {
     player: Player,
-    actions: TableActions
+    actions: TableActions,
+    card: Card
   }
 }
 </script>
