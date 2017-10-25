@@ -11,7 +11,8 @@
 
 import Player from '@/components/table/Player'
 import Card from '@/components/table/Card'
-import TableActions from '@components/table/TableActions'
+import TableActions from '@/components/table/TableActions'
+import Cards from '@/types/cards.js'
 
 export default {
   data () {
@@ -27,15 +28,17 @@ export default {
         username: 'Javon',
         account: 1000000,
         bet: 110,
-        cards: ['S1', 'D1']
+        cards: [Cards.SPADES_ACE, Cards.SPADES_TWO]
       },
       state: {
-        active: 2
+        active: 2,
+        community_cards: []
       }
     }
   },
   methods: {
-    send_event () {
+    send_event (event) {
+
     }
   },
   components: {

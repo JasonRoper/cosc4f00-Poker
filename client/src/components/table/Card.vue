@@ -1,5 +1,5 @@
 <template>
-  <div class="clubs ace">
+  <div class="card" :class="card">
     {{ card }}
   </div>
 </template>
