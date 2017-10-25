@@ -3,7 +3,7 @@ dist
 .vscode
 
 .gradle
-/build/
+api/build/
 !gradle/wrapper/gradle-wrapper.jar
 
 ### STS ###
@@ -22,7 +22,7 @@ dist
 
 ### NetBeans ###
 nbproject/private/
-build/
+/build/
 nbbuild/
 dist/
 nbdist/
