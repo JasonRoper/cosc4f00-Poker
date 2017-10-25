@@ -1,22 +1,18 @@
 <template>
-  <div class="col">
-    <player v-for="player in opponents" :key="player.id" :data="player"/>
-
-    <card class='size' v-for="card in user.cards" :key="card" :card="card"/></card>
-
+  <div>
+    <player v-for="player in players" :key="player.id" :data="player"/>
+    <card v-for="card in user.cards" :key="card" :card="card"/>
     <player :data="user"/>
-    <actions @action="setAction" :active="state.active"/>
+    <actions @action="send_event" :active="state.active"/>
   </div>
 </template>
 
 <script>
 
-import Player from '@/components/table/Player.vue'
+import Player from '@/components/table/Player'
 import Card from '@/components/table/Card'
 import TableActions from '@/components/table/TableActions'
-import CardSuite from '@/types/cards'
-import Actions from '@/types/actions'
-import { GameService } from '@/api/gameservice'
+import Cards from '@/types/cards.js'
 
 export default {
   data () {
@@ -32,46 +28,23 @@ export default {
         username: 'Javon',
         account: 1000000,
         bet: 110,
-        cards: [CardSuite.HEARTS_ACE, CardSuite.SPADES_TWO],
-        nextAction: Actions.NONE
+        cards: [Cards.SPADES_ACE, Cards.SPADES_TWO]
       },
       state: {
         active: 2,
-        communityCards: [],
-        pot: 0
+        community_cards: []
       }
     }
   },
   methods: {
-    setAction (event) {
-      this.user.nextAction = event
+    send_event (event) {
+
     }
   },
   components: {
     player: Player,
     actions: TableActions,
     card: Card
-  },
-  created () {
-    this.gameService = new GameService(1)
-
-    this.gameService.onGameUpdated((newState) => {
-      console.log('type: %s , value: %s', typeof newState, JSON.stringify(newState))
-    })
-    this.gameService.sendAction({type: 'BET', bet: 1})
-  },
-  destroyed () {
-    if (this.gameService) {
-      this.gameService.finish()
-    }
   }
 }
 </script>
-<style>
-  .size{
-    height: 138px;
-    width:  103px;
-    background-repeat:no-repeat;
-    position:center;
-  }
-</style>
