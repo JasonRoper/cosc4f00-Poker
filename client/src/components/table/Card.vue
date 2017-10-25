@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="clubs ace">
     {{ card }}
   </div>
 </template>
@@ -10,8 +10,5 @@ export default {
 }
 </script>
 
-<style>
-
+<style src="@/assets/css/cards.css">
 </style>
-<style scoped src="./assets/css/cards.css"></style>
-
