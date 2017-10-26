@@ -3,7 +3,7 @@ export default {
   SPADES_TWO: 'spades two',
   SPADES_THREE: 'spades three',
   SPADES_FOUR: 'spades four',
-  SPADES_FiVE: 'spadses five',
+  SPADES_FiVE: 'spades five',
   SPADES_SIX: 'spades six',
   SPADES_SEVEN: 'spades seven',
   SPADES_EIGHT: 'spades eight',
@@ -11,8 +11,8 @@ export default {
   SPADES_TEN: 'spades ten',
   SPADES_JACK: 'spades jack',
   SPADES_QUEEN: 'spades queen',
-  SPADES_King: 'spades king',
-//Hearts
+  SPADES_KING: 'spades king',
+// Hearts
   HEARTS_ACE: 'hearts ace',
   HEARTS_TWO: 'hearts two',
   HEARTS_THREE: 'hearts three',
@@ -25,8 +25,8 @@ export default {
   HEARTS_TEN: 'hearts ten',
   HEARTS_JACK: 'hearts jack',
   HEARTS_QUEEN: 'hearts queen',
-  HEARTS_King: 'hearts king',
-//Diamonds 
+  HEARTS_KING: 'hearts king',
+// Diamonds
   DIAMONDS_ACE: 'diamonds ace',
   DIAMONDS_TWO: 'diamonds two',
   DIAMONDS_THREE: 'diamonds three',
@@ -39,8 +39,8 @@ export default {
   DIAMONDS_TEN: 'diamonds ten',
   DIAMONDS_JACK: 'diamonds jack',
   DIAMONDS_QUEEN: 'diamonds queen',
-  DIAMONDS_King: 'diamonds king',
-//Clubs 
+  DIAMONDS_KING: 'diamonds king',
+// Clubs
   CLUBS_ACE: 'clubs ace',
   CLUBS_TWO: 'clubs two',
   CLUBS_THREE: 'clubs three',
@@ -52,6 +52,5 @@ export default {
   CLUBS_TEN: 'clubs ten',
   CLUBS_JACK: 'clubs jack',
   CLUBS_QUEEN: 'clubs queen',
-  CLUBS_King: 'clubs king'
-
+  CLUBS_KING: 'clubs king'
 }
