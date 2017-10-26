@@ -1,4 +1,4 @@
-export default { 
+export default {
   SPADES_ACE: 'spades ace',
   SPADES_TWO: 'spades two',
   SPADES_THREE: 'spades three',
