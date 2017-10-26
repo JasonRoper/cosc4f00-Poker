@@ -12,7 +12,7 @@
 import Player from '@/components/table/Player'
 import Card from '@/components/table/Card'
 import TableActions from '@/components/table/TableActions'
-import Cards from '@/types/cards.js'
+import Cards from '@/types/cards'
 
 export default {
   data () {
