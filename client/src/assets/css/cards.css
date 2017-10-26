@@ -14,8 +14,8 @@
     background: url("../cards/Spades 4.png");
 }
 
-.spadses.five {
-    background: url("../cards/Spadses 5.png");
+.spades.five {
+    background: url("../cards/Spades 5.png");
 }
 
 .spades.six {
@@ -103,55 +103,55 @@
 }
 
 .diamonds.ace {
-    background: url("../cards/Diamonds 1.png");
+    background: url("../cards/Diamond 1.png");
 }
 
 .diamonds.two {
-    background: url("../cards/Diamonds 2.png");
+    background: url("../cards/Diamond 2.png");
 }
 
 .diamonds.three {
-    background: url("../cards/Diamonds 3.png");
+    background: url("../cards/Diamond 3.png");
 }
 
 .diamonds.four {
-    background: url("../cards/Diamonds 4.png");
+    background: url("../cards/Diamond 4.png");
 }
 
 .diamonds.five {
-    background: url("../cards/Diamonds 5.png");
+    background: url("../cards/Diamond 5.png");
 }
 
 .diamonds.six {
-    background: url("../cards/Diamonds 6.png");
+    background: url("../cards/Diamond 6.png");
 }
 
 .diamonds.seven {
-    background: url("../cards/Diamonds 7.png");
+    background: url("../cards/Diamond 7.png");
 }
 
 .diamonds.eight {
-    background: url("../cards/Diamonds 8.png");
+    background: url("../cards/Diamond 8.png");
 }
 
 .diamonds.nine {
-    background: url("../cards/Diamonds 9.png");
+    background: url("../cards/Diamond 9.png");
 }
 
 .diamonds.ten {
-    background: url("../cards/Diamonds 10.png");
+    background: url("../cards/Diamond 10.png");
 }
 
 .diamonds.jack {
-    background: url("../cards/Diamonds 11.png");
+    background: url("../cards/Diamond 11.png");
 }
 
 .diamonds.queen {
-    background: url("../cards/Diamonds 12.png");
+    background: url("../cards/Diamond 12.png");
 }
 
 .diamonds.king {
-    background: url("../cards/Diamonds 13.png");
+    background: url("../cards/Diamond 13.png");
 }
 
 .clubs.ace {
