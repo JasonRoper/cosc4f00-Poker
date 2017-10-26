@@ -32,7 +32,6 @@
 .clubs.jack {
   background: url("../cards/Clubs 11.png");
 }
-
 .clubs.queen {
   background: url("../cards/Clubs 12.png");
 }
@@ -48,7 +47,6 @@
 .diamond.two {
   background: url("../cards/Diamond 2.png");
 }
-
 .diamond.three {
   background: url("../cards/Diamond 3.png");
 }
