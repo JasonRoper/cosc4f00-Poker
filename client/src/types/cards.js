@@ -53,5 +53,5 @@ export default {
   CLUBS_JACK: 'clubs jack',
   CLUBS_QUEEN: 'clubs queen',
   CLUBS_KING: 'clubs king'
-
 }
+
