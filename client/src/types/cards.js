@@ -54,3 +54,4 @@ export default {
   CLUBS_QUEEN: 'clubs queen',
   CLUBS_KING: 'clubs king'
 }
+

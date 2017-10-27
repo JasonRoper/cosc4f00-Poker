@@ -1,18 +1,26 @@
 <template>
   <div>
     <player v-for="player in players" :key="player.id" :data="player"/>
-    <card v-for="card in user.cards" :key="card" :card="card"/>
+   
+    <card class='size' v-for="card in user.cards" :key="card" :card="card"/></card>
+
     <player :data="user"/>
+    <div class='container'>
+    <div class='row'>
+    <div class='col-lg-12'>
     <actions @action="send_event" :active="state.active"/>
+  </div>
+  </div>
+  </div>
   </div>
 </template>
 
 <script>
 
-import Player from '@/components/table/Player'
+import Player from '@/components/table/Player.vue'
 import Card from '@/components/table/Card'
 import TableActions from '@/components/table/TableActions'
-import Cards from '@/types/cards'
+import CardSuite from '@/types/cards'
 
 export default {
   data () {
@@ -28,7 +36,7 @@ export default {
         username: 'Javon',
         account: 1000000,
         bet: 110,
-        cards: [Cards.SPADES_ACE, Cards.SPADES_TWO]
+        cards: [CardSuite.HEARTS_ACE, CardSuite.SPADES_TWO]
       },
       state: {
         active: 2,
@@ -48,3 +56,11 @@ export default {
   }
 }
 </script>
+<style>
+  .size{
+    height: 138px;
+    width:  103px;
+    background-repeat:no-repeat;
+    position:center;
+  }
+</style>
