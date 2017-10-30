@@ -1,87 +1,78 @@
 <template>
 <div class='nav justify-content-center' role='navigation'>
-   <div class='container'>
-    <div class='row'>
-    <div class='col-sm-12'>
-  <div class=' button-nav'>
   <ul id='TableActions'class='nav navbar-nav'>
-    <button @click='Bet()'><li class='nav-item'>Bet</li></button>
-    <button><li class='nav-item' >Call</li></button>
-    <button><li class='nav-item'>Raise</li></button>
-    <button><li class='nav-item'>Check</li></button>
-    <button><li class='nav-item'>Fold</li></button>
-
- 
-
-</ul>
-
-<div v-if='shown==true'>
-  <input type='number'></input>
-</div>
-
+    <li v-for="(button,index) in buttons" :key="index" class='nav-item'>
+      <button @click='button.event'>{{ button.text }}</button>
+    </li>
+  </ul>
+  <div v-if="canBet">
+    <input type='number'></input>
   </div>
 </div>
-</div>
-</div>
- </div>
 </template>
 
 <script>
- export default {
-   data () {
-     return {
-       bet: 'Bet',
-       shown2: false,
-       shown: false}
-   },
-   methods: {
-     Bet: function () {
-       this.shown = true
-       if (this.shown2 === true) {
-         this.shown = true
-         let inputElement = document.createElement('INPUT')
-         let buttonNav = document.getElementById('TableActions')
-         inputElement.className = 'text'
-         inputElement.size = '10'
-         buttonNav.appendChild(inputElement)
-         console.log('tell me')
-       }
-     },
-     Raise: function () {
-       this.shown = true
-       console.log('tell me')
-     },
-     Call: function () {
-       this.shown = true
-       console.log('tell me')
-     },
-     Check: function () {
-       this.shown = true
-       console.log('tell me')
-     },
-     Fold: function () {
-       this.shown = true
-       console.log('tell me')
-     }
-   }
- }
- </script>
+
+import Actions from '@/types/actions'
+
+export default {
+  props: ['maxBet', 'canBet', 'matchBet'],
+  data () {
+    return {
+      bet: 0,
+      buttons: {
+        call: {
+          text: 'Call',
+          event: this.call
+        },
+        raise: {
+          text: 'Raise',
+          event: this.raise
+        }
+      }
+    }
+  },
+  methods: {
+    bet () {
+      this.$emit('action', {
+        action: Actions.BET,
+        bet: this.bet
+      })
+    },
+    raise () {
+      console.log('raise')
+      this.$emit('action', {
+        actions: Actions.RAISE,
+        bet: this.bet
+      })
+    },
+    call () {
+      console.log('call')
+    },
+    check () {
+      console.log('check')
+    },
+    fold () {
+      console.log('tell me')
+    }
+  },
+  watch: {
+    matchBet () {
+      this.buttons.call.text = 'Check'
+    }
+  }
+}
+</script>
 
 <style>
-
-  .button-nav{
-
-    border: 7px solid red;
-    background-color: #ABC;
-    border-radius: 12px;
-    margin-left:330px;
-    margin-right:550px;
-    overflow:hidden;
-    height:85px;
-    position:fixed;
-
-
-  
-  }
-
+.button-nav {
+  border: 7px solid red;
+  background-color: #abc;
+  border-radius: 12px;
+  margin-left: 330px;
+  margin-right: 550px;
+  overflow: hidden;
+  height: 85px;
+  position: fixed;
+}
 </style>

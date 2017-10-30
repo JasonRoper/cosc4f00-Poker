@@ -1,17 +1,11 @@
 <template>
-  <div>
-    <player v-for="player in players" :key="player.id" :data="player"/>
+  <div class="col">
+    <player v-for="player in opponents" :key="player.id" :data="player"/>
    
     <card class='size' v-for="card in user.cards" :key="card" :card="card"/></card>
 
     <player :data="user"/>
-    <div class='container'>
-    <div class='row'>
-    <div class='col-lg-12'>
-    <actions @action="send_event" :active="state.active"/>
-  </div>
-  </div>
-  </div>
+    <actions @action="setAction" :active="state.active"/>
   </div>
 </template>
 
@@ -21,6 +15,7 @@ import Player from '@/components/table/Player.vue'
 import Card from '@/components/table/Card'
 import TableActions from '@/components/table/TableActions'
 import CardSuite from '@/types/cards'
+import Actions from '@/types/actions'
 
 export default {
   data () {
@@ -36,17 +31,19 @@ export default {
         username: 'Javon',
         account: 1000000,
         bet: 110,
-        cards: [CardSuite.HEARTS_ACE, CardSuite.SPADES_TWO]
+        cards: [CardSuite.HEARTS_ACE, CardSuite.SPADES_TWO],
+        nextAction: Actions.NONE
       },
       state: {
         active: 2,
-        community_cards: []
+        communityCards: [],
+        pot: 0
       }
     }
   },
   methods: {
-    send_event (event) {
-
+    setAction (event) {
+      this.user.nextAction = event
     }
   },
   components: {
