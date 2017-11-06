@@ -1,5 +1,5 @@
 <template>
-<div class='nav justify-content-center' role='navigation'>
+<div class='nav justify-content-center button-nav' role='navigation'>
   <ul id='TableActions'class='nav navbar-nav'>
     <li v-for="(button,index) in buttons" :key="index" class='nav-item'>
       <button @click='button.event'>{{ button.text }}</button>
@@ -28,12 +28,25 @@ export default {
         raise: {
           text: 'Raise',
           event: this.raise
+        },
+        fold: {
+          text: 'Fold',
+          event: this.fold
+        },
+        check: {
+          text: 'Check',
+          event: this.check
+        },
+        bet: {
+          text: 'Bet',
+          event: this.Makebet
         }
       }
     }
   },
   methods: {
-    bet () {
+    Makebet () {
+      console.log('bet')
       this.$emit('action', {
         action: Actions.BET,
         bet: this.bet
@@ -48,12 +61,24 @@ export default {
     },
     call () {
       console.log('call')
+      this.$emit('action', {
+        actions: Actions.CALL,
+        bet: this.bet
+      })
     },
     check () {
       console.log('check')
+      this.$emit('action', {
+        actions: Actions.CHECK,
+        bet: this.bet
+      })
     },
     fold () {
-      console.log('tell me')
+      console.log('fold')
+      this.$emit('action', {
+        actions: Actions.CHECK,
+        bet: this.bet
+      })
     }
   },
   watch: {
@@ -66,13 +91,7 @@ export default {
 
 <style>
 .button-nav {
-  border: 7px solid red;
-  background-color: #abc;
-  border-radius: 12px;
-  margin-left: 330px;
-  margin-right: 550px;
-  overflow: hidden;
-  height: 85px;
-  position: fixed;
+  margin: 0px auto;
+  
 }
 </style>

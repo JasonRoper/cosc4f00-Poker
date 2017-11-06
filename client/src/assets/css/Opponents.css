@@ -1,0 +1,21 @@
+.showImage{
+    background:url("../PlayerGraphics/Opponent.svg");
+    background-repeat: no-repeat;
+    width: 100px;
+    height: 100px;
+    color: white;   
+    margin: 0px auto; 
+
+}
+
+.opponentInfo{
+
+    color:black;
+    left: 140px;
+    border: 1px solid black;
+    border-radius: 10px;
+    width: 150px;
+    height: 70px;
+    margin-left: 100px;
+    text-align: left;
+}
