@@ -26,7 +26,7 @@ public class GameController {
 
     @MessageMapping("/game/{id}/play")
     @SendTo("/messages/game/{id}")
-    public GameTransport play(GameAction action, @DestinationVariable("id") Long id) {
+    public GameState play(GameAction action, @DestinationVariable("id") Long id) {
         GameState state = games.findOne(id);
         logger.info("recieved play action for " + id);
         if (state == null) {
@@ -36,7 +36,7 @@ public class GameController {
 
         state.play(action);
         games.save(state);
-        return state.toTransport();
+        return state;
     }
 
     @MessageExceptionHandler
@@ -51,6 +51,6 @@ public class GameController {
         logger.info("new game created at " + id);
         GameState state = new GameState(id);
         games.save(state);
-        return "success! game created at " + Long.toString(state.getId());
+        return "success! game created at " + Long.toString(state.id);
     }
 }
