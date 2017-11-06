@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <div class="showImage" placeholder="asdas"> 
+    <div class='oppenentContainer'>
+        <div class="showImage " placeholder="asdas"> 
             <p>{{this.data.username}}</p> 
             <div class="opponentInfo">
                <p>Account Balance: {{this.data.account}}</p>

@@ -1,6 +1,7 @@
 <template>
-<div class='nav justify-content-center button-nav' role='navigation'>
-  <ul id='TableActions'class='nav navbar-nav'>
+<div class='thecontain'>
+<div class=' button-nav ' role='navigation'>
+  <ul id='TableActions'class='nav navbar-nav thecontain"'>
     <li v-for="(button,index) in buttons" :key="index" class='nav-item'>
       <button @click='button.event'>{{ button.text }}</button>
     </li>
@@ -8,6 +9,7 @@
   <div v-if="canBet">
     <input type='number'></input>
   </div>
+</div>
 </div>
 </template>
 
@@ -90,8 +92,9 @@ export default {
 </script>
 
 <style>
-.button-nav {
-  margin: 0px auto;
+.thecontain{
+ margin: 0px auto;
+ border: 1px soild green;
   
 }
 </style>
