@@ -1,7 +1,7 @@
 <template>
 
-  <div class="card" :class="card">
-    <div class='Pcard'>
+  <div  class="card" :class="card">
+    <div  class='Pcard'>
     {{this.card}} 
     </div>
   </div>
@@ -9,7 +9,12 @@
 
 <script>
 export default {
-  props: ['card'],
+  props: {
+    card: [String],
+    cardPosition: {
+      type: Number
+    }
+  },
   data () {
     return {
       blank: 'a'

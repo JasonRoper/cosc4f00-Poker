@@ -5,8 +5,10 @@
     height: 100px;
     color: white;   
     margin: 0px auto; 
+    
 
 }
+
 
 .opponentInfo{
 
@@ -18,4 +20,10 @@
     height: 70px;
     margin-left: 100px;
     text-align: left;
+}
+
+.oppenentContainer{
+ 
+     width:250px;
+
 }

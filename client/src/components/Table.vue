@@ -1,14 +1,20 @@
 <template>
   <div class="col">
-    <player v-for="player in opponents" :key="player.id" :data="player"/>
+     <div class="opps">
+       <player   v-for="player in opponents" :key="player.id" :data="player"/>
+     </div>
     <h4> Communnity Cards</h4>
-    <card class='size' v-for="card in state.communityCards" :key="card" :card="card"/></card>
-
+    <div class='Communitycards'>
+      <card  class='size' v-for="(card,index) in state.communityCards" :key="card" :card="card"/></card>
+    </div>
     <h4>Users Cards </h4>
-    <card class='size' v-for="card in user.cards" :key="card" :card="card"/></card>
-
-    <player :data="user"/>
-    <actions @action="setAction" :active="state.active"/>
+    <div class='userCards'>
+     
+      <card class='size' v-for="card in user.cards" :key="card" :card="card"/></card>
+  
+       <player class='userInfo' :data="user"/>
+    </div>
+    <actions class='actionsPosition' @action="setAction" :active="state.active"/>
   </div>
 </template>
 
@@ -23,6 +29,7 @@ import Actions from '@/types/actions'
 export default {
   data () {
     return {
+      cardPos: 30,
       opponents: [{
         id: 1,
         username: 'Jason',
@@ -53,6 +60,11 @@ export default {
   methods: {
     setAction (event) {
       this.user.nextAction = event
+    },
+    sortcards () {
+      for (let i = 0; i < this.state.communityCards.length; i++) {
+        this.state.communityCards[i].css.style.color = 'blue'
+      }
     }
   },
   components: {
@@ -62,11 +74,8 @@ export default {
   }
 }
 </script>
-<style>
-  .size{
-    height: 138px;
-    width:  103px;
-    background-repeat:no-repeat;
-    position:center;
-  }
+
+  <style src="@/assets/css/Table.css">
+
 </style>
+
