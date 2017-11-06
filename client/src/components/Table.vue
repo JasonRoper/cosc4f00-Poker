@@ -1,7 +1,10 @@
 <template>
   <div class="col">
     <player v-for="player in opponents" :key="player.id" :data="player"/>
+    <h4> Communnity Cards</h4>
+    <card class='size' v-for="card in state.communityCards" :key="card" :card="card"/></card>
 
+    <h4>Users Cards </h4>
     <card class='size' v-for="card in user.cards" :key="card" :card="card"/></card>
 
     <player :data="user"/>
@@ -26,6 +29,12 @@ export default {
         username: 'Jason',
         account: 100000,
         bet: 110
+      },
+      {
+        id: 2,
+        username: 'Lucy',
+        account: 100000,
+        bet: 210
       }],
       user: {
         id: 2,
@@ -37,7 +46,7 @@ export default {
       },
       state: {
         active: 2,
-        communityCards: [],
+        communityCards: [CardSuite.HEARTS_EIGHT, CardSuite.SPADES_THREE, CardSuite.SPADES_ACE],
         pot: 0
       }
     }
