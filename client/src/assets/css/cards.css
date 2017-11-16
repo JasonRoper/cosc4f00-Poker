@@ -1,3 +1,8 @@
+.blank.card{
+    background: url("../cards/Back Blue 1.png");
+}
+
+
 
 .clubs.ace {
   background: url("../cards/Clubs 1.png");

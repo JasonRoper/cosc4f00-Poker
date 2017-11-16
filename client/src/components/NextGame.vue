@@ -1,15 +1,19 @@
 <template>
   <div class="col">
-    <player v-for="player in opponents" :key="player.id" :data="player"/>
-    <h4> Communnity Cards</h4>
-    <card class='size' v-for="card in state.communityCards" :key="card" :card="card"/></card>
+     <div class="opps">
 
-    <h4>Users Cards </h4>
-    <card class='size' v-for="card in user.cards" :key="card" :card="card"/></card>
+         <div>These are the people that are playing: </div>
+       <div v-for="player in opponents" :key="player.id">
+              {{ player.username }}{{","}}
+       </div>
+     </div>
 
-    <player :data="user"/>
-    <actions @action="setAction" :active="state.active"/>
+    <a href="/">Playing</a>
+    <a href="/Lobby">Lobby</a>
   </div>
+
+
+  
 </template>
 
 <script>
@@ -19,68 +23,65 @@ import Card from '@/components/table/Card'
 import TableActions from '@/components/table/TableActions'
 import CardSuite from '@/types/cards'
 import Actions from '@/types/actions'
-import { GameService } from '@/api/gameservice'
 
 export default {
   data () {
     return {
+      cardPos: 30,
       opponents: [{
         id: 1,
-        username: 'Jason',
+        username: 'Jasddon',
         account: 100000,
+        cards: [CardSuite.HEARTS_ACE, CardSuite.SPADES_TWO],
         bet: 110
+
       },
       {
         id: 2,
         username: 'Lucy',
         account: 100000,
+        cards: [CardSuite.HEARTS_ACE, CardSuite.SPADES_TWO],
         bet: 210
-      }],
-      user: {
+      },
+      {
         id: 2,
         username: 'Javon',
         account: 1000000,
         bet: 110,
         cards: [CardSuite.HEARTS_ACE, CardSuite.SPADES_TWO],
         nextAction: Actions.NONE
-      },
+      }],
       state: {
         active: 2,
         communityCards: [CardSuite.HEARTS_EIGHT, CardSuite.SPADES_THREE, CardSuite.SPADES_ACE],
+        lobby: true,
         pot: 0
+
+      },
+      empty: {
+        card: CardSuite.HEARTS_EIGHT
       }
     }
   },
   methods: {
     setAction (event) {
       this.user.nextAction = event
+    },
+    sortcards () {
+      for (let i = 0; i < this.state.communityCards.length; i++) {
+        this.state.communityCards[i].css.style.color = 'blue'
+      }
     }
   },
   components: {
     player: Player,
     actions: TableActions,
     card: Card
-  },
-  created () {
-    this.gameService = new GameService(1)
-
-    this.gameService.onGameUpdated((newState) => {
-      console.log('type: %s , value: %s', typeof newState, JSON.stringify(newState))
-    })
-    this.gameService.sendAction({type: 'BET', bet: 1})
-  },
-  destroyed () {
-    if (this.gameService) {
-      this.gameService.finish()
-    }
   }
 }
 </script>
-<style>
-  .size{
-    height: 138px;
-    width:  103px;
-    background-repeat:no-repeat;
-    position:center;
-  }
+
+  <style src="@/assets/css/Lobby.css">
+
 </style>
+

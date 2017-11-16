@@ -1,0 +1,49 @@
+.opps {
+    width:  600px;
+    margin: 0px auto;
+    display: -webkit-flex; /* Safari */
+    -webkit-align-items: center; /* Safari 7.0+ */
+    display: flex;
+    align-items: center;
+    align-content: center;
+
+
+  }
+
+  .size{
+    height: 138px;
+    width:  103px;
+    background-repeat:no-repeat;
+    position:relative;
+  }
+  .Communitycards{
+    width:  600px;
+    margin: 0px auto;
+    display: -webkit-flex; /* Safari */
+    -webkit-align-items: center; /* Safari 7.0+ */
+    display: flex;
+    align-items: center;
+    align-content: center;
+  }
+  .userCards{
+    width:  480px;
+    margin-left: 400px;
+    margin: 0px auto;
+    display: -webkit-flex; /* Safari */
+    -webkit-align-items: center; /* Safari 7.0+ */
+    display: flex;
+    align-items: center;
+    align-content: center;
+
+  }
+  .userInfo{
+     margin-right:20px;
+     width:400px;
+
+
+    }
+    .actionsPosition{
+        margin: 0px auto;
+    
+
+    }
