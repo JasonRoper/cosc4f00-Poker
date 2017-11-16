@@ -26,7 +26,7 @@
       <card  class='size' v-for="(card,index) in state.communityCards" :key="card" :card="card"/></card>
     </div>
  
-    <a href="/NextGame">NextGame</a>
+    <a href="/#/NextGame">NextGame</a>
 
 
   </div>

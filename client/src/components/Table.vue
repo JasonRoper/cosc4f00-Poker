@@ -5,11 +5,17 @@
     <card class='size' v-for="card in state.communityCards" :key="card" :card="card"/></card>
 
     <h4>Users Cards </h4>
-    <card class='size' v-for="card in user.cards" :key="card" :card="card"/></card>
+    <div class='userCards'>
+     
+      <card class='size' v-for="card in user.cards" :key="card" :card="card"/></card>
+  
+       <player class='userInfo' :data="user"/>
+    </div>
+    <actions class='actionsPosition' @action="setAction" :active="state.active"/>
+   <a href="/#/Lobby">Lobby</a>
+  </div>  
+ 
 
-    <player :data="user"/>
-    <actions @action="setAction" :active="state.active"/>
-  </div>
 </template>
 
 <script>
