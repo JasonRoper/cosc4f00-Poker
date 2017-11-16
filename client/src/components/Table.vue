@@ -15,7 +15,10 @@
        <player class='userInfo' :data="user"/>
     </div>
     <actions class='actionsPosition' @action="setAction" :active="state.active"/>
-  </div>
+   <a href="/#/Lobby">Lobby</a>
+  </div>  
+ 
+
 </template>
 
 <script>

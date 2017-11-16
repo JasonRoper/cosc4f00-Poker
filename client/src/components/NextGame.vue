@@ -9,7 +9,7 @@
      </div>
 
     <a href="/">Playing</a>
-    <a href="/Lobby">Lobby</a>
+    <a href="/#/Lobby">Lobby</a>
   </div>
 
 
