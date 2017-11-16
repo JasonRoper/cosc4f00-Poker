@@ -1,3 +1,7 @@
+.blank.card{
+    background: url("../cards/Back Blue 1.png");
+}
+
 .spades.ace {
     background: url("../cards/Spades 1.png");
     

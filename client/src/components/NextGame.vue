@@ -1,29 +1,15 @@
 <template>
   <div class="col">
      <div class="opps">
-       <player   v-for="player in opponents" :key="player.id" :data="player">
 
-
-       </player>
-       
+         <div>These are the people that are playing: </div>
+       <div v-for="player in opponents" :key="player.id">
+              {{ player.username }}{{","}}
+       </div>
      </div>
 
-    <div class='card' v-for= "player in opponents" :key="player.id">
-        <div class = 'showCard' v-if="player.result">
-           <player :data="player"></player>
-        </div>
-        <div class='showCard' v-else>
-            <card class='size' v-for="card in player.cards" :key="card" :card="card"/></card>
-        </div>
-
-
-    </div>
-
-  
- 
-    <a href="/NextGame">NextGame</a>
+    <a href="/">Playing</a>
     <a href="/Lobby">Lobby</a>
-
   </div>
 
 
