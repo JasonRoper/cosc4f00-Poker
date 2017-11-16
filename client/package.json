@@ -5,10 +5,12 @@
   "author": "Jason Roper <jkmroper@gmail.com>",
   "private": true,
   "scripts": {
+    "test": "standard && node my-tests.js",
     "dev": "node build/dev-server.js",
     "start": "npm run dev",
     "build": "node build/build.js",
     "lint": "eslint --ext .js,.vue src"
+    
   },
   "dependencies": {
     "axios": "^0.17.0",
@@ -19,6 +21,7 @@
     "webstomp-client": "^1.2.0"
   },
   "devDependencies": {
+    "standard": "*",
     "autoprefixer": "^7.1.2",
     "babel-core": "^6.22.1",
     "babel-eslint": "^7.1.1",
