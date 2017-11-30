@@ -16,6 +16,7 @@ import Card from '@/components/table/Card'
 import TableActions from '@/components/table/TableActions'
 import CardSuite from '@/types/cards'
 import Actions from '@/types/actions'
+import GameService from '@/api/gameservice.js'
 
 export default {
   data () {
@@ -50,6 +51,10 @@ export default {
     player: Player,
     actions: TableActions,
     card: Card
+  },
+  created () {
+    // TODO: Actually do something with this.
+    this.gameService = new GameService(0)
   }
 }
 </script>
