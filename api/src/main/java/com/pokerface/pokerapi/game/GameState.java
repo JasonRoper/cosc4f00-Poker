@@ -27,6 +27,9 @@ public class GameState {
     }
 
     public GameTransport toTransport() {
-        return new GameTransport();
+        GameTransport transport = new GameTransport();
+        transport.setNextId(nextTurnId);
+        transport.setPot(pot);
+        return transport;
     }
 }
