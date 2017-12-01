@@ -54,7 +54,12 @@ export default {
   },
   created () {
     // TODO: Actually do something with this.
-    this.gameService = new GameService(0)
+    this.gameService = new GameService(1)
+
+    this.gameService.onGameUpdated((newState) => {
+      console.log('type: %s , value: %s', typeof newState, JSON.stringify(newState))
+    })
+    this.gameService.sendAction({type: 'BET', bet: 1})
   }
 }
 </script>

@@ -35,9 +35,8 @@ class Subscription {
       return
     }
 
-    const callback = (payload) => {
-      this.callbacks.forEach(callback => callback(payload))
-    }
+    const callback = payload => this.notifyAll(JSON.parse(payload.body))
+
     if (socket.connected) {
       this.handle = socket.subscribe(this.path, callback)
     }
@@ -63,7 +62,7 @@ class Subscription {
    * @returns {Number} - the number of callbacks that are currently subscribed to this subscription
    */
   subscribers () {
-    return this.callbacks.size()
+    return this.callbacks.size
   }
 
   /**
@@ -115,15 +114,15 @@ class Websocket {
       this.state = this.WebsocketState.CONNECTED
       console.log('connected to websocket at %s', websocketPath)
 
+      // Subscribe to all paths that were subscribed to while connecting
+      this.subscriberMap.forEach((sub, key, map) => {
+        sub.doSubscribe(this.socket)
+      })
+
       // send all messages that were enqueued while we were connecting
       // TODO: check to see if rate limiting is required
       this.unsentMessages.forEach(element => {
         this.socket.send(element.path, element.payload)
-      })
-
-      // Subscribe to all paths that were subscribed to while connecting
-      this.subscriberMap.forEach((sub, key, map) => {
-        sub.doSubscribe(this.socket)
       })
     }
 
@@ -160,13 +159,13 @@ class Websocket {
    */
   send (path, payload) {
     if (this.connected()) {
-      this.socket.send(path, payload)
-    } else if (this.errorOccurred) {
+      this.socket.send(path, JSON.stringify(payload))
+    } else if (this.errorOccurred()) {
       console.log('Websocket(%s): socket in error state, cannot send data {path: %s, payload: %s}',
         this.websocketPath, path, payload)
     } else {
       console.log('Websocket(%s): socket not connected yet, enqueuing message', this.websocketPath)
-      this.unsentMessages.push({path: path, payload: payload})
+      this.unsentMessages.push({path: path, payload: JSON.stringify(payload)})
     }
   }
 
@@ -193,7 +192,7 @@ class Websocket {
     var subscription = this.subscriberMap.get(path)
     if (subscription) {
       subscription.removeCallback(callback)
-      if (subscription.callbacks() === 0) {
+      if (subscription.subscribers() === 0) {
         subscription.unsubscribeSocket()
         this.subscriberMap.delete(path)
       }
