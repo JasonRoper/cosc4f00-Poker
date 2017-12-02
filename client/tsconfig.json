@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "outDir": "tsout",
+
+        "module": "es2015",
+        "moduleResolution": "node",
+        "baseUrl": ".",
+        "paths": {
+            "@/*": ["src/*"]
+        },
+
+        "allowJs": true,
+        "sourceMap": true,
+
+        "strict": true,
+        "noImplicitReturns": true,
+        "allowSyntheticDefaultImports": true,
+        "skipLibCheck": true,
+        "lib": ["dom", "es5", "es6"]
+    },
+    "include": [
+        "src", "test"
+    ]
+}
