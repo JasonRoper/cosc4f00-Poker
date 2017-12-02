@@ -95,7 +95,7 @@ enum WebsocketState {
 /**
  * Manage multiple subscriptions to different paths in a websocket.
  */
-class Websocket {
+class PokerClient {
   private websocketPath: string
   private socket: webstomp.Client
   private subscriberMap: Map<string, Subscription>
@@ -239,4 +239,4 @@ class Websocket {
   }
 }
 
-export default new Websocket('ws://localhost:8080/live')
+export default new PokerClient('ws://localhost:8080/live')
