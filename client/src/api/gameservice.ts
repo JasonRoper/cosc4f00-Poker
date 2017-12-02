@@ -1,4 +1,4 @@
-import PokerClient from '@/api/pokerclient'
+import Websocket from '@/api/websocket'
 
 /**
  * Helper class that will build the paths used to access a game
@@ -74,7 +74,7 @@ export class GameService {
    * @param callback - will be called when the game updates
    */
   public onGameUpdated (callback: GameUpdatedCallback) {
-    PokerClient.switchCallback(
+    Websocket.switchCallback(
       this.gamePaths.GAME_UPDATES,
       this.onGameUpdatedCallback,
       callback)
@@ -86,7 +86,7 @@ export class GameService {
    * @param callback - will be called when a game event occurs
    */
   public onGameEvent (callback: GameEventCallback) {
-    PokerClient.switchCallback(
+    Websocket.switchCallback(
       this.gamePaths.GAME_EVENTS,
       this.onGameEventCallback,
       callback)
@@ -98,7 +98,7 @@ export class GameService {
    * @param {GameAction} action - the action that is being taken
    */
   public sendAction (action: GameAction) {
-    PokerClient.send(this.gamePaths.GAME_ACTIONS, action)
+    Websocket.send(this.gamePaths.GAME_ACTIONS, action)
   }
 
   /**
@@ -108,12 +108,12 @@ export class GameService {
   public switchGame (gameId: number) {
     const newPaths = new GamePaths(gameId)
 
-    PokerClient.switchPath(
+    Websocket.switchPath(
       this.gamePaths.GAME_UPDATES,
       newPaths.GAME_UPDATES,
       this.onGameUpdatedCallback
     )
-    PokerClient.switchPath(
+    Websocket.switchPath(
       this.gamePaths.GAME_EVENTS,
       newPaths.GAME_EVENTS,
       this.onGameUpdatedCallback
@@ -127,11 +127,11 @@ export class GameService {
    * Stop listening for events.
    */
   public finish () {
-    PokerClient.unsubscribeOn(
+    Websocket.unsubscribeOn(
       this.gamePaths.GAME_UPDATES,
       this.onGameUpdatedCallback
     )
-    PokerClient.unsubscribeOn(
+    Websocket.unsubscribeOn(
       this.gamePaths.GAME_EVENTS,
       this.onGameEventCallback
     )
