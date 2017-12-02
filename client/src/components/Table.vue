@@ -1,7 +1,7 @@
 <template>
   <div class="col">
     <player v-for="player in opponents" :key="player.id" :data="player"/>
-   
+
     <card class='size' v-for="card in user.cards" :key="card" :card="card"/></card>
 
     <player :data="user"/>
@@ -16,7 +16,7 @@ import Card from '@/components/table/Card'
 import TableActions from '@/components/table/TableActions'
 import CardSuite from '@/types/cards'
 import Actions from '@/types/actions'
-import GameService from '@/api/gameservice.js'
+import { GameService } from '@/api/gameservice'
 
 export default {
   data () {
@@ -53,13 +53,17 @@ export default {
     card: Card
   },
   created () {
-    // TODO: Actually do something with this.
     this.gameService = new GameService(1)
 
     this.gameService.onGameUpdated((newState) => {
       console.log('type: %s , value: %s', typeof newState, JSON.stringify(newState))
     })
     this.gameService.sendAction({type: 'BET', bet: 1})
+  },
+  destroyed () {
+    if (this.gameService) {
+      this.gameService.finish()
+    }
   }
 }
 </script>

@@ -1,47 +1,79 @@
-import Websocket from '@/api/websocket.js'
+import Websocket from '@/api/websocket'
 
 /**
  * Helper class that will build the paths used to access a game
  * with the given id.
  */
 class GamePaths {
+  public GAME_UPDATES: string
+  public GAME_EVENTS: string
+  public GAME_ACTIONS: string
   /**
    * Generate the websocket paths used for the given gameID
-   * @param {Integer} gameId - the id of the game
+   * @param gameId - the id of the game
    */
-  constructor (gameId) {
+  constructor (gameId: number) {
     this.GAME_UPDATES = '/messages/game/' + gameId
     this.GAME_EVENTS = '/messages/game/' + gameId + '/events'
     this.GAME_ACTIONS = '/app/game/' + gameId + '/play'
   }
 }
 
+export interface GameState {
+  pot: number,
+  nextId: number
+}
+
+export enum GameEventType {
+  GAME_STARTED = 'GAME_STARTED',
+  GAME_FINISHED = 'GAME_FINISHED'
+}
+
+export interface GameEvent {
+  event: GameEventType,
+  payload: any
+}
+
+export enum GameActionType {
+  BET = 'BET',
+  CALL = 'CALL',
+  CHECK = 'CHECK',
+  FOLD = 'FOLD'
+}
+
+export interface GameAction {
+  type: GameActionType,
+  bet: number
+}
+
+export type GameUpdatedCallback = (newState: GameState) => void
+
+export type GameEventCallback = (event: GameEvent) => void
+
 /**
  * Manages all access to games on the server
  */
-class GameService {
+export class GameService {
+  private gameId: number
+  private gamePaths: GamePaths
+  private onGameUpdatedCallback: GameUpdatedCallback
+  private onGameEventCallback: GameEventCallback
 
   /**
    * Create a GameService to manage access to the game at gameId
-   * @param {Integer} gameId - the id of the game
+   * @param gameId - the id of the game
    */
-  constructor (gameId) {
+  constructor (gameId: number) {
     this.gameId = gameId
     this.gamePaths = new GamePaths(gameId)
     this.switchGame(gameId)
   }
 
   /**
-   * Callback used to notify when the GameState has changed
-   * @callback gameStateCallback
-   * @param {GameState} - the new game state
-   */
-
-  /**
    * Register a callback to be called when the game is updated
-   * @param {gameStateCallback} callback
+   * @param callback - will be called when the game updates
    */
-  onGameUpdated (callback) {
+  public onGameUpdated (callback: GameUpdatedCallback) {
     Websocket.switchCallback(
       this.gamePaths.GAME_UPDATES,
       this.onGameUpdatedCallback,
@@ -50,16 +82,10 @@ class GameService {
   }
 
   /**
-   * Callback used to notify when a GameEvent has occurred
-   * @callback gameEventCallback
-   * @param {GameEvent} - the event that occurred
-   */
-
-  /**
    * Register a callback to be called when a game event is issued from the server
-   * @param {gameEventCallback} callback
+   * @param callback - will be called when a game event occurs
    */
-  onGameEvent (callback) {
+  public onGameEvent (callback: GameEventCallback) {
     Websocket.switchCallback(
       this.gamePaths.GAME_EVENTS,
       this.onGameEventCallback,
@@ -71,7 +97,7 @@ class GameService {
    * Send an action to the server. (Note: this does not manage permissions)
    * @param {GameAction} action - the action that is being taken
    */
-  sendAction (action) {
+  public sendAction (action: GameAction) {
     Websocket.send(this.gamePaths.GAME_ACTIONS, action)
   }
 
@@ -79,8 +105,8 @@ class GameService {
    * Switch the GameService to begin listening to a different game
    * @param {Integer} gameId - the id of the new game to be watched
    */
-  switchGame (gameId) {
-    var newPaths = new GamePaths(gameId)
+  public switchGame (gameId: number) {
+    const newPaths = new GamePaths(gameId)
 
     Websocket.switchPath(
       this.gamePaths.GAME_UPDATES,
@@ -100,7 +126,7 @@ class GameService {
   /**
    * Stop listening for events.
    */
-  finish () {
+  public finish () {
     Websocket.unsubscribeOn(
       this.gamePaths.GAME_UPDATES,
       this.onGameUpdatedCallback
@@ -111,5 +137,3 @@ class GameService {
     )
   }
 }
-
-export default GameService
