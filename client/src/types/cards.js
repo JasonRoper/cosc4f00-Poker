@@ -3,7 +3,7 @@ export default {
   SPADES_TWO: 'spades two',
   SPADES_THREE: 'spades three',
   SPADES_FOUR: 'spades four',
-  SPADES_FiVE: 'spades five',
+  SPADES_FIVE: 'spades five',
   SPADES_SIX: 'spades six',
   SPADES_SEVEN: 'spades seven',
   SPADES_EIGHT: 'spades eight',
