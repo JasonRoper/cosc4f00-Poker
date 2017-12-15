@@ -4,7 +4,7 @@ import Table from '@/components/Table'
 import Lobby from '@/components/Lobby'
 import WinLoss from '@/components/WinLoss'
 import NextGame from '@/components/NextGame'
-
+import Login from '@/components/Login'
 Vue.use(Router)
 
 export default new Router({
@@ -28,6 +28,11 @@ export default new Router({
       path: '/WinLoss',
       name: 'WinLoss',
       component: WinLoss
+    },
+    {
+      path: '/login',
+      name: 'Login',
+      component: Login
     }
   ]
 })
