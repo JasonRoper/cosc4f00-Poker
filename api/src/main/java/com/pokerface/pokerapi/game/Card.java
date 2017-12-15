@@ -1,5 +1,8 @@
 package com.pokerface.pokerapi.game;
 
+/**
+ * This is an enum representing the cards in a deck. It should, eventually, store the suit and value for use by deck
+ */
 public enum Card {
     SPADES_ACE,
     SPADES_TWO,
@@ -15,7 +18,7 @@ public enum Card {
     SPADES_QUEEN,
     SPADES_KING,
 //  Hearts
-    HEARTS_ACE,
+HEARTS_ACE,
     HEARTS_TWO,
     HEARTS_THREE,
     HEARTS_FOUR,
@@ -29,7 +32,7 @@ public enum Card {
     HEARTS_QUEEN,
     HEARTS_KING,
 //  Diamonds
-    DIAMONDS_ACE,
+DIAMONDS_ACE,
     DIAMONDS_TWO,
     DIAMONDS_THREE,
     DIAMONDS_FOUR,
@@ -43,7 +46,7 @@ public enum Card {
     DIAMONDS_QUEEN,
     DIAMONDS_KING,
 // Clubs
-    CLUBS_ACE,
+CLUBS_ACE,
     CLUBS_TWO,
     CLUBS_THREE,
     CLUBS_FIVE,

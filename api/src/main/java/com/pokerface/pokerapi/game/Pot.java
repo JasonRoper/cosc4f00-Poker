@@ -7,6 +7,13 @@ public class Pot {
         pot=new int[players];
     }
 
+    /**
+     * Super not done, an idea at best. This is the amount of money each person has put into the pot.
+     *
+     * @param amount
+     * @param playerSeatID
+     * @return
+     */
     public int add(int amount, int playerSeatID){
         sum+=amount;
         pot[playerSeatID]+=amount;

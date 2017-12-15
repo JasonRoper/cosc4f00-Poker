@@ -51,6 +51,6 @@ public class GameController {
         logger.info("new game created at " + id);
         GameState state = new GameState(id);
         games.save(state);
-        return "success! game created at " + Long.toString(state.id);
+        return "success! game created at " + Long.toString(state.getId());
     }
 }
