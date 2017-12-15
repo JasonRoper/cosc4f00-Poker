@@ -19,9 +19,47 @@ class GamePaths {
   }
 }
 
+/**
+ * GameState which will hold the state of the game
+ */
 export interface GameState {
-  pot: number,
-  nextId: number
+  HasBet: boolean
+  Turn: number
+  MultiplePlayers: Player[]
+  GameId: number
+  Valid: boolean
+  Pot: Pot
+  Deck: Card[]
+}
+/**
+ * Defines a Card Object
+ */
+export interface Card {
+  suit: string
+  number: number
+}
+/**
+ * Defines a Player Object
+ */
+export interface Player {
+  money: number
+  id: number
+  move: GameAction
+  cards: Card
+}
+/**
+ * PlayerEntity holds the next action of a particular player at a specific game
+ */
+export interface PlayerEntity {
+  Player: Player
+  GameId: number
+  GameAction: GameAction
+}
+/**
+ * Defines the Pot object
+ */
+export interface Pot {
+  pot: number
 }
 
 export enum GameEventType {
@@ -38,11 +76,12 @@ export enum GameActionType {
   BET = 'BET',
   CALL = 'CALL',
   CHECK = 'CHECK',
-  FOLD = 'FOLD'
+  FOLD = 'FOLD',
+  RAISE = 'RAISE'
 }
 
 export interface GameAction {
-  type: GameActionType,
+  type: GameActionType | null,
   bet: number
 }
 
@@ -68,7 +107,6 @@ export class GameService {
     this.gamePaths = new GamePaths(gameId)
     this.switchGame(gameId)
   }
-
   /**
    * Register a callback to be called when the game is updated
    * @param callback - will be called when the game updates
@@ -123,17 +161,15 @@ export class GameService {
     this.gameId = gameId
   }
 
+  public connected() {
+    return PokerClient.connected()
+  }
+
   /**
    * Stop listening for events.
    */
   public finish () {
-    PokerClient.unsubscribeOn(
-      this.gamePaths.GAME_UPDATES,
-      this.onGameUpdatedCallback
-    )
-    PokerClient.unsubscribeOn(
-      this.gamePaths.GAME_EVENTS,
-      this.onGameEventCallback
-    )
+    PokerClient.unsubscribeOn(this.gamePaths.GAME_UPDATES,this.onGameUpdatedCallback)
+    PokerClient.unsubscribeOn(this.gamePaths.GAME_EVENTS,this.onGameEventCallback)
   }
 }
