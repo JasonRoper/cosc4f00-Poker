@@ -1,8 +1,10 @@
 <template>
   <div>
+    <form ref="theform" action="'/#/Lobby">
     <label>Username</label>
-    <input  ref="myTestField" type="text" >
-    <a href="/#/Lobby"><button @click="storeName">Login</button></a>
+    <input  ref="myTestField" type="text">
+    <input type="button" value = "Login"  @click="storeName">
+    </form>
   </div>
 </template>
 
@@ -17,9 +19,16 @@ export default {
     }
   },
   methods: {
-    toreName () {
-      this.Player.username = this.$refs.myTestField.value
-      this.$store.commit('setPlayer', this.Player.username)
+    storeName () {
+      let namefield = this.$refs.myTestField.value
+      if (namefield.length === 0) {
+        return
+      } else
+      if (namefield.length > 0) {
+        this.Player.username = this.$refs.myTestField.value
+        this.$store.commit('setPlayer', this.Player.username)
+        window.location.href = '/#/Lobby'
+      }
     }
   }
 }

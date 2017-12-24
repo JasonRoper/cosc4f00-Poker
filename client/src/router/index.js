@@ -1,23 +1,17 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Table from '@/components/Table'
 import Lobby from '@/components/Lobby'
-import WinLoss from '@/components/WinLoss'
-import NextGame from '@/components/NextGame'
 import Login from '@/components/Login'
+import Game from '@/components/Game'
+
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Table',
-      component: Table
-    },
-    {
-      path: '/NextGame',
-      name: 'NextGame',
-      component: NextGame
+      name: 'login',
+      component: Login
     },
     {
       path: '/Lobby',
@@ -25,14 +19,18 @@ export default new Router({
       component: Lobby
     },
     {
-      path: '/WinLoss',
-      name: 'WinLoss',
-      component: WinLoss
-    },
-    {
       path: '/login',
       name: 'Login',
       component: Login
+    },
+    {
+      path: '/game',
+      name: 'Game',
+      component: Game
+    },
+    {
+      path: '/matchMakeing',
+      name: 'MatchMaking'
     }
   ]
 })

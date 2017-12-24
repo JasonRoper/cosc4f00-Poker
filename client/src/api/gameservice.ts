@@ -161,7 +161,7 @@ export class GameService {
     this.gameId = gameId
   }
 
-  public connected() {
+  public connected () {
     return PokerClient.connected()
   }
 
