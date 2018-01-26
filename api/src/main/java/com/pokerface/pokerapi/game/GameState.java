@@ -19,9 +19,11 @@ public class GameState {
     int nextTurnID;
     int minimumBet;
     int bigBlind;
-    int[] cashOnHand;//User available money in game
     int presentTurn;//Whose action is it?
     int round;//What round are we on, enum? from 0-4, 0 transition value? 1 pre-bet, 2/3/4 is flop turn river respectively.
+    List<Player> players;
+
+
 
 
     public GameState(){
@@ -96,10 +98,6 @@ public class GameState {
         this.bigBlind = bigBlind;
     }
 
-    public void setCashOnHand(int[] cashOnHand) {
-        this.cashOnHand = cashOnHand;
-    }
-
     public void setPresentTurn(int presentTurn) {
         this.presentTurn = presentTurn;
     }
@@ -136,15 +134,21 @@ public class GameState {
         return bigBlind;
     }
 
-    public int[] getCashOnHand() {
-        return cashOnHand;
-    }
-
     public int getPresentTurn() {
         return presentTurn;
     }
 
     public int getRound() {
         return round;
+    }
+
+    @OneToMany(mappedBy = "gameState", cascade = CascadeType.ALL)
+    @OrderColumn
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(List<Player> players) {
+        this.players= players;
     }
 }
