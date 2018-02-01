@@ -2,13 +2,14 @@
   <div>
     <form ref="theform" action="'/#/Lobby">
     <label>Username</label>
-    <input  ref="myTestField" type="text">
-    <input type="button" value = "Login"  @click="storeName">
+    <input  v-model="Player.username"ref="myTestField" type="text">
+    <input type="button" value = "Login"  @click="storeName(Player.username)">
     </form>
   </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
   data () {
     return {
@@ -19,17 +20,9 @@ export default {
     }
   },
   methods: {
-    storeName () {
-      let namefield = this.$refs.myTestField.value
-      if (namefield.length === 0) {
-        return
-      } else
-      if (namefield.length > 0) {
-        this.Player.username = this.$refs.myTestField.value
-        this.$store.commit('setPlayer', this.Player.username)
-        window.location.href = '/#/Lobby'
-      }
-    }
+    ...mapActions([
+      'storeName'
+    ])
   }
 }
 </script>
