@@ -10,7 +10,8 @@ public class Player {
     @Enumerated
     private Card cardTwo;
     private int cashOnHand;//User available money in game
-    private Integer id;
+    private Long id; // id to the database
+    private int gameID; // id to the game
     private GameState gameState;
 
     public Player(){}
@@ -20,13 +21,12 @@ public class Player {
     public void setCardOne(Card card){
         cardOne=card;
     }
+
     public Card getCardTwo(){return cardTwo;}
 
     public void setCardTwo(Card card){
         cardTwo=card;
     }
-
-
 
     public int getCashOnHand() {
         return cashOnHand;
@@ -36,13 +36,17 @@ public class Player {
         this.cashOnHand = cashOnHand;
     }
 
+    public int getGameID() { return gameID; }
+
+    public void setgameID(int gameID) { this.gameID=gameID; }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

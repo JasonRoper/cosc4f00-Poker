@@ -2,7 +2,6 @@ package com.pokerface.pokerapi.game;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Stack;
 
 @Entity
 /**
@@ -17,7 +16,7 @@ public class GameState {
     int lastBet; //PlayerTableID
     int dealer; //PlayerTableID
     int nextTurnID;
-    int minimumBet;
+    int minimumBet; // the minimum bet required to stay in the round
     int bigBlind;
     int presentTurn;//Whose action is it?
     int round;//What round are we on, enum? from 0-4, 0 transition value? 1 pre-bet, 2/3/4 is flop turn river respectively.
@@ -42,8 +41,8 @@ public class GameState {
         nextTurnID++;
     }
 
-    public GameTransport toTransport() {
-        GameTransport transport = new GameTransport();
+    public GameUpdateTransport toTransport() {
+        GameUpdateTransport transport = new GameUpdateTransport();
         transport.setNextId(nextTurnID);
         //transport.setPot(potSum);
         return transport;
