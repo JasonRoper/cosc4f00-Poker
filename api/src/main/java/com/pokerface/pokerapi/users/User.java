@@ -27,7 +27,7 @@ public class User {
         this.username = username;
         this.password = securePassword;
         this.email = email;
-        this.role = "BASIC_USER";
+        this.role = "ROLE_USER";
     }
 
     public UserTransport toDTO() {

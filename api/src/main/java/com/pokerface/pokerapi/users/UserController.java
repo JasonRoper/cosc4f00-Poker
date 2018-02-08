@@ -1,12 +1,16 @@
 package com.pokerface.pokerapi.users;
 
+import com.pokerface.pokerapi.util.BadRequestError;
 import com.pokerface.pokerapi.util.RESTError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/user")
+import java.util.ArrayList;
+
+@RequestMapping("/users")
 @RestController
 public class UserController {
 
@@ -40,5 +44,16 @@ public class UserController {
     @DeleteMapping()
     public void delete() {
         userService.deleteUser();
+    }
+
+    @GetMapping()
+    public ListResponse<UserInfoTransport> listing() {
+        return new ListResponse<UserInfoTransport>(userService.listUsers());
+    }
+
+
+    @ExceptionHandler(value = UsernameNotFoundException.class)
+    public BadRequestError usernameNotFoundExceptionHandler(UsernameNotFoundException e) {
+        return new BadRequestError(e.getMessage());
     }
 }
