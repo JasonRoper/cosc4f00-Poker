@@ -26,7 +26,7 @@ public class GameController {
 
     @MessageMapping("/game/{id}/play")
     @SendTo("/messages/game/{id}")
-    public GameTransport play(GameAction action, @DestinationVariable("id") Long id) {
+    public GameUpdateTransport play(GameAction action, @DestinationVariable("id") Long id) {
         GameState state = games.findOne(id);
         logger.info("recieved play action for " + id);
         if (state == null) {

@@ -1,10 +1,10 @@
 package com.pokerface.pokerapi.game;
-
-public class GameTransport {  
+//NOT DONE AT ALL
+public class GameUpdateTransport {
   private int pot;
   private long nextId;
 
-  public GameTransport() {    
+  public GameUpdateTransport() {
   }
 
   public void setPot(int pot){
