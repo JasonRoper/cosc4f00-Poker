@@ -30,7 +30,7 @@ public class UserService implements UserDetailsService {
         users.save(admin);
     }
 
-    public UserDTO register(RegistrationFields fields) {
+    public UserTransport register(RegistrationFields fields) {
         User exists = users.findByUsernameIgnoreCaseOrEmailIgnoreCase(fields.getUsername(),fields.getEmail());
         if (exists != null) return null;
 
@@ -44,14 +44,13 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = users.findByUsername(username);
         logger.debug("loading username: " + user.getUsername());
-        if (user == null) return null;
 
         List<GrantedAuthority> auth = AuthorityUtils.commaSeparatedStringToAuthorityList(user.getRole());
 
         return new org.springframework.security.core.userdetails.User(username,user.getPassword(), auth);
     }
 
-    public UserDTO updateUser(UserDTO updatedUser) {
+    public UserTransport updateUser(UserTransport updatedUser) {
         User user = users.findByUsername(updatedUser.getUsername());
         user.setUsername(updatedUser.getUsername());
         user.setPassword(encoder.encode(updatedUser.getPassword()));

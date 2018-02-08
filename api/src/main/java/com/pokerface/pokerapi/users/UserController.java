@@ -4,7 +4,6 @@ import com.pokerface.pokerapi.util.RESTError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/user")
@@ -21,8 +20,8 @@ public class UserController {
     }
 
     @PostMapping()
-    public UserDTO register(@RequestBody RegistrationFields fields) throws RESTError {
-        UserDTO user = userService.register(fields);
+    public UserTransport register(@RequestBody RegistrationFields fields) throws RESTError {
+        UserTransport user = userService.register(fields);
         if (user == null) {
             throw new RESTError(HttpStatus.BAD_REQUEST, "yo fucked up");
         }
@@ -30,8 +29,8 @@ public class UserController {
     }
 
     @PutMapping()
-    public UserDTO update(@RequestBody UserDTO updatedUser) throws RESTError {
-        UserDTO user = userService.updateUser(updatedUser);
+    public UserTransport update(@RequestBody UserTransport updatedUser) throws RESTError {
+        UserTransport user = userService.updateUser(updatedUser);
         if (user == null) {
             throw new RESTError(HttpStatus.BAD_REQUEST, "yo fucked up");
         }

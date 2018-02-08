@@ -30,8 +30,8 @@ public class User {
         this.role = "BASIC_USER";
     }
 
-    public UserDTO toDTO() {
-        return new UserDTO(username, email);
+    public UserTransport toDTO() {
+        return new UserTransport(username, email);
     }
 
     public LoginState getLoginState() {

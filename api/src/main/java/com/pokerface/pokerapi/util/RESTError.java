@@ -8,7 +8,6 @@ public class RESTError extends Throwable {
     private HttpStatus statusCode;
     private LocalDateTime timestamp;
     private String message;
-    private String debugMessage;
 
     public RESTError() {
         statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
@@ -25,18 +24,16 @@ public class RESTError extends Throwable {
         this.message = message;
     }
 
-    public RESTError(String message, String debugMessage) {
-        this(message);
-        this.debugMessage = debugMessage;
-    }
-
     public RESTError(HttpStatus status, String message) {
         this(message);
         statusCode = status;
     }
 
-    public RESTError(HttpStatus status, String message, String debugMessage) {
-        this(status, message);
-        this.debugMessage = debugMessage;
+    public void setStatusCode(HttpStatus statusCode) {
+        this.statusCode = statusCode;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

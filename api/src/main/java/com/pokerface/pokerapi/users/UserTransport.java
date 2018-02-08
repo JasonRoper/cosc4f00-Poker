@@ -1,16 +1,16 @@
 package com.pokerface.pokerapi.users;
 
-public class UserDTO {
+public class UserTransport {
     private String username;
     private String password;
     private String email;
 
-    public UserDTO(String username, String email) {
+    public UserTransport(String username, String email) {
         this.username = username;
         this.email = email;
     }
 
-    public UserDTO(){}
+    public UserTransport(){}
 
     public String getUsername() {
         return username;
