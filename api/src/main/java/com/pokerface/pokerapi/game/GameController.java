@@ -34,9 +34,10 @@ public class GameController {
             throw new IllegalArgumentException("invalid id");
         }
 
-        state.play(action);
-        games.save(state);
-        return state.toTransport();
+//        state.play(action);
+//        games.save(state);
+//        return state.toTransport();
+return null;
     }
 
     @MessageExceptionHandler

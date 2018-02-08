@@ -11,7 +11,7 @@ public class Player {
     private Card cardTwo;
     private int cashOnHand;//User available money in game
     private Long id; // id to the database
-    private int gameID; // id to the game
+    private int tableSeatID; // id to the game
     private GameState gameState;
 
     public Player(){}
@@ -36,9 +36,9 @@ public class Player {
         this.cashOnHand = cashOnHand;
     }
 
-    public int getGameID() { return gameID; }
+    public int getTableSeatID() { return tableSeatID; }
 
-    public void setgameID(int gameID) { this.gameID=gameID; }
+    public void setTableSeatID(int tableSeatID) { this.tableSeatID =tableSeatID; }
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

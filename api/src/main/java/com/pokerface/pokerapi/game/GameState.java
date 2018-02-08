@@ -15,18 +15,13 @@ public class GameState {
     boolean hasBet; // Unecessary? Could be mapped to lastBet
     int lastBet; //PlayerTableID
     int dealer; //PlayerTableID
-    int nextTurnID;
     int minimumBet; // the minimum bet required to stay in the round
     int bigBlind;
     int presentTurn;//Whose action is it?
     int round;//What round are we on, enum? from 0-4, 0 transition value? 1 pre-bet, 2/3/4 is flop turn river respectively.
     List<Player> players;
 
-
-
-
     public GameState(){
-
     }
 
     public GameState(long id) {
@@ -35,17 +30,6 @@ public class GameState {
 
     public GameState(Deck deck) {
         this.deck = deck;
-    }
-
-    public void play(GameAction action) {
-        nextTurnID++;
-    }
-
-    public GameUpdateTransport toTransport() {
-        GameUpdateTransport transport = new GameUpdateTransport();
-        transport.setNextId(nextTurnID);
-        //transport.setPot(potSum);
-        return transport;
     }
 
     @Id
@@ -85,10 +69,6 @@ public class GameState {
         this.dealer = dealer;
     }
 
-    public void setNextTurnID(int nextTurnID) {
-        this.nextTurnID = nextTurnID;
-    }
-
     public void setMinimumBet(int minimumBet) {
         this.minimumBet = minimumBet;
     }
@@ -119,10 +99,6 @@ public class GameState {
 
     public int getDealer() {
         return dealer;
-    }
-
-    public long getNextTurnID() {
-        return nextTurnID;
     }
 
     public int getMinimumBet() {
