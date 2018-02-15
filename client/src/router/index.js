@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Lobby from '@/components/Lobby'
 import Login from '@/components/Login'
 import Game from '@/components/Game'
+import Table from '@/components/Table'
 
 Vue.use(Router)
 
@@ -10,8 +11,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'login',
-      component: Login
+      name: 'Table',
+      component: Table
     },
     {
       path: '/Lobby',

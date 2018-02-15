@@ -22,31 +22,30 @@ class GamePaths {
  * GameStateStarted - which will hold the information when a new game has started
  */
 export interface GameStarted {
-  MultiplePlayers: Player[]
-  Time: number
+  multiplePlayers: Player[]
+  time: number
 }
 
 /**
  * Game Ended - which will hold the information when a game has ended
  */
 export interface GameEnded {
-  Winner: number
-  Time: number
+  winner: number
+  time: number
 }
 
 /**
  * GameState which will hold the state of the game
  */
 export interface GameState {
-  HasBet: boolean
-  Turn: number
-  MultiplePlayers: Player[]
-  GameId: number
-  Valid: boolean
-  Pot: Pot []
-  Deck: Card[] | null
-  CommunityCards: string[]
-  EngGame: boolean | null
+  hasBet: boolean
+  turn: number
+  multiplePlayers: Player[]
+  gameId: number
+  valid: boolean
+  pot: Pot []
+  deck: Card[] | null
+  communityCards: string[]
 }
 /**
  * Defines a Card Object
@@ -54,6 +53,7 @@ export interface GameState {
 export interface Card {
   suit: string
 }
+
 /**
  * Defines a Player Object
  */
@@ -65,15 +65,9 @@ export interface Player {
   premove: GameAction | null
   card1: string | null
   card2: string | null
+  action: GameAction | null
   playing: boolean
-}
-/**
- * PlayerEntity holds the next action of a particular player at a specific game
- */
-export interface PlayerEntity {
-  Player: Player
-  GameId: number
-  GameAction: GameAction
+  endGame: boolean | null
 }
 /**
  * Defines the Pot object
@@ -103,7 +97,6 @@ export enum GameActionType {
 export interface GameAction {
   type: GameActionType,
   bet: number
-  valid: boolean
 }
 
 export type GameUpdatedCallback = (newState: GameState) => void
@@ -160,8 +153,6 @@ export class GameService {
     this.onGameEventCallback = callback
 
   }
-
-
   /**
    * Send an action to the server. (Note: this does not manage permissions)
    * @param {GameAction} action - the action that is being taken

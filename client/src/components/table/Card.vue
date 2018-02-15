@@ -1,6 +1,6 @@
 <template>
 
-  <div  class="card" :class="card">
+  <div  class="card" :class="this.card">
     <div  class='Pcard'>
     {{this.card}} 
     </div>
@@ -10,15 +10,7 @@
 <script>
 export default {
   props: {
-    card: [String],
-    cardPosition: {
-      type: Number
-    }
-  },
-  data () {
-    return {
-      blank: 'a'
-    }
+    card: [String]
   }
 }
 </script>
