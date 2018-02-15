@@ -1,7 +1,8 @@
 import {
   GameAction,
   GameActionType,
-  GameEnded,
+  GameError,
+  GameFinished,
   GameService,
   GameStarted,
   GameState,
@@ -32,34 +33,27 @@ export default class GameMech {
   public possibleAction: GameActionType [][] = [[GameActionType.BET, GameActionType.FOLD, GameActionType.CHECK],
     [GameActionType.CALL, GameActionType.RAISE, GameActionType.FOLD], [GameActionType.FOLD]]
   public playerLocation: number
+  public userAction: GameAction | null
+  public disable: number = 1
+  public enable: number = 0
+  public endGame: boolean | null
+  private lobby: boolean
   private gameService: GameService
-
-  /*
-  public get playerLocation () {
-    this.playerLocation = -1
-    if (this.userId !== null) {
-      for (let index = 0; index < this.multiplePlayers.length; index++) {
-        if (this.multiplePlayers[index].id === this.userId) {
-          this.playerLocation = index
-        }
-      }
-    }
-    return this.playerLocation
-  }
-  public set playerLocation (theBar: number) {
-    this.playerLocation = theBar
-  }
-  */
    // Generate the websocket paths used for the given gameId
    // @param gameId - the id of the game
   constructor (gameId: number, userId: number | null) {
     this.gameService = new GameService(gameId)
-    // this.gameService.onGameUpdated(this.setGameTransport)
-    this.setDefaultTransport()
+    if (userId !== null) {
+      // this.gameService.onGameUpdated(this.setGameTransport)
+      this.setDefaultTransport()
+      this.lobby = false
+    } else {
+      this.lobby = true
+    }
   }
 
   public setDefaultTransport () {
-    this.hasBet = true
+    this.hasBet = false
     this.turn = 0
     const p: Player = this.defaultPlayer()
     this.multiplePlayers = [{
@@ -70,9 +64,7 @@ export default class GameMech {
       premove: null,
       card1: CardSuite.BLANK_CARD,
       card2: CardSuite.BLANK_CARD,
-      playing: true,
-      endGame: null,
-      action: null
+      playing: true
     }, {
       id: 1,
       money: 888,
@@ -81,9 +73,7 @@ export default class GameMech {
       premove: null,
       card1: CardSuite.BLANK_CARD,
       card2: CardSuite.BLANK_CARD,
-      playing: true,
-      endGame: null,
-      action: null
+      playing: true
     }, this.defaultPlayer(), this.defaultPlayer() ]
     this.gameId = 0
     this.pot = []
@@ -92,6 +82,7 @@ export default class GameMech {
     this.temp = 'temoe'
     this.userId = 0
     this.playerLocation = 0
+    this.userAction = null
   }
   public defaultPlayer (): Player {
     const player: Player = {
@@ -102,9 +93,7 @@ export default class GameMech {
       premove: null,
       card1: CardSuite.BLANK_CARD,
       card2: CardSuite.BLANK_CARD,
-      playing: true,
-      endGame: null,
-      action: null
+      playing: true
     }
     return player
   }
@@ -115,10 +104,22 @@ export default class GameMech {
   /**
    * sendEvent of the game started
    */
-  public gameStartedEvent (gameStarted: GameStarted) {
+  public onGameStartedEvent (gameStarted: GameStarted) {
     this.multiplePlayers = gameStarted.multiplePlayers
   }
-
+  public onGameFinishedEvent (gameFinished: GameFinished) {
+    for (const player of this.multiplePlayers) {
+      if (player.id === gameFinished.winner) {
+        this.endGame = true
+      } else {
+        this.endGame = false
+      }
+    }
+  }
+  public onGameError (gameError: GameError) {
+    alert('Error: ' + gameError.error)
+    console.log('Error: ' + gameError.error)
+  }
   // 1. onGameError
   // 2. onGameStarted
   // 3. onGameFinished
@@ -137,20 +138,14 @@ export default class GameMech {
   /**
    * sendcommunityCards
    */
-  public sendCommunityCards (card1: string, card2: string, card3: string) {
-    this.communityCards[0] = card1
-    this.communityCards[1] = card2
-    this.communityCards[2] = card3
-    this.temp = card3
-    /*
+  public sendCommunityCards (card1: string) {
     const length = this.communityCards.length
-    if (length < 3) {
-
-    } else if (length < 5) {
+    if (length < 5) {
       this.communityCards[length] = card1
     } else {
       alert('ERROR _ YOU ARE TRYING TO ADD A CARD TO COMMUNITY CARDS WHEN THERE IS ALREADY 5')
-    }*/
+      console.log('Error you are trying to add more than 5 cards')
+    }
   }
 
   /**
@@ -158,28 +153,50 @@ export default class GameMech {
    */
   public storePremove (action: GameActionType, money: number): boolean {
     const move: GameAction = { type: action, bet: money }
-    if (this.validatePreMove(move)) {
-      this.multiplePlayers[this.playerLocation].action = move
+    // this.userAction = move
+    if (this.validatePreMove(move) && this.userAction === null) {
+      this.disableButton(action)
+      this.userAction = move
       return true
     } else {
-      this.tableActions()
-      this.multiplePlayers[this.playerLocation].action = null
+      this.setTableActions()
+      this.userAction = null
       return false
     }
   }
-
+  public disableButton (action: GameActionType) {
+    switch (action) {
+      case GameActionType.CHECK:
+        this.checkAction = this.disable
+        break
+      case GameActionType.BET:
+        this.betAction = this.disable
+        break
+      case GameActionType.CALL:
+        this.callAction = this.disable
+        break
+      case GameActionType.RAISE:
+        this.raiseAction = this.disable
+        break
+      case GameActionType.FOLD:
+        this.foldAction = this.disable
+        break
+      default:
+        alert('disable Button went wrong')
+    }
+  }
   /**
    * TableActions will give the player the differnet table actions that they can take
    */
-  public tableActions () {
+  public setTableActions () {
     if (this.hasBet) {
-      this.foldAction = 1
+      this.foldAction = 0
       this.betAction = 1
       this.checkAction = 1
       this.callAction = 0
       this.raiseAction = 0
     } else {
-      this.foldAction = 1
+      this.foldAction = 0
       this.betAction = 0
       this.checkAction = 0
       this.callAction = 1
@@ -191,16 +208,20 @@ export default class GameMech {
    */
   public validatePreMove (move: GameAction) {
     // Confirm that you have enough money
-    if (this.multiplePlayers[this.playerLocation].money > move.bet) {
+    if (this.multiplePlayers[this.playerLocation].money < move.bet) {
+      alert('you do not have enough money')
       return false
     }
+
     // Confirm that you made a valid move
     if (this.hasBet) {
-      if (this.possibleAction[0].indexOf(move.type) === -1) {
+      if (this.possibleAction[1].indexOf(move.type) === -1) {
+        alert('you have not made a valid move')
         return false
       }
     } else {
-      if (this.possibleAction[1].indexOf(move.type) === -1) {
+      if (this.possibleAction[0].indexOf(move.type) === -1) {
+        alert('you have not made a valid move')
         return false
       }
     }
@@ -218,17 +239,27 @@ export default class GameMech {
     this.multiplePlayers[this.playerLocation].card2 = card2
   }
 
-  public sendAction (action: GameAction) {
+  public sendAction (action: GameActionType, money: number) {
+    const move: GameAction = { type: action, bet: money }
     if (this.multiplePlayers[this.playerLocation].playing) {
       if (this.playerLocation === this.turn) {
-        if (this.storePremove(action.type, action.bet)) {
-          this.send(action)
-          this.multiplePlayers[this.playerLocation].action = null
+        if (this.storePremove(move.type, move.bet)) {
+          this.send(move)
+          this.userAction = null
         }
       }
     }
   }
-
+  public getAction () {
+    const action = this.userAction
+    if (action === null) {
+      alert('action is null')
+      return null
+    } else {
+      alert('action is valid')
+      return this.userAction
+    }
+  }
   public getUser (): Player {
     return this.multiplePlayers[this.playerLocation]
   }
@@ -237,45 +268,37 @@ export default class GameMech {
    *  Sets the Game Transport in the Game Mechanics
    * @param GameState
    */
-  /*
   public setGameTransport (gameTransport: GameState) {
     if (gameTransport.gameId === this.gameId) {
       this.communityCards = gameTransport.communityCards
-      // this.Deck = gameTransport.Deck
       this.hasBet = gameTransport.hasBet
       this.turn = gameTransport.turn
       this.multiplePlayers = gameTransport.multiplePlayers
-      this.Pot = gameTransport.Pot
-
+      // this.Pot = gameTransport.Pot
       // if there is a premove
-      if (this.multiplePlayers[this.playerLocation].action === null) {
-        this.ValidatePreMove(this.multiplePlayers[this.playerLocation].action as GameAction)
-      }
-      return true
 
+      if (this.playerLocation === this.turn) {
+        if (this.userAction !== null) {
+          if (this.validatePreMove(this.userAction)) {
+            const action = (this.userAction).type
+            const bet = (this.userAction).bet
+            this.sendAction(action, bet)
+            alert('send the action')
+          }
+        }
+      }
+      this.setTableActions()
+      return true
     }
     return false
   }
-  */
-
+  public tempAction () {
+    const m: GameAction = { type: GameActionType.BET, bet: 15 }
+    this.userAction = m
+  }
   public isGameRunning () {
     return this.gameService.connected()
   }
-  /*
-  public isPlayerInGame () {
-    // if this is not the game you are supposed to be at it returns false
-    this.gameService.
-    if ((this.gameTransport.gameId === this.gameId)) {
-      const players = this.gameTransport.multiplePlayers
-      for (const index of this.gameTransport.multiplePlayers) {
-        if (index.id === this.userId) {
-          return true
-        }
-      }
-    }
-    return false
-  }
-  */
   // can this game accecpt action from this player
   private send (gameAction: GameAction) {
     this.gameService.sendAction(gameAction)

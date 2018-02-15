@@ -1,16 +1,18 @@
 <template>
 <div>
-    <h4>Like, here's your table man...</h4>
-    <Thetable></Thetable>
+   
+   <table-view v-bind:userId="1"></table-view>
+   
     </div>
 
 </template>
 
 <script>
-import Table from '@/components/Table.vue'
+import TableView from '@/components/TableView'
 export default{
   components: {
-    Thetable: Table
+    tableView: TableView
+    // Thetable: Table
   }
 }
 

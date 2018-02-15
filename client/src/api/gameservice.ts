@@ -8,6 +8,9 @@ class GamePaths {
   public GAME_UPDATES: string
   public GAME_EVENTS: string
   public GAME_ACTIONS: string
+  public GAME_STARTED: string
+  public GAME_FINISHED: string
+  public GAME_ERROR: string
   /**
    * Generate the websocket paths used for the given gameID
    * @param gameId - the id of the game
@@ -16,6 +19,9 @@ class GamePaths {
     this.GAME_UPDATES = '/messages/game/' + gameId
     this.GAME_EVENTS = '/messages/game/' + gameId + '/events'
     this.GAME_ACTIONS = '/app/game/' + gameId + '/play'
+    this.GAME_STARTED = '/messages/game/' + gameId + '/start'
+    this.GAME_FINISHED = '/messages/game/' + gameId + '/finish'
+    this.GAME_ERROR = '/messages/game/' + gameId + '/error'
   }
 }
 /**
@@ -27,9 +33,16 @@ export interface GameStarted {
 }
 
 /**
- * Game Ended - which will hold the information when a game has ended
+ * Game Error - which will hold the information when a game has an error
  */
-export interface GameEnded {
+export interface GameError {
+  error: string
+}
+
+/**
+ * Game Finished - which will hold the information when a game has ended
+ */
+export interface GameFinished {
   winner: number
   time: number
 }
@@ -65,9 +78,7 @@ export interface Player {
   premove: GameAction | null
   card1: string | null
   card2: string | null
-  action: GameAction | null
   playing: boolean
-  endGame: boolean | null
 }
 /**
  * Defines the Pot object
@@ -78,7 +89,8 @@ export interface Pot {
 
 export enum GameEventType {
   GAME_STARTED = 'GAME_STARTED',
-  GAME_FINISHED = 'GAME_FINISHED'
+  GAME_FINISHED = 'GAME_FINISHED',
+  GAME_ERROR = 'GAME_ERROR'
 }
 
 export interface GameEvent {
@@ -147,12 +159,27 @@ export class GameService {
 
   public onGameStarted (callback: GameEventCallback) {
     PokerClient.switchCallback(
-      this.gamePaths.GAME_EVENTS,
+      this.gamePaths.GAME_STARTED,
       this.onGameEventCallback,
       callback)
     this.onGameEventCallback = callback
 
   }
+  public onGameFinished (callback: GameEventCallback) {
+    PokerClient.switchCallback(
+      this.gamePaths.GAME_FINISHED,
+      this.onGameEventCallback,
+      callback)
+    this.onGameEventCallback = callback
+  }
+  public onGameError (callback: GameEventCallback) {
+    PokerClient.switchCallback(
+      this.gamePaths.GAME_ERROR,
+      this.onGameEventCallback,
+      callback)
+    this.onGameEventCallback = callback
+  }
+
   /**
    * Send an action to the server. (Note: this does not manage permissions)
    * @param {GameAction} action - the action that is being taken
