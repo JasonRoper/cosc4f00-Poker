@@ -261,22 +261,6 @@ export default class GameMech {
   public isGameRunning () {
     return this.gameService.connected()
   }
-  /*
-  public isPlayerInGame () {
-    // if this is not the game you are supposed to be at it returns false
-    this.gameService.
-    if ((this.gameTransport.gameId === this.gameId)) {
-      const players = this.gameTransport.multiplePlayers
-      for (const index of this.gameTransport.multiplePlayers) {
-        if (index.id === this.userId) {
-          return true
-        }
-      }
-    }
-    return false
-  }
-  */
-  // can this game accecpt action from this player
   private send (gameAction: GameAction) {
     this.gameService.sendAction(gameAction)
   }
