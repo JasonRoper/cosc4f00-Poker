@@ -160,8 +160,6 @@ export class GameService {
     this.onGameEventCallback = callback
 
   }
-
-
   /**
    * Send an action to the server. (Note: this does not manage permissions)
    * @param {GameAction} action - the action that is being taken

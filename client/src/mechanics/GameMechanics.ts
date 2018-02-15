@@ -1,3 +1,4 @@
+/*/
 import { GameAction,GameActionType,GameService,GameState,Player, PlayerEntity } from '@/api/gameservice'
 
 class GameError extends Error {
@@ -30,7 +31,7 @@ class GameMechanics {
 /**
  * Validates action and sets it as a premove or sends it to a server
  * @param {GameId,Player,GameAction} PlayerEntity
- */
+ *//*/
   public action (PlayerEntity: PlayerEntity) {
     if (this.isPlayerTurn(PlayerEntity.Player,this.GAME_TRANSPORT.Turn)) {
       if (this.validate(PlayerEntity)) {
@@ -50,7 +51,7 @@ class GameMechanics {
   /**
    *  Sets the Game Transport in the Game Mechanics
    * @param GameState
-   */
+   *//*
   public setGameState (GameState: GameState) {
     // this.GAME_SERVICE.onGameUpdated()
     if (GameState.GameId === this.GAME_TRANSPORT.GameId) {
@@ -70,6 +71,7 @@ class GameMechanics {
    *  Gets the Game Transport in the Game Mechanics
    * @return GameState
    */
+  /*/
   public getGameState () {
     return this.GAME_TRANSPORT
   }
@@ -84,7 +86,8 @@ class GameMechanics {
       }
     }
   }
-
+/*/
+/*/
   public validate (PlayerEntity: PlayerEntity) {
     let valid = true
 
@@ -117,6 +120,7 @@ class GameMechanics {
    *  Sets the Game Transport in the Game Mechanics
    * @param GameState
    */
+  /*/
   public validateAction (Player: Player,Action: GameAction,HasBet: boolean) {
 
     switch (Action.type) {
@@ -198,3 +202,4 @@ return false
   }
 
 }
+/*/

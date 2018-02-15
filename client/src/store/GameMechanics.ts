@@ -42,6 +42,7 @@ class GameMechanics {
     this.MultiplePlayers = gameStarted.MultiplePlayers
 
   }
+  /*/
   public gameEndedEvent (gameEnded: GameEnded) {
     for (let index = 0; index < this.MultiplePlayers.length; index++) {
       if (index === gameEnded.Winner) {
@@ -146,6 +147,7 @@ class GameMechanics {
    * @param gameId - contains game indentifier
    * @return valid GameState object or null
    */
+  /*/
   public getGameTransport (userId: number, gameId: number): GameState | null {
     const gameState: GameState = new GameState()
     gameState.CommunityCards = this.CommunityCards
@@ -169,6 +171,7 @@ class GameMechanics {
  * @param gameId
  * @returns valid
  */
+/*/
   public validate (userId: number, gameId: number) {
     let valid = true
     valid = this.isPlayerTurn(userId)
@@ -204,6 +207,7 @@ class GameMechanics {
     }
   }
 */
+/*/
   public validateAction () {
     // if true then there is no premove
     if (this.gameTransport.MultiplePlayers[this.playerLocation].premove === null) {
@@ -286,7 +290,7 @@ class GameMechanics {
 // premove
 // provide event to vue before game has started 
 // update GS
-
+/*/
   public removeInfo (userId: number) {
     for (const index of this.gameTransport.MultiplePlayers) {
       if (index.id === userId) {
@@ -322,6 +326,7 @@ class GameMechanics {
  * Validates action and sets it as a premove or sends it to a server
  * @param {GameId,Player,GameAction} PlayerEntity
  */
+/*/
   public action (userId: number, gameId: number, move: GameAction) {
     if (this.validate(userId,gameId)) {
       if (this.validateMove(userId,move)) {
@@ -362,6 +367,7 @@ class GameMechanics {
    */
 
   // is it the players turn?
+  /*/
   public isPlayerTurn (userId: number) {
     const turn = this.gameTransport.Turn
     for (let i = 0;i < this.gameTransport.MultiplePlayers.length;i++) {
@@ -373,11 +379,14 @@ class GameMechanics {
     }
     return false
   }
-
+/*/
+/*/
   public isGameRunning () {
     return this.gameService.connected()
   }
+  /*/
   // is this particular game running?
+  /*/
   public isPlayerInGame (userId: number, gameId: number) {
     // if this is not the game you are supposed to be at it returns false
     if ((this.gameTransport.GameId === gameId)) {
@@ -391,6 +400,7 @@ class GameMechanics {
     return false
   }
   // can this game accecpt action from this player
+  /*/
   private send (gameAction: GameAction) {
     this.gameService.sendAction(gameAction)
   }
