@@ -1,5 +1,15 @@
 package com.pokerface.pokerapi.users;
 
+import org.hibernate.validator.constraints.Email;
+
+import javax.validation.constraints.Size;
+
+/**
+ * UserTransport is a user facing object that will deliver
+ * profile information to the owner of the profile.
+ *
+ * TODO: should user config updates be sent via this object? or another one?
+ */
 public class UserTransport {
     private String username;
     private String password;

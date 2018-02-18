@@ -8,5 +8,7 @@ interface UserRepository extends CrudRepository<User, Long> {
 
     User findByUsername(String username);
 
-    User findByUsernameIgnoreCaseOrEmailIgnoreCase(String username, String email);
+    boolean existsByUsernameIgnoreCase(String username);
+
+    boolean existsByEmailIgnoreCase(String email);
 }

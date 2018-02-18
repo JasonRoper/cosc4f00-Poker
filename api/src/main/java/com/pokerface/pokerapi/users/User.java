@@ -1,10 +1,7 @@
 package com.pokerface.pokerapi.users;
 
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class User {
@@ -12,9 +9,15 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+
+    @Column(unique = true)
     private String username;
+
     private String password;
+
+    @Column(unique = true)
     private String email;
+
     private int rating;
     private boolean lookingForGame;
     private LoginState loginState;
@@ -30,7 +33,7 @@ public class User {
         this.role = "ROLE_USER";
     }
 
-    public UserTransport toDTO() {
+    public UserTransport toTransfer() {
         return new UserTransport(username, email);
     }
 

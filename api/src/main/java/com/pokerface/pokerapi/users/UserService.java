@@ -1,5 +1,7 @@
 package com.pokerface.pokerapi.users;
 
+import com.pokerface.pokerapi.util.BadRequestError;
+import com.pokerface.pokerapi.util.RESTError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,19 +11,20 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class UserService implements UserDetailsService {
-    private UserRepository userRepository;
-
-    private PasswordEncoder encoder;
+    private final UserRepository userRepository;
+    private final PasswordEncoder encoder;
 
     private static Logger logger = LoggerFactory.getLogger(UserService.class);
 
-    public UserService(UserRepository userRepository, PasswordEncoder encoder) {
+    public UserService(final UserRepository userRepository, final PasswordEncoder encoder) {
         this.userRepository = userRepository;
         this.encoder = encoder;
         User admin = new User("admin",
@@ -31,20 +34,29 @@ public class UserService implements UserDetailsService {
         this.userRepository.save(admin);
     }
 
-    public UserTransport register(RegistrationFields fields) {
-        User exists = userRepository.findByUsernameIgnoreCaseOrEmailIgnoreCase(fields.getUsername(),fields.getEmail());
-        if (exists != null) return null;
+    public UserTransport register(@Valid RegistrationFields fields) throws BadRequestError {
+        BadRequestError errors = new BadRequestError("Registration fields are invalid");
+
+        if (userRepository.existsByEmailIgnoreCase(fields.getEmail())) {
+            errors.addFieldError("email", "email already exists");
+        }
+
+        if (userRepository.existsByUsernameIgnoreCase(fields.getUsername())) {
+            errors.addFieldError("username", "username already exists");
+        }
+
+        if (errors.getNumberErrors() > 0) throw errors;
 
         User newUser = new User(fields.getUsername(),
                 encoder.encode(fields.getPassword()),
                 fields.getEmail());
-        return userRepository.save(newUser).toDTO();
+
+        return userRepository.save(newUser).toTransfer();
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
-        logger.debug("loading username: " + user.getUsername());
 
         List<GrantedAuthority> auth = AuthorityUtils.commaSeparatedStringToAuthorityList(user.getRole());
 
@@ -52,6 +64,7 @@ public class UserService implements UserDetailsService {
     }
 
     public UserTransport updateUser(UserTransport updatedUser) {
+        //TODO: switch to using UserUpdateTransport
         User user = userRepository.findByUsername(updatedUser.getUsername());
         user.setUsername(updatedUser.getUsername());
         user.setPassword(encoder.encode(updatedUser.getPassword()));
@@ -70,5 +83,10 @@ public class UserService implements UserDetailsService {
             users.add(new UserInfoTransport(user));
         }
         return users;
+    }
+
+    @ExceptionHandler(RESTError.class)
+    public RESTError basicHandler(RESTError error) {
+        return error;
     }
 }
