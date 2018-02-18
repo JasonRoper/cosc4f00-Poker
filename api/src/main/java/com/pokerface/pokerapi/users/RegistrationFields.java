@@ -24,6 +24,16 @@ public class RegistrationFields {
     @NotNull
     private String email;
 
+    public RegistrationFields(){
+    }
+
+    public RegistrationFields(String username, String password, String email){
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
+
+
     public String getUsername() {
         return username;
     }
