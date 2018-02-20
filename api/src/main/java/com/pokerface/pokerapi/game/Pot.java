@@ -46,9 +46,9 @@ public class Pot {
                         winners.add(x); // add them to the list of winners
                     }
                 }
-                int winnings = 0;
-                int smallestWinner = Integer.MAX_VALUE;
                 while (!winners.isEmpty()) {
+                    int winnings = 0;
+                    int smallestWinner = Integer.MAX_VALUE;
                     for (int p : winners) { // We must determine the smallest of the winners, this means they did not contribute enough to win a full winning share
                         if (pot[p] < smallestWinner) {
                             smallestWinner = pot[p];
