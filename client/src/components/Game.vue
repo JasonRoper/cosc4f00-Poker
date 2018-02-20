@@ -12,7 +12,6 @@ import TableView from '@/components/TableView'
 export default{
   components: {
     tableView: TableView
-    // Thetable: Table
   }
 }
 
