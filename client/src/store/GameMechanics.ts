@@ -15,28 +15,28 @@ import { Action } from 'vuex'
 
 export default class GameMech {
   public numberOfPlayers: number = 5
-  public gameTransport: GameState
-  public hasBet: boolean
-  public turn: number
-  public multiplePlayers: Player[]
-  public temp: string
-  public gameId: number
-  public pot: Pot []
+  // public gameTransport: GameState
+  public hasBet: boolean = false
+  public turn: number = 0
+  public multiplePlayers: Player[] = []
+  public temp: string = ''
+  public gameId: number = 0
+  public pot: Pot [] = []
   // public Deck: Card[] | null
-  public communityCards: string[]
-  public userId: number | null
-  public foldAction: number
-  public callAction: number
-  public betAction: number
-  public raiseAction: number
-  public checkAction: number
+  public communityCards: string[] = []
+  public userId: number | null = 0
+  public foldAction: number = 0
+  public callAction: number = 0
+  public betAction: number = 0
+  public raiseAction: number = 0
+  public checkAction: number = 0
   public possibleAction: GameActionType [][] = [[GameActionType.BET, GameActionType.FOLD, GameActionType.CHECK],
     [GameActionType.CALL, GameActionType.RAISE, GameActionType.FOLD], [GameActionType.FOLD]]
-  public playerLocation: number
-  public userAction: GameAction | null
+  public playerLocation: number = 0
+  public userAction: GameAction | null = null
   public disable: number = 1
   public enable: number = 0
-  public endGame: boolean | null
+  public endGame: boolean | null = null
   private lobby: boolean
   private gameService: GameService
    // Generate the websocket paths used for the given gameId
@@ -239,16 +239,19 @@ export default class GameMech {
     this.multiplePlayers[this.playerLocation].card2 = card2
   }
 
-  public sendAction (action: GameActionType, money: number) {
-    const move: GameAction = { type: action, bet: money }
-    if (this.multiplePlayers[this.playerLocation].playing) {
-      if (this.playerLocation === this.turn) {
-        if (this.storePremove(move.type, move.bet)) {
-          this.send(move)
-          this.userAction = null
-        }
-      }
+  public sendAction () {
+    if (this.userAction !== null) {
+      // if (this.storePremove(this.userAction.type, this.userAction.bet)) {
+        // if (this.playerLocation === this.turn) {
+      // if (this.multiplePlayers[this.playerLocation].playing) {
+      this.send(this.userAction)
+      this.userAction = null
+      // }
+        // }
+      // }
     }
+    // action: GameActionType, money: number) {
+    // const move: GameAction = { type: action, bet: money }
   }
   public getAction () {
     const action = this.userAction
@@ -282,7 +285,7 @@ export default class GameMech {
           if (this.validatePreMove(this.userAction)) {
             const action = (this.userAction).type
             const bet = (this.userAction).bet
-            this.sendAction(action, bet)
+            this.sendAction()
             alert('send the action')
           }
         }
