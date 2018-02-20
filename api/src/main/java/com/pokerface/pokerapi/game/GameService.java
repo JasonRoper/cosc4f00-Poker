@@ -82,11 +82,14 @@ public class GameService {
      * @return
      */
     public GameUpdateTransport fold (GameState gameState, GameAction action, Player player){
-        return null;
+        gameState.getPlayers().get(player.getTableSeatID()).setFolded(true);
+    return null;
+        //CREATE GAMETRANSPORT
     }
 
-    public void applyBet(GameState gameState, int playerGameID, int bet) {
-        //NEEDS TO BE FILLED IN, handle application to pot, and the minimum bet required
+    public void applyBet(GameState gameState, int playerGameID, double bet) {
+        gameState.matchBet(playerGameID);
+        gameState.placeBet(playerGameID,bet);
     }
 
 }

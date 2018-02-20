@@ -9,12 +9,15 @@ public class Player {
     private Card cardOne;
     @Enumerated
     private Card cardTwo;
-    private int cashOnHand;//User available money in game
+    private double cashOnHand;//User available money in game
     private Long id; // id to the database
     private int tableSeatID; // id to the game
     private GameState gameState;
+    private boolean hasFolded;
 
-    public Player(){}
+    public Player(){
+        hasFolded=false;
+    }
 
     public Card getCardOne(){return cardOne;}
 
@@ -28,11 +31,11 @@ public class Player {
         cardTwo=card;
     }
 
-    public int getCashOnHand() {
+    public double getCashOnHand() {
         return cashOnHand;
     }
 
-    public void setCashOnHand(int cashOnHand) {
+    public void setCashOnHand(double cashOnHand) {
         this.cashOnHand = cashOnHand;
     }
 
@@ -59,6 +62,10 @@ public class Player {
     public void setGameState(GameState gameState) {
         this.gameState = gameState;
     }
+
+    public void setFolded(boolean state){hasFolded=state;}
+
+    public boolean hasFolded() {return hasFolded;}
 
 
 

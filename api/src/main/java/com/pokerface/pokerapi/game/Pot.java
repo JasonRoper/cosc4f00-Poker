@@ -1,11 +1,35 @@
 package com.pokerface.pokerapi.game;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
+@Table(name = "pot")
 public class Pot {
     private int[] pot;
     private int sum;
+    private long id;
+    private GameState gameState;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @OneToOne(mappedBy = "pot")
+    public GameState getGameState() {
+        return gameState;
+    }
+
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;
+    }
 
     public Pot(int players){
         pot=new int[players];
@@ -20,7 +44,7 @@ public class Pot {
      * @param playerSeatID
      * @return
      */
-    public void add(int amount, int playerSeatID){
+    public void add(double amount, int playerSeatID){
         pot[playerSeatID]+=amount;
         sum+=amount;
     }
@@ -86,11 +110,11 @@ public class Pot {
         return totalWinnings;
     }
 
+    public int getBet (int playerSeatID) {return pot[playerSeatID];}
+
     public int getSum () {return sum;}
 
-    public int getPlayerCount() {return pot.length;}
-
-    public void resetSum() {sum=0;}
+    public void setSum(int value) {sum=value;}
 
 
 

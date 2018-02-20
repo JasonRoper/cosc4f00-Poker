@@ -10,16 +10,15 @@ import java.util.List;
 public class GameState {
     private long id;
     private Deck deck; //A 1-1 storage of a stack full of enum cards.
-    int[] pot; // Each represents how much each player has put in.
+    private Pot pot; // Each represents how much each player has put in.
     //First round, the flop/ the turn/the river
-    boolean hasBet; // Unecessary? Could be mapped to lastBet
-    int lastBet; //PlayerTableID
-    int dealer; //PlayerTableID
-    int minimumBet; // the minimum bet required to stay in the round
-    int bigBlind;
-    int presentTurn;//Whose action is it?
-    int round;//What round are we on, enum? from 0-4, 0 transition value? 1 pre-bet, 2/3/4 is flop turn river respectively.
-    List<Player> players;
+    private int lastBet; //PlayerTableID
+    private int dealer; //PlayerTableID
+    private int minimumBet; // the minimum bet required to stay in the round
+    private int bigBlind;
+    private int presentTurn;//Whose action is it?
+    private int round;//What round are we on, enum? from 0-4, 0 transition value? 1 pre-bet, 2/3/4 is flop turn river respectively.
+    private List<Player> players;
 
     public GameState(){
     }
@@ -42,6 +41,15 @@ public class GameState {
         this.id = id;
     }
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn
+    public Pot getPot() {
+        return pot;
+    }
+
+    public void setPot(Pot pot) {
+        this.pot = pot;
+    }
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn
@@ -51,14 +59,6 @@ public class GameState {
 
     public void setDeck(Deck deck) {
         this.deck = deck;
-    }
-
-    public void setPot(int[] pot) {
-        this.pot = pot;
-    }
-
-    public void setHasBet(boolean hasBet) {
-        this.hasBet = hasBet;
     }
 
     public void setLastBet(int lastBet) {
@@ -83,14 +83,6 @@ public class GameState {
 
     public void setRound(int round) {
         this.round = round;
-    }
-
-    public int[] getPot() {
-        return pot;
-    }
-
-    public boolean isHasBet() {
-        return hasBet;
     }
 
     public int getLastBet() {
@@ -125,5 +117,31 @@ public class GameState {
 
     public void setPlayers(List<Player> players) {
         this.players= players;
+    }
+
+    public boolean matchBet (int playerSeatID){
+        Player player = players.get(playerSeatID);
+        double difference=minimumBet-pot.getBet(playerSeatID);
+        if (player.getCashOnHand()>=difference){
+            pot.add(difference,playerSeatID);
+            player.setCashOnHand(player.getCashOnHand()-difference);
+        } else {
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean placeBet(int playerSeatID, double betAmount){
+        Player player=players.get(playerSeatID);
+        if (player.getCashOnHand()>=betAmount){
+            pot.add(betAmount,playerSeatID);
+            player.setCashOnHand(player.getCashOnHand()-betAmount);
+            lastBet=playerSeatID;
+            minimumBet+=betAmount;
+        } else {
+            return false;
+        }
+       return true;
     }
 }
