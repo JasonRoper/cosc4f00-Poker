@@ -90,11 +90,55 @@ public class PotTest {
 
     @Test
     public void testTiesEvenPot(){
+        pot=new Pot(4);
+        moneyInPot= new int[]{100,100,100,100};
+        ranking = new int[]{1,1,2,3};
+        expectedWinnings = new int[]{200,200,0,0};
+        insertPot();
+        assertTrue(matches(pot.resolveWinnings(ranking),expectedWinnings));
+
+        ranking = new int[]{1,1,1,2};
+        expectedWinnings = new int[]{133,133,133,0};
+        insertPot();
+        assertTrue(matches(pot.resolveWinnings(ranking),expectedWinnings));
+
+        ranking = new int[]{1,1,2,2};
+        expectedWinnings = new int[]{200,200,0,0};
+        insertPot();
+        assertTrue(matches(pot.resolveWinnings(ranking),expectedWinnings));
+
+        ranking = new int[]{1,2,2,2};
+        expectedWinnings = new int[]{400,0,0,0};
+        insertPot();
+        assertTrue(matches(pot.resolveWinnings(ranking),expectedWinnings));
 
     }
 
     @Test
     public void testTiesUnevenPot(){
+        pot=new Pot(4);
+        moneyInPot= new int[]{150,200,50,100};
+        ranking = new int[]{1,1,2,3};
+        expectedWinnings = new int[]{225,275,0,0};
+        insertPot();
+        assertTrue(matches(pot.resolveWinnings(ranking),expectedWinnings));
 
+        moneyInPot= new int[]{150,200,50,100};
+        ranking = new int[]{1,1,1,2};
+        expectedWinnings = new int[]{191,241,66,0};
+        insertPot();
+        assertTrue(matches(pot.resolveWinnings(ranking),expectedWinnings));
+
+        moneyInPot= new int[]{150,200,50,100};
+        ranking = new int[]{1,2,1,2};
+        expectedWinnings = new int[]{350,50,100,0};
+        insertPot();
+        assertTrue(matches(pot.resolveWinnings(ranking),expectedWinnings));
+
+        moneyInPot= new int[]{150,200,50,100};
+        ranking = new int[]{1,2,2,2};
+        expectedWinnings = new int[]{450,50,0,0};
+        insertPot();
+        assertTrue(matches(pot.resolveWinnings(ranking),expectedWinnings));
     }
 }
