@@ -29,7 +29,7 @@ public class UserService implements UserDetailsService {
         this.encoder = encoder;
         User admin = new User("admin",
                 encoder.encode("admin"),
-                "jkmroper@gmail.com");
+                "admin@pokerpals.org");
         admin.setRole("ROLE_USER,ROLE_ADMIN");
         this.userRepository.save(admin);
     }

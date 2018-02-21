@@ -9,7 +9,7 @@ public class BadRequestError extends RESTError {
     private List<ErrorPair> invalidFields;
 
 
-        public BadRequestError(String type) {
+    public BadRequestError(String type) {
         super(HttpStatus.BAD_REQUEST, type);
         this.invalidFields = new ArrayList<>();
     }

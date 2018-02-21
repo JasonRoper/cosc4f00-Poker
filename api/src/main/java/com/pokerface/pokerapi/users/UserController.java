@@ -6,6 +6,7 @@ import com.pokerface.pokerapi.util.RESTError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,8 +26,8 @@ public class UserController {
     }
 
     @PostMapping()
-    public UserTransport register(@RequestBody RegistrationFields fields) throws RESTError {
-        return userService.register(fields);
+    public ResponseEntity<UserTransport> register(@RequestBody RegistrationFields fields) throws RESTError {
+        return new ResponseEntity<>(userService.register(fields), HttpStatus.CREATED);
     }
 
     @PutMapping()
