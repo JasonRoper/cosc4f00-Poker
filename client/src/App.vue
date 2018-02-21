@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <navBar></navBar>
     <router-view>
     </router-view>
   </div>
@@ -10,6 +9,11 @@
 import NavBar from '@/components/NavBar.vue'
 export default {
   name: 'app',
+  data () {
+    return {
+      onHomePage: true
+    }
+  },
   components: {
     navBar: NavBar
   }
@@ -23,4 +27,12 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;}
+
+   .moveup-enter-active {
+    animation: moveup 0.5s;
+  }
+  @keyframes moveup {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(50); }
+  } 
 </style>

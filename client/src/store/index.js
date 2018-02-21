@@ -4,7 +4,7 @@ import router from '@/router'
 Vue.use(Vuex)
 
 export const store = new Vuex.Store({
-  state: {name: '', id: ''},
+  state: {name: '', id: '', password: ''},
   mutations: {
     setId (state, userId) {
       state.id = userId
@@ -21,10 +21,7 @@ export const store = new Vuex.Store({
   actions: {
     storeName (context, name) {
       console.log('clicked')
-      if (name.length === 0) {
-        return
-      } else
-      if (name.length > 0) {
+      if ((name.length > 0)) {
         context.commit('setPlayer', name)
         router.push('Lobby')
       }
