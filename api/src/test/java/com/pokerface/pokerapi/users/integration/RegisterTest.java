@@ -7,10 +7,7 @@ import com.pokerface.pokerapi.users.User;
 import com.pokerface.pokerapi.users.UserRepository;
 import com.pokerface.pokerapi.users.UserTransport;
 import com.pokerface.pokerapi.util.TestCase;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -36,12 +33,10 @@ public class RegisterTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-
-    @Before
+    @After
     public void clearUsers() {
         userRepository.deleteAll();
     }
-
 
     @Test
     public void registerSuccessful(){
@@ -119,7 +114,7 @@ public class RegisterTest {
     }
 
     @Test
-    public void usernameAlreadyExists() {
+    public void usernameAlreadyExists() throws IOException {
         User existingRecord = new User("user1", "aHashedPassword", "user1@gmail.com");
         userRepository.save(existingRecord);
 
@@ -129,10 +124,13 @@ public class RegisterTest {
                 String.class
         );
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+
+        JsonNode root = objectMapper.readTree(response.getBody());
+        assertEquals("com.pokerface.pokerapi.users.UsernameAlreadyExistsException", root.get("exception").asText() );
     }
 
     @Test
-    public void emailAlreadyExists() {
+    public void emailAlreadyExists() throws IOException {
         User existingRecord = new User("user1", "aHashedPassword", "user1@gmail.com");
         userRepository.save(existingRecord);
 
@@ -142,5 +140,8 @@ public class RegisterTest {
                 String.class
         );
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+
+        JsonNode root = objectMapper.readTree(response.getBody());
+        assertEquals("com.pokerface.pokerapi.users.EmailAlreadyExistsException", root.get("exception").asText() );
     }
 }
