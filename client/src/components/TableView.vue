@@ -1,13 +1,12 @@
 <template>
-  <div class="col">
+  <div >
     <div v-if="this.userId === null">
       <!-- This means that your in the lobby -->
-      <seat v-for="player in this.mechanics.multiplePlayers" :key="player.id" :data="player"/>
+      <seat v-for="player in this.mechanics.multiplePlayers" :key="player.id" :data="player"></seat>
   
     </div>
     <div v-else>
-    
-    
+      <player v-for="player in this.mechanics.multiplePlayers" :key="player.id" :data="player"></player>
     </div>
 
      <p>table{{this.message}}</p>

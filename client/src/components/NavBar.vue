@@ -4,7 +4,7 @@
 <!--====================================================================Navbar=========================================-->
 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top mb-3" >
   <div class="container ">
-    <a class="  nav-item text-secondary" href="#">PokerPals</a>
+    <a class="nav-item text-secondary" href="#">PokerPals</a>
     <img src="../assets/Webgraphics/poker.png" width="50" height="50">
     <!--Add image logo -->
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">

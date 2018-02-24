@@ -1,0 +1,68 @@
+.Chip-option{
+  height: 10em;
+  width:20em;
+  padding: 40px;
+  align-content: center;
+  text-decoration: none;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);  
+  border: 1px solid black;
+  text-align: center;  
+  border-radius: 50%;
+ 
+}
+
+.around-words.inner-blue{
+
+  align-content: center;
+  text-align: center;
+  background: rgba(78, 105, 255, 0.925);}
+
+  .around-words.inner-grey{
+    
+      align-content: center;
+      text-align: center;
+      background: rgba(131, 131, 131, 0.925);}
+
+      .around-words.inner-black{
+        
+          align-content: center;
+          text-align: center;
+          background: rgba(0, 0, 0, 0.925);}
+      
+          .around-words.inner-yellow{
+            
+              align-content: center;
+              text-align: center;
+              background: rgba(224, 192, 5, 0.925);}
+          
+
+  .around-words.inner-green{
+    
+      align-content: center;
+      text-align: center;
+      background: rgb(15, 155, 34);}
+
+
+.btn:hover{
+  background-color: #970303;
+  box-shadow: 0 0 70px rgba(0,0,0,0.5);  
+  
+}
+
+.around-words:hover{
+  box-shadow: 0 0 70px rgba(0,0,0,0.5);  
+  
+}
+.around-words {
+  border: 22pt dashed rgb(246, 248, 246); 
+  height: 15em;
+  width:15em;
+  text-decoration: none;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);  
+  border-radius: 50%;
+
+}
+.chip-holder {
+  padding: 20px;
+  display: inline-block;
+}
