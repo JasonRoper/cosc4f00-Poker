@@ -1,13 +1,10 @@
 package com.pokerface.pokerapi.users;
 
-import com.pokerface.pokerapi.util.BadRequestError;
 import com.pokerface.pokerapi.util.ListResponse;
-import com.pokerface.pokerapi.util.RESTError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -26,12 +23,12 @@ public class UserController {
     }
 
     @PostMapping()
-    public ResponseEntity<UserTransport> register(@RequestBody RegistrationFields fields) throws RESTError {
+    public ResponseEntity<UserTransport> register(@Valid @RequestBody RegistrationFields fields) {
         return new ResponseEntity<>(userService.register(fields), HttpStatus.CREATED);
     }
 
     @PutMapping()
-    public UserTransport update(@RequestBody UserTransport updatedUser) throws RESTError {
+    public UserTransport update(@RequestBody UserTransport updatedUser) {
         return userService.updateUser(updatedUser);
     }
 
@@ -42,6 +39,6 @@ public class UserController {
 
     @GetMapping()
     public ListResponse<UserInfoTransport> listing() {
-        return new ListResponse<UserInfoTransport>(userService.listUsers());
+        return new ListResponse<>(userService.listUsers());
     }
 }

@@ -26,7 +26,7 @@ public class User {
     public User() {
     }
 
-    User (String username, String securePassword, String email) {
+    public User(String username, String securePassword, String email) {
         this.username = username;
         this.password = securePassword;
         this.email = email;
@@ -34,7 +34,7 @@ public class User {
     }
 
     public UserTransport toTransfer() {
-        return new UserTransport(username, email);
+        return new UserTransport(id, username, email);
     }
 
     public LoginState getLoginState() {

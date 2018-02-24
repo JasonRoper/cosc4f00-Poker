@@ -11,11 +11,12 @@ import javax.validation.constraints.Size;
  * TODO: should user config updates be sent via this object? or another one?
  */
 public class UserTransport {
+    private long id;
     private String username;
-    private String password;
     private String email;
 
-    public UserTransport(String username, String email) {
+    public UserTransport(long id, String username, String email) {
+        this.id = id;
         this.username = username;
         this.email = email;
     }
@@ -30,13 +31,6 @@ public class UserTransport {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
     public String getEmail() {
         return email;
@@ -46,6 +40,14 @@ public class UserTransport {
         this.email = email;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -53,15 +55,15 @@ public class UserTransport {
 
         UserTransport that = (UserTransport) o;
 
+        if (id != that.id) return false;
         if (username != null ? !username.equals(that.username) : that.username != null) return false;
-        if (password != null ? !password.equals(that.password) : that.password != null) return false;
         return email != null ? email.equals(that.email) : that.email == null;
     }
 
     @Override
     public int hashCode() {
-        int result = username != null ? username.hashCode() : 0;
-        result = 31 * result + (password != null ? password.hashCode() : 0);
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (username != null ? username.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
         return result;
     }

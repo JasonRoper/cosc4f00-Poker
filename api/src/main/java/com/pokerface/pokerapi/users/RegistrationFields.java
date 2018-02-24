@@ -1,6 +1,7 @@
 package com.pokerface.pokerapi.users;
 
 import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -11,17 +12,17 @@ import javax.validation.constraints.Size;
  * that a client will use to create a new user account.
  */
 public class RegistrationFields {
+    @NotNull()
     @Size(min = UserConstants.USERNAME_MIN_CHARACTER_LENGTH,
             max = UserConstants.USERNAME_MAX_CHARACTER_LENGTH)
-    @NotNull
     private String username;
 
-    @Size(min = UserConstants.PASSWORD_MIN_LENGTH)
     @NotNull
+    @Size(min = UserConstants.PASSWORD_MIN_LENGTH)
     private String password;
 
+    @NotEmpty
     @Email
-    @NotNull
     private String email;
 
     public RegistrationFields(){

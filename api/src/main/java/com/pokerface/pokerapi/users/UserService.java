@@ -1,7 +1,5 @@
 package com.pokerface.pokerapi.users;
 
-import com.pokerface.pokerapi.util.BadRequestError;
-import com.pokerface.pokerapi.util.RESTError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
@@ -34,18 +32,15 @@ public class UserService implements UserDetailsService {
         this.userRepository.save(admin);
     }
 
-    public UserTransport register(@Valid RegistrationFields fields) throws BadRequestError {
-        BadRequestError errors = new BadRequestError("Registration fields are invalid");
+    public UserTransport register(RegistrationFields fields) {
 
         if (userRepository.existsByEmailIgnoreCase(fields.getEmail())) {
-            errors.addFieldError("email", "email already exists");
+            throw new UsernameAlreadyExistsException();
         }
 
         if (userRepository.existsByUsernameIgnoreCase(fields.getUsername())) {
-            errors.addFieldError("username", "username already exists");
+            throw new EmailAlreadyExistsException();
         }
-
-        if (errors.getNumberErrors() > 0) throw errors;
 
         User newUser = new User(fields.getUsername(),
                 encoder.encode(fields.getPassword()),
@@ -67,7 +62,6 @@ public class UserService implements UserDetailsService {
         //TODO: switch to using UserUpdateTransport
         User user = userRepository.findByUsername(updatedUser.getUsername());
         user.setUsername(updatedUser.getUsername());
-        user.setPassword(encoder.encode(updatedUser.getPassword()));
         user.setEmail(updatedUser.getEmail());
         userRepository.save(user);
         return updatedUser;
@@ -83,10 +77,5 @@ public class UserService implements UserDetailsService {
             users.add(new UserInfoTransport(user));
         }
         return users;
-    }
-
-    @ExceptionHandler(RESTError.class)
-    public RESTError basicHandler(RESTError error) {
-        return error;
     }
 }

@@ -1,15 +1,10 @@
 package com.pokerface.pokerapi.users;
 
-import com.pokerface.pokerapi.util.BadRequestError;
-import junit.framework.TestCase;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.Matchers.any;
@@ -27,7 +22,7 @@ public class RegisterTest {
     }
 
     @Test
-    public void testSuccessfulRegistration() throws BadRequestError {
+    public void testSuccessfulRegistration() {
         RegistrationTestCase[] testCases = new RegistrationTestCase[]{
                 new RegistrationTestCase(
                         new RegistrationFields("Jason", "afasdkf3ip", "jkmroper@gmail.com")),
