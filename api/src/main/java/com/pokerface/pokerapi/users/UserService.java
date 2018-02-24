@@ -35,11 +35,11 @@ public class UserService implements UserDetailsService {
     public UserTransport register(RegistrationFields fields) {
 
         if (userRepository.existsByEmailIgnoreCase(fields.getEmail())) {
-            throw new UsernameAlreadyExistsException();
+            throw new EmailAlreadyExistsException();
         }
 
         if (userRepository.existsByUsernameIgnoreCase(fields.getUsername())) {
-            throw new EmailAlreadyExistsException();
+            throw new UsernameAlreadyExistsException();
         }
 
         User newUser = new User(fields.getUsername(),

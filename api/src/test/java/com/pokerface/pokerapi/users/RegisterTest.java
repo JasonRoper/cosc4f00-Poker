@@ -43,34 +43,38 @@ public class RegisterTest {
         }
     }
 
-    @Test
-    public void testInvalidUsername() {
-
-    }
-
-    @Test
-    public void testInvalidEmail() {
-
-    }
-
-    @Test
-    public void testInvalidPassword() {
-
-    }
-
-    @Test
+    @Test()
     public void testEmailAlreadyExists() {
+        RegistrationFields[] testCases = new RegistrationFields[]{
+                new RegistrationFields("Jason", "aPassword", "jkmroper@gmail.com"),
+        };
+        for (RegistrationFields testCase : testCases) {
+            Mockito.when(mockUserRepository.existsByUsernameIgnoreCase(testCase.getUsername())).thenReturn(false);
+            Mockito.when(mockUserRepository.existsByEmailIgnoreCase(testCase.getEmail())).thenReturn(true);
 
+            try {
+                userService.register(testCase);
+                Assert.fail("EmailAlreadyExistsException not thrown");
+            } catch (EmailAlreadyExistsException e){
+            }
+
+        }
     }
 
     @Test
     public void testUsernameAlreadyExists() {
-
-    }
-
-    @Test
-    public void testIncompleteForm() {
-
+        RegistrationFields[] testCases = new RegistrationFields[]{
+                new RegistrationFields("Jason", "aPassword", "jkmroper@gmail.com"),
+        };
+        for (RegistrationFields testCase : testCases) {
+            Mockito.when(mockUserRepository.existsByUsernameIgnoreCase(testCase.getUsername())).thenReturn(true);
+            Mockito.when(mockUserRepository.existsByEmailIgnoreCase(testCase.getEmail())).thenReturn(false);
+            try {
+                userService.register(testCase);
+                Assert.fail("UsernameAlreadyExistsException not thrown");
+            } catch (UsernameAlreadyExistsException e){
+            }
+        }
     }
 
     class RegistrationTestCase {
