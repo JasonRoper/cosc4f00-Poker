@@ -32,7 +32,7 @@ export default class GameMech {
   public checkAction: number = 0
   public possibleAction: GameActionType [][] = [[GameActionType.BET, GameActionType.FOLD, GameActionType.CHECK],
     [GameActionType.CALL, GameActionType.RAISE, GameActionType.FOLD], [GameActionType.FOLD]]
-  public playerLocation: number = 0
+  public playerLocation: number = -1
   public userAction: GameAction | null = null
   public disable: number = 1
   public enable: number = 0
@@ -43,6 +43,8 @@ export default class GameMech {
    // @param gameId - the id of the game
   constructor (gameId: number, userId: number | null) {
     this.gameService = new GameService(gameId)
+    this.setDefaultTransport()
+
     if (userId !== null) {
       // this.gameService.onGameUpdated(this.setGameTransport)
       this.setDefaultTransport()
@@ -60,40 +62,51 @@ export default class GameMech {
       id: 0,
       money: 500,
       name: 'javon',
-      tableAction: {} as GameActionType,
+      tableAction: [GameActionType.BET, GameActionType.CALL, GameActionType.CHECK],
       premove: null,
       card1: CardSuite.BLANK_CARD,
       card2: CardSuite.BLANK_CARD,
-      playing: true
-    }, {
-      id: 1,
-      money: 888,
-      name: 'test',
-      tableAction: {} as GameActionType,
-      premove: null,
-      card1: CardSuite.BLANK_CARD,
-      card2: CardSuite.BLANK_CARD,
-      playing: true
-    }, this.defaultPlayer(), this.defaultPlayer() ]
+      playing: true,
+      isPlayer: false
+    }]
     this.gameId = 0
     this.pot = []
     // this.Deck = []
     this.communityCards = [CardSuite.CLUBS_ACE, CardSuite.CLUBS_EIGHT, 'three', 'four', 'five']
     this.temp = 'temoe'
     this.userId = 0
-    this.playerLocation = 0
+    
+    for (let player of this.multiplePlayers) {
+      if (player.id = this.userId) {
+        this.playerLocation = player.id
+        break;
+      } 
+    }
+
     this.userAction = null
   }
+  /*, {
+      id: 1,
+      money: 888,
+      name: 'test',
+      tableAction: {} as GameActionType[],
+      premove: null,
+      card1: CardSuite.BLANK_CARD,
+      card2: CardSuite.BLANK_CARD,
+      playing: true
+    }, this.defaultPlayer(), this.defaultPlayer()
+    */
   public defaultPlayer (): Player {
     const player: Player = {
       id: -1,
       money: 0,
       name: 'defaultPlayer',
-      tableAction: {} as GameActionType,
+      tableAction: {} as GameActionType[],
       premove: null,
       card1: CardSuite.BLANK_CARD,
       card2: CardSuite.BLANK_CARD,
-      playing: true
+      playing: true,
+      isPlayer: false
     }
     return player
   }
@@ -133,6 +146,7 @@ export default class GameMech {
   public sendCards (card1: string, card2: string) {
     this.multiplePlayers[this.playerLocation].card1 = card1
     this.multiplePlayers[this.playerLocation].card2 = card2
+    // this.multiplePlayers[this.playerLocation].tableAction = [GameActionType.BET,GameActionType.CHECK]
   }
 
   /**
@@ -302,9 +316,17 @@ export default class GameMech {
   public isGameRunning () {
     return this.gameService.connected()
   }
+
+  public finish () {
+    this.gameService.finish()
+  }
+
+
   // can this game accecpt action from this player
   private send (gameAction: GameAction) {
     this.gameService.sendAction(gameAction)
   }
+
+  
 
 }

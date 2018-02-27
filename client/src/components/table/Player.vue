@@ -11,10 +11,9 @@
             
                <card :card="this.data.card1"></card>
                 <card :card="this.data.card2"></card>
-               <!--<p v-if='this.data.playing'>You are playing the Game</p>
+          
+          <table-actions :data="this.data.tableAction" @clicked="bet"></table-actions>
                
-              
-               -->
             </div>
         </div>       
     </div>
@@ -23,10 +22,19 @@
  
 <script>
 import Card from '@/components/table/Card'
+import TableActions from '@/components/table/TableActions'
+// actions="this.data.useractions"
 export default {
   props: ['data'],
+  methods: {
+    bet (value) {
+      alert('Bet was clicked') // someValue
+      alert(value)
+    }
+  },
   components: {
-    card: Card
+    card: Card,
+    tableActions: TableActions
   }
 }
   /*

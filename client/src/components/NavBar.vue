@@ -2,11 +2,17 @@
 <div>
   
 <!--====================================================================Navbar=========================================-->
+<<<<<<< Updated upstream
 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top mb-3" >
+=======
+
+<!--
+<nav class="navbar navbar-expand-lg navbar-light bg-secondary fixed-top mb-4">
+>>>>>>> Stashed changes
   <div class="container ">
     <a class="nav-item text-secondary" href="#">PokerPals</a>
     <img src="../assets/Webgraphics/poker.png" width="50" height="50">
-    <!--Add image logo -->
+    Add image logo
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -24,6 +30,7 @@
       </div>
     </div>
   </div>
+<<<<<<< Updated upstream
 </nav>
 
 <div class="tab-content" id="pills-tabContent">
@@ -31,6 +38,9 @@
  <div class="tab-pane fade" id="pills-features" role="tabpanel" aria-labelledby="pills-features-tab"><features></features></div> 
   <div class="tab-pane fade" id="pills-about" role="tabpanel" aria-labelledby="pills-about-tab"><about></about></div>
 </div>
+=======
+</nav>>-->
+>>>>>>> Stashed changes
 <!--====================================================================/Navbar=========================================-->
 <!-- <button @click="Showhome = !Showhome">Change Now</button> -->
 

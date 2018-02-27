@@ -1,9 +1,8 @@
 <template>
-  <div >
+  <div class="col">
+  <!-- <seat v-for="player in this.mechanics.multiplePlayers" :key="player.id" :data="player"/>-->
     <div v-if="this.userId === null">
-      <!-- This means that your in the lobby -->
-      <seat v-for="player in this.mechanics.multiplePlayers" :key="player.id" :data="player"></seat>
-  
+       <!--This means that your in the lobby -->
     </div>
     <div v-else>
       <player v-for="player in this.mechanics.multiplePlayers" :key="player.id" :data="player"></player>
@@ -18,15 +17,6 @@
    <pot :data="this.mechanics.pot"></pot>
 
   <div>Action: {{this.mechanics.userAction}}</div>    
-
-    <input v-model="money" placeholder="How much would you like to bet">
-
-     <button v-on:click="fold(money)" :disabled="this.mechanics.foldAction == 1">FOLD</button>
-     <button v-on:click="check(money)" :disabled="this.mechanics.checkAction == 1">CHECK</button>
-     <button v-on:click="raise(money)" :disabled="this.mechanics.raiseAction == 1">RAISE</button>
-     <button v-on:click="call(money)" :disabled="this.mechanics.callAction == 1">CALL</button>
-     <button v-on:click="bet(money)" :disabled="this.mechanics.betAction == 1">BET</button>
-   <button v-on:click="sendAction()">Send Action To Server</button>
    
  </div>
 </template>
@@ -48,8 +38,7 @@ export default {
   props: ['userId'],
   data () {
     return {
-      msg: 'hiiiLow',
-      mechanics: new GameMech(0, this.userId)
+      mechanics: new GameMech(0, 0)// this.userId
     }
   },
   watch: {
@@ -108,9 +97,6 @@ export default {
     }
   },
   components: {
-    player: Player,
-    actions: TableActions,
-    card: Card,
     seat: Seat
   },
   created () {
@@ -125,8 +111,8 @@ export default {
     // this.gameService.sendAction({type: 'BET', bet: 1})
   },
   destroyed () {
-    if (this.gameService) {
-      this.gameService.finish()
+    if (this.mechanics) {
+      this.mechanics.finish()
     }
   }
 }
