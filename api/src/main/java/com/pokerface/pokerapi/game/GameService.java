@@ -31,7 +31,21 @@ public class GameService {
      * @return GameUpdateTransport an update for the user to maintain their gamestate
      */
     public GameUpdateTransport handleAction(long id, GameAction action, long userID){
-        return null;
+        GameUpdateTransport presentGameStateTransport = new GameUpdateTransport();
+        GameState gameState = new GameState(); // dummy file
+        //do the thing
+
+        if (isHandEnd(gameState)) {
+
+
+        }
+
+        if (isRoundEnd(gameState)) {
+
+
+        }
+
+        return presentGameStateTransport;
 
 
 //        Player player=null;
@@ -92,4 +106,38 @@ public class GameService {
         gameState.placeBet(playerGameID,bet);
     }
 
+    public GameState startGame(int playerCount){
+        GameState newGameState = new GameState();
+        Player[] players = new Player[playerCount];
+        setupPlayers(players);
+        Deck deck = new Deck();
+
+        return newGameState;
+    }
+
+    private Player[] setupPlayers(Player[] players){
+
+
+        return players;
+    }
+
+    private boolean isRoundEnd(GameState gameState){
+        if (gameState.getPresentTurn()==gameState.getLastBet()){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isHandEnd(GameState gameState){
+        int notFolded=0;
+        for (Player p : gameState.getPlayers()){
+            if (!p.hasFolded()){
+                notFolded++;
+            }
+        }
+        if (notFolded==1){
+            return true;
+        }
+        return false;
+    }
 }

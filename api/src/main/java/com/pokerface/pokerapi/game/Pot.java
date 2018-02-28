@@ -110,6 +110,8 @@ public class Pot {
         return totalWinnings;
     }
 
+    public int getPlayerCount() {return pot.length;}
+
     public int getBet (int playerSeatID) {return pot[playerSeatID];}
 
     public int getSum () {return sum;}

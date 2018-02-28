@@ -19,6 +19,7 @@ public class GameState {
     private int presentTurn;//Whose action is it?
     private int round;//What round are we on, enum? from 0-4, 0 transition value? 1 pre-bet, 2/3/4 is flop turn river respectively.
     private List<Player> players;
+    private boolean showdown=false; // Are we in the final showdown
 
     public GameState(){
     }

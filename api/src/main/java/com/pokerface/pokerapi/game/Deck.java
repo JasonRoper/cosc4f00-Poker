@@ -20,6 +20,18 @@ public class Deck {
     private GameState gameState;
 
     public Deck(){
+        int cards=0;
+        boolean[] taken = new boolean[52];
+        Random rand = new Random(System.currentTimeMillis());
+        while (cards!=52){
+            int cardNumber = rand.nextInt(52);
+            if (taken[cardNumber]==false){
+                taken[cardNumber]=true;
+                Card card = null;
+                this.cards.add(card);
+            }
+
+        }
     }
 
     @Id
