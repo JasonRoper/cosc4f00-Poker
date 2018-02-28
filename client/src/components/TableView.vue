@@ -1,23 +1,39 @@
+<<<<<<< HEAD
 <template>
   <div class="col">
   <!-- <seat v-for="player in this.mechanics.multiplePlayers" :key="player.id" :data="player"/>-->
+=======
+<template class="row">
+  <div class="col-sm-center text-center" >
+>>>>>>> 368b9f83d873b3d3d25cf70a34e40f837eb0dace
     <div v-if="this.userId === null">
        <!--This means that your in the lobby -->
     </div>
-    <div v-else>
-      <player v-for="player in this.mechanics.multiplePlayers" :key="player.id" :data="player"></player>
-    </div>
+    <!-- <div class="opps" v-else> -->
+      <player  class="player" v-for="player in this.mechanics.multiplePlayers" :key="player.id" :data="player">
+      </player>
+    <!-- </div> -->
+        <div class="inner-tableBorder">
 
      <p>table{{this.message}}</p>
     
     
-     <p class='Communitycards'>
+     <p class='Communitycards mt-5 '>
       <card class='size' v-for="card in this.mechanics.communityCards" :key="card" :card="card"></card>
     </p>
    <pot :data="this.mechanics.pot"></pot>
-
+  </div>
   <div>Action: {{this.mechanics.userAction}}</div>    
-   
+
+    <input v-model="money" placeholder="How much would you like to bet">
+
+     <button v-on:click="fold(money)" :disabled="this.mechanics.foldAction == 1">FOLD</button>
+     <button v-on:click="check(money)" :disabled="this.mechanics.checkAction == 1">CHECK</button>
+     <button v-on:click="raise(money)" :disabled="this.mechanics.raiseAction == 1">RAISE</button>
+     <button v-on:click="call(money)" :disabled="this.mechanics.callAction == 1">CALL</button>
+     <button v-on:click="bet(money)" :disabled="this.mechanics.betAction == 1">BET</button>
+   <button v-on:click="sendAction()">Send Action To Server</button>
+ 
  </div>
 </template>
 
@@ -38,7 +54,13 @@ export default {
   props: ['userId'],
   data () {
     return {
+<<<<<<< HEAD
       mechanics: new GameMech(0, 0)// this.userId
+=======
+      msg: 'hiiiLow',
+      mechanics: new GameMech(0, this.userId),
+      numberofPlayer: 0
+>>>>>>> 368b9f83d873b3d3d25cf70a34e40f837eb0dace
     }
   },
   watch: {
@@ -100,6 +122,8 @@ export default {
     seat: Seat
   },
   created () {
+    this.numberofPlayer = this.mechanics.multiplePlayers.length
+    console.log('heres number of players' + this.numberofPlayer)
     // const mechanics = new GameMechanics(0, 0)
     // mechanics.setDefaultTransport(TempGameState)
     // mechanics.setGameTransport(TempGameState)
@@ -110,6 +134,30 @@ export default {
     // })
     // this.gameService.sendAction({type: 'BET', bet: 1})
   },
+  /* mounted () {
+    let players = document.getElementsByClassName('player')
+    let numberofPoints = players.length
+    let degreeIncrument = 360/numberofPoints
+    let radius = 400
+    let x = 0
+    let y = 0
+    let theta = 0
+    x = Math.sin()
+    for ( let i=0; i<numberofPoints;i++) {
+    }
+    players[0].style.transform = 'translateX(0px) translateY(0px)'
+    players[1].style.transform = 'translateX(-400px) translateY(0px)'
+    players[2].style.transform = 'translateX(0px) translateY(400px)'
+    players[3].style.transform = 'translateX(-400px) translateY(400px)'
+    // players[3].style.transform = 'scale(1.2)'
+
+    /*x=rcos(θ)
+    y=rsin(θ)
+    On a unit circle, a circle with radius 1,  x=cos(θ)  and  y=sin(θ)
+    divide the pooints ie number of players by 360
+    for each point that is the theta sin(theata (degrees))
+    },
+*/
   destroyed () {
     if (this.mechanics) {
       this.mechanics.finish()
@@ -120,6 +168,3 @@ export default {
 </script>
 
 <style src="@/assets/css/Table.css"></style>
-  <style src="@/assets/css/Lobby.css">
-
-</style>

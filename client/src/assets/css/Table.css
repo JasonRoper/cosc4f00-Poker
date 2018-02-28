@@ -1,15 +1,24 @@
-.opps {
-    width:  600px;
-    margin: 0px auto;
-    display: -webkit-flex; /* Safari */
-    -webkit-align-items: center; /* Safari 7.0+ */
-    display: flex;
-    align-items: center;
-    align-content: center;
 
 
-  }
-
+.opps
+{
+  border : 1px solid grey;
+  border-radius: 80%;
+  border-width: 40px;
+  height: 100%;
+  width:100%;
+}
+.player{
+  
+  position: absolute;
+  border: 15px solid blue;
+  display: inline-block;
+  width:15em;
+  height: 18em;
+  margin-left: 200px;
+  margin: auto;
+  
+}
   .size{
     height: 138px;
     width:  103px;
@@ -36,14 +45,35 @@
     align-content: center;
 
   }
-  .userInfo{
-     margin-right:20px;
-     width:400px;
 
 
-    }
-    .actionsPosition{
-        margin: 0px auto;
+     /*=================
+     Table CSS
+  ==================*/
+
     
+    .inner-tableBorder{
+      border : 1px solid #e2e2e2;
+      border-radius: 50%;
+      border-width: 40px;
+      
+      border-color: #000000;
+      display: flex;
+      flex-direction:row;
+      height: 480pt;
+      width: 500pt;
+      margin: auto;
+      padding: 0%;
+      
+    
+      /* transform: scale(0.9); */
+  
+     }    
+/* ====================
+     Media Queries 
+  =====================
+//For where the players are positioned at ddifferent screen sizes 
+// 
 
-    }
+*/
+/* For screen phones when they are smaller decress scale down scertain parts  */

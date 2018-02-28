@@ -1,6 +1,7 @@
 
 
 <template>
+<<<<<<< HEAD
     <div class='oppenentContainer'>
         <div class="showImage " placeholder="asdas"> 
             <p>{{this.data.id}}</p> 
@@ -16,7 +17,25 @@
                
             </div>
         </div>       
+=======
+  <div>
+    <div  class='oppenentContainer'>
+      <div class="showImage " placeholder="asdas"> 
+        <div class="text-white oppName"> 
+          {{this.data.name}}
+        </div>
+        <p>{{this.data.id}}</p> 
+        <div class="text-white oppBalance">
+          $ {{ this.data.money}}
+        </div>
+      </div>
+      <div class="oppentCards">
+        <card class="singleCard":card="this.data.card1"></card>
+        <card class="singleCard" :card="this.data.card2"></card>
+      </div>
+>>>>>>> 368b9f83d873b3d3d25cf70a34e40f837eb0dace
     </div>
+  </div>
 </template>
 
  
@@ -25,6 +44,11 @@ import Card from '@/components/table/Card'
 import TableActions from '@/components/table/TableActions'
 // actions="this.data.useractions"
 export default {
+  data () {
+    return {
+      player_num: 0
+    }
+  },
   props: ['data'],
   methods: {
     bet (value) {
