@@ -1,14 +1,4 @@
-.opps {
-    width:  600px;
-    margin: 0px auto;
-    display: -webkit-flex; /* Safari */
-    -webkit-align-items: center; /* Safari 7.0+ */
-    display: flex;
-    align-items: center;
-    align-content: center;
 
-
-  }
 
   .size{
     height: 138px;

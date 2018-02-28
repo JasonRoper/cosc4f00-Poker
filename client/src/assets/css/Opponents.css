@@ -3,9 +3,11 @@
     background-repeat: no-repeat;
     width: 100px;
     height: 100px;
-    color: white;   
-    
-
+    color: white; 
+    border:10px solid white;  
+   border-radius: 50%;   
+  margin:auto;
+   
 }
 
 
@@ -15,15 +17,63 @@
     left: 140px;
     border: 1px solid black;
     border-radius: 10px;
-    width: 150px;
-    height: 70px;
-    margin-left: 100px;
-    text-align: left;
+    text-align: center;
 }
+
+.oppentCards {
+height: 140px;
+width:200px;
+background-repeat: no-repeat;
+margin: auto;
+display: flex;
+flex-direction: row;
+justify-content: center;
+position: relative;
+/* bottom: -10px; */
+margin:auto;
+transform:scale(-0.5);
+border: 1px solid red;
+/* left:-40px; */
+/* top: 0px; */
+}
+
+.oppName{
+    top: -40%;
+    position: relative;
+    
+}
+.oppBalance{
+    position:relative;
+    bottom: -30%;
+}
+.oppenentContainer
+{
+   padding-right:10px; 
+   border: 15px solid burlywood;
+   /* margin: auto; */
+   /* display: flex; */
+   /* align-items: center; */
+   /* margin-right: 20px;    */
+   padding: 0%;
+   z-index: 1;
+   position: relative;
+
+   /* transform: scale(0.8); */
+   
+}
+/*=====MEdia Queries====*/
+
+/* FOR large screens
 
 .oppenentContainer{
- 
-     margin-right: 150px;
-     margin-left: 0px;
-
+  left:0%;
 }
+FOR small screens
+
+.oppenentContainer{
+  left:100%;
+}
+
+*/
+
+

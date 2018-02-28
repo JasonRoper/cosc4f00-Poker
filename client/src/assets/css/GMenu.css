@@ -43,14 +43,22 @@
       background: rgb(15, 155, 34);}
 
 
+      .btn{
+
+        /* backface-visibility: hidden; */
+      }
 .btn:hover{
-  background-color: #970303;
-  box-shadow: 0 0 70px rgba(0,0,0,0.5);  
+
   
 }
 
 .around-words:hover{
+  box-shadow: 0 0 70px rgba(0,0,0,0.5); 
+    background-color: #970303;
   box-shadow: 0 0 70px rgba(0,0,0,0.5);  
+  color: white;
+  transform: rotatex(0deg) scale(1.2);
+
   
 }
 .around-words {
@@ -60,9 +68,14 @@
   text-decoration: none;
   box-shadow: 0 0 20px rgba(0,0,0,0.5);  
   border-radius: 50%;
+  transition: transform 500ms cubic-bezier(.2,-0.02,.39,1.27);
+  transform: rotatex(25deg);
 
 }
 .chip-holder {
   padding: 20px;
   display: inline-block;
+  perspective: 790px;
 }
+
+

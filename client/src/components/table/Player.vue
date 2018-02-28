@@ -1,29 +1,34 @@
 
 
 <template>
-    <div class='oppenentContainer'>
-        <div class="showImage " placeholder="asdas"> 
-            <p>{{this.data.id}}</p> 
-            <div class="opponentInfo">
-               <p>Account Balance: {{this.data.name}}</p>
-               <p>Current Bet: {{this.data.money}}</p>
-               
-            
-               <card :card="this.data.card1"></card>
-                <card :card="this.data.card2"></card>
-               <!--<p v-if='this.data.playing'>You are playing the Game</p>
-               
-              
-               -->
-            </div>
-        </div>       
+  <div>
+    <div  class='oppenentContainer'>
+      <div class="showImage " placeholder="asdas"> 
+        <div class="text-white oppName"> 
+          {{this.data.name}}
+        </div>
+        <p>{{this.data.id}}</p> 
+        <div class="text-white oppBalance">
+          $ {{ this.data.money}}
+        </div>
+      </div>
+      <div class="oppentCards">
+        <card class="singleCard":card="this.data.card1"></card>
+        <card class="singleCard" :card="this.data.card2"></card>
+      </div>
     </div>
+  </div>
 </template>
 
  
 <script>
 import Card from '@/components/table/Card'
 export default {
+  data () {
+    return {
+      player_num: 0
+    }
+  },
   props: ['data'],
   components: {
     card: Card

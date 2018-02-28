@@ -1,5 +1,5 @@
-<template>
-<div >
+<template  >
+<div id="page-bg"    class="container-fluid text-sm-center mycontent ">
 
   <!-- MenuIcon -->
   <!-- <div id="sidebar"> -->
@@ -16,7 +16,7 @@
 
 
   <!--/Side BAr content  -->
-  <div  id="page-bg" >
+  <div class="container text-sm-center mycontent "  >
     <!-- <div  class=" container text-lg-center"> -->
     <div class="row">
             <div id="sidebar"  class="col">
@@ -41,7 +41,7 @@
   </div>
 </div>
       <div id="page-content" class="col">
-        <nav>
+        <nav class="text-center">
   <div class="nav nav-tabs" id="nav-tab" role="tablist">
     <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Game</a>
     <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Profile</a>
