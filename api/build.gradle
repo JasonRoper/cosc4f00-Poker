@@ -33,3 +33,10 @@ dependencies {
 	//compile ('mysql:mysql-connector-java')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
+
+task copyStatic(type: Copy){
+    from fileTree('../client/dist')
+    into "$projectDir/src/main/resources/public"
+}
+
+bootRun.dependsOn copyStatic
