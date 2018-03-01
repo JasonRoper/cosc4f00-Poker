@@ -17,7 +17,7 @@ public class PotTest {
     int[] expectedWinnings;
 
     void insertPot(){
-        for (int i=0;i<pot.getPlayerCount();i++){
+        for (int i=0;i<pot.pot.length;i++){
             pot.add(moneyInPot[i],i);
         }
     }

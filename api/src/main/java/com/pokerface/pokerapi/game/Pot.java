@@ -7,7 +7,7 @@ import java.util.List;
 @Entity
 @Table(name = "pot")
 public class Pot {
-    private int[] pot;
+    public int[] pot;
     private int sum;
     private long id;
     private GameState gameState;
@@ -109,8 +109,6 @@ public class Pot {
 
         return totalWinnings;
     }
-
-    public int getPlayerCount() {return pot.length;}
 
     public int getBet (int playerSeatID) {return pot[playerSeatID];}
 

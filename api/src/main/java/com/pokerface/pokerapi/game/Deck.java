@@ -27,10 +27,26 @@ public class Deck {
             int cardNumber = rand.nextInt(52);
             if (taken[cardNumber]==false){
                 taken[cardNumber]=true;
-                Card card = null;
+                Card card = Card.values()[cardNumber];
                 this.cards.add(card);
+                cards++;
             }
+        }
+    }
 
+    public void shuffleDeck(){
+        int cards=0;
+        boolean[] taken = new boolean[52];
+        this.cards=new Stack<Card>();
+        Random rand = new Random(System.currentTimeMillis());
+        while (cards!=52){
+            int cardNumber = rand.nextInt(52);
+            if (taken[cardNumber]==false){
+                taken[cardNumber]=true;
+                Card card = Card.values()[cardNumber];
+                this.cards.add(card);
+                cards++;
+            }
         }
     }
 
@@ -49,7 +65,7 @@ public class Deck {
         return gameState;
     }
 
-    public Card getCards() {
+    public Card getCard() {
         return cards.pop();
     }
 

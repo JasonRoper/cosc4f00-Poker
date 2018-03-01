@@ -36,25 +36,14 @@ public class GameService {
         //do the thing
 
         if (isHandEnd(gameState)) {
-
-
+            newHand(gameState);
         }
 
         if (isRoundEnd(gameState)) {
 
-
         }
 
         return presentGameStateTransport;
-
-
-//        Player player=null;
-//        for (int i=0;i<gameState.players.size();i++){
-//            if (gameState.players.get(i).getId()==userID){
-//                player=gameState.players.get(i);
-//                break;
-//            }
-//        }
     }
 
     /**
@@ -64,7 +53,7 @@ public class GameService {
      * @param player the user who performed the action
      * @return the update transport necessary for the clients
      */
-    public GameUpdateTransport bet (GameState gameState, GameAction action, Player player){
+    public void bet (GameState gameState, GameAction action, Player player){
 
         if (player.getCashOnHand()>=action.getBet()){
             player.setCashOnHand(player.getCashOnHand()-action.getBet()); // remove the bet from the players available cash
@@ -73,8 +62,6 @@ public class GameService {
         } else {
             //ERROR TRAPPING NEEDS MORE STATEMENTS, HANDLE NOT ENOUGH BET
         }
-
-        return null;
     }
 
     /**
@@ -84,10 +71,9 @@ public class GameService {
      * @param player the player who is performing the action
      * @return
      */
-    public GameUpdateTransport check (GameState gameState, GameAction action, Player player){
-        return null;
-    }
+    public void check (GameState gameState, GameAction action, Player player){
 
+    }
     /**
      * fold allows the user to fold, surrendering the hand in question
      * @param gameState
@@ -95,9 +81,8 @@ public class GameService {
      * @param player
      * @return
      */
-    public GameUpdateTransport fold (GameState gameState, GameAction action, Player player){
+    public void fold (GameState gameState, GameAction action, Player player){
         gameState.getPlayers().get(player.getTableSeatID()).setFolded(true);
-    return null;
         //CREATE GAMETRANSPORT
     }
 
@@ -116,8 +101,6 @@ public class GameService {
     }
 
     private Player[] setupPlayers(Player[] players){
-
-
         return players;
     }
 
@@ -136,8 +119,22 @@ public class GameService {
             }
         }
         if (notFolded==1){
+            if (gameState.getRound()==5){
+                return false;
+            }
             return true;
         }
         return false;
+    }
+
+    private void newHand(GameState gameState){
+        int[] winners=new int[4];
+        gameState.getPot().resolveWinnings(winners);
+        Deck deck = gameState.getDeck();
+        deck.shuffleDeck();
+        for(Player p:gameState.getPlayers()){
+            p.setCardOne(deck.getCard());
+            p.setCardTwo(deck.getCard());
+        }
     }
 }
