@@ -45,8 +45,8 @@ DIAMONDS_ACE,
     DIAMONDS_JACK,
     DIAMONDS_QUEEN,
     DIAMONDS_KING,
-// Clubs
-CLUBS_ACE,
+    // Clubs
+    CLUBS_ACE,
     CLUBS_TWO,
     CLUBS_THREE,
     CLUBS_FIVE,
@@ -57,5 +57,21 @@ CLUBS_ACE,
     CLUBS_TEN,
     CLUBS_JACK,
     CLUBS_QUEEN,
-    CLUBS_KING,
+    CLUBS_KING;
+
+    public static Card clubs(int i) {
+        return values()[CLUBS_ACE.ordinal() + i];
+    }
+
+    public static Card hearts(int i) {
+        return values()[HEARTS_ACE.ordinal() + i];
+    }
+
+    public static Card diamonds(int i) {
+        return values()[DIAMONDS_ACE.ordinal() + i];
+    }
+
+    public static Card spades(int i) {
+        return values()[SPADES_ACE.ordinal() + i];
+    }
 }
