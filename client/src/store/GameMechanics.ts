@@ -71,10 +71,10 @@ export default class GameMech {
       name: 'test',
       tableAction: {} as GameActionType,
       premove: null,
-      card1: CardSuite.BLANK_CARD,
-      card2: CardSuite.BLANK_CARD,
+      card1: CardSuite.CLUBS_ACE,
+      card2: CardSuite.CLUBS_TWO,
       playing: true
-    }, this.defaultPlayer(), this.defaultPlayer() ]
+    }, this.defaultPlayer(), this.defaultPlayer() ,this.defaultPlayer(),this.defaultPlayer()]
     this.gameId = 0
     this.pot = []
     // this.Deck = []

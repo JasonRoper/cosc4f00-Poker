@@ -1,5 +1,3 @@
-
-
 <template>
   <div>
     <div  class='oppenentContainer'>
@@ -13,7 +11,7 @@
         </div>
       </div>
       <div class="oppentCards">
-        <card class="singleCard":card="this.data.card1"></card>
+        <card class="singleCard" :card="this.data.card1"></card>
         <card class="singleCard" :card="this.data.card2"></card>
       </div>
     </div>

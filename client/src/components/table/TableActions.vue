@@ -1,13 +1,13 @@
 <template>
 <div class='thecontain'>
 <div class=' button-nav ' role='navigation'>
-  <ul id='TableActions'class='nav navbar-nav thecontain"'>
+  <ul id='TableActions' class='nav navbar-nav thecontain"'>
     <li v-for="(button,index) in buttons" :key="index" class='nav-item'>
       <button @click='button.event'>{{ button.text }}</button>
     </li>
   </ul>
   <div v-if="canBet">
-    <input type='number'></input>
+    <input type='number'> </input>
   </div>
 </div>
 </div>

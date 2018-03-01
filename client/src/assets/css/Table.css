@@ -11,19 +11,26 @@
 .player{
   
   position: absolute;
-  border: 15px solid blue;
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  align-content: center;
   width:15em;
   height: 18em;
-  margin-left: 200px;
-  margin: auto;
+  /* top: 220px; */
+  left:174px;
+  z-index: 1;
+  /* margin-left: 200px; */
+  /* margin: auto; */
   
 }
   .size{
     height: 138px;
-    width:  103px;
+    width:  123px;
     background-repeat:no-repeat;
     position:relative;
+    border:1px solid aqua; 
+    margin-right:14px;
+    background: transparent;
   }
   .Communitycards{
     width:  600px;
@@ -33,6 +40,10 @@
     display: flex;
     align-items: center;
     align-content: center;
+    position: relative;
+    left:-41px;
+    transform: scale(0.87);
+    
   }
   .userCards{
     width:  480px;
@@ -60,15 +71,111 @@
       border-color: #000000;
       display: flex;
       flex-direction:row;
+      align-items: center;
+      align-content: center;
       height: 480pt;
       width: 500pt;
       margin: auto;
       padding: 0%;
-      
+      /* position: relative; */
+      top: -200px;
+      left: -50px;
+      /* margin-top: -20px; */
+     z-index:0;
+     transform: scale(1);
     
       /* transform: scale(0.9); */
   
-     }    
+     } 
+
+     .inner-tableBorder.active {
+       /* position:relative; */
+       /* top:200px; */
+       border : 1px solid #e2e2e2;
+       border-radius: 20%;
+       border-width: 40px;
+       
+       border-color: #000000;
+       display: flex;
+       flex-direction:row;
+       align-items: center;
+       align-content: center;
+       height: 400pt;
+       width: 100%;
+       margin: auto;
+       padding: 0%;
+       /* position: relative; */
+       top: -200px;
+       left: -50px;
+       /* margin-top: -20px; */
+      z-index:0;
+     
+       /* transform: scale(0.9); */
+     }
+
+     .TableActions{
+      border: 20px solid lightslategrey;
+      border-radius: 20%;
+      height:215pt;
+      width:100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      flex-wrap:wrap;
+      justify-content:  space-between;
+      top:70px;
+      background-color: lightgray;
+      margin-top:15px;
+      
+    }
+
+    .TableActions .btn {
+      border-radius: 50%;
+      width:80px;
+      height:80px;
+      color: blue;
+      background: transparent;
+      border:1px solid black;
+      opacity: 0.8;
+      position:relative;
+     /* right: 500px; */
+     /* margin-right: 80px;  */
+     /* left:20px; */
+     transform: scale(1.2);
+     padding:-20px;
+     top:0px;
+      
+    }
+
+    .TableActions .btn:hover {
+      border-radius: 50%;
+      background: transparent;
+      background-color: lightgreen;
+      border: 1px solid black;
+      opacity: 1;
+      transform: scale(1.2);
+   
+    }
+
+    .Action {
+      
+      
+      text-align: center;
+      align-items: center;
+      align-content: center;
+      margin:  auto;
+      
+    }
+    .ActionTitle{
+    position: relative;
+    /* left: -20px; */
+  }
+     
+     /* ====================
+     Media Queries 
+  =====================*/
+
+     
 /* ====================
      Media Queries 
   =====================
