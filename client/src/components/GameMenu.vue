@@ -7,7 +7,7 @@
         <div class="text-center mx-4 ">
         <div class="chip-holder"><button class="around-words inner-yellow btn btn-lg" @click="showInstructPoker()"><hr><button class="inner-button  btn btn-lg">Instructional Poker</button><hr></button></div>
       <div class="chip-holder"><button class="around-words inner-green btn btn-lg" @click="showCasualPoker()"><hr><div class="button-title">Casual Poker</div><hr></button></div>
-        <div class="chip-holder"><button class="around-words inner-blue btn btn-lg"@click="showCompetitivePoker()"><hr><button class="btn btn-lg">Competitive Poker</button><hr></button></div>
+        <div class="chip-holder"><button class="around-words inner-blue btn btn-lg" @click="showCompetitivePoker()"><hr><button class="btn btn-lg">Competitive Poker</button><hr></button></div>
       </div>
       </div>
       <div  v-show="casualPokerMode">

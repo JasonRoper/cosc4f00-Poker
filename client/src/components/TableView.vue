@@ -45,12 +45,12 @@
         <div class="ActionTitle">
           Call
         </div>
-        <button type="button" class="btn  btn-lg "><i class="fa fa-dollar  fa-lg"></i></button>
+        <button type="button" class="btn  btn-lg "><i class="fa fa-dollar  fa-lg"></i>{{BigBlindCurrentBet}}</button>
         </div>
 
          <div class="Action text-center lead text-muted">
         <div class="ActionTitle">
-        Raise
+        Bet/Raise
         </div>
         <button type="button" class="btn  btn-lg "><i class="fa fa-chevron-up  fa-lg"></i></button>
         </div>
@@ -60,6 +60,13 @@
         Chat
         </div>
         <button type="button" class="btn  btn-lg "><i class="fa fa-comments  fa-lg"></i></button>
+        </div>
+
+         <div class="Action text-center lead text-muted">
+        <div class="ActionTitle">
+        Check
+        </div>
+        <button type="button" class="btn  btn-lg "><i class="fa fa-check  fa-lg"></i></button>
         </div>
          <!-- </div> -->
       </div>
@@ -93,7 +100,8 @@ export default {
     return {
       msg: 'hiiiLow',
       mechanics: new GameMech(0, this.userId),
-      numberofPlayer: 0
+      numberofPlayer: 0,
+      BigBlindCurrentBet: 0
     }
   },
   watch: {

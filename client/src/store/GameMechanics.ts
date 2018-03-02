@@ -64,7 +64,8 @@ export default class GameMech {
       premove: null,
       card1: CardSuite.BLANK_CARD,
       card2: CardSuite.BLANK_CARD,
-      playing: true
+      playing: true,
+      isDealer: true
     }, {
       id: 1,
       money: 888,
@@ -73,7 +74,8 @@ export default class GameMech {
       premove: null,
       card1: CardSuite.CLUBS_ACE,
       card2: CardSuite.CLUBS_TWO,
-      playing: true
+      playing: true,
+      isDealer: false
     }, this.defaultPlayer(), this.defaultPlayer() ,this.defaultPlayer(),this.defaultPlayer()]
     this.gameId = 0
     this.pot = []
@@ -93,7 +95,8 @@ export default class GameMech {
       premove: null,
       card1: CardSuite.BLANK_CARD,
       card2: CardSuite.BLANK_CARD,
-      playing: true
+      playing: true,
+      isDealer: false
     }
     return player
   }
