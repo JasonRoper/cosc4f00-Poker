@@ -93,7 +93,7 @@ import GameMech from '@/store/GameMechanics.ts'
 // import { GameAction } from '../api/gameservice'
 // import Game from '@/store/game.ts'
 import Seat from '@/components/table/Seat'
-import {GameActionType} from '../api/gameservice'
+import GameActionType from '../api/gameservice'
 export default {
   props: ['userId'],
   data () {
@@ -175,6 +175,7 @@ export default {
     // })
     // this.gameService.sendAction({type: 'BET', bet: 1})
   },
+  /*
   mounted () {
     let players = document.getElementsByClassName('player')
     // players[0].style.transform = 'translateX( 0pt) translateY( 280pt)'
@@ -197,7 +198,19 @@ export default {
       players[i].style.transform = 'translateX(' + x + 'pt) translateY(' + y + 'pt)'
       console.log('heres you x: ' + x + 'here your y:' + y + 'at ' + theta)
     }
-  },
+    players[0].style.transform = 'translateX(0px) translateY(0px)'
+    players[1].style.transform = 'translateX(-400px) translateY(0px)'
+    players[2].style.transform = 'translateX(0px) translateY(400px)'
+    players[3].style.transform = 'translateX(-400px) translateY(400px)'
+    // players[3].style.transform = 'scale(1.2)'
+
+    /*x=rcos(θ)
+    y=rsin(θ)
+    On a unit circle, a circle with radius 1,  x=cos(θ)  and  y=sin(θ)
+    divide the pooints ie number of players by 360
+    for each point that is the theta sin(theata (degrees))
+    },
+    */
   destroyed () {
     if (this.mechanics) {
       this.mechanics.finish()

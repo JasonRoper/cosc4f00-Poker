@@ -16,7 +16,6 @@
 </template>
 
 <script>
-
 // import Actions from '@/types/actions'
 // import GameActionType from '@/api/gameservice'
 export default {
@@ -29,11 +28,10 @@ export default {
 }
 
 </script>
-
 <style>
+
 .thecontain{
- margin: 0px auto;
- border: 1px soild green;
-  
+  margin: 0px auto;
+  border: 1px soild green;
 }
 </style>

@@ -7,7 +7,9 @@ import {
   GameStarted,
   GameState,
   Player,
-  Pot } from '@/api/gameservice'
+  Pot,
+  UserCards
+ } from '@/api/gameservice'
 
 import actions from '@/types/actions'
 import CardSuite from '@/types/cards'
@@ -22,7 +24,7 @@ export default class GameMech {
   public temp: string = ''
   public gameId: number = 0
   public pot: Pot [] = []
-  // public Deck: Card[] | null
+  public deck: string | null = ''
   public communityCards: string[] = []
   public userId: number | null = 0
   public foldAction: number = 0
@@ -38,16 +40,15 @@ export default class GameMech {
   public enable: number = 0
   public endGame: boolean | null = null
   private lobby: boolean
+
   private gameService: GameService
    // Generate the websocket paths used for the given gameId
    // @param gameId - the id of the game
-  constructor (gameId: number, userId: number | null) {
-    this.gameService = new GameService(gameId)
+  constructor (gameId: number, userId?: number) {
+    this.gameService = new GameService(gameId, userId)
     this.setDefaultTransport()
-
-    if (userId !== null) {
-      // this.gameService.onGameUpdated(this.setGameTransport)
-      this.setDefaultTransport()
+    if (userId) {
+      this.gameService.onGameUpdated(this.setGameTransport)
       this.lobby = false
     } else {
       this.lobby = true
@@ -67,21 +68,10 @@ export default class GameMech {
       premove: null,
       card1: CardSuite.BLANK_CARD,
       card2: CardSuite.BLANK_CARD,
-      playing: true,
       isPlayer: false,
-      isDealer: true
-    }, {
-      id: 1,
-      money: 888,
-      name: 'test',
-      tableAction: {} as GameActionType,
-      premove: null,
-      card1: CardSuite.CLUBS_ACE,
-      card2: CardSuite.CLUBS_TWO,
-      playing: true,
-      isPlayer: false,
+      currentBet: 0,
       isDealer: false
-    }, this.defaultPlayer(), this.defaultPlayer() ,this.defaultPlayer(),this.defaultPlayer()]
+    }]
     this.gameId = 0
     this.pot = []
     // this.Deck = []
@@ -97,17 +87,7 @@ export default class GameMech {
     }
     this.userAction = null
   }
-  /*, {
-      id: 1,
-      money: 888,
-      name: 'test',
-      tableAction: {} as GameActionType[],
-      premove: null,
-      card1: CardSuite.BLANK_CARD,
-      card2: CardSuite.BLANK_CARD,
-      playing: true
-    }, this.defaultPlayer(), this.defaultPlayer()
-    */
+
   public defaultPlayer (): Player {
     const player: Player = {
       id: -1,
@@ -117,14 +97,34 @@ export default class GameMech {
       premove: null,
       card1: CardSuite.BLANK_CARD,
       card2: CardSuite.BLANK_CARD,
-      playing: true,
       isPlayer: false,
+      currentBet: 0,
       isDealer: false
     }
     return player
   }
+
   public getTableAction () {
     return this.multiplePlayers[this.playerLocation].tableAction
+  }
+
+  /**
+   * send user cards
+   * @param userCards
+   */
+  public onUserCardsEvent (userCards: UserCards) {
+    this.multiplePlayers[this.playerLocation].card1 = userCards.card1
+    this.multiplePlayers[this.playerLocation].card2 = userCards.card2
+  }
+
+  /**
+   * Adds cards to the Comminity Cards
+   * @param card
+   */
+  public onGameComminityCardsEvent (card: string) {
+    if (this.communityCards.length <= 5) {
+      this.communityCards.push(card)
+    }
   }
 
   /**
@@ -133,6 +133,11 @@ export default class GameMech {
   public onGameStartedEvent (gameStarted: GameStarted) {
     this.multiplePlayers = gameStarted.multiplePlayers
   }
+
+  /**
+   * Game finished event
+   * @param gameFinished
+   */
   public onGameFinishedEvent (gameFinished: GameFinished) {
     for (const player of this.multiplePlayers) {
       if (player.id === gameFinished.winner) {
@@ -142,6 +147,7 @@ export default class GameMech {
       }
     }
   }
+
   public onGameError (gameError: GameError) {
     alert('Error: ' + gameError.error)
     console.log('Error: ' + gameError.error)
@@ -151,29 +157,6 @@ export default class GameMech {
   // 3. onGameFinished
   // 4. onDeal
   // 5. onGameUpdated
-  /**
-   * SendCards to the user
-   * @param card1 - players first card
-   * @param card2 - players second card
-   */
-  public sendCards (card1: string, card2: string) {
-    this.multiplePlayers[this.playerLocation].card1 = card1
-    this.multiplePlayers[this.playerLocation].card2 = card2
-    // this.multiplePlayers[this.playerLocation].tableAction = [GameActionType.BET,GameActionType.CHECK]
-  }
-
-  /**
-   * sendcommunityCards
-   */
-  public sendCommunityCards (card1: string) {
-    const length = this.communityCards.length
-    if (length < 5) {
-      this.communityCards[length] = card1
-    } else {
-      alert('ERROR _ YOU ARE TRYING TO ADD A CARD TO COMMUNITY CARDS WHEN THERE IS ALREADY 5')
-      console.log('Error you are trying to add more than 5 cards')
-    }
-  }
 
   /**
    * storePremove - Stores the premove or resets
@@ -212,6 +195,7 @@ export default class GameMech {
         alert('disable Button went wrong')
     }
   }
+
   /**
    * TableActions will give the player the differnet table actions that they can take
    */
@@ -338,4 +322,8 @@ export default class GameMech {
   private send (gameAction: GameAction) {
     this.gameService.sendAction(gameAction)
   }
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 }

@@ -1,4 +1,5 @@
 <template>
+<<<<<<< Updated upstream
     <div class='oppenentContainer'>
         <div class="showImage " placeholder="asdas"> 
             <p>{{this.data.id}}</p> 
@@ -15,9 +16,11 @@
             </div>
         </div>       
 
+=======
+>>>>>>> Stashed changes
   <div>
-    <div  class='oppenentContainer'>
-      <div class="showImage " placeholder="asdas"> 
+    <div class='oppenentContainer'>
+      <div class="showImage" placeholder="asdas"> 
         <div class="text-white oppName"> 
           {{this.data.name}}
         </div>
@@ -30,8 +33,6 @@
       <div class="oppentCards">
         <card class="singleCard" :card="this.data.card1"></card>
         <card class="singleCard" :card="this.data.card2"></card>
-      </div>
-        <div v-show ="this.data.isDealer" id="isDealer"></div>
       </div>
     </div>
     <!--Display status big blind small blind  dealer etc   -->
