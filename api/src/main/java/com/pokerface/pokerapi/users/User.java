@@ -54,7 +54,7 @@ public class User {
     }
 
 
-    public static enum LoginState {
+    public enum LoginState {
         LOGGED_IN, HIDDEN, LOGGED_OUT
     }
 

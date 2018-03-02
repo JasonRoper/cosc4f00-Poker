@@ -78,4 +78,13 @@ public class UserService implements UserDetailsService {
         }
         return users;
     }
+
+    public UserInfoTransport getUser(String username) {
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            return new UserInfoTransport(user);
+        } else {
+            return null;
+        }
+    }
 }

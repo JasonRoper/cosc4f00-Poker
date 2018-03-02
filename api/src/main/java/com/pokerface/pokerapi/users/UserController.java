@@ -5,9 +5,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @RequestMapping("/users")
 @RestController
@@ -40,5 +42,10 @@ public class UserController {
     @GetMapping()
     public ListResponse<UserInfoTransport> listing() {
         return new ListResponse<>(userService.listUsers());
+    }
+
+    @MessageMapping("/login")
+    public UserInfoTransport login(Principal principal){
+        return userService.getUser(principal.getName());
     }
 }
