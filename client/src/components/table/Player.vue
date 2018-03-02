@@ -1,5 +1,5 @@
 <template>
-<<<<<<< Updated upstream
+<div>
     <div class='oppenentContainer'>
         <div class="showImage " placeholder="asdas"> 
             <p>{{this.data.id}}</p> 
@@ -14,10 +14,9 @@
           <table-actions :data="this.data.tableAction" @clicked="bet"></table-actions>
                
             </div>
-        </div>       
-
-=======
->>>>>>> Stashed changes
+        </div>  
+    </div>     
+    
   <div>
     <div class='oppenentContainer'>
       <div class="showImage" placeholder="asdas"> 
@@ -37,6 +36,7 @@
     </div>
     <!--Display status big blind small blind  dealer etc   -->
   </div>
+    </div>
 </template>
 
  

@@ -322,8 +322,4 @@ export default class GameMech {
   private send (gameAction: GameAction) {
     this.gameService.sendAction(gameAction)
   }
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
 }
