@@ -74,11 +74,12 @@ export interface Player {
   money: number
   id: number | null
   name: string
-  tableAction: GameActionType[]
+  tableAction: GameActionType[] | GameActionType
   premove: GameAction | null
   card1: string | null
   card2: string | null
   playing: boolean
+  isPlayer: boolean
   isDealer: boolean
 }
 /**

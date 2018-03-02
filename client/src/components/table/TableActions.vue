@@ -1,48 +1,31 @@
 <template>
+<div>
 <div class='thecontain'>
-<div class=' button-nav ' role='navigation'>
-  <ul id='TableActions' class='nav navbar-nav thecontain"'>
-<<<<<<< HEAD
-
-      <div v-if="this.data.length != 0">
-          <input v-model="money" placeholder="How much would you like to bet">
-          
-          <button v-on:click="fold(money)" :disabled="this.mechanics.foldAction == 1">FOLD</button>
-          <button v-on:click="check(money)" :disabled="this.mechanics.checkAction == 1">CHECK</button>
-          <button v-on:click="raise(money)" :disabled="this.mechanics.raiseAction == 1">RAISE</button>
-          <button v-on:click="call(money)" :disabled="this.mechanics.callAction == 1">CALL</button>-->
-          <button v-on:click="bet(10)">BET</button>
-      </div>
-      
-      
-      
-
-  </ul>
-
-=======
-    <li v-for="(button,index) in buttons" :key="index" class='nav-item'>
+<div class=' button-nav' role='navigation'>
+  <ul id='TableActions' class='nav navbar-nav thecontain'>
+    <li v-for="(button, index) in buttons" :key="index" class='nav-item'>
       <button @click='button.event'>{{ button.text }}</button>
     </li>
   </ul>
   <div v-if="canBet">
-    <input type='number'> </input>
+    <input type='number'/>
   </div>
->>>>>>> 5f711e5773e1e4b607718fd18d064b4c15f88d4e
 </div>
 </div>
+  </div>
 </template>
 
 <script>
 
 // import Actions from '@/types/actions'
-import GameActionType from '@/api/gameservices'
+// import GameActionType from '@/api/gameservice'
 export default {
   props: ['data'],
   methods: {
     bet (money) {
       this.$emit('clicked', money)
     }
-  },
+  }
 }
 
 </script>

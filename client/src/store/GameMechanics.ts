@@ -14,7 +14,7 @@ import CardSuite from '@/types/cards'
 import { Action } from 'vuex'
 
 export default class GameMech {
-  public numberOfPlayers: number = 5
+  // public numberOfPlayers: number = 5
   // public gameTransport: GameState
   public hasBet: boolean = false
   public turn: number = 0
@@ -58,24 +58,17 @@ export default class GameMech {
     this.hasBet = false
     this.turn = 0
     const p: Player = this.defaultPlayer()
+
     this.multiplePlayers = [{
       id: 0,
       money: 500,
       name: 'javon',
-<<<<<<< HEAD
-      tableAction: [GameActionType.BET, GameActionType.CALL, GameActionType.CHECK],
-      premove: null,
-      card1: CardSuite.BLANK_CARD,
-      card2: CardSuite.BLANK_CARD,
-      playing: true,
-      isPlayer: false
-    }]
-=======
       tableAction: {} as GameActionType,
       premove: null,
       card1: CardSuite.BLANK_CARD,
       card2: CardSuite.BLANK_CARD,
       playing: true,
+      isPlayer: false,
       isDealer: true
     }, {
       id: 1,
@@ -86,23 +79,22 @@ export default class GameMech {
       card1: CardSuite.CLUBS_ACE,
       card2: CardSuite.CLUBS_TWO,
       playing: true,
+      isPlayer: false,
       isDealer: false
     }, this.defaultPlayer(), this.defaultPlayer() ,this.defaultPlayer(),this.defaultPlayer()]
->>>>>>> 5f711e5773e1e4b607718fd18d064b4c15f88d4e
     this.gameId = 0
     this.pot = []
     // this.Deck = []
     this.communityCards = [CardSuite.CLUBS_ACE, CardSuite.CLUBS_EIGHT, 'three', 'four', 'five']
     this.temp = 'temoe'
     this.userId = 0
-    
-    for (let player of this.multiplePlayers) {
-      if (player.id = this.userId) {
-        this.playerLocation = player.id
-        break;
-      } 
-    }
 
+    for (const player of this.multiplePlayers) {
+      if (player.id === this.userId) {
+        this.playerLocation = player.id
+        break
+      }
+    }
     this.userAction = null
   }
   /*, {
@@ -126,11 +118,8 @@ export default class GameMech {
       card1: CardSuite.BLANK_CARD,
       card2: CardSuite.BLANK_CARD,
       playing: true,
-<<<<<<< HEAD
-      isPlayer: false
-=======
+      isPlayer: false,
       isDealer: false
->>>>>>> 5f711e5773e1e4b607718fd18d064b4c15f88d4e
     }
     return player
   }
@@ -345,12 +334,8 @@ export default class GameMech {
     this.gameService.finish()
   }
 
-
   // can this game accecpt action from this player
   private send (gameAction: GameAction) {
     this.gameService.sendAction(gameAction)
   }
-
-  
-
 }

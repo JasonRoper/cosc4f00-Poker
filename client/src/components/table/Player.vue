@@ -1,5 +1,4 @@
 <template>
-<<<<<<< HEAD
     <div class='oppenentContainer'>
         <div class="showImage " placeholder="asdas"> 
             <p>{{this.data.id}}</p> 
@@ -15,7 +14,7 @@
                
             </div>
         </div>       
-=======
+
   <div>
     <div  class='oppenentContainer'>
       <div class="showImage " placeholder="asdas"> 
@@ -32,13 +31,8 @@
         <card class="singleCard" :card="this.data.card1"></card>
         <card class="singleCard" :card="this.data.card2"></card>
       </div>
-<<<<<<< HEAD
->>>>>>> 368b9f83d873b3d3d25cf70a34e40f837eb0dace
-=======
-        <div v-show ="this.data.isDealer" id="isDealer">
-         D 
+        <div v-show ="this.data.isDealer" id="isDealer"></div>
       </div>
->>>>>>> 5f711e5773e1e4b607718fd18d064b4c15f88d4e
     </div>
     <!--Display status big blind small blind  dealer etc   -->
   </div>

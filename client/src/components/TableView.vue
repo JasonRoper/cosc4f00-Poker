@@ -1,30 +1,9 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-<template>
-  <div class="col">
-  <!-- <seat v-for="player in this.mechanics.multiplePlayers" :key="player.id" :data="player"/>-->
-=======
-<template class="row">
-  <div class="col-sm-center text-center" >
->>>>>>> 368b9f83d873b3d3d25cf70a34e40f837eb0dace
-    <div v-if="this.userId === null">
-       <!--This means that your in the lobby -->
-    </div>
-    <!-- <div class="opps" v-else> -->
-      <player  class="player" v-for="player in this.mechanics.multiplePlayers" :key="player.id" :data="player">
-      </player>
-    <!-- </div> -->
-        <div class="inner-tableBorder">
-
-     <p>table{{this.message}}</p>
-=======
 <template class="row ">
   <div class="col-sm-center text-center" >
     <div class="CompleteTable">
       <div v-if="this.userId === null">
         <!-- This means that your in the lobby -->
         <seat v-for="player in this.mechanics.multiplePlayers" :key="player.id" :data="player"></seat>
->>>>>>> 5f711e5773e1e4b607718fd18d064b4c15f88d4e
     
       </div>
     <!-- <div class="opps" v-else> -->
@@ -104,9 +83,9 @@
 
 <script>
 
-import Player from '@/components/table/Player.vue'
-import Card from '@/components/table/Card'
-import TableActions from '@/components/table/TableActions'
+// import Player from '@/components/table/Player.vue'
+// import Card from '@/components/table/Card'
+// import TableActions from '@/components/table/TableActions'
 import CardSuite from '@/types/cards'
 // import Actions from '@/types/actions'
 // import { GameService, GameActionType } from '@/api/gameservice'
@@ -119,18 +98,10 @@ export default {
   props: ['userId'],
   data () {
     return {
-<<<<<<< HEAD
-      mechanics: new GameMech(0, 0)// this.userId
-=======
-      msg: 'hiiiLow',
+      // mechanics: new GameMech(0, 0)// this.userId
       mechanics: new GameMech(0, this.userId),
-<<<<<<< HEAD
-      numberofPlayer: 0
->>>>>>> 368b9f83d873b3d3d25cf70a34e40f837eb0dace
-=======
       numberofPlayer: 0,
       BigBlindCurrentBet: 0
->>>>>>> 5f711e5773e1e4b607718fd18d064b4c15f88d4e
     }
   },
   watch: {
