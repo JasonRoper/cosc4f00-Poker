@@ -1,16 +1,20 @@
+.Playingcard{
+  width:200px;
+  background-repeat: no-repeat;
+}
 .blank.card{
     background: url("../cards/Back Blue 1.png");
     height:100%;
     width:100%;
     background-repeat: no-repeat;
-
-
 }
 
 
 
 .clubs.ace {
   background: url("../cards/Clubs 1.png");
+
+
 }
 .clubs.two {
   background: url("../cards/Clubs 2.png");

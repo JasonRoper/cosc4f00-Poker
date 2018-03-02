@@ -7,6 +7,7 @@
     border:10px solid white;  
    border-radius: 50%;   
   margin:auto;
+  background-color: crimson;
    
 }
 
@@ -22,8 +23,7 @@
 
 .oppentCards {
 height: 140px;
-width:200px;
-background-repeat: no-repeat;
+width:210px;
 margin: auto;
 display: flex;
 flex-direction: row;
@@ -31,11 +31,49 @@ justify-content: center;
 position: relative;
 /* bottom: -10px; */
 margin:auto;
-transform:scale(-0.5);
+transform:scale(-0.6);
 border: 1px solid red;
+background-repeat: no-repeat;
+
 /* left:-40px; */
 /* top: 0px; */
 }
+#isDealer{
+  color:black;
+  border: 7.5px dashed white;
+  width: 100%;
+  height: 100%;
+  display:flex;
+  display: inline;
+  border-radius: 50%;
+  /* Chip size  of chips */
+  padding: 5px;
+  background-color: orange;
+  position: relative;
+  left:50px;
+  top:-260px;
+}
+
+/* / Dealer styling  */
+.chip {
+  position:relative;
+margin:auto;
+display: inline;
+background: cyan;
+
+border: 1px solid red;
+/* width: 00%; */
+height: 100%;
+border-radius: 50%;
+ /* padding: 20%;  */
+
+}
+.chip-holder {
+  /* padding: 20px; */
+  /* display: inline-block; */
+  /* perspective: 790px; */
+}
+/* ========== Dealer styling======  */
 
 .oppName{
     top: -40%;
@@ -49,7 +87,7 @@ border: 1px solid red;
 .oppenentContainer
 {
    padding-right:10px; 
-   border: 15px solid burlywood;
+   /* border: 15px solid burlywood; */
    /* margin: auto; */
    /* display: flex; */
    /* align-items: center; */
@@ -57,7 +95,8 @@ border: 1px solid red;
    padding: 0%;
    z-index: 1;
    position: relative;
-
+   bottom: -20%;
+   /* left:-100%; */
    /* transform: scale(0.8); */
    
 }

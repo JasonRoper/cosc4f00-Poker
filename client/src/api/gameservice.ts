@@ -79,7 +79,7 @@ export interface Player {
   card1: string | null
   card2: string | null
   playing: boolean
-  isPlayer: boolean
+  isDealer: boolean
 }
 /**
  * Defines the Pot object

@@ -1,6 +1,6 @@
 <template>
 
-  <div  class="card" :class="this.card">
+  <div  class="Playingcard" :class="this.card">
     <div  class='Pcard'>
     {{this.card}} 
     </div>

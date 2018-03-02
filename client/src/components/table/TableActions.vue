@@ -2,6 +2,7 @@
 <div class='thecontain'>
 <div class=' button-nav ' role='navigation'>
   <ul id='TableActions' class='nav navbar-nav thecontain"'>
+<<<<<<< HEAD
 
       <div v-if="this.data.length != 0">
           <input v-model="money" placeholder="How much would you like to bet">
@@ -18,6 +19,15 @@
 
   </ul>
 
+=======
+    <li v-for="(button,index) in buttons" :key="index" class='nav-item'>
+      <button @click='button.event'>{{ button.text }}</button>
+    </li>
+  </ul>
+  <div v-if="canBet">
+    <input type='number'> </input>
+  </div>
+>>>>>>> 5f711e5773e1e4b607718fd18d064b4c15f88d4e
 </div>
 </div>
 </template>

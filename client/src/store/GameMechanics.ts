@@ -62,6 +62,7 @@ export default class GameMech {
       id: 0,
       money: 500,
       name: 'javon',
+<<<<<<< HEAD
       tableAction: [GameActionType.BET, GameActionType.CALL, GameActionType.CHECK],
       premove: null,
       card1: CardSuite.BLANK_CARD,
@@ -69,6 +70,25 @@ export default class GameMech {
       playing: true,
       isPlayer: false
     }]
+=======
+      tableAction: {} as GameActionType,
+      premove: null,
+      card1: CardSuite.BLANK_CARD,
+      card2: CardSuite.BLANK_CARD,
+      playing: true,
+      isDealer: true
+    }, {
+      id: 1,
+      money: 888,
+      name: 'test',
+      tableAction: {} as GameActionType,
+      premove: null,
+      card1: CardSuite.CLUBS_ACE,
+      card2: CardSuite.CLUBS_TWO,
+      playing: true,
+      isDealer: false
+    }, this.defaultPlayer(), this.defaultPlayer() ,this.defaultPlayer(),this.defaultPlayer()]
+>>>>>>> 5f711e5773e1e4b607718fd18d064b4c15f88d4e
     this.gameId = 0
     this.pot = []
     // this.Deck = []
@@ -106,7 +126,11 @@ export default class GameMech {
       card1: CardSuite.BLANK_CARD,
       card2: CardSuite.BLANK_CARD,
       playing: true,
+<<<<<<< HEAD
       isPlayer: false
+=======
+      isDealer: false
+>>>>>>> 5f711e5773e1e4b607718fd18d064b4c15f88d4e
     }
     return player
   }

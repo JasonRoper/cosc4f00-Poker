@@ -1,5 +1,3 @@
-
-
 <template>
 <<<<<<< HEAD
     <div class='oppenentContainer'>
@@ -27,14 +25,22 @@
         <p>{{this.data.id}}</p> 
         <div class="text-white oppBalance">
           $ {{ this.data.money}}
+          <!-- Put talbe action made -->
         </div>
       </div>
       <div class="oppentCards">
-        <card class="singleCard":card="this.data.card1"></card>
+        <card class="singleCard" :card="this.data.card1"></card>
         <card class="singleCard" :card="this.data.card2"></card>
       </div>
+<<<<<<< HEAD
 >>>>>>> 368b9f83d873b3d3d25cf70a34e40f837eb0dace
+=======
+        <div v-show ="this.data.isDealer" id="isDealer">
+         D 
+      </div>
+>>>>>>> 5f711e5773e1e4b607718fd18d064b4c15f88d4e
     </div>
+    <!--Display status big blind small blind  dealer etc   -->
   </div>
 </template>
 
