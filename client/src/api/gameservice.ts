@@ -1,29 +1,46 @@
 import PokerClient from '@/api/pokerclient'
-
 /**
  * Helper class that will build the paths used to access a game
  * with the given id.
  */
-class GamePaths {
+export default class GamePaths {
   public GAME_UPDATES: string
   public GAME_EVENTS: string
   public GAME_ACTIONS: string
   public GAME_STARTED: string
   public GAME_FINISHED: string
   public GAME_ERROR: string
+  public GAME_JOIN: string
+
+  public USER_CARDS: string = ''
+
   /**
    * Generate the websocket paths used for the given gameID
    * @param gameId - the id of the game
    */
-  constructor (gameId: number) {
+  constructor (gameId: number, userId?: number) {
     this.GAME_UPDATES = '/messages/game/' + gameId
     this.GAME_EVENTS = '/messages/game/' + gameId + '/events'
     this.GAME_ACTIONS = '/app/game/' + gameId + '/play'
     this.GAME_STARTED = '/messages/game/' + gameId + '/start'
     this.GAME_FINISHED = '/messages/game/' + gameId + '/finish'
     this.GAME_ERROR = '/messages/game/' + gameId + '/error'
+    this.GAME_JOIN = '/messages/game/' + gameId + '/join'
+
+    if (userId) {
+      this.USER_CARDS = '/messages/game/' + gameId + '/' + userId + '/cards'
+    }
   }
 }
+
+/**
+ * UserCards - which will hold the cards to the user
+ */
+export interface UserCards {
+  card1: string
+  card2: string
+}
+
 /**
  * GameStateStarted - which will hold the information when a new game has started
  */
@@ -72,13 +89,14 @@ export interface Card {
  */
 export interface Player {
   money: number
-  id: number | null
+  id: number
   name: string
   tableAction: GameActionType[] | GameActionType
   premove: GameAction | null
-  card1: string | null
-  card2: string | null
-  playing: boolean
+  card1: string
+  card2: string
+  currentBet: number
+  isPlayer: boolean
   isDealer: boolean
 }
 /**
@@ -94,8 +112,17 @@ export enum GameEventType {
   GAME_ERROR = 'GAME_ERROR'
 }
 
+export enum UserEventType {
+  USER_CARDS = 'USER_CARDS'
+}
+
 export interface GameEvent {
   event: GameEventType,
+  payload: any
+}
+
+export interface UserEvent {
+  event: UserEventType,
   payload: any
 }
 
@@ -116,6 +143,8 @@ export type GameUpdatedCallback = (newState: GameState) => void
 
 export type GameEventCallback = (event: GameEvent) => void
 
+export type UserEventCallback = (event: UserEvent) => void
+
 /**
  * Manages all access to games on the server
  */
@@ -124,16 +153,31 @@ export class GameService {
   private gamePaths: GamePaths
   private onGameUpdatedCallback: GameUpdatedCallback
   private onGameEventCallback: GameEventCallback
+  private onUserEventCallback: UserEventCallback
 
   /**
    * Create a GameService to manage access to the game at gameId
    * @param gameId - the id of the game
    */
-  constructor (gameId: number) {
+  constructor (gameId: number, userId?: number) {
     this.gameId = gameId
-    this.gamePaths = new GamePaths(gameId)
+    this.gamePaths = new GamePaths(gameId, userId)
     this.switchGame(gameId)
   }
+
+  /**
+   * Register a callback to be called when the user is sent cards
+   * @param callback - will be called when the user is sent cards
+   */
+
+  public onUserCards (callback: UserEventCallback) {
+    PokerClient.switchCallback(
+      this.gamePaths.USER_CARDS,
+      this.onGameUpdatedCallback,
+      callback)
+    this.onUserEventCallback = callback
+  }
+
   /**
    * Register a callback to be called when the game is updated
    * @param callback - will be called when the game updates

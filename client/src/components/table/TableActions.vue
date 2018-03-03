@@ -1,100 +1,37 @@
 <template>
+<div>
 <div class='thecontain'>
-<div class=' button-nav ' role='navigation'>
-  <ul id='TableActions' class='nav navbar-nav thecontain"'>
-    <li v-for="(button,index) in buttons" :key="index" class='nav-item'>
+<div class=' button-nav' role='navigation'>
+  <ul id='TableActions' class='nav navbar-nav thecontain'>
+    <li v-for="(button, index) in buttons" :key="index" class='nav-item'>
       <button @click='button.event'>{{ button.text }}</button>
     </li>
   </ul>
   <div v-if="canBet">
-    <input type='number'> </input>
+    <input type='number'/>
   </div>
 </div>
 </div>
+  </div>
 </template>
 
 <script>
-
-import Actions from '@/types/actions'
-
+// import Actions from '@/types/actions'
+// import GameActionType from '@/api/gameservice'
 export default {
-  props: ['maxBet', 'canBet', 'matchBet'],
-  data () {
-    return {
-      bet: 0,
-      buttons: {
-        call: {
-          text: 'Call',
-          event: this.call
-        },
-        raise: {
-          text: 'Raise',
-          event: this.raise
-        },
-        fold: {
-          text: 'Fold',
-          event: this.fold
-        },
-        check: {
-          text: 'Check',
-          event: this.check
-        },
-        bet: {
-          text: 'Bet',
-          event: this.Makebet
-        }
-      }
-    }
-  },
+  props: ['data'],
   methods: {
-    Makebet () {
-      console.log('bet')
-      this.$emit('action', {
-        action: Actions.BET,
-        bet: this.bet
-      })
-    },
-    raise () {
-      console.log('raise')
-      this.$emit('action', {
-        actions: Actions.RAISE,
-        bet: this.bet
-      })
-    },
-    call () {
-      console.log('call')
-      this.$emit('action', {
-        actions: Actions.CALL,
-        bet: this.bet
-      })
-    },
-    check () {
-      console.log('check')
-      this.$emit('action', {
-        actions: Actions.CHECK,
-        bet: this.bet
-      })
-    },
-    fold () {
-      console.log('fold')
-      this.$emit('action', {
-        actions: Actions.CHECK,
-        bet: this.bet
-      })
-    }
-  },
-  watch: {
-    matchBet () {
-      this.buttons.call.text = 'Check'
+    bet (money) {
+      this.$emit('clicked', money)
     }
   }
 }
-</script>
 
+</script>
 <style>
+
 .thecontain{
- margin: 0px auto;
- border: 1px soild green;
-  
+  margin: 0px auto;
+  border: 1px soild green;
 }
 </style>
