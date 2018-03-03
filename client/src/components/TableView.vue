@@ -2,13 +2,9 @@
   <div class="col-sm-center text-center" >
     <div class="CompleteTable">
       <div v-if="this.userId === null">
-        <!-- This means that your in the lobby -->
         <seat v-for="player in this.mechanics.multiplePlayers" :key="player.id" :data="player"></seat>
     
       </div>
-    <!-- <div class="opps" v-else> -->
-    
-      <!-- </div> -->
               <div class="inner-tableBorder">    
           <player  class="player" v-for="player in this.mechanics.multiplePlayers" :key="player.id" :data="player">
         </player>
@@ -20,13 +16,8 @@
       </div>
     <pot :data="this.mechanics.pot"></pot>
     </div>
-  </div>
-    <!-- User Interacions -->
-    
+  </div>    
       <div class="TableActions">
-        
-        <!-- <div> -->
-          <!-- <div class="ActionContainer"> -->
         <div class="Action text-center lead text-muted">
         <div class="ActionTitle">
           Fold
@@ -68,7 +59,6 @@
         </div>
         <button type="button" class="btn  btn-lg "><i class="fa fa-check  fa-lg"></i></button>
         </div>
-         <!-- </div> -->
       </div>
       <div>Action: {{this.mechanics.userAction}}</div>    
         <input v-model="money" placeholder="How much would you like to bet">

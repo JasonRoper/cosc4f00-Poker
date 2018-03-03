@@ -79,7 +79,6 @@ export default class GameMech {
     }, this.defaultPlayer(), this.defaultPlayer() ,this.defaultPlayer(),this.defaultPlayer()]
     this.gameId = 0
     this.pot = []
-    // this.Deck = []
     this.communityCards = [CardSuite.CLUBS_ACE, CardSuite.CLUBS_EIGHT, 'three', 'four', 'five']
     this.temp = 'temoe'
     this.userId = 0

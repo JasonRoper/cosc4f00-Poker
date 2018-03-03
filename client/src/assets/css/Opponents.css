@@ -40,7 +40,7 @@ background-repeat: no-repeat;
 }
 #isDealer{
   color:black;
-  border: 7.5px dashed white;
+  border: 5.5px dashed white;
   width: 100%;
   height: 100%;
   display:flex;
@@ -48,11 +48,14 @@ background-repeat: no-repeat;
   border-radius: 50%;
   /* Chip size  of chips */
   padding: 5px;
+  padding-right:7px;
+  padding-left:7px;
   background-color: orange;
   position: relative;
   left:50px;
   top:-260px;
 }
+
 
 /* / Dealer styling  */
 .chip {

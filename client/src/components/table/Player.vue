@@ -16,7 +16,7 @@
         <card class="singleCard" :card="this.data.card2"></card>
       </div>
         <div v-show ="this.data.isDealer" id="isDealer">
-         D 
+      <strong>D </strong>
       </div>
     </div>
     <!--Display status big blind small blind  dealer etc   -->
