@@ -15,7 +15,9 @@ public class Player {
     private GameState gameState;
     private boolean hasFolded;
 
-    public Player(){
+    public Player(Long id){
+        this.id=id;
+        cashOnHand=getGameState().defaultCashOnHand;
         hasFolded=false;
     }
 
@@ -66,6 +68,10 @@ public class Player {
     public void setFolded(boolean state){hasFolded=state;}
 
     public boolean hasFolded() {return hasFolded;}
+
+    public void addPlayer(){
+
+    }
 
 
 

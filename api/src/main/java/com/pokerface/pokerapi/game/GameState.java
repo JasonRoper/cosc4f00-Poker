@@ -15,10 +15,19 @@ public class GameState {
     private int lastBet; //PlayerTableID
     private int dealer; //PlayerTableID
     private int minimumBet; // the minimum bet required to stay in the round
-    private int bigBlind;
+
     private int presentTurn;//Whose action is it?
     private int round;//What round are we on, enum? from 0-4, 0 transition value? 1 pre-bet, 2/3/4 is flop turn river respectively.
     private List<Player> players;
+
+    /**
+     * These are game settings
+     *
+     */
+    private int bigBlind;
+    int minPlayerCount;
+    int defaultCashOnHand;
+
 
     public GameState(){
     }
@@ -85,6 +94,22 @@ public class GameState {
         this.round = round;
     }
 
+    public void setMinPlayerCount(int minPlayerCount) {
+        this.minPlayerCount = minPlayerCount;
+    }
+
+    public void setDefaultCashOnHand(int defaultCashOnHand) {
+        this.defaultCashOnHand = defaultCashOnHand;
+    }
+
+    public int getMinPlayerCount() {
+        return minPlayerCount;
+    }
+
+    public int getDefaultCashOnHand() {
+        return defaultCashOnHand;
+    }
+
     public int getLastBet() {
         return lastBet;
     }
@@ -143,5 +168,10 @@ public class GameState {
             return false;
         }
        return true;
+    }
+
+    public int addPlayer(long playerID){
+        players.add(new Player(playerID));
+        return players.size();
     }
 }

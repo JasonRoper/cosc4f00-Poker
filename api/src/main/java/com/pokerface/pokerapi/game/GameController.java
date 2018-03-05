@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Stack;
+
+
 @Controller
 public class GameController {
     private static final Logger logger = LoggerFactory.getLogger(GameController.class);
@@ -25,6 +28,11 @@ public class GameController {
     }
 
 
+    /**
+     * This function is the baseline for when a player asks to be placed into a match. If there is a suitable game for them, it finds it and adds them, if there isn't it makes the game and will add other players to it.
+     * @param id
+     * @return
+     */
     public long matchmake(long id){
         long gameID= - 0;
         gameID=firstAvailableGame();
@@ -34,14 +42,30 @@ public class GameController {
         return gameID;
     }
 
+    /**
+     * This function adds players, and checks that the starting requirements have been met, thus starting the game.
+     * @param playerID
+     * @param gameID
+     */
     private void addPlayer(long playerID, long gameID){
+        GameState game=games.findOne(gameID);
+        if (game.addPlayer(playerID)>=game.minPlayerCount){
+            startGame(game.getId());
+        }
+        games.save(game);
+    }
+
+    /**
+     * This function starts games once the amount of users reached is enough. This is done once in the lifetime of a game
+     * @param ID This parameter is the games id being started
+     */
+    private void startGame(long ID){
 
     }
 
     private long firstAvailableGame(){
-
-
-        return 0;
+       // return games.getNextGame();
+return 0;
     }
 
 
