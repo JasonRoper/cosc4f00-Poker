@@ -8,7 +8,6 @@ import {
   GameStarted,
   GameState,
   Player,
-  Pot,
   UserCards } from '@/api/gameservice'
 
 import actions from '@/types/actions'
@@ -29,7 +28,6 @@ export default class GameMech {
   public storeAction: GameAction | null = null
 
   public endGame: boolean = false
-  private lobby: boolean
 
   public disable: number = 1
   public enableButton: number = 0
@@ -40,9 +38,10 @@ export default class GameMech {
   public checkAction: number = 0
   public possibleAction: GameActionType [][] = [[GameActionType.BET, GameActionType.FOLD, GameActionType.CHECK],
     [GameActionType.CALL, GameActionType.RAISE, GameActionType.FOLD], [GameActionType.FOLD]]
-  
+
+  private lobby: boolean
   private gameService: GameService
-  
+
   // Generate the websocket paths used for the given gameId
   // @param gameId - the id of the game
   constructor (gameId: number, userId: number | null) {
@@ -114,15 +113,14 @@ export default class GameMech {
   public getTableAction () {
     return this.multiplePlayers[this.playerLocation].tableAction
   }
-
   /**
    * sendEvent of the game started
    */
   public onGameStartedEvent (gameStarted: GameStarted) {
     this.multiplePlayers = gameStarted.multiplePlayers
   }
+
   /**
-   * 
    * @param gameFinished Finished Event of the game ending
    */
   public onGameFinishedEvent (gameFinished: GameFinished) {
@@ -138,16 +136,13 @@ export default class GameMech {
   }
 
   /**
-   * 
    * @param gameError When the game Sends and Error
    */
   public onGameError (gameError: GameError) {
     alert('Error: ' + gameError.error)
     console.log('Error: ' + gameError.error)
   }
-
-
-    /**
+  /**
    * send user cards
    * @param userCards
    */
@@ -157,13 +152,13 @@ export default class GameMech {
   }
   /**
    * SendCards to the user
-   * @param card1 - players first card
-   * @param card2 - players second card 
-    public sendCards (card1: string, card2: string) {
-      this.multiplePlayers[this.playerLocation].card1 = card1
-      this.multiplePlayers[this.playerLocation].card2 = card2
-    }
-  */
+   * players first card
+   *  players second card
+   * public sendCards (card1: string, card2: string) {
+   * this.multiplePlayers[this.playerLocation].card1 = card1
+   * this.multiplePlayers[this.playerLocation].card2 = card2
+   * }
+   */
   /**
    * Adds cards to the Comminity Cards
    * @param card

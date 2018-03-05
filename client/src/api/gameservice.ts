@@ -132,14 +132,11 @@ export interface GameAction {
 }
 
 export type GameUpdatedCallback = (newState: GameState) => void
-
 export type GameFinishedCallback = (gameFinished: GameFinished) => void
 export type GameStartedCallback = (gameStarted: GameStarted) => void
 export type GameErrorCallback = (gameError: GameError) => void
 export type GameEventCallback = (event: GameEvent) => void
-
-
-export type UserCardsCallback = (userCards: UserCards) => void 
+export type UserCardsCallback = (userCards: UserCards) => void
 
 /**
  * Manages all access to games on the server
@@ -163,8 +160,6 @@ export class GameService {
     this.gamePaths = new GamePaths(gameId, userId)
     this.switchGame(gameId)
   }
-
-
 
   /**
    * Register a callback to be called when the game is updated
