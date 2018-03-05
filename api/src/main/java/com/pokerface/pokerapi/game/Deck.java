@@ -69,8 +69,8 @@ public class Deck {
         return cards.pop();
     }
 
-    public void setCards(Card cards) {
-        this.cards.push(cards);
+    public void setCard(Card card) {
+        this.cards.push(card);
     }
 
     public int getPosition() {

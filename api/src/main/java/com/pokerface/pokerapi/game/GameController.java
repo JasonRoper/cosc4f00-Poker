@@ -16,42 +16,65 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class GameController {
     private static final Logger logger = LoggerFactory.getLogger(GameController.class);
-
     GameRepository games;
+    GameService gameService = new GameService(games);
 
     @Autowired
     public void setGameRepository(GameRepository games){
         this.games = games;
     }
 
-    @MessageMapping("/game/{id}/play")
-    @SendTo("/messages/game/{id}")
-    public GameUpdateTransport play(GameAction action, @DestinationVariable("id") Long id) {
-        GameState state = games.findOne(id);
-        logger.info("recieved play action for " + id);
-        if (state == null) {
-            logger.info("invalid path request: " + id);
-            throw new IllegalArgumentException("invalid id");
+
+    public long matchmake(long id){
+        long gameID= - 0;
+        gameID=firstAvailableGame();
+        if (gameID==0){
+            gameID=createGame();
         }
+        return gameID;
+    }
 
-//        state.play(action);
+    private void addPlayer(long playerID, long gameID){
+
+    }
+
+    private long firstAvailableGame(){
+
+
+        return 0;
+    }
+
+
+        private long createGame() {
+        GameState state = new GameState();
+        return games.save(state).getId();
+    }
+
+//    @MessageMapping("/game/{id}/play")
+//    @SendTo("/messages/game/{id}")
+//    public GameUpdateTransport play(GameAction action, @DestinationVariable("id") Long id) {
+//        GameState state = games.findOne(id);
+//        logger.info("recieved play action for " + id);
+//        if (state == null) {
+//            logger.info("invalid path request: " + id);
+//            throw new IllegalArgumentException("invalid id");
+//        }
+//
+//return null;
+//    }
+//
+//    @MessageExceptionHandler
+//    @SendToUser("/messages/errors")
+//    public String handleException(IllegalArgumentException e){
+//        return e.toString();
+//    }
+//
+//    @RequestMapping(value = "/game/new/{id}",method = )
+//    @ResponseBody
+//    public String createGame(@PathVariable("id") long id) {
+//        logger.info("new game created at " + id);
+//        GameState state = new GameState(id);
 //        games.save(state);
-//        return state.toTransport();
-return null;
-    }
-
-    @MessageExceptionHandler
-    @SendToUser("/messages/errors")
-    public String handleException(IllegalArgumentException e){
-        return e.toString();
-    }
-
-    @RequestMapping("/game/new/{id}")
-    @ResponseBody
-    public String createGame(@PathVariable("id") long id) {
-        logger.info("new game created at " + id);
-        GameState state = new GameState(id);
-        games.save(state);
-        return "success! game created at " + Long.toString(state.getId());
-    }
+//        return "success! game created at " + Long.toString(state.getId());
+//    }
 }
