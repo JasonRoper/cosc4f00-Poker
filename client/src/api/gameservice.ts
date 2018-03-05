@@ -72,9 +72,7 @@ export interface GameState {
   turn: number
   multiplePlayers: Player[]
   gameId: number
-  valid: boolean
-  pot: Pot []
-  deck: Card[] | null
+  pot: number
   communityCards: string[]
 }
 /**
@@ -98,12 +96,6 @@ export interface Player {
   currentBet: number
   isPlayer: boolean
   isDealer: boolean
-}
-/**
- * Defines the Pot object
- */
-export interface Pot {
-  pot: number
 }
 
 export enum GameEventType {
@@ -141,9 +133,13 @@ export interface GameAction {
 
 export type GameUpdatedCallback = (newState: GameState) => void
 
+export type GameFinishedCallback = (gameFinished: GameFinished) => void
+export type GameStartedCallback = (gameStarted: GameStarted) => void
+export type GameErrorCallback = (gameError: GameError) => void
 export type GameEventCallback = (event: GameEvent) => void
 
-export type UserEventCallback = (event: UserEvent) => void
+
+export type UserCardsCallback = (userCards: UserCards) => void 
 
 /**
  * Manages all access to games on the server
@@ -151,9 +147,12 @@ export type UserEventCallback = (event: UserEvent) => void
 export class GameService {
   private gameId: number
   private gamePaths: GamePaths
-  private onGameUpdatedCallback: GameUpdatedCallback
   private onGameEventCallback: GameEventCallback
-  private onUserEventCallback: UserEventCallback
+  private onGameUpdatedCallback: GameUpdatedCallback
+  private onGameFinishedCallback: GameFinishedCallback
+  private onGameStartedCallback: GameStartedCallback
+  private onGameErrorCallback: GameErrorCallback
+  private onUserEventCallback: UserCardsCallback
 
   /**
    * Create a GameService to manage access to the game at gameId
@@ -165,18 +164,7 @@ export class GameService {
     this.switchGame(gameId)
   }
 
-  /**
-   * Register a callback to be called when the user is sent cards
-   * @param callback - will be called when the user is sent cards
-   */
 
-  public onUserCards (callback: UserEventCallback) {
-    PokerClient.switchCallback(
-      this.gamePaths.USER_CARDS,
-      this.onGameUpdatedCallback,
-      callback)
-    this.onUserEventCallback = callback
-  }
 
   /**
    * Register a callback to be called when the game is updated
@@ -202,20 +190,20 @@ export class GameService {
     this.onGameEventCallback = callback
   }
 
-  public onGameStarted (callback: GameEventCallback) {
+  public onGameStarted (callback: GameStartedCallback) {
     PokerClient.switchCallback(
       this.gamePaths.GAME_STARTED,
-      this.onGameEventCallback,
+      this.onGameStartedCallback,
       callback)
-    this.onGameEventCallback = callback
+    this.onGameStartedCallback = callback
 
   }
-  public onGameFinished (callback: GameEventCallback) {
+  public onGameFinished (callback: GameFinishedCallback) {
     PokerClient.switchCallback(
       this.gamePaths.GAME_FINISHED,
-      this.onGameEventCallback,
+      this.onGameFinishedCallback,
       callback)
-    this.onGameEventCallback = callback
+    this.onGameFinishedCallback = callback
   }
   public onGameError (callback: GameEventCallback) {
     PokerClient.switchCallback(
@@ -223,6 +211,17 @@ export class GameService {
       this.onGameEventCallback,
       callback)
     this.onGameEventCallback = callback
+  }
+  /**
+   * Register a callback to be called when the user is sent cards
+   * @param callback - will be called when the user is sent cards
+   */
+  public onUserCards (callback: UserCardsCallback) {
+    PokerClient.switchCallback(
+      this.gamePaths.USER_CARDS,
+      this.onUserEventCallback,
+      callback)
+    this.onUserEventCallback = callback
   }
 
   /**
