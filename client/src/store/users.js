@@ -1,9 +1,9 @@
 import axios from 'axios'
-import config from '@/config'
+import { API_V1 } from '@/config'
 
 const paths = {
-  LOGIN: config.API_V1 + '/users/login',
-  REGISTER: config.API_V1 + '/users'
+  LOGIN: API_V1 + '/users/login',
+  REGISTER: API_V1 + '/users'
 }
 
 const state = {
@@ -47,7 +47,7 @@ const mutations = {
    *                    the error occured on, and the message
    */
   addLoginError (state, error) {
-    state.errors.login.append(error)
+    state.errors.login.push(error)
   },
   /**
    * add a registration error to the list
@@ -56,7 +56,7 @@ const mutations = {
    *                    the error occured on, and the message
    */
   addRegistrationError (state, error) {
-    state.errors.registration.append(error)
+    state.errors.registration.push(error)
   },
   /**
    * reset all errors that have occured during login
@@ -89,7 +89,7 @@ const actions = {
           password: loginInfo.password}
       }
     ).then(function (response) {
-      loginInfo.userId = response.data.userId
+      loginInfo.userId = response.data.id
       context.commit('setUser', loginInfo)
       context.commit('resetLoginErrors')
     }).catch(function (reason) {
@@ -109,7 +109,9 @@ const actions = {
       // success - the response body contains a userId, username and email - need to add password
       context.commit('setUser', { ...response.data, password: registrationFields.password })
     }).catch(function (reason) {
+      console.log('reason: ', reason)
       const body = reason.response.body
+
       switch (body.exception) {
         case 'com.pokerface.pokerapi.users.EmailAlreadyExistsException':
           context.commit('addRegistrationError', { field: 'email', message: body.message })

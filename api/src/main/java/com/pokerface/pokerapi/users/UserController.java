@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.security.Principal;
 
-@RequestMapping("/users")
+@RequestMapping("/api/v1/users")
 @RestController
 public class UserController {
 
@@ -44,7 +44,7 @@ public class UserController {
         return new ListResponse<>(userService.listUsers());
     }
 
-    @MessageMapping("/login")
+    @GetMapping("/login")
     public UserInfoTransport login(Principal principal){
         return userService.getUser(principal.getName());
     }

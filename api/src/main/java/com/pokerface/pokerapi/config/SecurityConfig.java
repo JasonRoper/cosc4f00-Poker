@@ -11,6 +11,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -27,18 +30,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/api/v1/admin/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.POST,"/users").permitAll()
+                .antMatchers(HttpMethod.OPTIONS).permitAll()
+
+                .antMatchers(HttpMethod.POST,"/api/v1/users").permitAll()
                 .antMatchers("/api/v1/**").hasRole("USER")
                 .antMatchers("/**").permitAll()
-                .and().csrf().disable().httpBasic();
-
-
+                .and().csrf().disable().cors().and().httpBasic();
     }
 
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(users);
         authProvider.setPasswordEncoder(encoder);
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+        return source;
     }
 }
