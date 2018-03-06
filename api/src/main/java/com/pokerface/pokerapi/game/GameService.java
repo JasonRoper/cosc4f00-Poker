@@ -2,16 +2,18 @@ package com.pokerface.pokerapi.game;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class GameService {
-    GameRepository gameRepository;
+    GameRepository games;
 
     /**
      * This constructor grabs the repository for access to the database
      * @param gameRepository the database and the ability to access the database
      */
     public GameService(GameRepository gameRepository){
-        this.gameRepository=gameRepository;
+        this.games=gameRepository;
     }
 
     /**
@@ -136,5 +138,55 @@ public class GameService {
             p.setCardOne(deck.getCard());
             p.setCardTwo(deck.getCard());
         }
+    }
+
+    /**
+     * This function adds players, and checks that the starting requirements have been met, thus starting the game.
+     * @param playerID
+     * @param gameID
+     */
+    private void addPlayer(long playerID, long gameID){
+        GameState game=games.findOne(gameID);
+        if (game.addPlayer(playerID)>=game.minPlayerCount){
+            startGame(game.getId());
+        }
+        games.save(game);
+    }
+
+    /**
+     * This function starts games once the amount of users reached is enough. This is done once in the lifetime of a game
+     * @param ID This parameter is the games id being started
+     */
+    private void startGame(long ID){
+
+    }
+
+    public long matchmake(long playerID){
+        long gameID= - 0;
+        gameID=firstAvailableGame();
+        if (gameID==0){
+            gameID=createGame();
+        }
+        return gameID;
+    }
+
+    /**
+     * This method is used to find the first available game and return the id of that game, used for matchmaking.
+     * @return
+     */
+    private long firstAvailableGame(){
+        List<Long> gameIDs;
+        gameIDs=games.findOpenGame();
+        if (gameIDs.isEmpty()){
+            return 0;
+        }
+        long gameID=gameIDs.get(0);
+        return gameID;
+    }
+
+
+    private long createGame() {
+        GameState state = new GameState();
+        return games.save(state).getId();
     }
 }
