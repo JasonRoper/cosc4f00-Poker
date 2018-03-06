@@ -1,13 +1,13 @@
 <template>
 <div>
   <!--======================================================jumbotron=============================================-->
-    <div id="Home"class="jumbotron jumbotron-fluid bg-dark text-white mb-4 ">
+    <div id="Home" class="jumbotron jumbotron-fluid bg-dark text-white mb-4 ">
   <div class="container text-sm-center pt-5">
     <h1 class="display-1">PokerPals</h1>
     <p class="lead"> We came to Play.</p>
 <!--   button group-->
     <div class="btn-group" role="group" aria-label="Basic example">
-  <button type="button" data-toggle="modal" data-target="#Register"class="btn btn-info btn-lg">Register Now</button>
+  <button type="button" data-toggle="modal" data-target="#Register" class="btn btn-info btn-lg">Register Now</button>
   <a href="#Developers" type="button" class="btn btn-light btn-lg">See Developers</a>
 </div>
 <!-- =========================================================Carrosal================================================================================================-->
@@ -115,23 +115,23 @@
                 <div class="ml-5 pl-5"><span class="badge badge-light badge-pill">{{Members}}</span></div>
               </li>
               <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
-                <div class="justify-content-left"> <img src="../assets/Webgraphics/pTable.png" style="decoration:none"width="35" height="35" > Games Today:</div>
+                <div class="justify-content-left"> <img src="../assets/Webgraphics/pTable.png" style="decoration:none" width="35" height="35" > Games Today:</div>
                 <span class="badge badge-light badge-pill">{{gamesToday}}</span>
               </li>
               <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
-                 <div class="justify-content-left"> <img src="../assets/Webgraphics/poker.png" style="decoration:none"width="35" height="35"> Players Online:</div>
+                 <div class="justify-content-left"> <img src="../assets/Webgraphics/poker.png" style="decoration:none" width="35" height="35"> Players Online:</div>
                 <span class="badge badge-light badge-pill">{{onlineMembers}}</span>
               </li>
               <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
-                <div class="justify-content-left"> <img src="../assets/Webgraphics/PokerCHIP.png" style="decoration:none"width="35" height="35"> Ranking1#:</div>
+                <div class="justify-content-left"> <img src="../assets/Webgraphics/PokerCHIP.png" style="decoration:none" width="35" height="35"> Ranking1#:</div>
                 <span class="badge badge-light badge-pill">{{Level1Members}}</span>
               </li>
                <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
-                  <div class="justify-content-left"> <img src="../assets/Webgraphics/PokerL2.png" style="decoration:none"width="35" height="35"> Ranking2#:</div>
+                  <div class="justify-content-left"> <img src="../assets/Webgraphics/PokerL2.png" style="decoration:none" width="35" height="35"> Ranking2#:</div>
                 <span class="badge badge-light badge-pill">{{Level2Members}}</span>
               </li>
               <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
-                 <div class="justify-content-left"> <img src="../assets/Webgraphics/chipPile.png" style="decoration:none"width="35" height="35">Ranking3#:</div>
+                 <div class="justify-content-left"> <img src="../assets/Webgraphics/chipPile.png" style="decoration:none" width="35" height="35">Ranking3#:</div>
                 <span class="badge badge-light badge-pill">{{Level3Members}}</span>
               </li>
           </ul>
@@ -141,9 +141,9 @@
 <div class="card border-dark mb-3 mx-auto" style="max-width: 40rem;">
   <div class="card-header text-left text-white bg-secondary lead"><i class="fa fa-user-circle pr-2 fa-lg"></i> <u>Login</u></div>
     <div class="card-body text-dark">
-      <form class="needs-validation"ref="theform" action="/#/Lobby">
+      <form class="needs-validation" ref="theform" action="/#/Lobby">
   <div class="form-group">
-    <input  v-model="Player.username"ref="myTestField" type="text" class="form-control" id="formGroupExampleInput" placeholder="UserName/Email">
+    <input  v-model="Player.username" ref="myTestField" type="text" class="form-control" id="formGroupExampleInput" placeholder="UserName/Email">
   </div>
   <div class="form-group">
     <input v-model="Player.password" ref="myTestField2" type="password" class="form-control" id="formGroupExampleInput2" placeholder="Password">

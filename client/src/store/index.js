@@ -23,7 +23,7 @@ export const store = new Vuex.Store({
       console.log('clicked')
       if ((name.length > 0)) {
         context.commit('setPlayer', name)
-        router.push('Lobby')
+        router.push('Game')
       }
       console.log(this.state.name)
     }

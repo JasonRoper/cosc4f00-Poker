@@ -16,8 +16,11 @@
 
 
   <!--/Side BAr content  -->
+
+
   <div class="container text-sm-center mycontent "  >
     <!-- <div  class=" container text-lg-center"> -->
+     
     <div class="row">
             <div id="sidebar"  class="col">
   <div >
@@ -40,21 +43,32 @@
     </ul>
   </div>
 </div>
+
+
       <div id="page-content" class="col">
-        <nav class="text-center">
-  <div class="nav nav-tabs" id="nav-tab" role="tablist">
-    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Game</a>
-    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Profile</a>
-    <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Community</a>
-  </div>
-</nav>
-<div class="tab-content" id="nav-tabContent">
-  <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab"><game-menu></game-menu></div>
-  <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">...</div>
-  <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">...</div>
+
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link active" id="game-tab" data-toggle="tab" href="#game" role="tab" aria-controls="game" aria-selected="true">Game</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Profile</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Contact</a>
+  </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade show active" id="game" role="tabpanel" aria-labelledby="home-tab"><game-menu></game-menu></div>
+  <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">somthine 2</div>
+  <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
 </div>
         </div>
+
+
       </div>
+
+        
     <!-- </div> -->
     </div>
    </div>
@@ -92,19 +106,10 @@ export default{
     toggleSidebar: function () {
       document.getElementById('sidebar').classList.toggle('active')
       document.getElementById('page-content').classList.toggle('active')
-     // if (document.documentElement.clientWidth <= 1600) {
-       // document.getElementById('page-content').classList.toggle('active')
-        // document.getElementById('sidebar').classList.toggle('active')
-      // }
-      // if (document.documentElement.clientWidth > 1600) {
-       // document.getElementById('page-content').classList.remove('active')
-      // }
-      // document.getElementById('page-content').style.transform = 'translatex(10%)'
     },
     adjustsideBar: function () {
       document.getElementById('page-content').classList.remove('active')
       document.getElementById('sidebar').classList.remove('active')
-     // this.toggleSidebar()
     }
   }
 }
