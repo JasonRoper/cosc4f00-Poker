@@ -1,32 +1,111 @@
 import PokerClient from '@/api/pokerclient'
-
 /**
  * Helper class that will build the paths used to access a game
  * with the given id.
  */
-class GamePaths {
+export default class GamePaths {
   public GAME_UPDATES: string
   public GAME_EVENTS: string
   public GAME_ACTIONS: string
+  public GAME_STARTED: string
+  public GAME_FINISHED: string
+  public GAME_ERROR: string
+  public GAME_JOIN: string
+
+  public USER_CARDS: string = ''
+
   /**
    * Generate the websocket paths used for the given gameID
    * @param gameId - the id of the game
    */
-  constructor (gameId: number) {
+  constructor (gameId: number, userId?: number) {
     this.GAME_UPDATES = '/messages/game/' + gameId
     this.GAME_EVENTS = '/messages/game/' + gameId + '/events'
     this.GAME_ACTIONS = '/app/game/' + gameId + '/play'
+    this.GAME_STARTED = '/messages/game/' + gameId + '/start'
+    this.GAME_FINISHED = '/messages/game/' + gameId + '/finish'
+    this.GAME_ERROR = '/messages/game/' + gameId + '/error'
+    this.GAME_JOIN = '/messages/game/' + gameId + '/join'
+
+    if (userId) {
+      this.USER_CARDS = '/messages/game/' + gameId + '/' + userId + '/cards'
+    }
   }
 }
 
+/**
+ * UserCards - which will hold the cards to the user
+ */
+export interface UserCards {
+  card1: string
+  card2: string
+}
+
+/**
+ * GameStateStarted - which will hold the information when a new game has started
+ */
+export interface GameStarted {
+  multiplePlayers: Player[]
+  time: number
+}
+
+/**
+ * Game Error - which will hold the information when a game has an error
+ */
+export interface GameError {
+  error: string
+}
+
+/**
+ * Game Finished - which will hold the information when a game has ended
+ */
+export interface GameFinished {
+  winner: number
+  time: number
+}
+
+/**
+ * GameState which will hold the state of the game
+ */
 export interface GameState {
-  pot: number,
-  nextId: number
+  hasBet: boolean
+  turn: number
+  multiplePlayers: Player[]
+  gameId: number
+  pot: number
+  communityCards: string[]
+}
+/**
+ * Defines a Card Object
+ */
+export interface Card {
+  suit: string
+}
+
+/**
+ * Defines a Player Object
+ */
+export interface Player {
+  money: number
+  id: number
+  name: string
+  tableAction: GameActionType[] | GameActionType
+  premove: GameAction | null
+  card1: string
+  card2: string
+  currentBet: number
+  isPlayer: boolean
+  isDealer: boolean
 }
 
 export enum GameEventType {
   GAME_STARTED = 'GAME_STARTED',
-  GAME_FINISHED = 'GAME_FINISHED'
+  GAME_FINISHED = 'GAME_FINISHED',
+  GAME_ERROR = 'GAME_ERROR'
+}
+
+export enum UserEventType {
+  USER_CARDS = 'USER_CARDS'
 }
 
 export interface GameEvent {
@@ -34,11 +113,17 @@ export interface GameEvent {
   payload: any
 }
 
+export interface UserEvent {
+  event: UserEventType,
+  payload: any
+}
+
 export enum GameActionType {
   BET = 'BET',
   CALL = 'CALL',
   CHECK = 'CHECK',
-  FOLD = 'FOLD'
+  FOLD = 'FOLD',
+  RAISE = 'RAISE'
 }
 
 export interface GameAction {
@@ -47,8 +132,11 @@ export interface GameAction {
 }
 
 export type GameUpdatedCallback = (newState: GameState) => void
-
+export type GameFinishedCallback = (gameFinished: GameFinished) => void
+export type GameStartedCallback = (gameStarted: GameStarted) => void
+export type GameErrorCallback = (gameError: GameError) => void
 export type GameEventCallback = (event: GameEvent) => void
+export type UserCardsCallback = (userCards: UserCards) => void
 
 /**
  * Manages all access to games on the server
@@ -56,16 +144,20 @@ export type GameEventCallback = (event: GameEvent) => void
 export class GameService {
   private gameId: number
   private gamePaths: GamePaths
-  private onGameUpdatedCallback: GameUpdatedCallback
   private onGameEventCallback: GameEventCallback
+  private onGameUpdatedCallback: GameUpdatedCallback
+  private onGameFinishedCallback: GameFinishedCallback
+  private onGameStartedCallback: GameStartedCallback
+  private onGameErrorCallback: GameErrorCallback
+  private onUserEventCallback: UserCardsCallback
 
   /**
    * Create a GameService to manage access to the game at gameId
    * @param gameId - the id of the game
    */
-  constructor (gameId: number) {
+  constructor (gameId: number, userId?: number) {
     this.gameId = gameId
-    this.gamePaths = new GamePaths(gameId)
+    this.gamePaths = new GamePaths(gameId, userId)
     this.switchGame(gameId)
   }
 
@@ -91,6 +183,40 @@ export class GameService {
       this.onGameEventCallback,
       callback)
     this.onGameEventCallback = callback
+  }
+
+  public onGameStarted (callback: GameStartedCallback) {
+    PokerClient.switchCallback(
+      this.gamePaths.GAME_STARTED,
+      this.onGameStartedCallback,
+      callback)
+    this.onGameStartedCallback = callback
+
+  }
+  public onGameFinished (callback: GameFinishedCallback) {
+    PokerClient.switchCallback(
+      this.gamePaths.GAME_FINISHED,
+      this.onGameFinishedCallback,
+      callback)
+    this.onGameFinishedCallback = callback
+  }
+  public onGameError (callback: GameEventCallback) {
+    PokerClient.switchCallback(
+      this.gamePaths.GAME_ERROR,
+      this.onGameEventCallback,
+      callback)
+    this.onGameEventCallback = callback
+  }
+  /**
+   * Register a callback to be called when the user is sent cards
+   * @param callback - will be called when the user is sent cards
+   */
+  public onUserCards (callback: UserCardsCallback) {
+    PokerClient.switchCallback(
+      this.gamePaths.USER_CARDS,
+      this.onUserEventCallback,
+      callback)
+    this.onUserEventCallback = callback
   }
 
   /**
@@ -123,17 +249,16 @@ export class GameService {
     this.gameId = gameId
   }
 
+  public connected () {
+    return PokerClient.connected()
+  }
+
   /**
    * Stop listening for events.
    */
   public finish () {
-    PokerClient.unsubscribeOn(
-      this.gamePaths.GAME_UPDATES,
-      this.onGameUpdatedCallback
-    )
-    PokerClient.unsubscribeOn(
-      this.gamePaths.GAME_EVENTS,
-      this.onGameEventCallback
-    )
+    PokerClient.unsubscribeOn(this.gamePaths.GAME_UPDATES,this.onGameUpdatedCallback)
+    PokerClient.unsubscribeOn(this.gamePaths.GAME_EVENTS,this.onGameEventCallback)
   }
+
 }

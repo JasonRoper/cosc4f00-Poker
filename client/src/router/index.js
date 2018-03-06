@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Table from '@/components/Table'
 import Lobby from '@/components/Lobby'
-import WinLoss from '@/components/WinLoss'
-import NextGame from '@/components/NextGame'
+import NavBar from '@/components/NavBar'
+import Game from '@/components/Game'
+import TableView from '@/components/TableView'
 
 Vue.use(Router)
 
@@ -11,13 +11,13 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Table',
-      component: Table
+      name: 'Home',
+      component: NavBar
     },
     {
-      path: '/NextGame',
-      name: 'NextGame',
-      component: NextGame
+      path: '/Home',
+      name: 'Home',
+      component: NavBar
     },
     {
       path: '/Lobby',
@@ -25,9 +25,18 @@ export default new Router({
       component: Lobby
     },
     {
-      path: '/WinLoss',
-      name: 'WinLoss',
-      component: WinLoss
+      path: '/Table',
+      name: 'TableView',
+      component: TableView
+    },
+    {
+      path: '/game',
+      name: 'Game',
+      component: Game
+    },
+    {
+      path: '/matchMakeing',
+      name: 'MatchMaking'
     }
   ]
 })

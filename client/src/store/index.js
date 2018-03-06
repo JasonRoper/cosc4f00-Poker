@@ -1,5 +1,5 @@
-import Vuex from 'vuex'
 import Vue from 'vue'
+import Vuex from 'vuex'
 import game from '@/store/game'
 import users from '@/store/users'
 

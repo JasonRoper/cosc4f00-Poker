@@ -5,7 +5,9 @@ import store from '@/store'
 import axios from 'axios'
 
 import 'bootstrap/dist/css/bootstrap.css'
+import VModal from 'vue-js-modal'
 
+Vue.use(VModal)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
