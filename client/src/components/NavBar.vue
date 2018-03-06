@@ -86,9 +86,9 @@
 </template>
 
 <script>
-import Login from '@/components/Login.vue'
-import Features from '@/components/Features.vue'
-import About from '@/components/About.vue'
+import Login from '@/components/Login'
+import Features from '@/components/Features'
+import About from '@/components/About'
 
 export default{
   data: function () {

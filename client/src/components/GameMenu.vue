@@ -1,8 +1,8 @@
 <template>
 <div >
-       <h2 class="display-1 text-white pb-2 mt-2 pb-2">PokerPals!!  <img src="../assets/Webgraphics/poker.png" width="100" height="100"></h2> 
+       <h2 class="display-1 text-white pb-2 mt-2 pb-2">PokerPals!!  <img src="../assets/Webgraphics/poker.png" width="100" height="100"></h2>
         <div v-show="GameMenu">
-        <h2 class="display-4 text-white pb-3 text-left ml-5 pl-5 mr-0 mt-5 pt-5"><u>MAIN MENU</u> </h2> 
+        <h2 class="display-4 text-white pb-3 text-left ml-5 pl-5 mr-0 mt-5 pt-5"><u>MAIN MENU</u> </h2>
         <div class="text-center mx-4 ">
         <div class="chip-holder"><button class="around-words inner-yellow btn btn-lg" @click="showInstructPoker()"><hr><button class="inner-button  btn btn-lg">Instructional Poker</button><hr></button></div>
       <div class="chip-holder"><button class="around-words inner-green btn btn-lg" @click="showCasualPoker()"><hr><div class="button-title">Casual Poker</div><hr></button></div>
@@ -11,7 +11,7 @@
       </div>
           <div  v-show="instrcutionPokerMode">
       <div >
-      <h2 class="display-4 text-white  text-left ml-5 pl-5 mr-0 mt-5 pt-5 "> <button type="button" class="btn btn-default btn-circle" @click="backButton()">back</button><u>Instructional(CPU) Poker</u> </h2>  
+      <h2 class="display-4 text-white  text-left ml-5 pl-5 mr-0 mt-5 pt-5 "> <button type="button" class="btn btn-default btn-circle" @click="backButton()">back</button><u>Instructional(CPU) Poker</u> </h2>
        <div class="pt-5 mt-5">
        <div class="chip-holder "><button class="around-words inner-grey btn btn-lg" @click="chipChoice('PokerTutorial')"><hr><div class="button-title">Poker Tutorial</div><hr></button></div>
         <div class="chip-holder "><button data-toggle="modal" data-target="#Register2" class="around-words inner-orange btn btn-lg"><hr> CPU Challenge<hr></button></div>
@@ -20,7 +20,7 @@
       </div>
         <div  v-show="competitivePokerMode">
       <div >
-      <h2 class="display-4 text-white text-left ml-5 pl-5 mr-0 "> <button type="button" class="btn btn-default btn-circle"  @click="chipChoice('CompetitivePoker')">back</button><u>Competitive Poker</u> </h2>  
+      <h2 class="display-4 text-white text-left ml-5 pl-5 mr-0 "> <button type="button" class="btn btn-default btn-circle"  @click="chipChoice('CompetitivePoker')">back</button><u>Competitive Poker</u> </h2>
               <!-- <div class="pt-0">
                 <table-view :userId="1" >
               </table-view>
@@ -29,7 +29,7 @@
       </div>
       <div  v-show="casualPokerMode">
       <div>
-      <h2 class="display-4 text-white text-left ml-5 pl-5 mr-0 "> <button type="button" class="btn btn-default btn-circle" @click="backButton()">back</button><u>Casual</u> </h2>  
+      <h2 class="display-4 text-white text-left ml-5 pl-5 mr-0 "> <button type="button" class="btn btn-default btn-circle" @click="backButton()">back</button><u>Casual</u> </h2>
               <div class="pt-0">
          <div class="chip-holder pt-5 mt-5"><button class="around-words2 inner-grey btn btn-lg" @click="showCasualPoker()"><hr><div class="button-title">Create Game</div><hr></button></div>
         <div class="chip-holder pt-5 mt-5"><button class="around-words2 inner-blue btn btn-lg" @click="showCompetitivePoker()"><hr><button class="btn btn-lg">Join Game</button><hr></button></div>
@@ -40,7 +40,7 @@
 
         <div  v-show="showTable">
       <div>
-      <h2 class="display-4 text-white text-left ml-5 pl-5 mr-0 "> <button type="button" class="btn btn-default btn-circle" @click="backButton()">back</button><u>Casual</u> </h2>  
+      <h2 class="display-4 text-white text-left ml-5 pl-5 mr-0 "> <button type="button" class="btn btn-default btn-circle" @click="backButton()">back</button><u>Casual</u> </h2>
               <div class="pt-0">
                 <table-view :userId="1" >
               </table-view>
@@ -48,7 +48,7 @@
               </div>
       </div>
 <!--==================*
-    MODAL Login!!! 
+    MODAL Login!!!
 *==================-->
 <div class="modal fade" id="Register2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
@@ -74,7 +74,7 @@
   <option value="1">4</option>
   <option value="2">5</option>
   <option value="3">6</option>
-</select> 
+</select>
       </div>
   </div>
   <div class="form-group row">
@@ -104,7 +104,7 @@
 </div>
    <!-- <table-view :userId="1" ></table-view>  -->
 
-  
+
 </template>
 
 <script>

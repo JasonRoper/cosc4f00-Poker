@@ -22,7 +22,7 @@
     <div class="row">
             <div id="sidebar"  class="col">
   <div >
-    <a href="#" ><img src="../assets/Webgraphics/Opponent.svg" class=" border border-white rounded-circle" width="70" height="70"></a>
+    <a href="#" ><img src="@/assets/Webgraphics/Opponent.svg" class=" border border-white rounded-circle" width="70" height="70"></a>
     <ul class="menu">
       <li><a href="#">Poker Pals</a></li>
        <li><a href="#">Pals</a></li>
@@ -56,9 +56,9 @@
     <div class="CompleteTable">
       <div v-if="this.userId === null">
         <seat v-for="player in this.mechanics.multiplePlayers" :key="player.id" :data="player"></seat>
-    
+
       </div>
-              <div class="inner-tableBorder">    
+              <div class="inner-tableBorder">
           <player  class="player" v-for="player in this.mechanics.multiplePlayers" :key="player.id" :data="player">
         </player>
         <div>
@@ -74,7 +74,7 @@
       </div>
     <pot :data="this.mechanics.pot"></pot>
     </div>
-  </div>    
+  </div>
       <div class="TableActions row">
 
          <div class="Action text-center lead text-muted">
@@ -84,14 +84,14 @@
         <button type="button" class="btn  btn-lg chat "><i class="fa fa-comments  fa-lg"></i></button>
         </div>
 
-              
+
          <div class="Action text-center lead text-muted">
         <div class="ActionTitle">
         Check
         </div>
         <button type="button" class="btn  btn-lg check"  v-on:click="check(money)" :disabled="this.mechanics.checkAction == 1"><i class="fa fa-check  fa-lg"></i></button>
         </div>
-        
+
 
      <div class="Action text-center lead text-muted">
         <div class="ActionTitle">
@@ -114,7 +114,7 @@
         </div>
         <button type="button" class="btn  btn-lg Bet "  v-on:click="bet(money)" :disabled="this.mechanics.betAction == 1"><i class="fa fa-chevron-up  fa-lg"></i></button>
         </div>
-  
+
          <div class="Action text-center lead text-muted">
         <div class="ActionTitle">
         Raise
@@ -123,7 +123,7 @@
         </div>
 
       </div>
-      <div>Action: {{this.mechanics.userAction}}</div>    
+      <div>Action: {{this.mechanics.userAction}}</div>
         <input v-model="money" placeholder="How much would you like to bet">
         <button  v-on:click="fold(money)" :disabled="this.mechanics.foldAction == 1">FOLD</button>
         <button v-on:click="check(money)" :disabled="this.mechanics.checkAction == 1">CHECK</button>
@@ -142,13 +142,13 @@
       </div>
     <!-- </div> -->
     </div>
-  
+
 
 
 
 </div>
 </template>
-  
+
 
 
 <script>

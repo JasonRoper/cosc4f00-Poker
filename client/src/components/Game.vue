@@ -20,11 +20,11 @@
 
   <div class="container text-sm-center mycontent "  >
     <!-- <div  class=" container text-lg-center"> -->
-     
+
     <div class="row">
             <div id="sidebar"  class="col">
   <div >
-    <a href="#" ><img src="../assets/Webgraphics/Opponent.svg" class=" border border-white rounded-circle" width="70" height="70"></a>
+    <a href="#" ><img src="@/assets/Webgraphics/Opponent.svg" class=" border border-white rounded-circle" width="70" height="70"></a>
     <ul class="menu">
       <li><a href="#">Poker Pals</a></li>
        <li><a href="#">Pals</a></li>
@@ -68,7 +68,7 @@
 
       </div>
 
-        
+
     <!-- </div> -->
     </div>
    </div>

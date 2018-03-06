@@ -96,7 +96,7 @@
     <!--====================================================================Column 1 ========================================================================= -->
     <div class="col-lg-7">
       <h4 class="display-3  text-left"><u>Latest News</u></h4>
-      <p class="lead text-left"><img class="img-thumbnail d-flex px-4" src="../assets/Webgraphics/Undercon.jpg" >Poker Pals is now curreently Withinin 
+      <p class="lead text-left"><img class="img-thumbnail d-flex px-4" src="@/assets/Webgraphics/Undercon.jpg" >Poker Pals is now curreently Withinin
       development phase following the generic phases set  by Brock University's COSC 4f00 team poker face. Within our venture we have now moved into the development phase of the Product, While our site is still currently under construction we hope to get things up and running as soon as possible. Until then please observe our structure and lay out of our up comming websitste and all the possible features we look for ward to possible providing in the meant time enjoy.<br> - Team Poker Face. </p>
     </div>
     <!--====================================================================/Column 1 =========================================================================-->
@@ -104,7 +104,7 @@
     <div class="col-lg-5">
       <!--==================Table/Card:System stats==================-->
       <div class="card border-dark mb-3 mx-auto" style="max-width: 40rem;">
-        <div class="card-header bg-secondary text-white text-left"> 
+        <div class="card-header bg-secondary text-white text-left">
           <span class="lead" ><i class="fa fa-bar-chart-o fa-lg"></i></span>
           <u>System Statistics</u>
           </div>
@@ -115,23 +115,23 @@
                 <div class="ml-5 pl-5"><span class="badge badge-light badge-pill">{{Members}}</span></div>
               </li>
               <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
-                <div class="justify-content-left"> <img src="../assets/Webgraphics/pTable.png" style="decoration:none" width="35" height="35" > Games Today:</div>
+                <div class="justify-content-left"> <img src="@/assets/Webgraphics/PTable.png" style="decoration:none" width="35" height="35" > Games Today:</div>
                 <span class="badge badge-light badge-pill">{{gamesToday}}</span>
               </li>
               <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
-                 <div class="justify-content-left"> <img src="../assets/Webgraphics/poker.png" style="decoration:none" width="35" height="35"> Players Online:</div>
+                 <div class="justify-content-left"> <img src="@/assets/Webgraphics/poker.png" style="decoration:none" width="35" height="35"> Players Online:</div>
                 <span class="badge badge-light badge-pill">{{onlineMembers}}</span>
               </li>
               <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
-                <div class="justify-content-left"> <img src="../assets/Webgraphics/PokerCHIP.png" style="decoration:none" width="35" height="35"> Ranking1#:</div>
+                <div class="justify-content-left"> <img src="@/assets/Webgraphics/Pokerchip.png" style="decoration:none" width="35" height="35"> Ranking1#:</div>
                 <span class="badge badge-light badge-pill">{{Level1Members}}</span>
               </li>
                <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
-                  <div class="justify-content-left"> <img src="../assets/Webgraphics/PokerL2.png" style="decoration:none" width="35" height="35"> Ranking2#:</div>
+                  <div class="justify-content-left"> <img src="@/assets/Webgraphics/PokerL2.png" style="decoration:none" width="35" height="35"> Ranking2#:</div>
                 <span class="badge badge-light badge-pill">{{Level2Members}}</span>
               </li>
               <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
-                 <div class="justify-content-left"> <img src="../assets/Webgraphics/chipPile.png" style="decoration:none" width="35" height="35">Ranking3#:</div>
+                 <div class="justify-content-left"> <img src="@/assets/Webgraphics/chipPile.png" style="decoration:none" width="35" height="35">Ranking3#:</div>
                 <span class="badge badge-light badge-pill">{{Level3Members}}</span>
               </li>
           </ul>
@@ -232,45 +232,45 @@
   <!--Developer 1 -->
     <div class="col-md-6 col-lg-3">
       <div class="card mb-3 ">
-        <img class="card-img-top   border-0" src="../assets/Webgraphics/crown.png" alt="Javon Luke">
+        <img class="card-img-top   border-0" src="@/assets/Webgraphics/crown.png" alt="Javon Luke">
         <div class="card-body">
           <h5 class="card-title">Javon Luke</h5>
           <p class="card-text">Team Lead and Front-End porgrammer lead of team Pokerface with great interest in Web and Mobile(IOS) Development.</p>
         </div>
-      </div>  
+      </div>
     </div>
   <!--/Developer 1 -->
 <!--Developer 2 -->
     <div class="col-md-6 col-lg-3">
       <div class="card mb-3 ">
-        <img class="card-img-top" src="../assets/Webgraphics/pointy-hat.png" alt="Adam Caverhill"  >
+        <img class="card-img-top" src="@/assets/Webgraphics/pointy-hat.png" alt="Adam Caverhill"  >
         <div class="card-body">
           <h5 class="card-title">Adam Caverhill</h5>
           <p class="card-text">Back-End Programmer and Documentation manager of PokerFace, Adam's interest Lies mainly within Back-end Development for the web.  </p>
         </div>
-      </div>  
+      </div>
     </div>
   <!--/Developer 2 -->
 <!--Developer 3 -->
     <div class="col-md-6 col-lg-3">
       <div class="card mb-3 ">
-        <img class="card-img-top" src="../assets/Webgraphics/developers.png" alt="Jason Roper">
+        <img class="card-img-top" src="@/assets/Webgraphics/developers.png" alt="Jason Roper">
         <div class="card-body">
           <h5 class="card-title">Jason Roper</h5>
           <p class="card-text"> Application Architect and DevOps of team Poker Face, Jason's delight are more found within Networking Programming.</p>
         </div>
-      </div>  
+      </div>
     </div>
   <!--/Developer 3 -->
 <!--Developer 4 -->
     <div class="col-md-6 col-lg-3">
       <div class="card mb-3 ">
-        <img class="card-img-top" src="../assets/Webgraphics/TopHat.png" alt="">
+        <img class="card-img-top" src="@/assets/Webgraphics/TopHat.png" alt="">
         <div class="card-body">
           <h5 class="card-title">Ashley Hamilton-Morley</h5>
           <p class="card-text">Front-end Programmer, Test Lead and UserInterface, Ashley's Interest are heavily invested in Game and Web development. </p>
         </div>
-      </div>  
+      </div>
     </div>
 <!--/Developer 4-->
 <!--====================================================Listdevelopers=================-->
