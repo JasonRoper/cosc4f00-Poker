@@ -89,8 +89,7 @@ export interface Player {
   money: number
   id: number
   name: string
-  tableAction: GameActionType[] | GameActionType
-  premove: GameAction | null
+  action: GameAction | null
   card1: string
   card2: string
   currentBet: number

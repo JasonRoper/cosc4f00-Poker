@@ -23,9 +23,10 @@ export default class GameMech {
   public pot: number = 0
   public communityCards: string[] = []
   public userId: number | null = 0
-  public playerLocation: number = 0
+  public playerLocation: number = -1
   public userAction: GameAction | null = null
-  public storeAction: GameAction | null = null
+
+  public tableAction: GameActionType[] = []
 
   public endGame: boolean = false
 
@@ -60,17 +61,14 @@ export default class GameMech {
       this.lobby = true
     }
   }
-
   public setDefaultTransport () {
     this.hasBet = false
     this.turn = 0
-    const p: Player = this.defaultPlayer()
     this.multiplePlayers = [{
       id: 0,
       money: 500,
       name: 'javon',
-      tableAction: {} as GameActionType,
-      premove: null,
+      action: null,
       card1: CardSuite.BLANK_CARD,
       card2: CardSuite.BLANK_CARD,
       currentBet: 0,
@@ -80,8 +78,7 @@ export default class GameMech {
       id: 1,
       money: 888,
       name: 'test',
-      tableAction: {} as GameActionType,
-      premove: null,
+      action: null,
       card1: CardSuite.CLUBS_ACE,
       card2: CardSuite.CLUBS_TWO,
       currentBet: 0,
@@ -92,7 +89,7 @@ export default class GameMech {
     this.pot = 0
     this.communityCards = [CardSuite.CLUBS_ACE, CardSuite.CLUBS_EIGHT, 'three', 'four', 'five']
     this.userId = 0
-    this.playerLocation = 0
+    this.playerLocation = this.playerLoc()
     this.userAction = null
   }
   public defaultPlayer (): Player {
@@ -100,8 +97,7 @@ export default class GameMech {
       id: -1,
       money: 0,
       name: 'defaultPlayer',
-      tableAction: {} as GameActionType,
-      premove: null,
+      action: null,
       card1: CardSuite.BLANK_CARD,
       card2: CardSuite.BLANK_CARD,
       currentBet: 0,
@@ -110,8 +106,18 @@ export default class GameMech {
     }
     return player
   }
+
+  public playerLoc (): number {
+    for (const play of this.multiplePlayers) {
+      if (play.id === this.userId) {
+        return play.id
+      }
+    }
+    return -1
+  }
+
   public getTableAction () {
-    return this.multiplePlayers[this.playerLocation].tableAction
+    return this.tableAction
   }
   /**
    * sendEvent of the game started
@@ -255,7 +261,6 @@ export default class GameMech {
       if (this.storePremove(this.userAction.type, this.userAction.bet)) {
         if (this.playerLocation === this.turn) {
           this.send(this.userAction)
-          this.storeAction = this.userAction
           this.userAction = null
         }
       }
@@ -265,13 +270,22 @@ export default class GameMech {
     return this.multiplePlayers[this.playerLocation]
   }
 
+  public getOpponents (): Player[] {
+    const playerArray: Player[] = []
+    for (let i = 0;i < this.multiplePlayers.length; i++) {
+      if (i !== this.playerLocation) {
+        playerArray.push(this.multiplePlayers[i])
+      }
+    }
+    return playerArray
+  }
+
   /**
    *  Sets the Game Transport in the Game Mechanics
    * @param GameState
    */
   public setGameTransport (gameTransport: GameState) {
     if (gameTransport.gameId === this.gameId) {
-      this.storeAction = null
       this.communityCards = gameTransport.communityCards
       this.hasBet = gameTransport.hasBet
       this.turn = gameTransport.turn

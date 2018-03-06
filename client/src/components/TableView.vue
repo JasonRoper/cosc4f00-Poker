@@ -68,6 +68,7 @@
         <button v-on:click="call(money)" :disabled="this.mechanics.callAction == 1">CALL</button>
         <button v-on:click="bet(money)" :disabled="this.mechanics.betAction == 1">BET</button>
         <button v-on:click="sendAction()">Send Action To Server</button>
+              
  </div>
 </template>
 
@@ -91,15 +92,25 @@ export default {
       msg: 'hiiiLow',
       mechanics: new GameMech(0, this.userId),
       numberofPlayer: 0,
-      BigBlindCurrentBet: 0
+      BigBlindCurrentBet: 0,
+      user: 0,
+      opponents: 0
     }
   },
   watch: {
     mechanics: function (newValue, oldValue) {
+      this.user = this.getUser()
+      this.opponents = this.getOpponents()
       this.$forceUpdate()
     }
   },
   methods: {
+    getUser: function () {
+      return this.mechanics.getUser()
+    },
+    getOpponents: function () {
+      return this.mechanics.getOpponents()
+    },
     setTableActions: function () {
       this.mechanics.tableActions()
     },
