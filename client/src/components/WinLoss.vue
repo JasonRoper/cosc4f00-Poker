@@ -12,7 +12,7 @@
            <player :data="player"></player>
         </div>
         <div class='showCard' v-else>
-            <card class='size' v-for="card in player.cards" :key="card" :card="card"/></card>
+            <card class='size' v-for="card in player.cards" :key="card" :card="card"></card>
         </div>
     </div>
     <a href="/NextGame">NextGame</a>
