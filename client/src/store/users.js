@@ -19,6 +19,21 @@ const state = {
 }
 
 const getters = {
+  loggedIn (state) {
+    return state.username != null
+  }
+}
+
+/**
+ * set the user relevant fields in the state
+ * @param {UserState} state - the UserState
+ * @param {username: string, password: string, userId: number, email: string} fields - the fields to set
+ */
+function assignUserFields (state, fields) {
+  state.username = fields.username
+  state.password = fields.password
+  state.userId = fields.userId
+  state.email = fields.email
 }
 
 const mutations = {
@@ -28,23 +43,19 @@ const mutations = {
    * @param payload - the username, password, userId and email of the user
    */
   setUser (state, payload) {
-    state.username = payload.username
-    state.password = payload.password
-    state.userId = payload.userId
-    state.email = payload.email
+    assignUserFields(state, payload)
   },
   /**
    * set all of the user fields to null.
    * @param {UserState} state - the user state
    */
   logout (state) {
-    this.setUser(state, {username: null, password: null, userId: null, email: null})
+    assignUserFields(state, {username: null, password: null, userId: null, email: null})
   },
   /**
    * add a login error to the list
    * @param {UserState} state - the user state
-   * @param {*} error - the error that occured. Includes the field that
-   *                    the error occured on, and the message
+   * @param {string} error - the message about the error that occured.
    */
   addLoginError (state, error) {
     state.errors.login.push(error)
@@ -71,6 +82,13 @@ const mutations = {
    */
   resetRegistrationErrors (state) {
     state.errors.registration = []
+  },
+  /**
+   * reset all global errors
+   * @param {UserState} state - the user state
+   */
+  resetGlobalErrors (state) {
+    state.errors.global = []
   }
 }
 
@@ -82,6 +100,11 @@ const actions = {
    * @param {LoginFields} loginInfo - the username and password
    */
   login (context, loginInfo) {
+    context.commit('resetLoginErrors')
+    if (context.getters.loggedIn) {
+      context.commit('logout')
+    }
+
     axios.get(paths.LOGIN,
       {
         auth: {
@@ -91,9 +114,20 @@ const actions = {
     ).then(function (response) {
       loginInfo.userId = response.data.id
       context.commit('setUser', loginInfo)
-      context.commit('resetLoginErrors')
     }).catch(function (reason) {
-      context.commit('addLoginError', {field: 'username', message: 'invalid username'})
+      if (!reason.response) {
+        context.commit('addGlobalError', {error: 'NetworKError', module: 'users', reason: reason})
+        return
+      }
+
+      let error = reason.response.data.error
+      switch (error) {
+        case 'Unauthorized':
+          context.commit('addLoginError', 'Authentication error')
+          break
+        default:
+          context.commit('addGlobalError', {error: 'UnknownLoginError', module: 'users', reason: reason})
+      }
     })
   },
   /**
@@ -103,14 +137,27 @@ const actions = {
    * @param {RegistrationFields} registrationFields - the username, email and password of the user
    */
   register (context, registrationFields) {
+    if (context.getters.loggedIn) {
+      context.commit('logout')
+    }
+
     context.commit('resetRegistrationErrors')
     axios.post(paths.REGISTER, registrationFields)
     .then(function (response) {
       // success - the response body contains a userId, username and email - need to add password
-      context.commit('setUser', { ...response.data, password: registrationFields.password })
+      context.commit('setUser', {
+        username: response.data.username,
+        userId: response.data.id,
+        email: response.data.email,
+        password: registrationFields.password })
     }).catch(function (reason) {
-      console.log('reason: ', reason)
-      const body = reason.response.body
+      if (!reason.response) {
+        console.log('unhandled error occured: ', reason)
+        context.commit('addGlobalError', {error: 'NetworkError', module: 'users', reason: reason})
+        return
+      }
+
+      const body = reason.response.data
 
       switch (body.exception) {
         case 'com.pokerface.pokerapi.users.EmailAlreadyExistsException':
@@ -130,6 +177,10 @@ const actions = {
             })
           }
           break
+        default:
+          context.commit('addGlobalError', {error: 'UnknownRegistrationError',
+            module: 'users',
+            reason: reason})
       }
     })
   }

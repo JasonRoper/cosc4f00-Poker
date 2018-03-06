@@ -11,11 +11,18 @@ const store = new Vuex.Store({
     users
   },
   state: {
-    number: 1
+    number: 1,
+    globalErrors: []
   },
   mutations: {
-    add (state) {
-      state.number += 1
+    /**
+     * global errors that have no better place, go here. In general, that means errors
+     * that cannot be handled more specifically - ie Unkown Errors
+     * @param {GlobalState} state - the global state
+     * @param {error: string, module: string, reason: {*}} error - the error that occured
+     */
+    addGlobalError (state, error) {
+      state.globalErrors.push(error)
     }
   }
 })
