@@ -26,7 +26,7 @@ public class GameController {
 
     @MessageMapping("/game/{id}/play")
     @SendTo("/messages/game/{id}")
-    public GameTransport play(GameAction action, @DestinationVariable("id") Long id) {
+    public GameUpdateTransport play(GameAction action, @DestinationVariable("id") Long id) {
         GameState state = games.findOne(id);
         logger.info("recieved play action for " + id);
         if (state == null) {
@@ -34,9 +34,10 @@ public class GameController {
             throw new IllegalArgumentException("invalid id");
         }
 
-        state.play(action);
-        games.save(state);
-        return state.toTransport();
+//        state.play(action);
+//        games.save(state);
+//        return state.toTransport();
+return null;
     }
 
     @MessageExceptionHandler
@@ -51,6 +52,6 @@ public class GameController {
         logger.info("new game created at " + id);
         GameState state = new GameState(id);
         games.save(state);
-        return "success! game created at " + Long.toString(state.id);
+        return "success! game created at " + Long.toString(state.getId());
     }
 }

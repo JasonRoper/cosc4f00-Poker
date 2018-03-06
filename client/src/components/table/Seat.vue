@@ -2,6 +2,8 @@
    <div> seat
 <div v-if="this.data.id === -1">
 Write out that there is no player for this position
+        <button type="button" class="btn  btn-lg "><i class="fa fa-user-plus fa-lg"></i></button>
+
 </div>
 <div v-else-if="this.data.isPlayer === true">
   This is classified as the user

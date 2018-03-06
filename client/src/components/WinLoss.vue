@@ -5,7 +5,6 @@
 
 
        </player>
-       
      </div>
 
     <div class='card' v-for= "player in opponents" :key="player.id">
@@ -13,21 +12,13 @@
            <player :data="player"></player>
         </div>
         <div class='showCard' v-else>
-            <card class='size' v-for="card in player.cards" :key="card" :card="card"/></card>
+            <card class='size' v-for="card in player.cards" :key="card" :card="card"></card>
         </div>
-
-
     </div>
-
-  
- 
     <a href="/NextGame">NextGame</a>
     <a href="/Lobby">Lobby</a>
 
   </div>
-
-
-  
 </template>
 
 <script>
@@ -95,7 +86,7 @@ export default {
 }
 </script>
 
-  <style src="@/assets/css/Lobby.css">
+<style src="@/assets/css/Lobby.css">
 
 </style>
 

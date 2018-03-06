@@ -68,7 +68,12 @@ export default class GameMech {
       id: 0,
       money: 500,
       name: 'javon',
+<<<<<<< HEAD
       action: null,
+=======
+      tableAction: GameActionType.FOLD,
+      premove: null,
+>>>>>>> 8b95e37ff016b30de3c003772f15ba1dda174ce1
       card1: CardSuite.BLANK_CARD,
       card2: CardSuite.BLANK_CARD,
       currentBet: 0,

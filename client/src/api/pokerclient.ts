@@ -1,3 +1,4 @@
+import { WEBSOCKET_PATH } from '@/config'
 import webstomp from 'webstomp-client'
 
 type EventCallback = (payload: any) => void
@@ -8,7 +9,7 @@ type EventCallback = (payload: any) => void
 class Subscription {
   private path: string
   private callbacks: Set<EventCallback>
-  private handle: webstomp.Subscription
+  private handle: webstomp.Subscription | undefined
 
   /**
    * Create a Subscription to the given path. If the socket has not connected
@@ -239,4 +240,4 @@ class PokerClient {
   }
 }
 
-export default new PokerClient('ws://localhost:8080/live')
+export default new PokerClient(WEBSOCKET_PATH)

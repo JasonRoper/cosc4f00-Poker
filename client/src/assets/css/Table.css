@@ -32,6 +32,7 @@
     margin-right:14px;
     background: transparent;
   }
+
   .Communitycards{
     width:  600px;
     margin: 0px auto;
@@ -41,8 +42,8 @@
     align-items: center;
     align-content: center;
     position: relative;
-    left:-41px;
-    transform: scale(0.87);
+    left:-35px;
+    transform: scale(0.85);
     
   }
   .userCards{
@@ -56,6 +57,33 @@
     align-content: center;
 
   }
+
+  .DECK{
+    width:  545px;
+    margin: 0px auto;
+    display: -webkit-flex; /* Safari */
+    -webkit-align-items: center; /* Safari 7.0+ */
+    display: block;
+    align-items: center;
+    align-content: center;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    left:-35px;
+    transform: scale(0.85);
+    /* margin: auto; */
+  }
+
+  .DECKsize{
+    height: 138px;
+    width:  107px;
+    background-repeat:no-repeat;
+    position:absolute;
+    border:1px solid aqua; 
+    background: transparent;
+  }
+
+
 
 
      /*=================
@@ -128,12 +156,12 @@
       margin-top:15px;
       
     }
-
+  
     .TableActions .btn {
       border-radius: 50%;
       width:80px;
       height:80px;
-      color: blue;
+      color: black;
       background: transparent;
       border:1px solid black;
       opacity: 0.8;
@@ -144,30 +172,84 @@
      transform: scale(1.2);
      padding:-20px;
      top:0px;
-      
     }
+    /* Table background colors */
+    .TableActions .fold{ 
+      /* background-color: #fa0909; */
+      background-color: #F00;
+      opacity: 0.86;
+      }
+      .TableActions .check{ 
+        /* background-color: #fa0909; */
+        background-color: #24E0FF;
+        opacity: 0.86;
+        }   
+        .TableActions .CALL { 
+          /* background-color: #fa0909; */
+          background-color: #24A5FF;
+          opacity: 0.86;
+          }   
+         .TableActions .Bet{ 
+          background-color:rgb(255, 166, 0); 
 
-    .TableActions .btn:hover {
-      border-radius: 50%;
-      background: transparent;
-      background-color: lightgreen;
-      border: 1px solid black;
-      opacity: 1;
-      transform: scale(1.2);
-   
-    }
+          /* background-color: #fa0909; */
+          opacity: 0.80;
+        }
+        .TableActions .chat{ 
+          background-color: #2ED553;
 
+          /* background-color: #fa0909; */
+          opacity: 0.80;
+        }
+        .TableActions .chat:hover { 
+          background-color: #2ED553;
+          border-radius: 50%;
+          box-shadow: #2ED553 0 -1px 7px 1px, inset #2f4413 0 -1px 9px, #69FF3F 0 2px 12px;    
+          opacity: 1 ;
+          color:#e2e2e2;
+        }
+
+      .TableActions .fold:hover { 
+        background-color: #F00;
+        border-radius: 50%;
+        box-shadow: #F00 0 -1px 7px 1px, inset #441313 0 -1px 9px, rgba(255, 0, 0, 0.5) 0 2px 12px;    
+        opacity: 1 ;
+        color:#e2e2e2;
+      }
+        .TableActions .check:hover { 
+          background-color: #24E0FF;
+          border-radius: 50%;
+          box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #006 0 -1px 9px, #3F8CFF 0 2px 14px;
+          opacity: 1; 
+          color:#e2e2e2;
+
+        }
+          .TableActions .Bet:hover { 
+            background-color:rgb(255, 166, 0);
+            box-shadow: rgb(255, 166, 0) 0 -1px 7px 1px, inset rgb(102, 75, 0) 0 -1px 9px, #FFD33F 0 2px 14px;
+            /* border-top:none; */
+            opacity: 1;
+            color:#e2e2e2;
+
+          }
+          .TableActions .CALL:hover { 
+            background-color:#24A5FF;
+            box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #002860 0 -1px 9px, #3F6DFF 0 2px 14px;
+            /* border-top:none; */
+            opacity: 1;
+            color:#e2e2e2;
+
+          }
     .Action {
-      
-      
       text-align: center;
       align-items: center;
       align-content: center;
-      margin:  auto;
-      
+      margin:  auto;      
     }
     .ActionTitle{
     position: relative;
+    color:#131313;
+    margin-bottom: 10px;
     /* left: -20px; */
   }
      

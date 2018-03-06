@@ -21,7 +21,6 @@
        <p class="lead text-left mw-2  text-wrap  row-sm-mr-4"> This section of the page is to discribe the poker pals product  we plan to provide only the greatest and latest topics in poker </p>
       </div>
      </div>
-  </div> 
-   
+  </div>
 </div>
 </template>

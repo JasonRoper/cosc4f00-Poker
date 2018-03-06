@@ -42,7 +42,7 @@
 <!-- Modal -->
 </transition>
 <!--==================*
-    MODAL Login!!! 
+    MODAL Login!!!
 *==================-->
 <div class="modal fade" id="Register2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
@@ -86,9 +86,9 @@
 </template>
 
 <script>
-import Login from '@/components/Login.vue'
-import Features from '@/components/Features.vue'
-import About from '@/components/About.vue'
+import Login from '@/components/Login'
+import Features from '@/components/Features'
+import About from '@/components/About'
 
 export default{
   data: function () {

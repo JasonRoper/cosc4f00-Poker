@@ -1,31 +1,28 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import router from '@/router'
+import game from '@/store/game'
+import users from '@/store/users'
+
 Vue.use(Vuex)
 
-export const store = new Vuex.Store({
-  state: {name: '', id: '', password: ''},
+const store = new Vuex.Store({
+  modules: {
+    game,
+    users
+  },
+  state: {
+    number: 1,
+    globalErrors: []
+  },
   mutations: {
-    setId (state, userId) {
-      state.id = userId
-    },
-    setPlayer (state, userName) {
-      state.name = userName
-    }
-  },
-  getters: {
-    user (state) {
-      return state.name
-    }
-  },
-  actions: {
-    storeName (context, name) {
-      console.log('clicked')
-      if ((name.length > 0)) {
-        context.commit('setPlayer', name)
-        router.push('Lobby')
-      }
-      console.log(this.state.name)
+    /**
+     * global errors that have no better place, go here. In general, that means errors
+     * that cannot be handled more specifically - ie Unkown Errors
+     * @param {GlobalState} state - the global state
+     * @param {error: string, module: string, reason: {*}} error - the error that occured
+     */
+    addGlobalError (state, error) {
+      state.globalErrors.push(error)
     }
   }
 })
