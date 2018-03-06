@@ -42,7 +42,7 @@
 <!-- Modal -->
 </transition>
 <!--==================*
-    MODAL Login!!! 
+    MODAL Login!!!
 *==================-->
 <div class="modal fade" id="Register2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
