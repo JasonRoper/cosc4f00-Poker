@@ -30,11 +30,12 @@ export default class GameRequest {
     })
     return this.gameId
   }
+}
 
-  /**
+  /*
+    /**
    * Register a callback to be called when the game is updated
    * @param callback - will be called when the game updates
-   */
   public onGameJoin (subPath: string, callback: GameJoinCallback) {
     PokerClient.switchCallback(
       subPath,
@@ -42,9 +43,6 @@ export default class GameRequest {
       callback)
     this.onGameJoinCallback = callback
   }
-}
-
-  /*
   public onGameJoin (subPath: string, callback: GameJoinCallback) {
     PokerClient.switchCallback(
       subPath,
@@ -62,7 +60,7 @@ function sub(a: number, b: number): number {
 
 export = sub;
 */
-
+/*
 export class TestAxios {
 
   // public axios = require('axios')
@@ -78,3 +76,4 @@ export class TestAxios {
     }).catch((response) => { this.abc = response.data })
   }
 }
+*/

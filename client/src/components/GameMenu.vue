@@ -116,9 +116,11 @@ import CardSuite from '@/types/cards'
 import Actions from '@/types/actions'
 import TableView from '@/components/TableView'
 import router from '@/router'
+import GameRequest from '@/store/GameRequest.ts'
 export default {
   data () {
     return {
+      gameReq: new GameRequest(),
       cardPos: 30,
       GameMenu: true,
       instrcutionPokerMode: false,
@@ -188,18 +190,24 @@ export default {
       this.competitivePokerMode = false
       this.showTable = false
     },
+    createGame: function () {
+      return this.gameReq.createGame()
+    },
     chipChoice: function (choice) {
+      var newGameId
       if (choice === 'PokerTutorial') {
-        router.push('Table')
+        newGameId = this.createGame()
+        router.push({name: 'Table', params: {gameId: newGameId}})
       }
       if (choice === 'CompetitivePoker') {
         alert('Lets Compete Poker')
-        this.instrcutionPokerMode = false
-        this.showTable = true
+        // this.instrcutionPokerMode = false
+        // this.showTable = true
+        newGameId = this.createGame()
+        router.push({name: 'Table', params: {gameId: newGameId}})
       }
       if (choice === 'CPUChallenge') {
         alert('Bot Plays Poker')
-        router.push('Table')
       }
     }
   },
