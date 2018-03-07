@@ -78,9 +78,11 @@
 <script>
 import TableView from '@/components/TableView'
 import GameMenu from '@/components/GameMenu'
+import GameRequest from '@/store/GameRequest'
 export default{
   data () {
     return {
+      gameRequest = new GameRequest(),
       windowWidth: 'document.documentElement.clientWidth',
       toggleon: false
     }
@@ -90,6 +92,9 @@ export default{
     gameMenu: GameMenu
   },
   watch: {
+    gameRequest: function (newValue, oldValue) {
+      
+    },
     windowWidth: function (query) {
       console.log(query)
     }

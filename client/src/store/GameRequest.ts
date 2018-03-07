@@ -7,7 +7,7 @@ import store from '@/store/index.js'
 export type GameJoinCallback = (gameId: number) => void
 
 export default class GameRequest {
-  public userId: number = 0
+  public userId: number
   public BASE_PATH: string = 'https://localhost:8443'
   public API_V1: string = this.BASE_PATH + '/api/v1'
   public MATCHMAKING: string = this.API_V1 + '/matchmaking/basicGame'
@@ -17,7 +17,6 @@ export default class GameRequest {
 
   constructor () {
     this.userId = parseInt(store.state.id, 10)
-    // this.matchMakingId = 0
   }
 
   public getMatchMakingId () {
