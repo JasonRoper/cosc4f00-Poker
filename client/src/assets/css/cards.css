@@ -1,5 +1,11 @@
+.Playingcard:hover{
+  transform: rotatey(180deg);
+  transition: transform 500ms cubic-bezier(.2,-0.02,.39,1.27);
+
+  /* border: white 23px solid; */
+}
 .Playingcard{
-  /* width:700px; */
+  width:107px;
   height:143px;
   background-repeat: no-repeat;
 }
@@ -10,7 +16,10 @@
     background-repeat: no-repeat;
 }
 
-
+.blank.card:hover{
+  /* perspective:700px;  */
+  transform: scaleY(180deg);
+}
 
 .clubs.ace {
   background: url("../cards/Clubs 1.png");
