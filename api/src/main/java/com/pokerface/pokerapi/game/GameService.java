@@ -57,7 +57,6 @@ public class GameService {
      * @return the update transport necessary for the clients
      */
     public void bet (GameState gameState, GameAction action, Player player){
-
         if (player.getCashOnHand()>=action.getBet()){
             player.setCashOnHand(player.getCashOnHand()-action.getBet()); // remove the bet from the players available cash
             applyBet(gameState,player.getTableSeatID(),action.getBet()); // apply the bet to gamestate
@@ -75,6 +74,9 @@ public class GameService {
      * @return
      */
     public void check (GameState gameState, GameAction action, Player player){
+        if (player.getCashOnHand()>=gameState.getMinimumBet()-gameState.getPot().getBet(player.getTableSeatID())){
+            player.setCashOnHand(player.getCashOnHand()-gameState.getMinimumBet()-gameState.getPot().getBet(player.getTableSeatID()));
+        }
 
     }
     /**
