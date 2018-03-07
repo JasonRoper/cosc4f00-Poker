@@ -1,4 +1,7 @@
 export default {
+//  Turn down Cards
+  BLANK_CARD: 'blank card',
+//  Spades
   SPADES_ACE: 'spades ace',
   SPADES_TWO: 'spades two',
   SPADES_THREE: 'spades three',
@@ -54,4 +57,3 @@ export default {
   CLUBS_QUEEN: 'clubs queen',
   CLUBS_KING: 'clubs king'
 }
-

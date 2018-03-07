@@ -1,19 +1,17 @@
 <template>
 
-  <div class="card" :class="card">
-    <div class='Pcard'>
+  <div  class="Playingcard" :class="this.card">
+    <div  class='Pcard'>
     {{this.card}} 
     </div>
+
   </div>
 </template>
 
 <script>
 export default {
-  props: ['card'],
-  data () {
-    return {
-      blank: 'a'
-    }
+  props: {
+    card: [String]
   }
 }
 </script>
