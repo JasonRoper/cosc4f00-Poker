@@ -190,21 +190,19 @@ export default {
       this.competitivePokerMode = false
       this.showTable = false
     },
-    createGame: function () {
-      return this.gameReq.createGame()
-    },
     chipChoice: function (choice) {
-      var newGameId
       if (choice === 'PokerTutorial') {
-        newGameId = this.createGame()
-        router.push({name: 'Table', params: {gameId: newGameId}})
+        this.gameReq.createGame().then(() => {
+          router.push({name: 'Table', params: {gameId: this.gameReq.gameId}})
+        })
       }
       if (choice === 'CompetitivePoker') {
         alert('Lets Compete Poker')
         // this.instrcutionPokerMode = false
         // this.showTable = true
-        newGameId = this.createGame()
-        router.push({name: 'Table', params: {gameId: newGameId}})
+        this.gameReq.createGame().then(() => {
+          router.push({name: 'Table', params: {gameId: this.gameReq.gameId}})
+        })
       }
       if (choice === 'CPUChallenge') {
         alert('Bot Plays Poker')
