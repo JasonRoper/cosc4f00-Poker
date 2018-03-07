@@ -136,6 +136,7 @@ export type GameStartedCallback = (gameStarted: GameStarted) => void
 export type GameErrorCallback = (gameError: GameError) => void
 export type GameEventCallback = (event: GameEvent) => void
 export type UserCardsCallback = (userCards: UserCards) => void
+export type GameCommunityCardsCallback = (card: string) => void
 
 /**
  * Manages all access to games on the server
@@ -149,6 +150,7 @@ export class GameService {
   private onGameStartedCallback: GameStartedCallback
   private onGameErrorCallback: GameErrorCallback
   private onUserEventCallback: UserCardsCallback
+  private onGameCommunityCardsCallback: GameCommunityCardsCallback
 
   /**
    * Create a GameService to manage access to the game at gameId
@@ -192,6 +194,15 @@ export class GameService {
     this.onGameStartedCallback = callback
 
   }
+
+  public onGameCommunityCards (callback: GameCommunityCardsCallback) {
+    PokerClient.switchCallback(
+      this.gamePaths.GAME_EVENTS,
+      this.onGameCommunityCardsCallback,
+      callback)
+    this.onGameCommunityCardsCallback = callback
+  }
+
   public onGameFinished (callback: GameFinishedCallback) {
     PokerClient.switchCallback(
       this.gamePaths.GAME_FINISHED,
@@ -199,12 +210,12 @@ export class GameService {
       callback)
     this.onGameFinishedCallback = callback
   }
-  public onGameError (callback: GameEventCallback) {
+  public onGameError (callback: GameErrorCallback) {
     PokerClient.switchCallback(
       this.gamePaths.GAME_ERROR,
-      this.onGameEventCallback,
+      this.onGameErrorCallback,
       callback)
-    this.onGameEventCallback = callback
+    this.onGameErrorCallback = callback
   }
   /**
    * Register a callback to be called when the user is sent cards

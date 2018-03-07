@@ -19,21 +19,18 @@ export default class GameRequest {
     this.userId = parseInt(store.state.id, 10)
   }
 
-  public getMatchMakingId () {
+  public createGame (): number {
     axios.post(this.MATCHMAKING).then((response) => {
-      const subPath: string = this.API_V1 + '/' + response.data.matchmakingId.toString() + '/matchmaking'
-      this.matchMakingId = response.data.matchmakingId
+      // const subPath: string = this.API_V1 + '/' + response.data.matchmakingId.toString() + '/matchmaking'
+      this.gameId = response.data.gameId
       // this.onGameJoin(subPath, this.setGameId)
       console.log(response)
     }).catch((error) => {
       console.log(error)
     })
+    return this.gameId
   }
 
-  public setGameId (gameId: number) {
-    this.gameId = gameId
-    // Then you push to the router
-  }
   /**
    * Register a callback to be called when the game is updated
    * @param callback - will be called when the game updates
@@ -55,6 +52,15 @@ export default class GameRequest {
       callback)
     this.onGameJoinCallback = callback
 }
+*/
+/*
+const sum = require('./sum');
+
+function sub(a: number, b: number): number {
+  return sum(a, -b);
+}
+
+export = sub;
 */
 
 export class TestAxios {

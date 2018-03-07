@@ -78,11 +78,11 @@
 <script>
 import TableView from '@/components/TableView'
 import GameMenu from '@/components/GameMenu'
-// import GameRequest from '@/store/GameRequest'
+import GameRequest from '@/store/GameRequest'
 export default{
   data () {
     return {
-      // gameRequest = new GameRequest(),
+      gameReq: new GameRequest(),
       windowWidth: 'document.documentElement.clientWidth',
       toggleon: false
     }
@@ -107,7 +107,8 @@ export default{
   },
   methods: {
     createGame: function () {
-      // gameRequest.createGame()
+      var gameId = this.gameReq.createGame()
+      this.$router.push({name: 'tableView', params: { gameId: gameId }})
     },
     toggleSidebar: function () {
       document.getElementById('sidebar').classList.toggle('active')
