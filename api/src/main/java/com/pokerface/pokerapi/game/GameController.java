@@ -26,11 +26,13 @@ public class GameController {
         this.gameService = gameService;
     }
 
-    /**
-     * This function is the baseline for when a player asks to be placed into a match. If there is a suitable game for them, it finds it and adds them, if there isn't it makes the game and will add other players to it.
-     * @param playerID
-     * @return
-     */
+//Hey I need to find a game!!!
+
+
+    //Hey here's an action!
+
+
+    //GameState has changed
 
 
 

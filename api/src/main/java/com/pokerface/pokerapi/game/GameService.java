@@ -7,6 +7,7 @@ import java.util.List;
 @Service
 public class GameService {
     GameRepository games;
+    AIService aiService;
 
     /**
      * This constructor grabs the repository for access to the database
@@ -88,23 +89,17 @@ public class GameService {
         //CREATE GAMETRANSPORT
     }
 
+    /**
+     * ApplyBet takes a players bet and applies it to the gameState
+     * @param gameState
+     * @param playerGameID
+     * @param bet
+     */
     public void applyBet(GameState gameState, int playerGameID, double bet) {
         gameState.matchBet(playerGameID);
         gameState.placeBet(playerGameID,bet);
     }
 
-    public GameState startGame(int playerCount){
-        GameState newGameState = new GameState();
-        Player[] players = new Player[playerCount];
-        setupPlayers(players);
-        Deck deck = new Deck();
-
-        return newGameState;
-    }
-
-    private Player[] setupPlayers(Player[] players){
-        return players;
-    }
 
     private boolean isRoundEnd(GameState gameState){
         if (gameState.getPresentTurn()==gameState.getLastBet()){
@@ -129,6 +124,10 @@ public class GameService {
         return false;
     }
 
+    /**
+     * newHand is called when a game reaches a new round.
+     * @param gameState
+     */
     private void newHand(GameState gameState){
         int[] winners=new int[4];
         gameState.getPot().resolveWinnings(winners);
@@ -138,6 +137,7 @@ public class GameService {
             p.setCardOne(deck.getCard());
             p.setCardTwo(deck.getCard());
         }
+        games.save(gameState);
     }
 
     /**
@@ -155,14 +155,19 @@ public class GameService {
 
     /**
      * This function starts games once the amount of users reached is enough. This is done once in the lifetime of a game
-     * @param ID This parameter is the games id being started
+     * @param gameID This parameter is the games id being started
      */
-    private void startGame(long ID){
+    private void startGame(long gameID){
 
     }
 
+    /**
+     * This method takes a player's ID and finds a game for them. THe logic for this can be improved as matchmaking algorithms are made more complex.
+     * @param playerID
+     * @return
+     */
     public long matchmake(long playerID){
-        long gameID= - 0;
+        long gameID= 0; // 0 is never a legitimate gameID, this allows error checking for unfound game.
         gameID=firstAvailableGame();
         if (gameID==0){
             gameID=createGame();
@@ -172,7 +177,7 @@ public class GameService {
 
     /**
      * This method is used to find the first available game and return the id of that game, used for matchmaking.
-     * @return
+     * @return the ID of the available game
      */
     private long firstAvailableGame(){
         List<Long> gameIDs;
@@ -185,6 +190,10 @@ public class GameService {
     }
 
 
+    /**
+     * This creations a new game and returns the ID of that game once it is saved in the repository
+     * @return
+     */
     private long createGame() {
         GameState state = new GameState();
         return games.save(state).getId();
