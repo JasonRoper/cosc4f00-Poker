@@ -214,6 +214,11 @@ public class GameState {
         }
     }
 
+    /**
+     * returns the player matching the user ID
+     * @param userID
+     * @return
+     */
     public Player getPlayer(long userID){
         for (Player p:players){
             if (p.getId()==userID){
@@ -221,5 +226,15 @@ public class GameState {
             }
         }
         return null;
+    }
+
+    /**
+     * advances to the dealer to the next player
+     */
+    public void advanceDealer(){
+        dealer++;
+        if (dealer>=players.size()){
+            dealer=0;
+        }
     }
 }
