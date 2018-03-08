@@ -31,10 +31,23 @@ public class GameState {
 
 
     public GameState(){
+
     }
 
     public GameState(long id) {
+        this(id,12,4,200);
         setId(id);
+    }
+
+    public GameState(long id,int bigBlind,int minPlayerCount, int defaultCashOnHand){
+        setId(id);
+        this.lastBet=2;
+        this.bigBlind=bigBlind;
+        this.dealer=0;
+        this.round=0;
+        this.presentTurn=3;
+        this.minPlayerCount=minPlayerCount;
+        this.defaultCashOnHand=defaultCashOnHand;
     }
 
     public GameState(Deck deck) {
@@ -186,5 +199,27 @@ public class GameState {
 
     public void setPlayerCount(int playerCount) {
         this.playerCount = playerCount;
+    }
+
+    public void nextTurn(){
+        while(true) {
+            presentTurn++;
+
+            if (presentTurn == players.size()) {
+                presentTurn = 0;
+            }
+            if (!players.get(presentTurn).hasFolded()){
+                break;
+            }
+        }
+    }
+
+    public Player getPlayer(long userID){
+        for (Player p:players){
+            if (p.getId()==userID){
+                return p;
+            }
+        }
+        return null;
     }
 }

@@ -29,22 +29,30 @@ public class GameService {
 
     /**
      * This method takes the message from the Controller when an action is received, it takes that action, interprets it, gets the gamestate and calls appropriate methods. It also grabs the player reference at the table matching the id and sends it along.
-     * @param id represenative of the gamestate in the database
+     * @param gameID represenative of the gamestate in the database
      * @param action the action being performed
      * @return GameUpdateTransport an update for the user to maintain their gamestate
      */
-    public GameUpdateTransport handleAction(long id, GameAction action, long userID){
+    public GameUpdateTransport handleAction(long gameID, GameAction action, long userID){
         GameUpdateTransport presentGameStateTransport = new GameUpdateTransport();
-        GameState gameState = new GameState(); // dummy file
-        //do the thing
+        GameState gameState = games.findOne(gameID);
+        Player player = gameState.getPlayer(userID);
+                if (action.getType()==GameActionType.BET){
+            bet(gameState,action,player);
+        } else if (action.getType()==GameActionType.FOLD) {
+fold(gameState,action,player);
+        } else if (action.getType()==GameActionType.CHECK) {
+check(gameState,action,player);
+        }
 
         if (isHandEnd(gameState)) {
             newHand(gameState);
+        } else if (isRoundEnd(gameState,action.getType())) {
+
+        } else {
+            gameState.nextTurn();
         }
 
-        if (isRoundEnd(gameState)) {
-
-        }
 
         return presentGameStateTransport;
     }
@@ -103,8 +111,8 @@ public class GameService {
     }
 
 
-    private boolean isRoundEnd(GameState gameState){
-        if (gameState.getPresentTurn()==gameState.getLastBet()){
+    private boolean isRoundEnd(GameState gameState,GameActionType actionType){
+        if (gameState.getPresentTurn()==gameState.getLastBet()&&actionType!=GameActionType.BET){
             return true;
         }
         return false;
