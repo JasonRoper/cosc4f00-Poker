@@ -9,8 +9,8 @@ public class Player {
     private Card cardOne;
     @Enumerated
     private Card cardTwo;
-    private double cashOnHand;//User available money in game
-    private Long id; // id to the database
+    private int cashOnHand;//User available money in game
+    private long id; // id to the database
     private int tableSeatID; // id to the game
     private GameState gameState;
     private boolean hasFolded;
@@ -33,11 +33,11 @@ public class Player {
         cardTwo=card;
     }
 
-    public double getCashOnHand() {
+    public int getCashOnHand() {
         return cashOnHand;
     }
 
-    public void setCashOnHand(double cashOnHand) {
+    public void setCashOnHand(int cashOnHand) {
         this.cashOnHand = cashOnHand;
     }
 
@@ -47,11 +47,11 @@ public class Player {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 

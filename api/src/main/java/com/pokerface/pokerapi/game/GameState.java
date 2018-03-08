@@ -163,7 +163,7 @@ public class GameState {
 
     public boolean matchBet (int playerSeatID){
         Player player = players.get(playerSeatID);
-        double difference=minimumBet-pot.getBet(playerSeatID);
+        int difference=minimumBet-pot.getBet(playerSeatID);
         if (player.getCashOnHand()>=difference){
             pot.add(difference,playerSeatID);
             player.setCashOnHand(player.getCashOnHand()-difference);
@@ -174,7 +174,7 @@ public class GameState {
         return true;
     }
 
-    public boolean placeBet(int playerSeatID, double betAmount){
+    public boolean placeBet(int playerSeatID, int betAmount){
         Player player=players.get(playerSeatID);
         if (player.getCashOnHand()>=betAmount){
             pot.add(betAmount,playerSeatID);

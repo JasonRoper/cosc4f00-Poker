@@ -7,7 +7,6 @@ import java.util.List;
 @Service
 public class GameService {
     GameRepository games;
-    AIService aiService;
 
     /**
      * This constructor grabs the repository for access to the database
@@ -124,12 +123,18 @@ public class GameService {
      * @param playerGameID
      * @param bet
      */
-    public void applyBet(GameState gameState, int playerGameID, double bet) {
+    public void applyBet(GameState gameState, int playerGameID, int bet) {
         gameState.matchBet(playerGameID);
         gameState.placeBet(playerGameID, bet);
     }
 
 
+    /**
+     * isRoundEnd returns a boolean value if the Round, the first or second, is at its end as betting has ceased.
+     * @param gameState
+     * @param actionType
+     * @return
+     */
     private boolean isRoundEnd(GameState gameState, GameActionType actionType) {
         if (gameState.getPresentTurn() == gameState.getLastBet() && actionType != GameActionType.BET && gameState.getRound()!=3) {
             gameState.setRound(gameState.getRound()+1);
@@ -234,5 +239,15 @@ public class GameService {
     private long createGame() {
         GameState state = new GameState();
         return games.save(state).getId();
+    }
+
+    /**
+     *
+     * @param gameID
+     * @param userID
+     * @return
+     */
+    public int getPlayerID(long gameID, long userID) {
+        return (games.findOne(gameID).getPlayer(userID)).getTableSeatID();
     }
 }
