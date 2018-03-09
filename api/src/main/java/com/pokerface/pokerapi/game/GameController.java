@@ -46,19 +46,36 @@ public class GameController {
     }
 
 
-
     @MessageMapping("/game/{game_id}")
-    public void receiveAction(GameAction action, @DestinationVariable("game_id") long id, Principal principal) {
-        UserInfoTransport user = userService.getUser(principal.getName());
-        int playerId = gameService.getPlayerID(user.getId());
-        GameStateTransport nextGameState = gameService.handleAction(id, action, user.getId());
-        messenger.convertAndSend("/messages/game/" + id, nextGameState);
+    public void receiveAction(GameAction action, @DestinationVariable("game_id") long gameId, Principal principal) {
 
-        while (aiService.isAIPlayer(nextGameState).getNextId()) {
-            GameAction aiAction = aiService.playAction(nextGameState);
-            nextGameState = gameService.handleAction(id, aiAction, nextGameState.getNextId());
-            messenger.convertAndSend("/messages/game/" + id, nextGameState);
+        UserInfoTransport user = userService.getUser(principal.getName());
+        int playerId = gameService.getPlayerID(gameId, user.getId());
+
+        GameStateTransport nextGameState = handleAction(gameId, action, playerId);
+
+        while (aiService.isAIPlayer(gameId, nextGameState.nextPlayer())) {
+            GameAction aiAction = aiService.playAction(gameId);
+            nextGameState = handleAction(gameId, aiAction, nextGameState.nextPlayer());
         }
+    }
+
+    private GameStateTransport handleAction(long gameId, GameAction action, long playerId) {
+        GameStateTransport nextGameState = gameService.handleAction(gameId, action, playerId);
+        messenger.convertAndSend("/messages/game/" + gameId, nextGameState);
+
+        if (gameService.isHandEnd(gameId)) {
+            HandEndTransport winners = gameService.determineWinnings(gameId);
+            nextGameState = gameService.getGameState(gameId);
+            messenger.convertAndSend("/messages/game/" + gameId,
+                    nextGameState.reason(GameStateTransport.Reason.HAND_FINISHED,""));
+        } else if (gameService.isRoundEnd(gameId)){
+            nextGameState = gameService.handleRound(gameId);
+            messenger.convertAndSend("/messages/game/" + gameId,
+                    nextGameState.reason(GameStateTransport.Reason.ROUND_FINSHED,""));
+        }
+
+        return nextGameState;
     }
 
     @PostMapping("/api/v1/matchmaking/basicGame")
