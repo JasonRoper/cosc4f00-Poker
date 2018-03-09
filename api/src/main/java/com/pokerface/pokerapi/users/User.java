@@ -3,6 +3,9 @@ package com.pokerface.pokerapi.users;
 
 import javax.persistence.*;
 
+/**
+ * User is the database representation of the users permanent representation. When they log in, this is the data they need to be able to validate and then be able to access
+ */
 @Entity
 public class User {
 
@@ -19,13 +22,17 @@ public class User {
     private String email;
 
     private int rating;
-    private boolean lookingForGame;
-    private LoginState loginState;
     private String role;
 
     public User() {
     }
 
+    /**
+     * This constructor is what is used upon valid registration to create a user.
+     * @param username
+     * @param securePassword
+     * @param email
+     */
     public User(String username, String securePassword, String email) {
         this.username = username;
         this.password = securePassword;
@@ -33,72 +40,101 @@ public class User {
         this.role = "ROLE_USER";
     }
 
+    /**
+     * This bundles up the user info to transmit when needed to the Front End
+     * @return a UserTransport object
+     */
     public UserTransport toTransfer() {
         return new UserTransport(id, username, email);
     }
 
-    public LoginState getLoginState() {
-        return loginState;
-    }
 
-    public void setLoginState(LoginState state) {
-        this.loginState = state;
-    }
-
+    /**
+     * Accesses the user's role, if they are a user or admin
+     * @return String representing their role
+     */
     public String getRole() {
         return role;
     }
 
+    /**
+     * Sets the users role
+     * @param role the role to set for them
+     */
     public void setRole(String role) {
         this.role = role;
     }
 
-
-    public enum LoginState {
-        LOGGED_IN, HIDDEN, LOGGED_OUT
-    }
-
+    /**
+     * Returns the users id
+     * @return a long value representing their ID in the Database
+     */
     public long getId() {
         return id;
     }
 
+    /**
+     * Accesses the users username
+     * @return the username in question as a string
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     * Changes the users username
+     * @param username the username to change their users username to
+     */
     public void setUsername(String username) {
         this.username = username;
     }
 
+    /**
+     * Returns the users password
+     * @return the string representation of their password
+     */
     public String getPassword() {
         return password;
     }
 
+    /**
+     * setPassword sets the users password
+     * @param password the password to be updated to
+     */
     public void setPassword(String password) {
         this.password = password;
     }
 
+    /**
+     * Returns the users email
+     * @return string representing the users email
+     */
     public String getEmail() {
         return email;
     }
 
+    /**
+     * setEmail sets their email
+     * @param email the string email to be set
+     */
     public void setEmail(String email) {
         this.email = email;
     }
 
+    /**
+     * The users ranking, used for competetive matchmaking
+     * @return int representing rating
+     */
     public int getRating() {
         return rating;
     }
 
+    /**
+     * sets the users rating
+     * @param rating the int to set their rating to
+     */
     public void setRating(int rating) {
         this.rating = rating;
     }
 
-    public boolean isLookingForGame() {
-        return lookingForGame;
-    }
-
-    public void setLookingForGame(boolean lookingForGame) {
-        this.lookingForGame = lookingForGame;
-    }
 }
