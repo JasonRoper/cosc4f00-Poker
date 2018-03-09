@@ -7,4 +7,9 @@ public class HandTransport {
   public HandTransport() {
   }
 
+  public HandTransport(Card cardOne, Card cardTwo){
+    this.cardOne=cardOne;
+    this.cardTwo=cardTwo;
+  }
+
 }

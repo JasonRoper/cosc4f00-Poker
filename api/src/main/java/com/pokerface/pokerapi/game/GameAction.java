@@ -1,8 +1,17 @@
 package com.pokerface.pokerapi.game;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "gameaction")
 public class GameAction {
     private GameActionType type;
     private int bet;
+    private GameState gameState;
+
+
+
+    private long id; // id to the database
 
     public GameAction(){
 
@@ -17,7 +26,33 @@ public class GameAction {
         return type;
     }
 
+    public void setType(GameActionType type) {
+        this.type = type;
+    }
+
     public int getBet () {
         return bet;
+    }
+
+    public void setBet(int bet){this.bet=bet;}
+
+    @ManyToOne
+    @JoinColumn(name="gameState")
+    public GameState getGameState() {
+        return gameState;
+    }
+
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;
+    }
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }

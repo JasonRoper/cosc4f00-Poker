@@ -55,6 +55,7 @@ public class GameService {
         } else {
             gameState.nextTurn();
         }
+        gameState.setLastGameAction(player.getTableSeatID(),action);
         //player.setLastAction(action);
         games.save(gameState);
         GameStateTransport presentGameStateTransport = new GameStateTransport();

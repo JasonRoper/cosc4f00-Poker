@@ -1,4 +1,7 @@
 package com.pokerface.pokerapi.game;
+
+import java.util.List;
+
 ///NOT AT ALL DONE
 public class GameStateTransport {
         Card[] communityCards;
@@ -11,14 +14,14 @@ public class GameStateTransport {
 
         }
 
-        public GameStateTransport(Card[] communityCards, int potSum, int bigBlind, String action, String event,Player[] players){
+        public GameStateTransport(Card[] communityCards, int potSum, int bigBlind, String action, String event,Player[] players,List<GameAction> gameActions){
             this.communityCards=communityCards;
             this.potSum=potSum;
             this.bigBlind=bigBlind;
             this.event=new Event(action,event);
             this.players = new PlayerTransport[players.length];
             for (int i=0;i<players.length;i++){
-                this.players[i]=new PlayerTransport(i,players[i].getCashOnHand(),null,players[i].getIsDealer(),players[i].getHasFolded());
+                this.players[i]=new PlayerTransport(i,players[i].getCashOnHand(),gameActions.get(i),players[i].getIsDealer(),players[i].getHasFolded());
             }
         }
 

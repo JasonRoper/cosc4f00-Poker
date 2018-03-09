@@ -14,7 +14,6 @@ public class Player {
     private int tableSeatID; // id to the game
     private GameState gameState;
     private boolean hasFolded;
-    //private GameAction lastAction;
 
 
 
@@ -79,15 +78,6 @@ public class Player {
     public void addPlayer(){
 
     }
-
-//    public GameAction getLastAction() {
-//        return lastAction;
-//    }
-//
-//    public void setLastAction(GameAction lastAction) {
-//        this.lastAction = lastAction;
-//    }
-
     public boolean getIsDealer() {
         return isDealer;
     }

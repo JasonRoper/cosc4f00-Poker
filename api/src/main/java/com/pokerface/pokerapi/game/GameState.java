@@ -20,6 +20,9 @@ public class GameState {
     private int round;//What round are we on, enum? from 0-4, 0 transition value? 1 pre-bet, 2/3/4 is flop turn river respectively.
     private List<Player> players;
     private int playerCount=0;
+    private List<GameAction> lastGameActions;
+
+
 
     /**
      * These are game settings
@@ -190,6 +193,7 @@ public class GameState {
     public int addPlayer(long playerID){
         players.add(new Player(playerID));
         playerCount=players.size();
+        lastGameActions.add(null);
         return players.size();
     }
 
@@ -236,5 +240,20 @@ public class GameState {
         if (dealer>=players.size()){
             dealer=0;
         }
+    }
+
+    @OneToMany(mappedBy = "gameState", cascade = CascadeType.ALL)
+    @OrderColumn
+    public List<GameAction> getLastGameActions() {
+        return lastGameActions;
+    }
+
+    public void setLastGameActions(List<GameAction> lastGameActions) {
+        this.lastGameActions = lastGameActions;
+    }
+
+    public void setLastGameAction(int playerID, GameAction action){
+        lastGameActions.remove(playerID);
+        lastGameActions.add(playerID,action);
     }
 }
