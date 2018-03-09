@@ -5,31 +5,26 @@ import PokerClient from '@/api/pokerclient'
  */
 export default class GamePaths {
   public GAME_UPDATES: string
-  public GAME_EVENTS: string
-  public GAME_ACTIONS: string
-  public GAME_STARTED: string
-  public GAME_FINISHED: string
+  public GAME_FINISHED: string // Displays the winners and losers of the hand - and cards
   public GAME_ERROR: string
-  public GAME_JOIN: string
-
-  public USER_CARDS: string = ''
+  public USER_CARDS: string
+  public USER_ACTIONS: string
 
   /**
    * Generate the websocket paths used for the given gameID
    * @param gameId - the id of the game
    */
   constructor (gameId: number, userId?: number) {
-    this.GAME_UPDATES = '/messages/game/' + gameId
-    this.GAME_EVENTS = '/messages/game/' + gameId + '/events'
-    this.GAME_ACTIONS = '/app/game/' + gameId + '/play'
-    this.GAME_STARTED = '/messages/game/' + gameId + '/start'
-    this.GAME_FINISHED = '/messages/game/' + gameId + '/finish'
-    this.GAME_ERROR = '/messages/game/' + gameId + '/error'
-    this.GAME_JOIN = '/messages/game/' + gameId + '/join'
+    const messageGame = '/messages/game/'
 
-    if (userId) {
-      this.USER_CARDS = '/messages/game/' + gameId + '/' + userId + '/cards'
-    }
+    this.GAME_UPDATES = messageGame + gameId
+    this.GAME_FINISHED = messageGame + gameId + '/status'
+
+    this.GAME_ERROR = messageGame + gameId + '/error'
+
+    this.USER_ACTIONS = '/app/game/' + gameId + '/play'
+
+    this.USER_CARDS = userId ? messageGame + gameId + '/' + userId + '/cards' : ''
   }
 }
 
@@ -41,11 +36,8 @@ export interface UserCards {
   card2: string
 }
 
-/**
- * GameStateStarted - which will hold the information when a new game has started
- */
-export interface GameStarted {
-  multiplePlayers: Player[]
+export interface GameFinished {
+  winner: number
   time: number
 }
 
@@ -57,29 +49,16 @@ export interface GameError {
 }
 
 /**
- * Game Finished - which will hold the information when a game has ended
- */
-export interface GameFinished {
-  winner: number
-  time: number
-}
-
-/**
  * GameState which will hold the state of the game
  */
 export interface GameState {
   hasBet: boolean
   turn: number
-  multiplePlayers: Player[]
+  multiplePlayers: PlayerWithoutCards[]
   gameId: number
   pot: number
   communityCards: string[]
-}
-/**
- * Defines a Card Object
- */
-export interface Card {
-  suit: string
+  gameEventType: GameStateType // This is every time that the GAME has UPDATED
 }
 
 /**
@@ -97,21 +76,41 @@ export interface Player {
   isDealer: boolean
 }
 
-export enum GameEventType {
-  GAME_STARTED = 'GAME_STARTED',
-  GAME_FINISHED = 'GAME_FINISHED',
-  GAME_ERROR = 'GAME_ERROR'
+/**
+ * Defines a Player without cards
+ */
+export interface PlayerWithoutCards {
+  money: number
+  id: number
+  name: string
+  action: GameAction | null
+  currentBet: number
+  isPlayer: boolean
+  isDealer: boolean
+}
+
+/**
+ * GameEventType always sends GameState objecct and determinds what ty
+ */
+
+export enum GameStateType {
+  HAND_STARTED = 'HAND_STARTED', // USER Joins the GAME
+  USER_ACTION = 'USER_ACTION', // This is sent after a player makes an action
+  HAND_FINISHED = 'HAND_FINISHED', // Equivalent for a winnder being determined from a hand
+  ROUND_FINISHED = 'ROUND_FINISHED', // All players have bet - this results in a new Community cards
+  USER_JOIN = 'USER_JOIN',// A new player has been added to the game
+  USER_LEAVE = 'USER_LEAVE' // A new player has left the game
 }
 
 export enum UserEventType {
   USER_CARDS = 'USER_CARDS'
 }
-
+/*
 export interface GameEvent {
   event: GameEventType,
   payload: any
 }
-
+*/
 export interface UserEvent {
   event: UserEventType,
   payload: any
@@ -131,12 +130,12 @@ export interface GameAction {
 }
 
 export type GameUpdatedCallback = (newState: GameState) => void
-export type GameFinishedCallback = (gameFinished: GameFinished) => void
-export type GameStartedCallback = (gameStarted: GameStarted) => void
+export type GameFinishedCallback = (HandFinished: GameFinished) => void
+
 export type GameErrorCallback = (gameError: GameError) => void
-export type GameEventCallback = (event: GameEvent) => void
+
 export type UserCardsCallback = (userCards: UserCards) => void
-export type GameCommunityCardsCallback = (card: string) => void
+export type UserActionsCallback = (action: GameAction) => void
 
 /**
  * Manages all access to games on the server
@@ -144,13 +143,12 @@ export type GameCommunityCardsCallback = (card: string) => void
 export class GameService {
   private gameId: number
   private gamePaths: GamePaths
-  private onGameEventCallback: GameEventCallback
+
   private onGameUpdatedCallback: GameUpdatedCallback
   private onGameFinishedCallback: GameFinishedCallback
-  private onGameStartedCallback: GameStartedCallback
   private onGameErrorCallback: GameErrorCallback
   private onUserEventCallback: UserCardsCallback
-  private onGameCommunityCardsCallback: GameCommunityCardsCallback
+  private onUserActionsCallback: UserActionsCallback
 
   /**
    * Create a GameService to manage access to the game at gameId
@@ -175,41 +173,21 @@ export class GameService {
   }
 
   /**
-   * Register a callback to be called when a game event is issued from the server
-   * @param callback - will be called when a game event occurs
+   * Register a callback to be called when the hand is finished
+   * @param callback - will be called when the hand is finished
    */
-  public onGameEvent (callback: GameEventCallback) {
-    PokerClient.switchCallback(
-      this.gamePaths.GAME_EVENTS,
-      this.onGameEventCallback,
-      callback)
-    this.onGameEventCallback = callback
-  }
-
-  public onGameStarted (callback: GameStartedCallback) {
-    PokerClient.switchCallback(
-      this.gamePaths.GAME_STARTED,
-      this.onGameStartedCallback,
-      callback)
-    this.onGameStartedCallback = callback
-
-  }
-
-  public onGameCommunityCards (callback: GameCommunityCardsCallback) {
-    PokerClient.switchCallback(
-      this.gamePaths.GAME_EVENTS,
-      this.onGameCommunityCardsCallback,
-      callback)
-    this.onGameCommunityCardsCallback = callback
-  }
-
-  public onGameFinished (callback: GameFinishedCallback) {
+  public onHandFinished (callback: GameFinishedCallback) {
     PokerClient.switchCallback(
       this.gamePaths.GAME_FINISHED,
       this.onGameFinishedCallback,
       callback)
     this.onGameFinishedCallback = callback
   }
+
+  /**
+   * Register a callback to be called when the game returns and error
+   * @param callback - will be called when an error is sent
+   */
   public onGameError (callback: GameErrorCallback) {
     PokerClient.switchCallback(
       this.gamePaths.GAME_ERROR,
@@ -233,8 +211,8 @@ export class GameService {
    * Send an action to the server. (Note: this does not manage permissions)
    * @param {GameAction} action - the action that is being taken
    */
-  public sendAction (action: GameAction) {
-    PokerClient.send(this.gamePaths.GAME_ACTIONS, action)
+  public onUserSendAction (action: GameAction) {
+    PokerClient.send(this.gamePaths.USER_ACTIONS, action)
   }
 
   /**
@@ -249,12 +227,30 @@ export class GameService {
       newPaths.GAME_UPDATES,
       this.onGameUpdatedCallback
     )
+
     PokerClient.switchPath(
-      this.gamePaths.GAME_EVENTS,
-      newPaths.GAME_EVENTS,
-      this.onGameUpdatedCallback
+      this.gamePaths.GAME_FINISHED,
+      newPaths.GAME_FINISHED,
+      this.onGameFinishedCallback
     )
 
+    PokerClient.switchPath(
+      this.gamePaths.GAME_ERROR,
+      newPaths.GAME_ERROR,
+      this.onGameError
+    )
+
+    PokerClient.switchPath(
+      this.gamePaths.USER_CARDS,
+      newPaths.USER_CARDS,
+      this.onUserCards
+    )
+
+    PokerClient.switchPath(
+      this.gamePaths.USER_ACTIONS,
+      newPaths.USER_ACTIONS,
+      this.onUserSendAction
+    )
     this.gamePaths = newPaths
     this.gameId = gameId
   }
@@ -267,8 +263,11 @@ export class GameService {
    * Stop listening for events.
    */
   public finish () {
-    PokerClient.unsubscribeOn(this.gamePaths.GAME_UPDATES,this.onGameUpdatedCallback)
-    PokerClient.unsubscribeOn(this.gamePaths.GAME_EVENTS,this.onGameEventCallback)
-  }
+    PokerClient.unsubscribeOn(this.gamePaths.GAME_UPDATES, this.onGameUpdatedCallback)
+    PokerClient.unsubscribeOn(this.gamePaths.GAME_FINISHED, this.onHandFinished)
 
+    PokerClient.unsubscribeOn(this.gamePaths.GAME_ERROR, this.onGameError)
+    PokerClient.unsubscribeOn(this.gamePaths.USER_CARDS, this.onUserCards)
+    PokerClient.unsubscribeOn(this.gamePaths.USER_ACTIONS, this.onUserSendAction)
+  }
 }

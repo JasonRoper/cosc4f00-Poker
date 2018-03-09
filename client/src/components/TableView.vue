@@ -153,7 +153,12 @@
 
 
 <script>
-
+/**
+ * A simple checkbox component.
+ * @module components/basic/checkbox
+ * @param {number} [disabled=false] - Disabled component
+ * @param {string[]} model - Required, need two way
+ */
 import Player from '@/components/table/Player.vue'
 import Card from '@/components/table/Card'
 import TableActions from '@/components/table/TableActions'
@@ -166,6 +171,8 @@ import GameMech from '@/store/GameMechanics.ts'
 import Seat from '@/components/table/Seat'
 import {GameActionType} from '../api/gameservice'
 export default {
+  name: 'checkbox',
+  introduction: 'an amazing checkbox',
   props: ['userId'],
   data () {
     return {
@@ -194,6 +201,7 @@ export default {
       this.mechanics.tableActions()
     },
     fold: function () {
+      alert('FOLD')
       this.premove(GameActionType.FOLD, 0)
     },
     check: function () {
