@@ -14,6 +14,7 @@ public class Player {
     private int tableSeatID; // id to the game
     private GameState gameState;
     private boolean hasFolded;
+    private boolean isAI;
 
 
 
@@ -25,6 +26,7 @@ public class Player {
         cashOnHand=getGameState().defaultCashOnHand;
         hasFolded=false;
         isDealer=false;
+        isAI=false;
     }
 
     public Card getCardOne(){return cardOne;}
@@ -84,6 +86,14 @@ public class Player {
 
     public void setIsDealer(boolean dealer) {
         isDealer = dealer;
+    }
+
+    public boolean isAI() {
+        return isAI;
+    }
+
+    public void setAI(boolean AI) {
+        isAI = AI;
     }
 
 }

@@ -279,7 +279,7 @@ public class GameService {
     }
 
     public GameStateTransport getGameStateTransport(GameState gameState){
-        GameStateTransport gameStateTransport = new GameStateTransport(gameState.getCommunityCards(),gameState.getPot().getSum(),gameState.getBigBlind(),null,null,gameState.getPlayers(),gameState.getLastGameActions(),gameState.getPresentTurn());
+        GameStateTransport gameStateTransport = new GameStateTransport(gameState.getCommunityCardOne(),gameState.getCommunityCardTwo(),gameState.getCommunityCardThree(),gameState.getCommunityCardFour(),gameState.getCommunityCardFive(),gameState.getPot().getSum(),gameState.getBigBlind(),null,null,gameState.getPlayers(),gameState.getLastGameActions(),gameState.getPresentTurn());
 return gameStateTransport;
     }
     //public GameStateTransport(Card[] communityCards, int potSum, int bigBlind, Reason action, String event,Player[] players,List<GameAction> gameActions,int nextPlayer){

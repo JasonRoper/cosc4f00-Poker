@@ -22,8 +22,10 @@ public class GameState {
     private List<Player> players;
     private int playerCount=0;
     private List<GameAction> lastGameActions;
-    private Card[] communityCards;
-    private List<Boolean> isAI;
+    private Card communityCardOne,communityCardTwo,communityCardThree,communityCardFour,communityCardFive;
+
+
+
     private int previousTurn;
 
 
@@ -54,7 +56,7 @@ public class GameState {
         this.presentTurn=3;
         this.minPlayerCount=minPlayerCount;
         this.defaultCashOnHand=defaultCashOnHand;
-        isAI=new ArrayList<Boolean>();
+        //isAI=new ArrayList<Boolean>();
     }
 
     public GameState(Deck deck) {
@@ -266,26 +268,34 @@ public class GameState {
         lastGameActions.add(playerID,action);
     }
 
-    public List<Boolean> getIsAI() {
-        return isAI;
+    public Card getCommunityCardOne(){
+        return communityCardOne;
+    }
+    public Card getCommunityCardTwo(){
+        return communityCardTwo;
+    }
+    public Card getCommunityCardThree(){
+        return communityCardThree;
+    }
+    public Card getCommunityCardFour(){
+        return communityCardFour;
+    }
+    public Card getCommunityCardFive(){
+        return communityCardFive;
     }
 
-    public void setIsAI(List<Boolean> isAI) {
-        this.isAI = isAI;
-    }
-
-    public boolean isAI(int position){
-        return isAI.get(position);
-    }
-
-    public Card[] getCommunityCards(){
-        return communityCards;
-    }
-
-    public void setCommunityCards(Card[] communityCards){this.communityCards=communityCards;}
-
-    public void dealCommunityCard(){
-        communityCards[round+2]=deck.getCard();
+    public void setCommunityCard(Card communityCards){
+        if (communityCardOne==null){
+            communityCardOne=deck.getCard();
+        } else if (communityCardTwo==null){
+            communityCardTwo=deck.getCard();
+        } else if (communityCardThree==null){
+            communityCardThree=deck.getCard();
+        } else if (communityCardFour==null){
+            communityCardFour=deck.getCard();
+        } else if (communityCardFive==null){
+            communityCardFive=deck.getCard();
+        }
     }
 
     public int getPreviousTurn() {
@@ -294,6 +304,26 @@ public class GameState {
 
     public void setPreviousTurn(int previousTurn) {
         this.previousTurn = previousTurn;
+    }
+
+    public void setCommunityCardOne(Card communityCardOne) {
+        this.communityCardOne = communityCardOne;
+    }
+
+    public void setCommunityCardTwo(Card communityCardTwo) {
+        this.communityCardTwo = communityCardTwo;
+    }
+
+    public void setCommunityCardThree(Card communityCardThree) {
+        this.communityCardThree = communityCardThree;
+    }
+
+    public void setCommunityCardFour(Card communityCardFour) {
+        this.communityCardFour = communityCardFour;
+    }
+
+    public void setCommunityCardFive(Card communityCardFive) {
+        this.communityCardFive = communityCardFive;
     }
 
 }

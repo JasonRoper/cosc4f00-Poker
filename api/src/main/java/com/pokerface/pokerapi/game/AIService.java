@@ -91,6 +91,6 @@ public class AIService {
     }
 
     public boolean isAIPlayer(long gameID,int playerID){
-       return games.findOne(gameID).isAI(playerID);
+      return games.findOne(gameID).getPlayer(playerID).isAI();
     }
 }

@@ -4,7 +4,7 @@ import java.util.List;
 
 ///NOT AT ALL DONE
 public class GameStateTransport {
-        Card[] communityCards;
+    private Card communityCardOne,communityCardTwo,communityCardThree,communityCardFour,communityCardFive;
         int potSum;
         int bigBlind;
         int nextPlayer;
@@ -15,8 +15,13 @@ public class GameStateTransport {
 
     }
 
-        public GameStateTransport(Card[] communityCards, int potSum, int bigBlind, Reason action, String event,List<Player> players,List<GameAction> gameActions,int nextPlayer){
-            this.communityCards=communityCards;
+        public GameStateTransport(Card communityCardOne,Card communityCardTwo,Card communityCardThree,Card communityCardFour,Card communityCardFive, int potSum, int bigBlind, Reason action, String event,List<Player> players,List<GameAction> gameActions,int nextPlayer){
+            communityCardOne=communityCardOne;
+            communityCardTwo=communityCardTwo;
+                    communityCardThree=communityCardThree;
+                    communityCardFour=communityCardFour;
+                    communityCardFive=communityCardFive;
+
             this.potSum=potSum;
             this.bigBlind=bigBlind;
             this.event=new Event(action, event);
