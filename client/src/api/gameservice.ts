@@ -89,7 +89,7 @@ export interface Player {
   money: number
   id: number
   name: string
-  action: GameAction | null
+  action: GameActionType | null
   card1: string
   card2: string
   currentBet: number

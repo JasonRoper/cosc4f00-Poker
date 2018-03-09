@@ -298,3 +298,4 @@ export default {
 </script>
 
 <style src="@/assets/css/Table.css"></style>
+<style src="@/assets/css/GameNav.css"></style>
