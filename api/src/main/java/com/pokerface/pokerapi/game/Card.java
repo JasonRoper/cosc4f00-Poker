@@ -20,7 +20,7 @@ public enum Card {
     SPADES_QUEEN,
     SPADES_KING,
 //  Hearts
-HEARTS_ACE,
+    HEARTS_ACE,
     HEARTS_TWO,
     HEARTS_THREE,
     HEARTS_FOUR,
@@ -34,7 +34,7 @@ HEARTS_ACE,
     HEARTS_QUEEN,
     HEARTS_KING,
 //  Diamonds
-DIAMONDS_ACE,
+    DIAMONDS_ACE,
     DIAMONDS_TWO,
     DIAMONDS_THREE,
     DIAMONDS_FOUR,
@@ -47,7 +47,8 @@ DIAMONDS_ACE,
     DIAMONDS_JACK,
     DIAMONDS_QUEEN,
     DIAMONDS_KING,
-    // Clubs
+
+    // Clubs,
     CLUBS_ACE,
     CLUBS_TWO,
     CLUBS_THREE,
@@ -62,24 +63,8 @@ DIAMONDS_ACE,
     CLUBS_QUEEN,
     CLUBS_KING;
 
-    public static Card clubs(int i) {
-        return values()[CLUBS_ACE.ordinal() + i];
-    }
-
-    public static Card hearts(int i) {
-        return values()[HEARTS_ACE.ordinal() + i];
-    }
-
-    public static Card diamonds(int i) {
-        return values()[DIAMONDS_ACE.ordinal() + i];
-    }
-
-    public static Card spades(int i) {
-        return values()[SPADES_ACE.ordinal() + i];
-    }
-
     public Suit suit() {
-        Card ace = Card.values()[this.ordinal() % 13];
+        Card ace = Card.values()[(this.ordinal() / 13) * 13];
         switch(ace) {
             case SPADES_ACE:
                 return Suit.SPADES;
@@ -107,10 +92,8 @@ DIAMONDS_ACE,
     }
 
     public Card next() {
-        int next = this.ordinal() + 1;
-        if (next >= Card.values().length) {
-            return null;
-        }
+        int next = (this.ordinal() + 1) % 13 + (this.ordinal() / 13) * 13;
+
         Card nextCard = Card.values()[next];
         return (nextCard.suit() == this.suit()) ? nextCard : null;
     }
