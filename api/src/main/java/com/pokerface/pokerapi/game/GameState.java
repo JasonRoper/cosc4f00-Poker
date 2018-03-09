@@ -22,9 +22,9 @@ public class GameState {
     private List<Player> players;
     private int playerCount=0;
     private List<GameAction> lastGameActions;
-    private Card[] communityCard;
+    private Card[] communityCards;
     private List<Boolean> isAI;
-
+    private int previousTurn;
 
 
     /**
@@ -211,6 +211,7 @@ public class GameState {
 
     public void nextTurn(){
         while(true) {
+            previousTurn=presentTurn;
             presentTurn++;
 
             if (presentTurn == players.size()) {
@@ -276,4 +277,23 @@ public class GameState {
     public boolean isAI(int position){
         return isAI.get(position);
     }
+
+    public Card[] getCommunityCards(){
+        return communityCards;
+    }
+
+    public void setCommunityCards(Card[] communityCards){this.communityCards=communityCards;}
+
+    public void dealCommunityCard(){
+        communityCards[round+2]=deck.getCard();
+    }
+
+    public int getPreviousTurn() {
+        return previousTurn;
+    }
+
+    public void setPreviousTurn(int previousTurn) {
+        this.previousTurn = previousTurn;
+    }
+
 }

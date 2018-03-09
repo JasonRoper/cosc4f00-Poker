@@ -60,7 +60,7 @@ public class GameController {
         }
     }
 
-    private GameStateTransport handleAction(long gameId, GameAction action, long playerId) {
+    private GameStateTransport handleAction(long gameId, GameAction action, int playerId) {
         GameStateTransport nextGameState = gameService.handleAction(gameId, action, playerId);
         messenger.convertAndSend("/messages/game/" + gameId, nextGameState);
 

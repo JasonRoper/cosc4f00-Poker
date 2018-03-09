@@ -130,22 +130,27 @@ public class GameService {
         gameState.placeBet(playerGameID, bet);
     }
 
+    public boolean isRoundEnd(long gameID){
+        return isRoundEnd(games.findOne(gameID));
+    }
 
     /**
      * isRoundEnd returns a boolean value if the Round, the first or second, is at its end as betting has ceased.
      * @param gameState
-     * @param actionType
      * @return
      */
-    private boolean isRoundEnd(GameState gameState, GameActionType actionType) {
-        if (gameState.getPresentTurn() == gameState.getLastBet() && actionType != GameActionType.BET && gameState.getRound()!=3) {
-            gameState.setRound(gameState.getRound()+1);
+    public boolean isRoundEnd(GameState gameState) {
+        if (gameState.getPresentTurn() == gameState.getLastBet() && gameState.getLastGameActions().get(gameState.getPreviousTurn()).getType() != GameActionType.BET && gameState.getRound()!=3) {
             return true;
         }
         return false;
     }
 
-    private boolean isHandEnd(GameState gameState) {
+    public boolean isHandEnd(long gameID){
+        return isHandEnd(games.findOne(gameID));
+    }
+
+    public boolean isHandEnd(GameState gameState) {
         int notFolded = 0;
         for (Player p : gameState.getPlayers()) {
             if (!p.getHasFolded()) {
@@ -166,18 +171,17 @@ public class GameService {
      *
      * @param gameState
      */
-    private int[] newHand(GameState gameState) {
-        int[] winners = new int[gameState.getPlayerCount()];
-        winners=gameState.getPot().resolveWinnings(winners);
-        Deck deck = gameState.getDeck();
-        deck.shuffleDeck();
-        for (Player p : gameState.getPlayers()) {
-            p.setCardOne(deck.getCard());
-            p.setCardTwo(deck.getCard());
-        }
-        gameState.advanceDealer();
-        return winners;
-    }
+//    private int[] newHand(GameState gameState) {
+//
+//        Deck deck = gameState.getDeck();
+//        deck.shuffleDeck();
+//        for (Player p : gameState.getPlayers()) {
+//            p.setCardOne(deck.getCard());
+//            p.setCardTwo(deck.getCard());
+//        }
+//        gameState.advanceDealer();
+//        return winners;
+//    }
 
     /**
      * This function adds players, and checks that the starting requirements have been met, thus starting the game.
@@ -252,4 +256,32 @@ public class GameService {
     public int getPlayerID(long gameID, long userID) {
         return (games.findOne(gameID).getPlayer(userID)).getTableSeatID();
     }
-}
+
+    public HandEndTransport determineWinnings(long gameID){
+        GameState gameState = games.findOne(gameID);
+        int[] winners = new int[gameState.getPlayerCount()];
+        //DETERMINE WINNERS HERE
+        winners=gameState.getPot().resolveWinnings(winners);
+        HandEndTransport handEndTransport = new HandEndTransport(winners,gameState.getPlayers());
+        return handEndTransport;
+    }
+
+    public GameStateTransport handleRound(long gameID){
+        GameState gameState = games.findOne(gameID);
+        gameState.advanceDealer();
+        games.save(gameState);
+        return getGameStateTransport(gameState);
+    }
+
+    public GameStateTransport getGameStateTransport(long gameID){
+        GameState gameState = games.findOne(gameID);
+        return getGameStateTransport(gameState);
+    }
+
+    public GameStateTransport getGameStateTransport(GameState gameState){
+        GameStateTransport gameStateTransport = new GameStateTransport(gameState.getCommunityCards(),gameState.getPot().getSum(),gameState.getBigBlind(),null,null,gameState.getPlayers(),gameState.getLastGameActions(),gameState.getPresentTurn());
+return gameStateTransport;
+    }
+    //public GameStateTransport(Card[] communityCards, int potSum, int bigBlind, Reason action, String event,Player[] players,List<GameAction> gameActions,int nextPlayer){
+
+    }

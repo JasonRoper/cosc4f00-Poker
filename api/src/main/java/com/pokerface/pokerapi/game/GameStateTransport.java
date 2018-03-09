@@ -15,14 +15,14 @@ public class GameStateTransport {
 
     }
 
-        public GameStateTransport(Card[] communityCards, int potSum, int bigBlind, Reason action, String event,Player[] players,List<GameAction> gameActions,int nextPlayer){
+        public GameStateTransport(Card[] communityCards, int potSum, int bigBlind, Reason action, String event,List<Player> players,List<GameAction> gameActions,int nextPlayer){
             this.communityCards=communityCards;
             this.potSum=potSum;
             this.bigBlind=bigBlind;
             this.event=new Event(action, event);
-            this.players = new PlayerTransport[players.length];
-            for (int i=0;i<players.length;i++){
-                this.players[i]=new PlayerTransport(i,players[i].getCashOnHand(),gameActions.get(i),players[i].getIsDealer(),players[i].getHasFolded());
+            this.players = new PlayerTransport[players.size()];
+            for (int i=0;i<players.size();i++){
+                this.players[i]=new PlayerTransport(i,players.get(i).getCashOnHand(),gameActions.get(i),players.get(i).getIsDealer(),players.get(i).getHasFolded());
             }
             this.nextPlayer = nextPlayer;
         }
@@ -33,6 +33,7 @@ public class GameStateTransport {
 
     public GameStateTransport reason(Reason reason, String message) {
         this.event = event;
+        return this;
     }
 
 
