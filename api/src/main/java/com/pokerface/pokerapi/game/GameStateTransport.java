@@ -2,46 +2,78 @@ package com.pokerface.pokerapi.game;
 
 import java.util.List;
 
-///NOT AT ALL DONE
+/**
+ * GameStateTransport is the object that is communicated by the GameController to the Front End user, it represents the GameState as they see it, with only public information. It also has an Event object which confers why the GameState is being sent.
+ * <p>
+ * The GameStateTransport is submitted upon every action that is sent and processed, whenever a hand is started or finished and whenever a player leaves or enters.
+ */
 public class GameStateTransport {
-    private Card communityCardOne,communityCardTwo,communityCardThree,communityCardFour,communityCardFive;
-        int potSum;
-        int bigBlind;
-        int nextPlayer;
-        Event event;
-        PlayerTransport[] players;
+    private Card communityCardOne, communityCardTwo, communityCardThree, communityCardFour, communityCardFive;
+    int potSum;
+    int bigBlind;
+    int nextPlayer;
+    Event event;
+    PlayerTransport[] players;
 
     public GameStateTransport() {
 
     }
 
-        public GameStateTransport(Card communityCardOne,Card communityCardTwo,Card communityCardThree,Card communityCardFour,Card communityCardFive, int potSum, int bigBlind, Reason action, String event,List<Player> players,List<GameAction> gameActions,int nextPlayer){
-            communityCardOne=communityCardOne;
-            communityCardTwo=communityCardTwo;
-                    communityCardThree=communityCardThree;
-                    communityCardFour=communityCardFour;
-                    communityCardFive=communityCardFive;
+    /**
+     * This creates a GameStateTransport for full use.
+     *
+     * @param communityCardOne   Each of community cards are identical, representing a card in the community
+     * @param communityCardTwo
+     * @param communityCardThree
+     * @param communityCardFour
+     * @param communityCardFive
+     * @param potSum the sum of the pot
+     * @param bigBlind the amount the bigBlind currently is
+     * @param action the reason the action is being sent
+     * @param event the occurence that made the object be sent
+     * @param players the players in the game, a class for transport
+     * @param gameActions the actions performed
+     * @param nextPlayer whose turn it is now
+     */
+    public GameStateTransport(Card communityCardOne, Card communityCardTwo, Card communityCardThree, Card communityCardFour, Card communityCardFive, int potSum, int bigBlind, Reason action, String event, List<Player> players, List<GameAction> gameActions, int nextPlayer) {
+        this.communityCardOne = communityCardOne;
+        this.communityCardTwo = communityCardTwo;
+        this.communityCardThree = communityCardThree;
+        this.communityCardFour = communityCardFour;
+        this.communityCardFive = communityCardFive;
 
-            this.potSum=potSum;
-            this.bigBlind=bigBlind;
-            this.event=new Event(action, event);
-            this.players = new PlayerTransport[players.size()];
-            for (int i=0;i<players.size();i++){
-                this.players[i]=new PlayerTransport(i,players.get(i).getCashOnHand(),gameActions.get(i),players.get(i).getIsDealer(),players.get(i).getHasFolded());
-            }
-            this.nextPlayer = nextPlayer;
+        this.potSum = potSum;
+        this.bigBlind = bigBlind;
+        this.event = new Event(action, event);
+        this.players = new PlayerTransport[players.size()];
+        for (int i = 0; i < players.size(); i++) {
+            this.players[i] = new PlayerTransport(i, players.get(i).getCashOnHand(), gameActions.get(i), players.get(i).getIsDealer(), players.get(i).getHasFolded());
         }
+        this.nextPlayer = nextPlayer;
+    }
 
+    /**
+     * nextPlayer is the integer of who is next
+     * @return the int of who is next
+     */
     public int nextPlayer() {
         return nextPlayer;
     }
 
+    /**
+     * Allows to append a reason after the fact
+     * @param reason
+     * @param message
+     * @return
+     */
     public GameStateTransport reason(Reason reason, String message) {
         this.event = event;
         return this;
     }
 
-
+    /**
+     * A class that contains an action, why the event is being sent, and an optional message for extra communication if necessary
+     */
     private class Event {
         Reason action;
         String message;
@@ -56,6 +88,9 @@ public class GameStateTransport {
         }
     }
 
+    /**
+     * A Player representation, containing an id, their seat, the money they have, the action they last performed, if they are a player or if they are a dealer.
+     */
     private class PlayerTransport {
         int id;
         int money;

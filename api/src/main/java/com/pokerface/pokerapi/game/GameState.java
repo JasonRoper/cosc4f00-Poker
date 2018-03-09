@@ -1,12 +1,13 @@
 package com.pokerface.pokerapi.game;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 /**
- * GameState stores everything necessary to know about the state of a game. It should do little, but represent the database object
+ * GameState stores everything necessary to know about the state of a game. It provides function to access that information.
+ *
+ * It exists within the GameRepository.
  */
 public class GameState {
     private long id;
@@ -24,10 +25,7 @@ public class GameState {
     private List<GameAction> lastGameActions;
     private Card communityCardOne,communityCardTwo,communityCardThree,communityCardFour,communityCardFive;
 
-
-
     private int previousTurn;
-
 
     /**
      * These are game settings
@@ -42,11 +40,22 @@ public class GameState {
 
     }
 
+    /**
+     * GameState constructory, with an ID, setting itself up with default settings.
+     * @param id
+     */
     public GameState(long id) {
         this(id,12,4,200);
         setId(id);
     }
 
+    /**
+     * The chained constructor creates a gameState based on all settings given
+     * @param id the id of the game
+     * @param bigBlind the bigBlind amount
+     * @param minPlayerCount the minimum player count before it starts
+     * @param defaultCashOnHand the default cash on hand for a joining player
+     */
     public GameState(long id,int bigBlind,int minPlayerCount, int defaultCashOnHand){
         setId(id);
         this.lastBet=2;
@@ -56,107 +65,203 @@ public class GameState {
         this.presentTurn=3;
         this.minPlayerCount=minPlayerCount;
         this.defaultCashOnHand=defaultCashOnHand;
-        //isAI=new ArrayList<Boolean>();
     }
 
+    /**
+     * This creates a gameState with a deck only.
+     * @param deck
+     */
     public GameState(Deck deck) {
         this.deck = deck;
     }
 
+    /**
+     * This gets the gameState ID
+     * @return long ID of gameState
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public long getId() {
         return id;
     }
 
+    /**
+     * Sets the ID of the gameState
+     * @param id a long value
+     */
     public void setId(long id) {
         this.id = id;
     }
 
+    /**
+     * getPot returns the GameState pot object
+     * @return a Pot object
+     */
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn
     public Pot getPot() {
         return pot;
     }
 
+    /**
+     * Sets a GameState pot Object
+     * @param pot the Pot to be set
+     */
     public void setPot(Pot pot) {
         this.pot = pot;
     }
 
+    /**
+     * gets the Deck attached to the gameState
+     * @return a Deck object
+     */
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn
     public Deck getDeck() {
         return deck;
     }
 
+    /**
+     * sets a new Deck to the gameState
+     * @param deck Deck object to be set
+     */
     public void setDeck(Deck deck) {
         this.deck = deck;
     }
 
+    /**
+     * sets the lastBetter, the PlayerID of the last person to bet, used to determine round ending criteria
+     * @param lastBet
+     */
     public void setLastBet(int lastBet) {
         this.lastBet = lastBet;
     }
 
+    /**
+     * sets who the dealer is
+     * @param dealer an integer representing the PlayerID of the dealer
+     */
     public void setDealer(int dealer) {
         this.dealer = dealer;
     }
 
+    /**
+     * updated the minimum bet to stay in the game in a given round
+     * @param minimumBet integer of the minimumBet
+     */
     public void setMinimumBet(int minimumBet) {
         this.minimumBet = minimumBet;
     }
 
+    /**
+     * setBigBlind sets the big blind setting of the game
+     * @param bigBlind integer value of bigBlind
+     */
     public void setBigBlind(int bigBlind) {
         this.bigBlind = bigBlind;
     }
 
+    /**
+     * Sets who turn it currently is
+     * @param presentTurn int representing playerID of current turn
+     */
     public void setPresentTurn(int presentTurn) {
         this.presentTurn = presentTurn;
     }
 
+
+    /**
+     * Sets what round is on, should be 1,2 or 3.
+     * @param round
+     */
     public void setRound(int round) {
         this.round = round;
     }
 
+    /**
+     * Sets the minimum player count setting.
+     * @param minPlayerCount int of the minimum players
+     */
     public void setMinPlayerCount(int minPlayerCount) {
         this.minPlayerCount = minPlayerCount;
     }
 
+    /**
+     * Sets the default cash on hand setting of the GameState
+     * @param defaultCashOnHand int representing default cash on hand of a new player.
+     */
     public void setDefaultCashOnHand(int defaultCashOnHand) {
         this.defaultCashOnHand = defaultCashOnHand;
     }
 
+    /**
+     * getMinPlayerCount returns the integer of the minimum amount of player setting
+     * @return
+     */
     public int getMinPlayerCount() {
         return minPlayerCount;
     }
 
+    /**
+     * get default cash on hand returns the amount a player starts with
+     * @return int of cash on hand
+     */
     public int getDefaultCashOnHand() {
         return defaultCashOnHand;
     }
 
+    /**
+     * getLastBet returns the playerID of who bet last
+     * @return int playerID of who bet last
+     */
     public int getLastBet() {
         return lastBet;
     }
 
+    /**
+     * getDealer returns the player ID of the dealer
+     * @return int of the dealer
+     */
     public int getDealer() {
         return dealer;
     }
 
+    /**
+     * getMinimumBet returns the current minimum bet to stay in the game
+     * @return int of my minimum bet
+     */
     public int getMinimumBet() {
         return minimumBet;
     }
 
+    /**
+     * getBigBlind returns the bigblind setting
+     * @return the int of the big blind
+     */
     public int getBigBlind() {
         return bigBlind;
     }
 
+    /**
+     * getPresentTurn returns the playerID of whose turn it currently is
+     * @return int of playerID whose turn it is
+     */
     public int getPresentTurn() {
         return presentTurn;
     }
 
+    /**
+     * getRound returns what round it is
+     * @return int value of 1 2 or 3
+     */
     public int getRound() {
         return round;
     }
 
+    /**
+     * returns a List of the players
+     * @return List of the current players in the game
+     */
     @OneToMany(mappedBy = "gameState", cascade = CascadeType.ALL)
     @OrderColumn
     public List<Player> getPlayers() {
@@ -164,12 +269,20 @@ public class GameState {
     }
 
 
-
+    /**
+     * setPlayers sets the players in a game
+     * @param players being set into the game
+     */
     public void setPlayers(List<Player> players) {
         this.players= players;
         playerCount=players.size();
     }
 
+    /**
+     * matchBet returns a boolean value of if the player can match the minimum bet, and then does so
+     * @param playerSeatID of the better trying to match the current bet
+     * @return boolean value representing of if it was successful
+     */
     public boolean matchBet (int playerSeatID){
         Player player = players.get(playerSeatID);
         int difference=minimumBet-pot.getBet(playerSeatID);
@@ -183,6 +296,12 @@ public class GameState {
         return true;
     }
 
+    /**
+     * placeBet places a bet
+     * @param playerSeatID the player betting
+     * @param betAmount the amount being bet
+     * @return if it worked
+     */
     public boolean placeBet(int playerSeatID, int betAmount){
         Player player=players.get(playerSeatID);
         if (player.getCashOnHand()>=betAmount){
@@ -196,6 +315,11 @@ public class GameState {
        return true;
     }
 
+    /**
+     * Adds a player to the game
+     * @param playerID the ID of the player
+     * @return the amount of players in the game as an int
+     */
     public int addPlayer(long playerID){
         players.add(new Player(playerID));
         playerCount=players.size();
@@ -203,14 +327,25 @@ public class GameState {
         return players.size();
     }
 
+    /**
+     * returns the amount of players in the game
+     * @return int player Count
+     */
     public int getPlayerCount() {
         return playerCount;
     }
 
+    /**
+     * setPlayerCount sets the player count
+     * @param playerCount integer value of how many players there are
+     */
     public void setPlayerCount(int playerCount) {
         this.playerCount = playerCount;
     }
 
+    /**
+     * nextTurn advances to the next players turn
+     */
     public void nextTurn(){
         while(true) {
             previousTurn=presentTurn;
@@ -227,8 +362,8 @@ public class GameState {
 
     /**
      * returns the player matching the user ID
-     * @param userID
-     * @return
+     * @param userID being searched
+     * @return the Player object of the one matching the UserID
      */
     public Player getPlayer(long userID){
         for (Player p:players){
@@ -239,6 +374,11 @@ public class GameState {
         return null;
     }
 
+    /**
+     * Returns a Player using a PlayerID
+     * @param playerID
+     * @return Player object
+     */
     public Player getPlayer(int playerID){
         return players.get(playerID);
     }
@@ -253,21 +393,38 @@ public class GameState {
         }
     }
 
+    /**
+     * getLastGameActions returns the player mapped lists of GameAction
+     * @return List of gameActions
+     */
     @OneToMany(mappedBy = "gameState", cascade = CascadeType.ALL)
     @OrderColumn
     public List<GameAction> getLastGameActions() {
         return lastGameActions;
     }
 
+    /**
+     * Sets a list of gameActions
+     * @param lastGameActions the gameActions to be set
+     */
     public void setLastGameActions(List<GameAction> lastGameActions) {
         this.lastGameActions = lastGameActions;
     }
 
+    /**
+     * This writes a players last action to the list
+     * @param playerID the player who did the action
+     * @param action the action they performed
+     */
     public void setLastGameAction(int playerID, GameAction action){
         lastGameActions.remove(playerID);
         lastGameActions.add(playerID,action);
     }
 
+    /**
+     * All Community Cards return the card position, one through to five
+     * @return
+     */
     public Card getCommunityCardOne(){
         return communityCardOne;
     }
@@ -284,7 +441,11 @@ public class GameState {
         return communityCardFive;
     }
 
-    public void setCommunityCard(Card communityCards){
+    /**
+     * SetCommunityCard takes a card from the deck and places it in the first empty spot
+     * @param communityCard the card to be set, it takes it from the deck if not provided
+     */
+    public void setCommunityCard(Card communityCard){
         if (communityCardOne==null){
             communityCardOne=deck.getCard();
         } else if (communityCardTwo==null){
@@ -298,14 +459,26 @@ public class GameState {
         }
     }
 
+    /**
+     * Returns whose turn it was last
+     * @return
+     */
     public int getPreviousTurn() {
         return previousTurn;
     }
 
+    /**
+     * Allows to to set whose turn it was last
+     * @param previousTurn
+     */
     public void setPreviousTurn(int previousTurn) {
         this.previousTurn = previousTurn;
     }
 
+    /**
+     * Sets a community card specifically, if needed. Same for all from One through to Five
+     * @param communityCardOne
+     */
     public void setCommunityCardOne(Card communityCardOne) {
         this.communityCardOne = communityCardOne;
     }

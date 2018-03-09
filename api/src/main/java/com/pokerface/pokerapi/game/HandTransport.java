@@ -1,5 +1,8 @@
 package com.pokerface.pokerapi.game;
-//NOT DONE AT ALL
+
+/**
+ * HandTransport contains two cards, sent in the event of a newHand being dealt
+ */
 public class HandTransport {
   Card cardOne;
   Card cardTwo;

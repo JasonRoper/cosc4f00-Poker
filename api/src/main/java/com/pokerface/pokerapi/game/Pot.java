@@ -4,6 +4,11 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Pot is a representation of the money being held for a hand of Poker. It holds money, and also knows who has put in what amount.
+ *
+ * This exists within a GameState. It has methods to return who has bet what, as well as, if given a ranking array, who will win what amounts at the end of a Hand.
+ */
 @Entity
 @Table(name = "pot")
 public class Pot {
@@ -12,25 +17,45 @@ public class Pot {
     private long id;
     private GameState gameState;
 
+    /**
+     * Return the ID of the pot
+     * @return long of the ID
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Long getId() {
         return id;
     }
 
+    /**
+     * sets the ID of the pot
+     * @param id the long to be set as the ID of the pot
+     */
     public void setId(Long id) {
         this.id = id;
     }
 
+    /**
+     * the GameState of the pot
+     * @return the GameState of the pot
+     */
     @OneToOne(mappedBy = "pot")
     public GameState getGameState() {
         return gameState;
     }
 
+    /**
+     * setGameState sets the gameState of the pot
+     * @param gameState the GameState to be set
+     */
     public void setGameState(GameState gameState) {
         this.gameState = gameState;
     }
 
+    /**
+     * Creates a pot of size players
+     * @param players int of players
+     */
     public Pot(int players){
         pot=new int[players];
         sum=0;
@@ -38,10 +63,10 @@ public class Pot {
 
 
     /**
-     * Super not done, an idea at best. This is the amount of money each person has put into the pot.
+     * Adds the amount to the pot the PlayerID bet
      *
-     * @param amount
-     * @param playerSeatID
+     * @param amount bet, as int
+     * @param playerSeatID the player betting
      */
     public void add(double amount, int playerSeatID){
         pot[playerSeatID]+=amount;
@@ -101,18 +126,27 @@ public class Pot {
                         winners.add(p);
                     }
                 }
-                //calculate what they get here
-
         }
-
-
         return totalWinnings;
     }
 
+    /**
+     * Returns how much that player has bet
+     * @param playerSeatID the plaer to check
+     * @return
+     */
     public int getBet (int playerSeatID) {return pot[playerSeatID];}
 
+    /**
+     * Returns the sum of the pot
+     * @return the int of the sum of the pot
+     */
     public int getSum () {return sum;}
 
+    /**
+     * Sets the sum of the pot, used to reset.
+     * @param value to set the pot
+     */
     public void setSum(int value) {sum=value;}
 
 

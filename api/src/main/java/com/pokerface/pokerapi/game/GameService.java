@@ -4,6 +4,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * GameService is the heart of the logic of the Back End. It communicates solely with the Controller, it handles GameIds and GameAction's to modify the gameState and create and then return Transport objects which are then communicated with the Front End users.
+ *
+ * It uses a GameRepository which is where it loads and saves GameStates and the changes it has made to them.
+ */
 @Service
 public class GameService {
     GameRepository games;
@@ -31,6 +36,8 @@ public class GameService {
     /**
      * This method takes the message from the Controller when an action is received, it takes that action, interprets it, gets the gamestate and calls appropriate methods. It also grabs the player reference at the table matching the id and sends it along.
      *
+     * After this is completed handleAction then sets that players last action, and advances to the next player.
+     *
      * @param gameID represenative of the gamestate in the database
      * @param action the action being performed
      * @return GameUpdateTransport an update for the user to maintain their gamestate
@@ -47,28 +54,21 @@ public class GameService {
             check(gameState, action, player);
         }
 
-//        if (isHandEnd(gameState)) {
-//            newHand(gameState);//returns int of winnings, need to hand this out
-//
-//        } else if (isRoundEnd(gameState, action.getType())) {
-//            gameState.advanceDealer();
-//        } else {
-//            gameState.nextTurn();
-//        }
         gameState.setLastGameAction(player.getTableSeatID(),action);
-        //player.setLastAction(action);
+        gameState.nextTurn();
         games.save(gameState);
-        GameStateTransport presentGameStateTransport = new GameStateTransport();
+        GameStateTransport presentGameStateTransport = getGameStateTransport(gameState);
+
         return presentGameStateTransport;
     }
 
     /**
-     * This method handles bet/raise actions
+     * This method handles bet/raise actions applying a bet
      *
      * @param gameState the state of the game grabbed by repository via ID
      * @param action    the action being performed, interpreted already
      * @param player    the user who performed the action
-     * @return the update transport necessary for the clients
+     * @return boolean representing if it went through successfully
      */
     public boolean bet(GameState gameState, GameAction action, Player player) {
         if (player.getCashOnHand() >= action.getBet()) {
@@ -78,7 +78,6 @@ public class GameService {
             return true;
         } else {
             return false;
-            //ERROR TRAPPING NEEDS MORE STATEMENTS, HANDLE NOT ENOUGH BET
         }
     }
 
@@ -88,7 +87,7 @@ public class GameService {
      * @param gameState the current state of the game being played
      * @param action    the action being applied
      * @param player    the player who is performing the action
-     * @return
+     * @return boolean representing if it went through successfully
      */
     public boolean check(GameState gameState, GameAction action, Player player) {
         if (player.getCashOnHand() >= gameState.getMinimumBet() - gameState.getPot().getBet(player.getTableSeatID())) {
@@ -106,7 +105,7 @@ public class GameService {
      * @param gameState
      * @param action
      * @param player
-     * @return
+     * @return boolean representing if it went through successfully
      */
     public boolean fold(GameState gameState, GameAction action, Player player) {
         if (player.getHasFolded()==false) {
@@ -121,23 +120,28 @@ public class GameService {
     /**
      * ApplyBet takes a players bet and applies it to the gameState
      *
-     * @param gameState
-     * @param playerGameID
-     * @param bet
+     * @param gameState the game being bet on
+     * @param playerGameID the id of the player betting
+     * @param bet the bet being applied
      */
     public void applyBet(GameState gameState, int playerGameID, int bet) {
         gameState.matchBet(playerGameID);
         gameState.placeBet(playerGameID, bet);
     }
 
+    /**
+     * isRoundEnd checks if the game is at the end of the round, this chains to the actual call by getting the game first
+     * @param gameID the ID of the game being checked
+     * @return a chained boolean of if the round has ended
+     */
     public boolean isRoundEnd(long gameID){
         return isRoundEnd(games.findOne(gameID));
     }
 
     /**
      * isRoundEnd returns a boolean value if the Round, the first or second, is at its end as betting has ceased.
-     * @param gameState
-     * @return
+     * @param gameState of the game being checked
+     * @return boolean representing if the round is ended
      */
     public boolean isRoundEnd(GameState gameState) {
         if (gameState.getPresentTurn() == gameState.getLastBet() && gameState.getLastGameActions().get(gameState.getPreviousTurn()).getType() != GameActionType.BET && gameState.getRound()!=3) {
@@ -146,10 +150,20 @@ public class GameService {
         return false;
     }
 
+    /**
+     * isHandEnd is a chain called to isHandEnd with the gameState. THis grabs the gamestate
+     * @param gameID the game being grabbed
+     * @return boolean return of chain call
+     */
     public boolean isHandEnd(long gameID){
         return isHandEnd(games.findOne(gameID));
     }
 
+    /**
+     * isHandEnd checks if a hand has ended, has everyone but one player folded, or are we at the showdown?
+     * @param gameState the game being checked
+     * @return boolean value representing if the game hand has ended
+     */
     public boolean isHandEnd(GameState gameState) {
         int notFolded = 0;
         for (Player p : gameState.getPlayers()) {
@@ -161,56 +175,30 @@ public class GameService {
             if (gameState.getRound() == 3) {
                 return false;
             }
+            gameState.advanceDealer();
             return true;
         }
         return false;
     }
 
     /**
-     * newHand is called when a game reaches a new round.
+     * This function adds players to the game
      *
-     * @param gameState
+     * @param userID UserID of player being added,
+     * @param gameID gameID they are being added to
      */
-//    private int[] newHand(GameState gameState) {
-//
-//        Deck deck = gameState.getDeck();
-//        deck.shuffleDeck();
-//        for (Player p : gameState.getPlayers()) {
-//            p.setCardOne(deck.getCard());
-//            p.setCardTwo(deck.getCard());
-//        }
-//        gameState.advanceDealer();
-//        return winners;
-//    }
-
-    /**
-     * This function adds players, and checks that the starting requirements have been met, thus starting the game.
-     *
-     * @param playerID
-     * @param gameID
-     */
-    private void addPlayer(long playerID, long gameID) {
+    private void addPlayer(long userID, long gameID) {
         GameState game = games.findOne(gameID);
-        if (game.addPlayer(playerID) >= game.minPlayerCount) {
-            startGame(game.getId());
-        }
+game.addPlayer(userID);
         games.save(game);
     }
 
-    /**
-     * This function starts games once the amount of users reached is enough. This is done once in the lifetime of a game
-     *
-     * @param gameID This parameter is the games id being started
-     */
-    private void startGame(long gameID) {
-
-    }
 
     /**
      * This method takes a player's ID and finds a game for them. THe logic for this can be improved as matchmaking algorithms are made more complex.
      *
-     * @param playerID
-     * @return
+     * @param playerID the playerID needing to be added to a game
+     * @return the long id of the game they will join
      */
     public long matchmake(long playerID) {
         long gameID = 0; // 0 is never a legitimate gameID, this allows error checking for unfound game.
@@ -240,7 +228,7 @@ public class GameService {
     /**
      * This creations a new game and returns the ID of that game once it is saved in the repository
      *
-     * @return
+     * @return long id of the game created
      */
     private long createGame() {
         GameState state = new GameState();
@@ -248,15 +236,20 @@ public class GameService {
     }
 
     /**
-     *
-     * @param gameID
-     * @param userID
-     * @return
+     * getPlayerID returns the seat of the player.
+     * @param gameID the ID of the game in the repository
+     * @param userID the id of the user
+     * @return int of where the player is sitting
      */
     public int getPlayerID(long gameID, long userID) {
         return (games.findOne(gameID).getPlayer(userID)).getTableSeatID();
     }
 
+    /**
+     * determineWInnings is the call to return a transport of a hand being ended
+     * @param gameID the gameId to determine
+     * @return HandEndTransport an object for the Front End communication
+     */
     public HandEndTransport determineWinnings(long gameID){
         GameState gameState = games.findOne(gameID);
         int[] winners = new int[gameState.getPlayerCount()];
@@ -266,18 +259,32 @@ public class GameService {
         return handEndTransport;
     }
 
+    /**
+     * handleRound ensures the round is advanced
+     * @param gameID
+     * @return
+     */
     public GameStateTransport handleRound(long gameID){
         GameState gameState = games.findOne(gameID);
-        gameState.advanceDealer();
         games.save(gameState);
         return getGameStateTransport(gameState);
     }
 
+    /**
+     * This is a chain method that takes a gameID to pass on to get a gameStateTransport for helper use of both this and the Controller
+     * @param gameID
+     * @return GameStateTransport is a communication object
+     */
     public GameStateTransport getGameStateTransport(long gameID){
         GameState gameState = games.findOne(gameID);
         return getGameStateTransport(gameState);
     }
 
+    /**
+     * getGameStateTransport returns a GameStateTransport object, representing the gameState for the Front End User
+     * @param gameState
+     * @return GameStateTransport object
+     */
     public GameStateTransport getGameStateTransport(GameState gameState){
         GameStateTransport gameStateTransport = new GameStateTransport(gameState.getCommunityCardOne(),gameState.getCommunityCardTwo(),gameState.getCommunityCardThree(),gameState.getCommunityCardFour(),gameState.getCommunityCardFive(),gameState.getPot().getSum(),gameState.getBigBlind(),null,null,gameState.getPlayers(),gameState.getLastGameActions(),gameState.getPresentTurn());
 return gameStateTransport;

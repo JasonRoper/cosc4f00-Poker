@@ -4,29 +4,28 @@ import com.pokerface.pokerapi.users.UserInfoTransport;
 import com.pokerface.pokerapi.users.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
-import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.List;
-import java.util.Stack;
 
-
+/**
+ * The GameController serves vital function as the communication hub of the Front End users and the Back End server.
+ *
+ * It exists to receive incoming messages and using the classes and methods of GameService, UserService and AIService handle those requests and communication the appropriate message or object.
+ *
+ * It uses a combination of REST and STOMP end points for communication, REST for user initiated communication and STOMP for unprompted communications.
+ */
 @Controller
 public class GameController {
     private static final Logger logger = LoggerFactory.getLogger(GameController.class);
     private final GameService gameService;
     private final UserService userService;
     private final AIService aiService;
-
     private final SimpMessagingTemplate messenger;
 
     public GameController(final GameService gameService,
@@ -40,6 +39,9 @@ public class GameController {
         this.messenger = messenger;
     }
 
+    /**
+     *
+     */
     @MessageMapping("/game/{game_id}/control")
     public void receiveManagementAction() {
 

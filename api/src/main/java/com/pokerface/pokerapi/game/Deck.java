@@ -66,7 +66,7 @@ public class Deck {
 
     /**
      * getID returns to the ID of the deck
-     * @return
+     * @return a long representing the ID of the deck
      */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -76,7 +76,7 @@ public class Deck {
 
     /**
      * setId adds the ID parameter to the deck
-     * @param id
+     * @param id of the deck
      */
     public void setId(long id) {
         this.id = id;
@@ -101,7 +101,7 @@ public class Deck {
 
     /**
      * setCard return a card to the deck, likely unused.
-     * @param card
+     * @param card the card being pushed
      */
     public void setCard(Card card) {
         this.cards.push(card);
@@ -109,7 +109,7 @@ public class Deck {
 
     /**
      * setGameState sets what game the deck belongs to, likely unused.
-     * @param gameState
+     * @param gameState the gamestate being set
      */
     public void setGameState(GameState gameState) {
         this.gameState = gameState;
