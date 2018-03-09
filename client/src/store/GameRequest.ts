@@ -8,9 +8,12 @@ export type GameJoinCallback = (gameId: number) => void
 
 export default class GameRequest {
   public MATCHMAKING: string = API_V1 + '/matchmaking/basicGame'
+  public JOINGAME: string = API_V1 + '/casualGame/basicGame'
+
+
   public matchMakingId: number = 0
   public gameId: number = -1
-  private onGameJoinCallback: GameJoinCallback
+  // private onGameJoinCallback: GameJoinCallback
 
   public createGame (): Promise<number | void> {
     const prom = axios.post(this.MATCHMAKING).then((response) => {
@@ -22,7 +25,19 @@ export default class GameRequest {
     }).catch((error) => {
       console.log(error)
     })
+    return prom
+  }
 
+  public joinGame (): Promise<number | void> {
+    const prom = axios.post(this.JOINGAME).then((response) => {
+      // const subPath: string = this.API_V1 + '/' + response.data.matchmakingId.toString() + '/matchmaking'
+      this.gameId = response.data.gameId
+      // this.onGameJoin(subPath, this.setGameId)
+      console.log(response)
+      return this.gameId
+    }).catch((error) => {
+      console.log(error)
+    })
     return prom
   }
 }
