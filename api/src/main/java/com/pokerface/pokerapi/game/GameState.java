@@ -1,6 +1,7 @@
 package com.pokerface.pokerapi.game;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -21,6 +22,8 @@ public class GameState {
     private List<Player> players;
     private int playerCount=0;
     private List<GameAction> lastGameActions;
+    private Card[] communityCard;
+    private List<Boolean> isAI;
 
 
 
@@ -51,6 +54,7 @@ public class GameState {
         this.presentTurn=3;
         this.minPlayerCount=minPlayerCount;
         this.defaultCashOnHand=defaultCashOnHand;
+        isAI=new ArrayList<Boolean>();
     }
 
     public GameState(Deck deck) {
@@ -232,6 +236,10 @@ public class GameState {
         return null;
     }
 
+    public Player getPlayer(int playerID){
+        return players.get(playerID);
+    }
+
     /**
      * advances to the dealer to the next player
      */
@@ -255,5 +263,17 @@ public class GameState {
     public void setLastGameAction(int playerID, GameAction action){
         lastGameActions.remove(playerID);
         lastGameActions.add(playerID,action);
+    }
+
+    public List<Boolean> getIsAI() {
+        return isAI;
+    }
+
+    public void setIsAI(List<Boolean> isAI) {
+        this.isAI = isAI;
+    }
+
+    public boolean isAI(int position){
+        return isAI.get(position);
     }
 }

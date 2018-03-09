@@ -46,19 +46,20 @@ public class GameController {
     }
 
 
-//    @MessageMapping("/game/{game_id}")
-//    public void receiveAction(GameAction action, @DestinationVariable("game_id") long id, Principal principal) {
-//        UserInfoTransport user = userService.getUser(principal.getName());
-//        int playerId = gameService.getPlayerID(user.getId());
-//        GameStateTransport nextGameState = gameService.handleAction(id, action, user.getId());
-//        messenger.convertAndSend("/messages/game/" + id, nextGameState);
-//
-//        while (aiService.isAIPlayer(nextGameState).getNextId()) {
-//            GameAction aiAction = aiService.playAction(nextGameState);
-//            nextGameState = gameService.handleAction(id, aiAction, nextGameState.getNextId());
-//            messenger.convertAndSend("/messages/game/" + id, nextGameState);
-//        }
-//    }
+
+    @MessageMapping("/game/{game_id}")
+    public void receiveAction(GameAction action, @DestinationVariable("game_id") long id, Principal principal) {
+        UserInfoTransport user = userService.getUser(principal.getName());
+        int playerId = gameService.getPlayerID(user.getId());
+        GameStateTransport nextGameState = gameService.handleAction(id, action, user.getId());
+        messenger.convertAndSend("/messages/game/" + id, nextGameState);
+
+        while (aiService.isAIPlayer(nextGameState).getNextId()) {
+            GameAction aiAction = aiService.playAction(nextGameState);
+            nextGameState = gameService.handleAction(id, aiAction, nextGameState.getNextId());
+            messenger.convertAndSend("/messages/game/" + id, nextGameState);
+        }
+    }
 
     @PostMapping("/api/v1/matchmaking/basicGame")
     public void createGame(Principal principal) {

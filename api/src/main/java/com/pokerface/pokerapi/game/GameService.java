@@ -35,10 +35,10 @@ public class GameService {
      * @param action the action being performed
      * @return GameUpdateTransport an update for the user to maintain their gamestate
      */
-    public GameStateTransport handleAction(long gameID, GameAction action, long userID) {
+    public GameStateTransport handleAction(long gameID, GameAction action, int playerID) {
 
         GameState gameState = games.findOne(gameID);
-        Player player = gameState.getPlayer(userID);
+        Player player = gameState.getPlayer(playerID);
         if (action.getType() == GameActionType.BET) {
             bet(gameState, action, player);
         } else if (action.getType() == GameActionType.FOLD) {
@@ -47,14 +47,14 @@ public class GameService {
             check(gameState, action, player);
         }
 
-        if (isHandEnd(gameState)) {
-            newHand(gameState);//returns int of winnings, need to hand this out
-
-        } else if (isRoundEnd(gameState, action.getType())) {
-            gameState.advanceDealer();
-        } else {
-            gameState.nextTurn();
-        }
+//        if (isHandEnd(gameState)) {
+//            newHand(gameState);//returns int of winnings, need to hand this out
+//
+//        } else if (isRoundEnd(gameState, action.getType())) {
+//            gameState.advanceDealer();
+//        } else {
+//            gameState.nextTurn();
+//        }
         gameState.setLastGameAction(player.getTableSeatID(),action);
         //player.setLastAction(action);
         games.save(gameState);

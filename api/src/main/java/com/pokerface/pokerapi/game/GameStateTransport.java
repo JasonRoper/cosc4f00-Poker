@@ -7,6 +7,7 @@ public class GameStateTransport {
         Card[] communityCards;
         int potSum;
         int bigBlind;
+        int nextPlayer;
         Event event;
         PlayerTransport[] players;
 
@@ -14,7 +15,7 @@ public class GameStateTransport {
 
         }
 
-        public GameStateTransport(Card[] communityCards, int potSum, int bigBlind, String action, String event,Player[] players,List<GameAction> gameActions){
+        public GameStateTransport(Card[] communityCards, int potSum, int bigBlind, String action, String event,Player[] players,List<GameAction> gameActions,int nextPlayer){
             this.communityCards=communityCards;
             this.potSum=potSum;
             this.bigBlind=bigBlind;
@@ -23,6 +24,7 @@ public class GameStateTransport {
             for (int i=0;i<players.length;i++){
                 this.players[i]=new PlayerTransport(i,players[i].getCashOnHand(),gameActions.get(i),players[i].getIsDealer(),players[i].getHasFolded());
             }
+            this.nextPlayer=nextPlayer;
         }
 
 
