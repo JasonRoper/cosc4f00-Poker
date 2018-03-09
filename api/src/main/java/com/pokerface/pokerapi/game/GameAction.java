@@ -1,16 +1,16 @@
 package com.pokerface.pokerapi.game;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "gameaction")
+@JsonIgnoreProperties(value={"gameState","id"})
 public class GameAction {
     private GameActionType type;
     private int bet;
     private GameState gameState;
-
-
-
     private long id; // id to the database
 
     public GameAction(){
