@@ -2,6 +2,7 @@ package com.pokerface.pokerapi.game;
 
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -289,6 +290,44 @@ game.addPlayer(userID);
         GameStateTransport gameStateTransport = new GameStateTransport(gameState.getCommunityCardOne(),gameState.getCommunityCardTwo(),gameState.getCommunityCardThree(),gameState.getCommunityCardFour(),gameState.getCommunityCardFive(),gameState.getPot().getSum(),gameState.getBigBlind(),null,null,gameState.getPlayers(),gameState.getLastGameActions(),gameState.getPresentTurn());
 return gameStateTransport;
     }
-    //public GameStateTransport(Card[] communityCards, int potSum, int bigBlind, Reason action, String event,Player[] players,List<GameAction> gameActions,int nextPlayer){
+
+    /**
+     * This function returns all gameStates held by the repository and turns them into gameStateTransports
+     * @return iterable object containing all GameStatesTransports of all GameStates
+     */
+    public List<GameStateTransport> getGameStateList(){
+        List<GameStateTransport> gameStateTransports = new ArrayList<>();
+        Iterable<GameState> gameStates = games.findAll();
+        for (GameState g : gameStates){
+            gameStateTransports.add(getGameStateTransport(g));
+        }
+        return gameStateTransports;
+    }
+
+    /**
+     * Create game takes settings and creates a game with those settings, returning the ID of that game
+     * @param minPlayers the minimum players to start a game
+     * @return long ID of the game
+     */
+    public long createGame(int minPlayers){
+        GameState gameState = new GameState();
+        gameState.setMinPlayerCount(minPlayers);
+        games.save(gameState);
+        return gameState.getId();
+    }
+
+    /**
+     * Deletes game from repository, called when the game is completed or abandoned.
+     * @param gameID of game to delete
+     * @return boolean of if game was found and thus deleted
+     */
+    public boolean deleteGame(long gameID){
+        if (games.exists(gameID)){
+            games.delete(gameID);
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     }

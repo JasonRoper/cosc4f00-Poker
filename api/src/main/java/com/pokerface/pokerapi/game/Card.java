@@ -3,7 +3,7 @@ package com.pokerface.pokerapi.game;
 import java.util.Comparator;
 
 /**
- * This is an enum representing the cards in a deck. It should, eventually, store the suit and value for use by deck
+ * This is an enum representing the cards in a deck. It has functionality to break that Card down into Suit and Rank values
  */
 public enum Card {
     SPADES_ACE,
@@ -63,6 +63,10 @@ public enum Card {
     CLUBS_QUEEN,
     CLUBS_KING;
 
+    /**
+     * This function operates on Card's to provide their suit value, it uses their ordinal position to determine suit.
+     * @return a Suit, which is Spades Clubs Diamonds or Hearts
+     */
     public Suit suit() {
         Card ace = Card.values()[(this.ordinal() / 13) * 13];
         switch(ace) {
@@ -79,18 +83,36 @@ public enum Card {
         }
     }
 
+    /**
+     * Checks whether or not a Card matches the given suit
+     * @param suit the suit to check
+     * @return the boolean of if the suits match
+     */
     public boolean isSuit(Suit suit) {
         return this.suit() == suit;
     }
 
+    /**
+     * Rank returns the value of the rank of the card, which is their mod 13 value. 1 is ace, 13 is king
+     * @return Rank representing Ace-King
+     */
     public Rank rank() {
         return Rank.values()[this.ordinal() % 13];
     }
 
+    /**
+     * Checks if a card is a face card, used for hand evaluation
+     * @param rank the Rank to check if it is Face
+     * @return true if face, false if not a face card
+     */
     public boolean isFace(Rank rank){
         return this.rank() == rank;
     }
 
+    /**
+     * Checks the next card up, for hand evaluation
+     * @return returns the next card from ordinal position
+     */
     public Card next() {
         int next = (this.ordinal() + 1) % 13 + (this.ordinal() / 13) * 13;
 
@@ -98,6 +120,10 @@ public enum Card {
         return (nextCard.suit() == this.suit()) ? nextCard : null;
     }
 
+    /**
+     * Compares the rank, sorting them by rank
+     * @return Comparator of the handed cards
+     */
     public static Comparator<Card> rankCompare() {
         return new Comparator<Card>() {
             @Override
@@ -107,6 +133,10 @@ public enum Card {
         };
     }
 
+    /**
+     * Returns a suit comparison of the cards
+     * @return a comparator object of the two cards suit
+     */
     public static Comparator<Card> suitCompare() {
         return new Comparator<Card>() {
             @Override
@@ -116,10 +146,16 @@ public enum Card {
         };
     }
 
+    /**
+     * The suits of playing cards, Spades, CLubs, Diamonds and Hearts
+     */
     public enum Suit {
         SPADES, CLUBS, DIAMONDS, HEARTS
     }
 
+    /**
+     * The Rank of playing cards, from Ace to King
+     */
     public enum Rank {
         ACE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING
     }
