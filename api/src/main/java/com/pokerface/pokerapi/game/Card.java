@@ -3,7 +3,8 @@ package com.pokerface.pokerapi.game;
 import java.util.Comparator;
 
 /**
- * This is an enum representing the cards in a deck. It has functionality to break that Card down into Suit and Rank values
+ * This is an enum representing the cards in a deck. It has functionality
+ * to break that Card down into Suit and Rank values
  */
 public enum Card {
     SPADES_ACE,

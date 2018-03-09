@@ -6,7 +6,8 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 /**
- * GameRepository is the database, wired up to an SQL database for storage it uses JAVA SQL for custom queries which the GameService might use. It is an extension of CrudRepository.
+ * GameRepository is the database, wired up to an SQL database for storage it uses JAVA SQL for custom queries which
+ * the GameService might use. It is an extension of CrudRepository.
  */
 public interface GameRepository extends CrudRepository<GameState, Long> {
 

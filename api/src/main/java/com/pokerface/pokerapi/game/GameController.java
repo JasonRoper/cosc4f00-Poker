@@ -16,9 +16,11 @@ import java.security.Principal;
 /**
  * The GameController serves vital function as the communication hub of the Front End users and the Back End server.
  *
- * It exists to receive incoming messages and using the classes and methods of GameService, UserService and AIService handle those requests and communication the appropriate message or object.
+ * It exists to receive incoming messages and using the classes and methods of GameService, UserService and AIService
+ * handle those requests and communication the appropriate message or object.
  *
- * It uses a combination of REST and STOMP end points for communication, REST for user initiated communication and STOMP for unprompted communications.
+ * It uses a combination of REST and STOMP end points for communication, REST for user initiated communication and STOMP
+ * for unprompted communications.
  */
 @Controller
 public class GameController {

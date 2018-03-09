@@ -4,7 +4,8 @@ package com.pokerface.pokerapi.users;
 import javax.persistence.*;
 
 /**
- * User is the database representation of the users permanent representation. When they log in, this is the data they need to be able to validate and then be able to access
+ * User is the database representation of the users permanent representation.
+ * When they log in, this is the data they need to be able to validate and then be able to access
  */
 @Entity
 public class User {
@@ -29,9 +30,9 @@ public class User {
 
     /**
      * This constructor is what is used upon valid registration to create a user.
-     * @param username
-     * @param securePassword
-     * @param email
+     * @param username string of their username
+     * @param securePassword string of their password
+     * @param email string of their email
      */
     public User(String username, String securePassword, String email) {
         this.username = username;

@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Pot is a representation of the money being held for a hand of Poker. It holds money, and also knows who has put in what amount.
+ * Pot is a representation of the money being held for a hand of Poker.
+ * It holds money, and also knows who has put in what amount.
  *
- * This exists within a GameState. It has methods to return who has bet what, as well as, if given a ranking array, who will win what amounts at the end of a Hand.
+ * This exists within a GameState. It has methods to return who has bet what, as well as,
+ * if given a ranking array, who will win what amounts at the end of a Hand.
  */
 @Entity
 @Table(name = "pot")
@@ -133,7 +135,7 @@ public class Pot {
     /**
      * Returns how much that player has bet
      * @param playerSeatID the plaer to check
-     * @return
+     * @return the integer of their bet
      */
     public int getBet (int playerSeatID) {return pot[playerSeatID];}
 

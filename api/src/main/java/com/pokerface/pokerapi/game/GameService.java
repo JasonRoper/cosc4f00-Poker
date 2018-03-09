@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * GameService is the heart of the logic of the Back End. It communicates solely with the Controller, it handles GameIds and GameAction's to modify the gameState and create and then return Transport objects which are then communicated with the Front End users.
+ * GameService is the heart of the logic of the Back End. It communicates solely with the Controller, it handles
+ * GameIds and GameAction's to modify the gameState and create and then return Transport objects which are then
+ * communicated with the Front End users.
  *
  * It uses a GameRepository which is where it loads and saves GameStates and the changes it has made to them.
  */
@@ -35,12 +37,15 @@ public class GameService {
     }
 
     /**
-     * This method takes the message from the Controller when an action is received, it takes that action, interprets it, gets the gamestate and calls appropriate methods. It also grabs the player reference at the table matching the id and sends it along.
+     * This method takes the message from the Controller when an action is received, it takes that action, interprets
+     * it, gets the gamestate and calls appropriate methods. It also grabs the player reference at the table matching
+     * the id and sends it along.
      *
      * After this is completed handleAction then sets that players last action, and advances to the next player.
      *
      * @param gameID represenative of the gamestate in the database
      * @param action the action being performed
+     * @param playerID the playerID who the action is handling, where they sit
      * @return GameUpdateTransport an update for the user to maintain their gamestate
      */
     public GameStateTransport handleAction(long gameID, GameAction action, int playerID) {
@@ -103,9 +108,9 @@ public class GameService {
     /**
      * fold allows the user to fold, surrendering the hand in question
      *
-     * @param gameState
-     * @param action
-     * @param player
+     * @param gameState gameState where the user is folding
+     * @param action the data of the fold
+     * @param player is the one who is folding
      * @return boolean representing if it went through successfully
      */
     public boolean fold(GameState gameState, GameAction action, Player player) {
@@ -131,7 +136,8 @@ public class GameService {
     }
 
     /**
-     * isRoundEnd checks if the game is at the end of the round, this chains to the actual call by getting the game first
+     * isRoundEnd checks if the game is at the end of the round,
+     * this chains to the actual call by getting the game first
      * @param gameID the ID of the game being checked
      * @return a chained boolean of if the round has ended
      */
@@ -196,7 +202,8 @@ game.addPlayer(userID);
 
 
     /**
-     * This method takes a player's ID and finds a game for them. THe logic for this can be improved as matchmaking algorithms are made more complex.
+     * This method takes a player's ID and finds a game for them. THe logic for this can be improved
+     * as matchmaking algorithms are made more complex.
      *
      * @param playerID the playerID needing to be added to a game
      * @return the long id of the game they will join
@@ -262,8 +269,8 @@ game.addPlayer(userID);
 
     /**
      * handleRound ensures the round is advanced
-     * @param gameID
-     * @return
+     * @param gameID tbe gameID whose round is being advanced
+     * @return the GameStateTransport of the round
      */
     public GameStateTransport handleRound(long gameID){
         GameState gameState = games.findOne(gameID);
@@ -272,8 +279,9 @@ game.addPlayer(userID);
     }
 
     /**
-     * This is a chain method that takes a gameID to pass on to get a gameStateTransport for helper use of both this and the Controller
-     * @param gameID
+     * This is a chain method that takes a gameID to pass on to get a
+     * gameStateTransport for helper use of both this and the Controller
+     * @param gameID the gameId that needs a statetransport
      * @return GameStateTransport is a communication object
      */
     public GameStateTransport getGameStateTransport(long gameID){
@@ -283,7 +291,7 @@ game.addPlayer(userID);
 
     /**
      * getGameStateTransport returns a GameStateTransport object, representing the gameState for the Front End User
-     * @param gameState
+     * @param gameState the gameState that is being turned into a transport
      * @return GameStateTransport object
      */
     public GameStateTransport getGameStateTransport(GameState gameState){

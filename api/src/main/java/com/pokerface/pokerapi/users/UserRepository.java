@@ -14,7 +14,8 @@ public interface UserRepository extends CrudRepository<User, Long> {
     User findByUsername(String username);
 
     /**
-     * Searches for a user matching the String provided, this method ignores case. Used to see if user exists during registration
+     * Searches for a user matching the String provided,
+     * this method ignores case. Used to see if user exists during registration
      * @param username string, username being searched
      * @return a boolean indicating if that user was found
      */

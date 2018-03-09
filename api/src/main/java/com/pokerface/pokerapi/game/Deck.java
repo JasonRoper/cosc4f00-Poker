@@ -4,11 +4,12 @@ import javax.persistence.*;
 import java.util.Random;
 import java.util.Stack;
 
+/**
+ * Deck is an object belonging 1-1 to a gamestate, it is the deck of cards used to play. It begins with a full set of
+ * the cards, held from the enum in a stack implementation. It has methods to pop cards and shuffle itself.
+ */
 @Entity
 @Table(name = "deck")
-/**
- * Deck is an object belonging 1-1 to a gamestate, it is the deck of cards used to play. It begins with a full set of the cards, held from the enum in a stack implementation. It has methods to pop cards and shuffle itself.
- */
 public class Deck {
     @ElementCollection(targetClass = Card.class)
     @JoinTable(name = "deck", joinColumns = @JoinColumn(name = "id"))
@@ -28,7 +29,8 @@ public class Deck {
     private GameState gameState;
 
     /**
-     * This is the default constructor, when created it generates a new randomly shuffled deck by randomly pulling cards that have not yet been pulled until 52 cards have been chosen in a random order
+     * This is the default constructor, when created it generates a new randomly shuffled deck by randomly pulling
+     * cards that have not yet been pulled until 52 cards have been chosen in a random order
      */
     public Deck(){
         int cards=0;

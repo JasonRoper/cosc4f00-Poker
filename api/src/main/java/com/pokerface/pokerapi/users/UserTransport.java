@@ -17,9 +17,9 @@ public class UserTransport {
 
     /**
      * This constructor takes an ID, a UserName and an Email to generate a UserTransport
-     * @param id
-     * @param username
-     * @param email
+     * @param id long for the userID
+     * @param username string for their username
+     * @param email string for their email
      */
     public UserTransport(long id, String username, String email) {
         this.id = id;

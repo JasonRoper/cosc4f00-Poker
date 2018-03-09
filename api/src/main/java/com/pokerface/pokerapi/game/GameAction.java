@@ -5,7 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.*;
 
 /**
- * GameAction is the form of the GameActions received from the FrontEnd. It contains a bet, 0 if irrelevent, and a type. gameState and id are used only internally for storing previous actions.
+ * GameAction is the form of the GameActions received from the FrontEnd. It contains a bet, 0 if irrelevent, and a type.
+ * gameState and id are used only internally for storing previous actions.
  */
 @Entity
 @Table(name = "gameaction")
@@ -68,7 +69,7 @@ public class GameAction {
 
     /**
      * setGameState sets the gameState for storage purposes of lastAction
-     * @param gameState
+     * @param gameState the gameState being set
      */
     public void setGameState(GameState gameState) {
         this.gameState = gameState;

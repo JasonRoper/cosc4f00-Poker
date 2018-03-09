@@ -14,7 +14,8 @@ import java.security.Principal;
 /**
  * UserController exists to map the communication from the Front End to the UserService where appropriate.
  *
- * This handles the communication of log ins, and registration, ensuring to communicate proper Transport objects to the user.
+ * This handles the communication of log ins, and registration,
+ * ensuring to communicate proper Transport objects to the user.
  */
 @RequestMapping("/api/v1/users")
 @RestController
@@ -33,7 +34,8 @@ public class UserController {
     }
 
     /**
-     * register handles the mapping of the registration of a user, taking the fields they've submitted and passing them along to UserService to parse
+     * register handles the mapping of the registration of a user, taking the
+     * fields they've submitted and passing them along to UserService to parse
      * @param fields the fields of the registration
      * @return the response, if it was successful or not
      */
