@@ -1,5 +1,7 @@
 package com.pokerface.pokerapi.game;
 
+import java.util.Comparator;
+
 /**
  * This is an enum representing the cards in a deck. It should, eventually, store the suit and value for use by deck
  */
@@ -74,5 +76,68 @@ DIAMONDS_ACE,
 
     public static Card spades(int i) {
         return values()[SPADES_ACE.ordinal() + i];
+    }
+
+    public Suit suit() {
+        Card ace = Card.values()[this.ordinal() % 13];
+        switch(ace) {
+            case SPADES_ACE:
+                return Suit.SPADES;
+            case CLUBS_ACE:
+                return Suit.CLUBS;
+            case DIAMONDS_ACE:
+                return Suit.DIAMONDS;
+            case HEARTS_ACE:
+                return Suit.HEARTS;
+            default:
+                return null;
+        }
+    }
+
+    public boolean isSuit(Suit suit) {
+        return this.suit() == suit;
+    }
+
+    public Rank rank() {
+        return Rank.values()[this.ordinal() % 13];
+    }
+
+    public boolean isFace(Rank rank){
+        return this.rank() == rank;
+    }
+
+    public Card next() {
+        int next = this.ordinal() + 1;
+        if (next >= Card.values().length) {
+            return null;
+        }
+        Card nextCard = Card.values()[next];
+        return (nextCard.suit() == this.suit()) ? nextCard : null;
+    }
+
+    public static Comparator<Card> rankCompare() {
+        return new Comparator<Card>() {
+            @Override
+            public int compare(Card l, Card r) {
+                return l.rank().compareTo(r.rank());
+            }
+        };
+    }
+
+    public static Comparator<Card> suitCompare() {
+        return new Comparator<Card>() {
+            @Override
+            public int compare(Card l, Card r) {
+                return l.suit().compareTo(r.suit());
+            }
+        };
+    }
+
+    public enum Suit {
+        SPADES, CLUBS, DIAMONDS, HEARTS
+    }
+
+    public enum Rank {
+        ACE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING
     }
 }

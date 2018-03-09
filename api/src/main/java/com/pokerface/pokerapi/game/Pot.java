@@ -42,7 +42,6 @@ public class Pot {
      *
      * @param amount
      * @param playerSeatID
-     * @return
      */
     public void add(double amount, int playerSeatID){
         pot[playerSeatID]+=amount;
