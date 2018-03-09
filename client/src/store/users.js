@@ -93,6 +93,9 @@ const mutations = {
 }
 
 const actions = {
+  storeName (context, name) {
+    alert(name + 'hey its')
+  },
   /**
    * log in to the server. This is just a validation function due
    * to the use of HttpBasic authentication

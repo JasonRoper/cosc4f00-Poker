@@ -70,10 +70,10 @@ export default class GameMech {
       id: 0,
       money: 500,
       name: 'javon',
-      action: null,
+      action: GameActionType.CALL,
       card1: CardSuite.BLANK_CARD,
       card2: CardSuite.BLANK_CARD,
-      currentBet: 0,
+      currentBet: 600,
       isPlayer: true,
       isDealer: true
     }, {

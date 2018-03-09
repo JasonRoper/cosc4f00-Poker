@@ -61,13 +61,13 @@
           <!--Username input   -->
           <div class="form-group mb-3">
              <div class="input-group mb-3">
-             <label>Please provide a Username/email and Password.</label></div>
+             <label>Please enter the following.</label></div>
           </div>
             <div class="input-group mb-3">
               <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon1">@</span>
+                <span class="input-group-text" id="basic-addon1"><i class="fa fa-user"></i></span>
               </div>
-              <input type="text" class="form-control" placeholder="Username/Email" aria-label="Username/Email" aria-describedby="basic-addon1">
+              <input type="text" class="form-control" placeholder="Username" aria-label="Username/Email" aria-describedby="basic-addon1">
             </div>
           <!--Username input   -->
           <!-- Password Input -->
@@ -78,6 +78,14 @@
               <input type="password" class="form-control" placeholder="Passowrd" aria-label="Username/Email" aria-describedby="basic-addon1">
             </div>
           <!--Password input   -->
+            <!--Email input   -->
+                      <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">@</span>
+              </div>
+              <input type="Email" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="basic-addon1">
+            </div>
+          <!--Email input   -->
       </form>
       </div>
       <div class="modal-footer">
@@ -149,7 +157,7 @@
     <input v-model="Player.password" ref="myTestField2" type="password" class="form-control" id="formGroupExampleInput2" placeholder="Password">
   </div>
     <div class="form-group">
-      <button class="btn btn-darkgrey btn-lg btn-block text-dark text-center" type="button" value = "Login"  @click="checkInputs()"><i class="fa fa-sign-in"></i> Login</button>
+      <button class="btn btn-darkgrey btn-lg btn-block text-dark text-center" type="button" value = "Login"  @click="AttemptLogin()"><i class="fa fa-sign-in"></i> Login</button>
   </div>
   <div class="form-group">
       <button class="btn btn-warning btn-lg btn-block text-dark  text-center" type="button" value ="Register"  data-toggle="modal" data-target="#Register">  <i class="fa fa-sign-in"></i> Register</button>
@@ -284,12 +292,13 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
+// import { mapState } from 'vuex'
+import users from '@/store/users.js'
 export default {
   data () {
     return {
       Player: {
-        ID: ' ',
         username: '',
         password: ''
       },
@@ -300,19 +309,33 @@ export default {
       Level2Members: 6000,
       Level3Members: 1300,
       LoginSucessful: false,
-      onPage: true
+      onPage: true,
+      ErrorMessage: users.state.errors.login
     }
+  },
+  computed: {
+    ...mapState({
+      ErrorMessage: 'errors'
+    })
+
   },
   methods: {
     ...mapActions([
-      'storeName'
+      'storeName',
+      'register',
+      'login'
     ]),
-    checkInputs () {
-      console.log('Password length is' + this.Player.password.length)
+     // Attempts login  givent the requested fields If the fields are empty then return an aerror
+    AttemptLogin () {
+      console.log('Phase 1')
       if ((this.Player.username.length === 0) || (this.Player.password.length === 0)) {
         return
       } else {
-        this.storeName(this.Player.username)
+        // this.storeName(this.Player.username)
+        this.login(this.Player)
+        // this.ErrorMessage = this.$store.
+        console.log('errors:', this.ErrorMessage[0])
+        console.log('Phase 2')
       }
     }
   }
