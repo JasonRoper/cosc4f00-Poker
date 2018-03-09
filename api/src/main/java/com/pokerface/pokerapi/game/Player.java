@@ -14,11 +14,18 @@ public class Player {
     private int tableSeatID; // id to the game
     private GameState gameState;
     private boolean hasFolded;
+    //private GameAction lastAction;
+
+
+
+    private boolean isDealer;
+
 
     public Player(Long id){
         this.id=id;
         cashOnHand=getGameState().defaultCashOnHand;
         hasFolded=false;
+        isDealer=false;
     }
 
     public Card getCardOne(){return cardOne;}
@@ -65,16 +72,29 @@ public class Player {
         this.gameState = gameState;
     }
 
-    public void setFolded(boolean state){hasFolded=state;}
+    public void setHasFolded(boolean state){hasFolded=state;}
 
-    public boolean hasFolded() {return hasFolded;}
+    public boolean getHasFolded() {return hasFolded;}
 
     public void addPlayer(){
 
     }
 
+//    public GameAction getLastAction() {
+//        return lastAction;
+//    }
+//
+//    public void setLastAction(GameAction lastAction) {
+//        this.lastAction = lastAction;
+//    }
 
+    public boolean getIsDealer() {
+        return isDealer;
+    }
 
+    public void setIsDealer(boolean dealer) {
+        isDealer = dealer;
+    }
 
 }
 

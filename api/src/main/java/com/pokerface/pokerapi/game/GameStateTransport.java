@@ -1,24 +1,59 @@
 package com.pokerface.pokerapi.game;
 ///NOT AT ALL DONE
 public class GameStateTransport {
-    private int pot;
-    private long nextId;
+        Card[] communityCards;
+        int potSum;
+        int bigBlind;
+        Event event;
+        PlayerTransport[] players;
 
-    public GameStateTransport() {
+        public GameStateTransport(){
+
+        }
+
+        public GameStateTransport(Card[] communityCards, int potSum, int bigBlind, String action, String event,Player[] players){
+            this.communityCards=communityCards;
+            this.potSum=potSum;
+            this.bigBlind=bigBlind;
+            this.event=new Event(action,event);
+            this.players = new PlayerTransport[players.length];
+            for (int i=0;i<players.length;i++){
+                this.players[i]=new PlayerTransport(i,players[i].getCashOnHand(),null,players[i].getIsDealer(),players[i].getHasFolded());
+            }
+        }
+
+
+
+    private class Event {
+        String action;
+        String message;
+
+        public Event(){
+
+        }
+
+        public Event(String action, String message){
+            this.action=action;
+            this.message=message;
+        }
     }
 
-    public void setPot(int pot){
-        this.pot = pot;
-    }
-    public void setNextId(long nextId) {
-        this.nextId = nextId;
-    }
+    private class PlayerTransport{
+        int id;
+        int money;
+        GameAction action;
+        boolean isPlayer;
+        boolean isDealer;
 
-    public int getPot() {
-        return pot;
-    }
+        public PlayerTransport(){
 
-    public long getNextId() {
-        return nextId;
+        }
+        public PlayerTransport(int id, int money, GameAction action,boolean isPlayer, boolean isDealer){
+            this.id=id;
+            this.money=money;
+            this.action=action;
+            this.isPlayer=isPlayer;
+            this.isDealer=isDealer;
+        }
     }
 }

@@ -50,7 +50,7 @@ public class GameController {
 //    public void receiveAction(GameAction action, @DestinationVariable("game_id") long id, Principal principal) {
 //        UserInfoTransport user = userService.getUser(principal.getName());
 //        int playerId = gameService.getPlayerID(user.getId());
-//        GameUpdateTransport nextGameState = gameService.handleAction(id, action, user.getId());
+//        GameStateTransport nextGameState = gameService.handleAction(id, action, user.getId());
 //        messenger.convertAndSend("/messages/game/" + id, nextGameState);
 //
 //        while (aiService.isAIPlayer(nextGameState).getNextId()) {

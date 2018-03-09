@@ -208,7 +208,7 @@ public class GameState {
             if (presentTurn == players.size()) {
                 presentTurn = 0;
             }
-            if (!players.get(presentTurn).hasFolded()){
+            if (!players.get(presentTurn).getHasFolded()){
                 break;
             }
         }

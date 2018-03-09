@@ -35,8 +35,8 @@ public class GameService {
      * @param action the action being performed
      * @return GameUpdateTransport an update for the user to maintain their gamestate
      */
-    public GameUpdateTransport handleAction(long gameID, GameAction action, long userID) {
-        GameUpdateTransport presentGameStateTransport = new GameUpdateTransport();
+    public GameStateTransport handleAction(long gameID, GameAction action, long userID) {
+
         GameState gameState = games.findOne(gameID);
         Player player = gameState.getPlayer(userID);
         if (action.getType() == GameActionType.BET) {
@@ -55,8 +55,9 @@ public class GameService {
         } else {
             gameState.nextTurn();
         }
-
+        //player.setLastAction(action);
         games.save(gameState);
+        GameStateTransport presentGameStateTransport = new GameStateTransport();
         return presentGameStateTransport;
     }
 
@@ -107,8 +108,8 @@ public class GameService {
      * @return
      */
     public boolean fold(GameState gameState, GameAction action, Player player) {
-        if (player.hasFolded()==false) {
-            gameState.getPlayers().get(player.getTableSeatID()).setFolded(true);
+        if (player.getHasFolded()==false) {
+            gameState.getPlayers().get(player.getTableSeatID()).setHasFolded(true);
             return true;
         } else {
             return false;
@@ -146,7 +147,7 @@ public class GameService {
     private boolean isHandEnd(GameState gameState) {
         int notFolded = 0;
         for (Player p : gameState.getPlayers()) {
-            if (!p.hasFolded()) {
+            if (!p.getHasFolded()) {
                 notFolded++;
             }
         }
