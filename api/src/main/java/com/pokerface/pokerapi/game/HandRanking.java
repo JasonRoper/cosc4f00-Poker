@@ -5,7 +5,11 @@ import org.springframework.data.util.Pair;
 import java.util.*;
 
 /**
- * HandRanking is ...
+ * HandRanking is used to evaluate hands by the GameService at a hands end to see who won, this ranking is then used by
+ * the pot to evaluate who gets what winnings.
+ *
+ * HandRanking is also used to evaluate AI position for move decision, it will consider what hand it has and then modify
+ * its actions based on that.
  */
 public class HandRanking implements Comparable<HandRanking> {
 
