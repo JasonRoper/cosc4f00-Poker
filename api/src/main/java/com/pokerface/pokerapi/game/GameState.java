@@ -3,12 +3,13 @@ package com.pokerface.pokerapi.game;
 import javax.persistence.*;
 import java.util.List;
 
-@Entity
 /**
- * GameState stores everything necessary to know about the state of a game. It provides function to access that information.
+ * GameState stores everything necessary to know about the state of a game.
+ * It provides function to access that information.
  *
  * It exists within the GameRepository.
  */
+@Entity
 public class GameState {
     private long id;
     private Deck deck; //A 1-1 storage of a stack full of enum cards.
@@ -42,7 +43,7 @@ public class GameState {
 
     /**
      * GameState constructory, with an ID, setting itself up with default settings.
-     * @param id
+     * @param id being used to create the game a long GameID
      */
     public GameState(long id) {
         this(id,12,4,200);
@@ -69,7 +70,7 @@ public class GameState {
 
     /**
      * This creates a gameState with a deck only.
-     * @param deck
+     * @param deck the deck for the gameState
      */
     public GameState(Deck deck) {
         this.deck = deck;
@@ -131,7 +132,7 @@ public class GameState {
 
     /**
      * sets the lastBetter, the PlayerID of the last person to bet, used to determine round ending criteria
-     * @param lastBet
+     * @param lastBet the lastBetters playerID
      */
     public void setLastBet(int lastBet) {
         this.lastBet = lastBet;
@@ -172,7 +173,7 @@ public class GameState {
 
     /**
      * Sets what round is on, should be 1,2 or 3.
-     * @param round
+     * @param round the round it is as an int
      */
     public void setRound(int round) {
         this.round = round;
@@ -196,7 +197,7 @@ public class GameState {
 
     /**
      * getMinPlayerCount returns the integer of the minimum amount of player setting
-     * @return
+     * @return the integer representing the minplayercount
      */
     public int getMinPlayerCount() {
         return minPlayerCount;
@@ -376,8 +377,8 @@ public class GameState {
 
     /**
      * Returns a Player using a PlayerID
-     * @param playerID
-     * @return Player object
+     * @param playerID the PlayerID being searched
+     * @return Player object that was found
      */
     public Player getPlayer(int playerID){
         return players.get(playerID);
@@ -423,7 +424,7 @@ public class GameState {
 
     /**
      * All Community Cards return the card position, one through to five
-     * @return
+     * @return return the community card being requested
      */
     public Card getCommunityCardOne(){
         return communityCardOne;
@@ -461,7 +462,7 @@ public class GameState {
 
     /**
      * Returns whose turn it was last
-     * @return
+     * @return the int of the previous turn
      */
     public int getPreviousTurn() {
         return previousTurn;
@@ -469,7 +470,7 @@ public class GameState {
 
     /**
      * Allows to to set whose turn it was last
-     * @param previousTurn
+     * @param previousTurn the int setting the previous turn
      */
     public void setPreviousTurn(int previousTurn) {
         this.previousTurn = previousTurn;
@@ -477,7 +478,7 @@ public class GameState {
 
     /**
      * Sets a community card specifically, if needed. Same for all from One through to Five
-     * @param communityCardOne
+     * @param communityCardOne being set, a Card type
      */
     public void setCommunityCardOne(Card communityCardOne) {
         this.communityCardOne = communityCardOne;

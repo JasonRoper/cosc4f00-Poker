@@ -16,9 +16,11 @@ import java.security.Principal;
 /**
  * The GameController serves vital function as the communication hub of the Front End users and the Back End server.
  *
- * It exists to receive incoming messages and using the classes and methods of GameService, UserService and AIService handle those requests and communication the appropriate message or object.
+ * It exists to receive incoming messages and using the classes and methods of GameService, UserService and AIService
+ * handle those requests and communication the appropriate message or object.
  *
- * It uses a combination of REST and STOMP end points for communication, REST for user initiated communication and STOMP for unprompted communications.
+ * It uses a combination of REST and STOMP end points for communication, REST for user initiated communication and STOMP
+ * for unprompted communications.
  */
 @Controller
 public class GameController {
@@ -80,35 +82,41 @@ public class GameController {
         return nextGameState;
     }
 
-    @PostMapping("/api/v1/matchmaking/basicGame")
-    public void createGame(Principal principal) {
-        UserInfoTransport user = userService.getUser(principal.getName());
-        gameService.matchmake(user.getId());
+//    @PostMapping("/api/v1/matchmaking/basicGame")
+//    public void createGame(Principal principal) {
+//        UserInfoTransport user = userService.getUser(principal.getName());
+//        gameService.matchmake(user.getId());
+//
+//    }
+//
+//
+//    @GetMapping("/api/v1/games")
+//    public void getGameListing() {
+//        gameService.getGameStateList();
+//    }
+//
+//    @PostMapping("/api/v1/games")
+//    public void createCasualGame(Principal principal) {
+//        gameService.createGame(10);
+//    }
 
-    }
-
-    @GetMapping("/api/v1/games")
-    public void getGameListing() {
-
-    }
-
-    @PostMapping("/api/v1/games")
-    public void createCasualGame(Principal principal) {
-
-    }
-
+    /**
+     * This method getsGameInfo of a specific game and responds with the info the user needs to display it
+     * @param gameID a long value representing the gameState in repository
+     * @return the GameStateTransport of that game
+     */
     @GetMapping("/api/v1/games/{id}")
-    public void getGameInfo(@PathVariable("id") long gameId) {
-
+    public GameStateTransport getGameInfo(@PathVariable("id") long gameID) {
+        return gameService.getGameStateTransport(gameID);
     }
-
-    @PutMapping("/api/v1/games/{id}")
-    public void updateGameRules(@PathVariable("id") long gameId) {
-
-    }
-
-    @DeleteMapping("/api/v1/games/{id}")
-    public void deleteOwnedGame(@PathVariable("id") long gameId) {
-
-    }
+//
+//    @PutMapping("/api/v1/games/{id}")
+//    public void updateGameRules(@PathVariable("id") long gameId) {
+//
+//    }
+//
+//    @DeleteMapping("/api/v1/games/{id}")
+//    public void deleteOwnedGame(@PathVariable("id") long gameID) {
+//        gameService.deleteGame(gameID)
+//    }
 }

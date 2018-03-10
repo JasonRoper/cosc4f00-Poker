@@ -3,9 +3,12 @@ package com.pokerface.pokerapi.game;
 import java.util.List;
 
 /**
- * GameStateTransport is the object that is communicated by the GameController to the Front End user, it represents the GameState as they see it, with only public information. It also has an Event object which confers why the GameState is being sent.
+ * GameStateTransport is the object that is communicated by the GameController to the Front End user, it represents
+ * the GameState as they see it, with only public information. It also has an Event object which confers
+ * why the GameState is being sent.
  * <p>
- * The GameStateTransport is submitted upon every action that is sent and processed, whenever a hand is started or finished and whenever a player leaves or enters.
+ * The GameStateTransport is submitted upon every action that is sent and processed, whenever a hand is started
+ * or finished and whenever a player leaves or enters.
  */
 public class GameStateTransport {
     private Card communityCardOne, communityCardTwo, communityCardThree, communityCardFour, communityCardFive;
@@ -23,10 +26,10 @@ public class GameStateTransport {
      * This creates a GameStateTransport for full use.
      *
      * @param communityCardOne   Each of community cards are identical, representing a card in the community
-     * @param communityCardTwo
-     * @param communityCardThree
-     * @param communityCardFour
-     * @param communityCardFive
+     * @param communityCardTwo card two
+     * @param communityCardThree card three
+     * @param communityCardFour card four, in round 2
+     * @param communityCardFive card five, in round 3
      * @param potSum the sum of the pot
      * @param bigBlind the amount the bigBlind currently is
      * @param action the reason the action is being sent
@@ -62,9 +65,9 @@ public class GameStateTransport {
 
     /**
      * Allows to append a reason after the fact
-     * @param reason
-     * @param message
-     * @return
+     * @param reason a Reason object
+     * @param message a String message
+     * @return the gameStateTransport
      */
     public GameStateTransport reason(Reason reason, String message) {
         this.event = event;

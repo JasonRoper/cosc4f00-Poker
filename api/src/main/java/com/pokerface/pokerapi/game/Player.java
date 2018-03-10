@@ -4,7 +4,8 @@ import javax.persistence.*;
 
 /**
  * A player representation that lives in the GameState
- * They have two card objects, an ID tied to the database of the user who is playing them, the seatID of where they are in the game, the GameState they belong to, if they have folded and if they are AI
+ * They have two card objects, an ID tied to the database of the user who is playing them, the seatID of where they are
+ * in the game, the GameState they belong to, if they have folded and if they are AI
  */
 @Entity
 @Table(name = "player")
@@ -23,7 +24,7 @@ public class Player {
 
     /**
      * Creates a player with a userID
-     * @param id
+     * @param id is the UserID of the player
      */
     public Player(Long id){
         this.id=id;
@@ -91,7 +92,7 @@ public class Player {
 
     /**
      * The ID of where this object exists in the database
-     * @return
+     * @return the long userID of the Player
      */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -109,7 +110,7 @@ public class Player {
 
     /**
      * returns the gameState where they exist
-     * @return
+     * @return the GameState of the Player
      */
     @ManyToOne
     @JoinColumn(name="gameState")
@@ -132,8 +133,8 @@ public class Player {
     public void setHasFolded(boolean state){hasFolded=state;}
 
     /**
-     * Checks if they have folde
-     * @returnd boolean of if they have folded
+     * Gets if the user has folded during this hand or not
+     * @return boolean value representing if they have folded
      */
     public boolean getHasFolded() {return hasFolded;}
 
