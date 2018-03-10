@@ -6,7 +6,6 @@ import java.util.Comparator;
  * This is an enum representing the cards in a deck. It should, eventually, store the suit and value for use by deck
  */
 public enum Card {
-    SPADES_ACE,
     SPADES_TWO,
     SPADES_THREE,
     SPADES_FOUR,
@@ -19,8 +18,8 @@ public enum Card {
     SPADES_JACK,
     SPADES_QUEEN,
     SPADES_KING,
+    SPADES_ACE,
 //  Hearts
-    HEARTS_ACE,
     HEARTS_TWO,
     HEARTS_THREE,
     HEARTS_FOUR,
@@ -33,8 +32,8 @@ public enum Card {
     HEARTS_JACK,
     HEARTS_QUEEN,
     HEARTS_KING,
+    HEARTS_ACE,
 //  Diamonds
-    DIAMONDS_ACE,
     DIAMONDS_TWO,
     DIAMONDS_THREE,
     DIAMONDS_FOUR,
@@ -47,9 +46,8 @@ public enum Card {
     DIAMONDS_JACK,
     DIAMONDS_QUEEN,
     DIAMONDS_KING,
-
+    DIAMONDS_ACE,
     // Clubs,
-    CLUBS_ACE,
     CLUBS_TWO,
     CLUBS_THREE,
     CLUBS_FOUR,
@@ -61,18 +59,19 @@ public enum Card {
     CLUBS_TEN,
     CLUBS_JACK,
     CLUBS_QUEEN,
-    CLUBS_KING;
+    CLUBS_KING,
+    CLUBS_ACE;
 
     public Suit suit() {
         Card ace = Card.values()[(this.ordinal() / 13) * 13];
         switch(ace) {
-            case SPADES_ACE:
+            case SPADES_TWO:
                 return Suit.SPADES;
-            case CLUBS_ACE:
+            case CLUBS_TWO:
                 return Suit.CLUBS;
-            case DIAMONDS_ACE:
+            case DIAMONDS_TWO:
                 return Suit.DIAMONDS;
-            case HEARTS_ACE:
+            case HEARTS_TWO:
                 return Suit.HEARTS;
             default:
                 return null;
@@ -94,26 +93,15 @@ public enum Card {
     public Card next() {
         int next = (this.ordinal() + 1) % 13 + (this.ordinal() / 13) * 13;
 
-        Card nextCard = Card.values()[next];
-        return (nextCard.suit() == this.suit()) ? nextCard : null;
+        return this.values()[next];
     }
 
     public static Comparator<Card> rankCompare() {
-        return new Comparator<Card>() {
-            @Override
-            public int compare(Card l, Card r) {
-                return l.rank().compareTo(r.rank());
-            }
-        };
+        return Comparator.comparingInt(l -> l.rank().ordinal());
     }
 
     public static Comparator<Card> suitCompare() {
-        return new Comparator<Card>() {
-            @Override
-            public int compare(Card l, Card r) {
-                return l.suit().compareTo(r.suit());
-            }
-        };
+        return Comparator.comparingInt(l -> l.suit().ordinal());
     }
 
     public enum Suit {
@@ -121,6 +109,6 @@ public enum Card {
     }
 
     public enum Rank {
-        ACE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING
+        TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING, ACE
     }
 }

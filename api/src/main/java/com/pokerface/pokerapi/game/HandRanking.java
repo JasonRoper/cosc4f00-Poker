@@ -62,8 +62,7 @@ public class HandRanking implements Comparable<HandRanking> {
         // card is a KING, and the first card is an ACE
         // tie breaker: NONE
         if (straightFlush != null &&
-                flush.get(flush.size() - 1).rank() == Card.Rank.KING &&
-                flush.get(0).rank() == Card.Rank.ACE) {
+                straightFlush.get(straightFlush.size() - 1).rank() == Card.Rank.ACE) {
             rank = Type.ROYAL_FLUSH;
         }
 
@@ -79,7 +78,7 @@ public class HandRanking implements Comparable<HandRanking> {
         else if (sets.size() != 0 && sets.get(sets.size() - 1).getFirst() == 4) {
             rank = Type.FOUR_OF_A_KIND;
             tieBreakers.add(sets.get(sets.size() - 1).getSecond());
-            tieBreakers.add(highCardNot(cards, sets.get(sets.size() - 1).getSecond()));
+            tieBreakers.add(highCardNotRank(cards, sets.get(sets.size() - 1).getSecond().rank()));
         }
 
         // FULL HOUSE: if sets has 2 or more sets, and they respectively contain 3 and 2
@@ -113,7 +112,7 @@ public class HandRanking implements Comparable<HandRanking> {
             rank = Type.THREE_OF_A_KIND;
             tieBreakers.add(sets.get(sets.size() - 1).getSecond());
 
-            List<Card> highCards = filterOut(cards, tieBreakers.get(0));
+            List<Card> highCards = filterOutRank(cards, tieBreakers.get(0).rank());
             Collections.reverse(highCards);
             tieBreakers.addAll(highCards.subList(0, Math.min(2, highCards.size())));
         }
@@ -132,7 +131,7 @@ public class HandRanking implements Comparable<HandRanking> {
                 tieBreakers.add(second);
                 tieBreakers.add(first);
             }
-            tieBreakers.add(highCardNot(cards, first, second));
+            tieBreakers.add(highCardNotRank(cards, first.rank(), second.rank()));
 
         }
 
@@ -141,7 +140,7 @@ public class HandRanking implements Comparable<HandRanking> {
         else if (sets.size() != 0 && sets.get(sets.size() - 1).getFirst() == 2) {
             rank = Type.ONE_PAIR;
             tieBreakers.add(sets.get(sets.size() - 1).getSecond());
-            List<Card> remaining = filterOut(cards, tieBreakers.get(0));
+            List<Card> remaining = filterOutRank(cards, tieBreakers.get(0).rank());
             Collections.reverse(remaining);
             tieBreakers.addAll(remaining.subList(0, Math.min(3, remaining.size())));
         }
@@ -162,14 +161,17 @@ public class HandRanking implements Comparable<HandRanking> {
         // workingStraight stores the current straight that is being built
         ArrayList<Card> workingStraight = new ArrayList<>();
 
-        Card lastCard = null;
-        for (int i = 0; i < cards.size(); i++) {
-            Card card = cards.get(i);
+        // Initialize lastCard to the last element of the cards list in case
+        // the high card of the hand is an ace. this will allow aces to be a
+        // part of an A, 2, 3, 4, 5 straight as well as a 10, J, Q, K, A straight
+        Card lastCard = cards.get(cards.size() - 1);
+        workingStraight.add(lastCard);
+
+        for (Card card : cards) {
 
             // figure out if the next card should be added to the workingStraight
-            // if it isn't, check to see if the workingStraight should be set to
-            // straight.
-            if (lastCard == null || lastCard.next().rank() == card.rank()) {
+            // if it isn't, check to see if the workingStraight is a valid straight.
+            if (lastCard.next().rank() == card.rank()) {
                 workingStraight.add(card);
             } else if (lastCard.rank() != card.rank()) {
                 if (workingStraight.size() >= 5) {
@@ -183,12 +185,6 @@ public class HandRanking implements Comparable<HandRanking> {
             }
 
             lastCard = card;
-        }
-
-        // if the last card was a KING, then if an ACE exists at the start of the list
-        // of cards, that ace should be added to the workingStraight
-        if (lastCard.rank() == Card.Rank.KING && cards.get(0).rank() == Card.Rank.ACE) {
-            workingStraight.add(cards.get(0));
         }
 
         // if the workingStraight is a valid straight, set straight
@@ -259,20 +255,20 @@ public class HandRanking implements Comparable<HandRanking> {
         return flush;
     }
 
-    private Card highCardNot(List<Card> cards, Card ...not){
-        List<Card> notList = Arrays.asList(not);
+    private Card highCardNotRank(List<Card> cards, Card.Rank ...not){
+        List<Card.Rank> notList = Arrays.asList(not);
         for (int i = cards.size() - 1 ; i >= 0 ; i--){
-            if (!notList.contains(cards.get(i))) {
+            if (!notList.contains(cards.get(i).rank())) {
                 return cards.get(i);
             }
         }
         return null;
     }
 
-    private List<Card> filterOut(List<Card> cards, Card ...filter) {
+    private List<Card> filterOutRank(List<Card> cards, Card.Rank ...filter) {
         ArrayList<Card> newCards = new ArrayList<>(cards);
-        List<Card> filterList = Arrays.asList(filter);
-        newCards.removeIf(card -> filterList.contains(card));
+        List<Card.Rank> filterList = Arrays.asList(filter);
+        newCards.removeIf(card -> filterList.contains(card.rank()));
         return newCards;
     }
 
@@ -298,7 +294,7 @@ public class HandRanking implements Comparable<HandRanking> {
         return rank;
     }
 
-    public static Comparator<Pair<Integer, Card>> pairComparator() {
+    private static Comparator<Pair<Integer, Card>> pairComparator() {
         return (l, r) -> {
             int comp = Integer.compare(l.getFirst(), r.getFirst());
             if (comp == 0) {

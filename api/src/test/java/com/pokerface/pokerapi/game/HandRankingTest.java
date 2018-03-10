@@ -221,7 +221,7 @@ public class HandRankingTest {
                         },
                         new Card[]{
                                 Card.HEARTS_ACE, Card.HEARTS_TWO, Card.HEARTS_THREE, Card.HEARTS_FOUR,
-                                Card.HEARTS_FIVE, Card.DIAMONDS_FIVE, Card.SPADES_SIX
+                                Card.HEARTS_TEN, Card.DIAMONDS_FIVE, Card.SPADES_SIX
                         })
         };
 
@@ -267,7 +267,7 @@ public class HandRankingTest {
                                 Card.HEARTS_TWO, Card.DIAMONDS_THREE, Card.SPADES_SEVEN
                         },
                         new Card[]{
-                                Card.CLUBS_JACK, Card.HEARTS_JACK, Card.SPADES_JACK, Card.DIAMONDS_JACK,
+                                Card.CLUBS_JACK, Card.HEARTS_JACK, Card.SPADES_JACK, Card.DIAMONDS_TEN,
                                 Card.HEARTS_TWO, Card.DIAMONDS_THREE, Card.SPADES_SIX
                         })
         };
@@ -329,11 +329,11 @@ public class HandRankingTest {
                 Pair.of(
                         new Card[]{
                                 Card.CLUBS_ACE, Card.HEARTS_ACE, Card.SPADES_NINE, Card.DIAMONDS_QUEEN,
-                                Card.HEARTS_TWO, Card.DIAMONDS_FOUR, Card.SPADES_SIX
+                                Card.HEARTS_TWO, Card.DIAMONDS_JACK, Card.SPADES_SIX
                         },
                         new Card[]{
                                 Card.CLUBS_ACE, Card.HEARTS_ACE, Card.SPADES_NINE, Card.DIAMONDS_QUEEN,
-                                Card.HEARTS_TWO, Card.DIAMONDS_JACK, Card.SPADES_SEVEN
+                                Card.HEARTS_TWO, Card.DIAMONDS_FOUR, Card.SPADES_SEVEN
                         })
         };
 
@@ -348,21 +348,21 @@ public class HandRankingTest {
                 Pair.of(
 
                         new Card[]{
-                                Card.CLUBS_THREE, Card.HEARTS_JACK, Card.SPADES_NINE, Card.DIAMONDS_QUEEN,
+                                Card.CLUBS_ACE, Card.HEARTS_JACK, Card.SPADES_NINE, Card.DIAMONDS_QUEEN,
                                 Card.HEARTS_TWO, Card.DIAMONDS_FOUR, Card.SPADES_SEVEN
                         },
                         new Card[]{
-                                Card.CLUBS_ACE, Card.HEARTS_JACK, Card.SPADES_NINE, Card.DIAMONDS_QUEEN,
+                                Card.CLUBS_THREE, Card.HEARTS_JACK, Card.SPADES_NINE, Card.DIAMONDS_QUEEN,
                                 Card.HEARTS_TWO, Card.DIAMONDS_FOUR, Card.SPADES_SIX
                         }),
                 Pair.of(
                         new Card[]{
                                 Card.CLUBS_ACE, Card.HEARTS_JACK, Card.SPADES_NINE, Card.DIAMONDS_QUEEN,
-                                Card.HEARTS_TWO, Card.DIAMONDS_FOUR, Card.SPADES_SIX
+                                Card.HEARTS_TWO, Card.DIAMONDS_FIVE, Card.SPADES_SEVEN
                         },
                         new Card[]{
                                 Card.CLUBS_ACE, Card.HEARTS_JACK, Card.SPADES_NINE, Card.DIAMONDS_QUEEN,
-                                Card.HEARTS_TWO, Card.DIAMONDS_FIVE, Card.SPADES_SEVEN
+                                Card.HEARTS_TWO, Card.DIAMONDS_FOUR, Card.SPADES_SIX
                         })
         };
 
