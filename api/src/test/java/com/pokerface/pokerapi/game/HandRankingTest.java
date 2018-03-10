@@ -141,7 +141,7 @@ public class HandRankingTest {
             HandRanking ranking = new HandRanking(Arrays.asList(testCase.hand));
 
             assertEquals("Failed to correctly rank " + testCase.result.toString(),
-                    testCase.result, ranking.getRank());
+                    testCase.result, ranking.getHandType());
         }
     }
 
@@ -375,8 +375,8 @@ public class HandRankingTest {
         HandRanking winnerRanking = new HandRanking(Arrays.asList(winner));
         HandRanking looserRanking = new HandRanking(Arrays.asList(looser));
 
-        assertEquals("winner ranking incorrect", type, winnerRanking.getRank());
-        assertEquals("looser ranking incorrect", type, looserRanking.getRank());
+        assertEquals("winner ranking incorrect", type, winnerRanking.getHandType());
+        assertEquals("looser ranking incorrect", type, looserRanking.getHandType());
 
         assertTrue("winner ranked below looser", winnerRanking.compareTo(looserRanking) == 1);
         assertTrue("looser ranked above winner", looserRanking.compareTo(winnerRanking) == -1);
@@ -387,7 +387,7 @@ public class HandRankingTest {
     @Test
     public void testLessThanSevenCards() {
         HandRanking ranking = new HandRanking(Arrays.asList(Card.SPADES_KING));
-        assertEquals(HandRanking.Type.HIGH_CARD, ranking.getRank());
+        assertEquals(HandRanking.Type.HIGH_CARD, ranking.getHandType());
     }
 
     public class TestCase {
