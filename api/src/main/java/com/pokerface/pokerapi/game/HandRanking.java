@@ -260,7 +260,7 @@ public class HandRanking implements Comparable<HandRanking> {
      */
     private List<Card> findFlush(List<Card> cards) {
         // suits stores all cards with each suit
-        TreeMap<Card.Suit, ArrayList<Card>> suits = new TreeMap<>();
+        EnumMap<Card.Suit, ArrayList<Card>> suits = new EnumMap<>(Card.Suit.class);
         for (Card card : cards) {
             // don't create an array for suits unless that suit actually exists
             suits.computeIfAbsent(card.suit(), k -> new ArrayList<>());
