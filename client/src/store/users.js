@@ -126,7 +126,7 @@ const actions = {
       let error = reason.response.data.error
       switch (error) {
         case 'Unauthorized':
-          context.commit('addLoginError', 'Authentication error')
+          context.commit('addLoginError', {error: 'AuthenticationError', message: 'Error Authenticating'})
           break
         default:
           context.commit('addGlobalError', {error: 'UnknownLoginError', module: 'users', reason: reason})
