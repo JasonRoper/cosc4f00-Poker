@@ -169,7 +169,6 @@ export default {
   props: ['userId'],
   data () {
     return {
-      msg: 'hiiiLow',
       mechanics: new GameMech(0, this.userId),
       numberofPlayer: 0,
       BigBlindCurrentBet: 0,

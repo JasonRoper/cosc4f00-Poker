@@ -78,11 +78,9 @@
 <script>
 import TableView from '@/components/TableView'
 import GameMenu from '@/components/GameMenu'
-// import GameRequest from '@/store/GameRequest'
 export default{
   data () {
     return {
-      // gameRequest = new GameRequest(),
       windowWidth: 'document.documentElement.clientWidth',
       toggleon: false
     }
@@ -92,7 +90,6 @@ export default{
     gameMenu: GameMenu
   },
   watch: {
-    // gameRequest: function (newValue, oldValue) { },
     windowWidth: function (query) {
       console.log(query)
     }
@@ -106,9 +103,6 @@ export default{
     window.removeEventListener('resize', this.adjustsideBar)
   },
   methods: {
-    createGame: function () {
-      // gameRequest.createGame()
-    },
     toggleSidebar: function () {
       document.getElementById('sidebar').classList.toggle('active')
       document.getElementById('page-content').classList.toggle('active')

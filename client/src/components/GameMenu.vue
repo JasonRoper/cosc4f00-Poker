@@ -223,9 +223,11 @@ import Actions from '@/types/actions'
 import TableView from '@/components/TableView'
 import GameMech from '@/store/GameMechanics.ts'
 import router from '@/router'
+import GameRequest from '@/store/GameRequest.ts'
 export default {
   data () {
     return {
+      gameReq: new GameRequest(),
       cardPos: 30,
       GameMenu: true,
       instrcutionPokerMode: false,
@@ -298,17 +300,20 @@ export default {
     },
     chipChoice: function (choice) {
       if (choice === 'PokerTutorial') {
-        router.push('Table')
+        this.gameReq.createGame().then(() => {
+          router.push({name: 'Table', params: {gameId: this.gameReq.gameId}})
+        })
       }
       if (choice === 'CompetitivePoker') {
-        alert('Competitive Poker')
+        alert('Lets Compete Poker')
         // this.instrcutionPokerMode = false
         // this.showTable = true
-        router.push('Table')
+        this.gameReq.createGame().then(() => {
+          router.push({name: 'Table', params: {gameId: this.gameReq.gameId}})
+        })
       }
       if (choice === 'CPUChallenge') {
         alert('Bot Plays Poker')
-        router.push('Table')
       }
       if (choice === 'CasualPoker') {
         alert('Casual Plays Poker')

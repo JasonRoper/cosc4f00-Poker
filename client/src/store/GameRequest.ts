@@ -1,43 +1,36 @@
+import { API_V1 } from '@/config'
 import axios from 'axios'
 
 import GamePaths from '@/api/gameservice'
 import PokerClient from '@/api/pokerclient'
-import store from '@/store/index.js'
 
 export type GameJoinCallback = (gameId: number) => void
 
 export default class GameRequest {
-  public userId: number
-  public BASE_PATH: string = 'https://localhost:8443'
-  public API_V1: string = this.BASE_PATH + '/api/v1'
-  public MATCHMAKING: string = this.API_V1 + '/matchmaking/basicGame'
+  public MATCHMAKING: string = API_V1 + '/matchmaking/basicGame'
   public matchMakingId: number = 0
   public gameId: number = -1
   private onGameJoinCallback: GameJoinCallback
 
-  constructor () {
-    this.userId = parseInt(store.state.id, 10)
-  }
-
-  public getMatchMakingId () {
-    axios.post(this.MATCHMAKING).then((response) => {
-      const subPath: string = this.API_V1 + '/' + response.data.matchmakingId.toString() + '/matchmaking'
-      this.matchMakingId = response.data.matchmakingId
+  public createGame (): Promise<number | void> {
+    const prom = axios.post(this.MATCHMAKING).then((response) => {
+      // const subPath: string = this.API_V1 + '/' + response.data.matchmakingId.toString() + '/matchmaking'
+      this.gameId = response.data.gameId
       // this.onGameJoin(subPath, this.setGameId)
       console.log(response)
+      return this.gameId
     }).catch((error) => {
       console.log(error)
     })
-  }
 
-  public setGameId (gameId: number) {
-    this.gameId = gameId
-    // Then you push to the router
+    return prom
   }
-  /**
+}
+
+  /*
+    /**
    * Register a callback to be called when the game is updated
    * @param callback - will be called when the game updates
-   */
   public onGameJoin (subPath: string, callback: GameJoinCallback) {
     PokerClient.switchCallback(
       subPath,
@@ -45,9 +38,6 @@ export default class GameRequest {
       callback)
     this.onGameJoinCallback = callback
   }
-}
-
-  /*
   public onGameJoin (subPath: string, callback: GameJoinCallback) {
     PokerClient.switchCallback(
       subPath,
@@ -56,7 +46,16 @@ export default class GameRequest {
     this.onGameJoinCallback = callback
 }
 */
+/*
+const sum = require('./sum');
 
+function sub(a: number, b: number): number {
+  return sum(a, -b);
+}
+
+export = sub;
+*/
+/*
 export class TestAxios {
 
   // public axios = require('axios')
@@ -72,3 +71,4 @@ export class TestAxios {
     }).catch((response) => { this.abc = response.data })
   }
 }
+*/

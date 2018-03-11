@@ -47,12 +47,14 @@ export default class GameMech {
   // @param gameId - the id of the game
   constructor (gameId: number, userId: number | null) {
     this.gameService = new GameService(gameId)
+
     if (userId !== null) {
       this.gameService.onGameUpdated(this.setGameTransport)
       this.gameService.onGameFinished(this.onGameFinishedEvent)
       this.gameService.onGameStarted(this.onGameStartedEvent)
       this.gameService.onUserCards(this.onUserCardsEvent)
-      // this.gameService.onGameError(this.onGameError)
+      this.gameService.onGameError(this.onGameError)
+      this.gameService.onGameCommunityCards(this.onGameCommunityCardsEvent)
 
       this.setDefaultTransport()
       this.lobby = false
@@ -139,6 +141,10 @@ export default class GameMech {
     }
     this.endGame = true
     return this.endGame
+  }
+
+  public onGameCommunityCardsEvent (card: string) {
+    this.communityCards.push(card)
   }
 
   /**
