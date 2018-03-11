@@ -301,7 +301,7 @@ export default {
     chipChoice: function (choice) {
       if (choice === 'PokerTutorial') {
         this.gameReq.createGame().then(() => {
-          router.push({name: 'Table', params: {gameId: this.gameReq.gameId}})
+          this.$router.push({name: 'Table', params: {gameId: this.gameReq.gameId}})
         })
       }
       if (choice === 'CompetitivePoker') {
@@ -314,6 +314,7 @@ export default {
       }
       if (choice === 'CPUChallenge') {
         alert('Bot Plays Poker')
+        this.$router.push('Table')
       }
       if (choice === 'CasualPoker') {
         alert('Casual Plays Poker')

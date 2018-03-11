@@ -68,7 +68,7 @@
               <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon1"><i class="fa fa-user"></i></span>
               </div>
-              <input v-model="RegisteredPlayer.username" type="text" class="form-control" placeholder="Username" aria-label="Username/Email" aria-describedby="basic-addon1">
+              <input v-model="RegisterPlayer.username" type="text" class="form-control" placeholder="Username" aria-label="Username/Email" aria-describedby="basic-addon1">
             </div>
           <!--Username input   -->
           <!-- Password Input -->
@@ -76,7 +76,7 @@
               <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon1"><i class="fa fa-lock"></i></span>
               </div>
-              <input v-model="RegisteredPlayer.password"  type="password" class="form-control" placeholder="Passowrd" aria-label="Username/Email" aria-describedby="basic-addon1">
+              <input v-model="RegisterPlayer.password"  type="password" class="form-control" placeholder="Passowrd" aria-label="Username/Email" aria-describedby="basic-addon1">
              </div>
           <!--Password input   -->
             <!--Email input   -->
@@ -84,7 +84,7 @@
               <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon1">@</span>
               </div>
-              <input v-model="RegisteredPlayer.email" type="Email" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="basic-addon1">
+              <input v-model="RegisterPlayer.email" type="Email" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="basic-addon1">
             </div>
           <!--Email input   -->
           <div v-show="this.isRegistrationError" >
@@ -302,22 +302,19 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
-import ErrorMessages from '@/components/WebComponents/ErrorMessages'
+import { mapActions } from 'vuex' // used for maping actions of the vue store files
+import ErrorMessages from '@/components/WebComponents/ErrorMessages' // ErrorMessages Components
 // import router from '@/router'
-
-// import { c } from 'vuex'
-// import users from '@/store/users.js'
 export default {
   data () {
     return {
-      // Representation of a KnownPlayer
+      // Representation of a Player Logging in
       Player: {
         username: '',
         password: ''
       },
-      // Representation of a registerd player
-      RegisteredPlayer: {
+      // Representation of a  player that wants to register
+      RegisterPlayer: {
         username: '',
         password: '',
         email: ''
@@ -328,13 +325,10 @@ export default {
       Level1Members: 3000,
       Level2Members: 6000,
       Level3Members: 1300,
-      LoginSucessful: false,
-      onPage: true,
       registerErrorMessage: [],
       loginErrorMessage: [],
       isLoginError: false,
       isRegistrationError: false,
-      isclicked: false,
       ErrorMessage: '',
       registModal: false
     }
@@ -352,12 +346,18 @@ export default {
       'register',
       'login'
     ]),
-
      // Attempts login  givent the requested fields If the fields are empty then return an aerror
     AttemptLogin () {
-      this.login(this.Player)
-      this.loginErrorMessage = this.$store.state.users.errors.login
-      setTimeout(this.checkLoginErrors, 900)
+      this.ResetVariables()
+      if ((this.Player.username.length === 0) || (this.Player.password.length === 0)) {
+        this.isLoginError = true
+        this.ErrorMessage = 'Both Fields Must Be Filled'
+        return // Must add CSS for this action
+      } else {
+        this.login(this.Player)
+        this.loginErrorMessage = this.$store.state.users.errors.login
+        setTimeout(this.checkLoginErrors, 900)
+      }
     },
     checkLoginErrors () {
       if ((this.loginErrorMessage.length === 0)) {
@@ -372,9 +372,16 @@ export default {
       }
     },
     AttemptRegister () {
-      this.register(this.RegisteredPlayer)
-      this.registerErrorMessage = this.$store.state.users.errors.registration
-      setTimeout(this.checkRegisterErrors, 900)
+      this.ResetVariables()
+      if ((this.RegisterPlayer.username.length === 0) || (this.RegisterPlayer.password.length === 0) || (this.RegisterPlayer.email.length === 0)) {
+        this.isRegistrationError = true
+        this.ErrorMessage = 'All fields must Filled'
+        return // Must add CSS for this action
+      } else {
+        this.register(this.RegisterPlayer)
+        this.registerErrorMessage = this.$store.state.users.errors.registration
+        setTimeout(this.checkRegisterErrors, 900)
+      }
     },
     checkRegisterErrors () {
       if ((this.registerErrorMessage.length === 0)) {
@@ -391,6 +398,7 @@ export default {
     },
     ResetVariables () {
       this.isRegistrationError = false
+      this.isLoginError = false
       this.ErrorMessage = ''
     }
   },
