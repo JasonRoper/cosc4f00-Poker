@@ -77,7 +77,7 @@ public class GameController {
      * @param gameID the gameID of the game to be modified
      * @param action the action being performed
      * @param playerID the playerID performing the action
-     * @return
+     * @return a GameStateTrasnport, returning the new state of the game for the Front End user
      */
     private GameStateTransport handleAction(long gameID, GameAction action, int playerID) {
         GameStateTransport nextGameState = gameService.handleAction(gameID, action, playerID);
