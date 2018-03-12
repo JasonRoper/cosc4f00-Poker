@@ -1,6 +1,7 @@
 package com.pokerface.pokerapi.game;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -423,6 +424,25 @@ public class GameState {
     }
 
     /**
+     * Creates a list of the communityCards to return them
+     * @return a list of the communityCards
+     */
+    public List<Card> receiveCommunityCards() {
+        List<Card> cards = new ArrayList<>();
+
+        cards.add(getCommunityCardOne());
+        cards.add(getCommunityCardTwo());
+        cards.add(getCommunityCardThree());
+        if (round <= 2) {
+            cards.add(getCommunityCardFour());
+        }
+        if (round <= 3) {
+            cards.add(getCommunityCardFive());
+        }
+        return cards;
+    }
+
+    /**
      * All Community Cards return the card position, one through to five
      * @return return the community card being requested
      */
@@ -498,6 +518,18 @@ public class GameState {
 
     public void setCommunityCardFive(Card communityCardFive) {
         this.communityCardFive = communityCardFive;
+    }
+
+    public boolean removePlayer(long userID){
+        Player player=getPlayer(userID);
+        if (player.getIsDealer()){
+            advanceDealer();
+        }
+        if (getPresentTurn()==player.getTableSeatID()){
+            nextTurn();
+        }
+        players.remove(player);
+        return true;
     }
 
 }

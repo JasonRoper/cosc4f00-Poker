@@ -338,4 +338,15 @@ return gameStateTransport;
         }
     }
 
+    /**
+     * This function exists to remove people who have left the game, or if the game is to be closed.
+     * @param gameID the long ID of the game to remove the player
+     * @param userID the long ID of the user to be removed
+     * @return if it worked, boolean value
+     */
+    public boolean playerLeaveGame(long gameID, long userID){
+        games.findOne(gameID).removePlayer(userID);
+        return true;
+    }
+
     }
