@@ -93,6 +93,9 @@ const mutations = {
 }
 
 const actions = {
+  storeName (context, name) {
+    alert(name + 'hey its')
+  },
   /**
    * log in to the server. This is just a validation function due
    * to the use of HttpBasic authentication
@@ -123,7 +126,7 @@ const actions = {
       let error = reason.response.data.error
       switch (error) {
         case 'Unauthorized':
-          context.commit('addLoginError', 'Authentication error')
+          context.commit('addLoginError', {error: 'AuthenticationError', message: 'Error Authenticating'})
           break
         default:
           context.commit('addGlobalError', {error: 'UnknownLoginError', module: 'users', reason: reason})

@@ -131,6 +131,7 @@
         <button v-on:click="call(money)" :disabled="this.mechanics.callAction == 1">CALL</button>
         <button v-on:click="bet(money)" :disabled="this.mechanics.betAction == 1">BET</button>
         <button v-on:click="sendAction()">Send Action To Server</button>
+              
  </div>
 </div>
 
@@ -152,7 +153,12 @@
 
 
 <script>
-
+/**
+ * A simple checkbox component.
+ * @module components/basic/checkbox
+ * @param {number} [disabled=false] - Disabled component
+ * @param {string[]} model - Required, need two way
+ */
 import Player from '@/components/table/Player.vue'
 import Card from '@/components/table/Card'
 import TableActions from '@/components/table/TableActions'
@@ -165,25 +171,37 @@ import GameMech from '@/store/GameMechanics.ts'
 import Seat from '@/components/table/Seat'
 import {GameActionType} from '../api/gameservice'
 export default {
+  name: 'checkbox',
+  introduction: 'an amazing checkbox',
   props: ['userId'],
   data () {
     return {
-      msg: 'hiiiLow',
       mechanics: new GameMech(0, this.userId),
       numberofPlayer: 0,
-      BigBlindCurrentBet: 0
+      BigBlindCurrentBet: 0,
+      user: 0,
+      opponents: 0
     }
   },
   watch: {
     mechanics: function (newValue, oldValue) {
+      this.user = this.getUser()
+      this.opponents = this.getOpponents()
       this.$forceUpdate()
     }
   },
   methods: {
+    getUser: function () {
+      return this.mechanics.getUser()
+    },
+    getOpponents: function () {
+      return this.mechanics.getOpponents()
+    },
     setTableActions: function () {
       this.mechanics.tableActions()
     },
     fold: function () {
+      alert('FOLD')
       this.premove(GameActionType.FOLD, 0)
     },
     check: function () {
@@ -287,3 +305,4 @@ export default {
 </script>
 
 <style src="@/assets/css/Table.css"></style>
+<style src="@/assets/css/GameNav.css"></style>

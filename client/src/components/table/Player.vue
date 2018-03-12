@@ -19,27 +19,48 @@
           
       <strong id= "isDealer" >D </strong>
       </div>
-         <div  v-if ="this.data.tableAction === 'FOLD'" id="isChipContainer">
+
+
+
+       <div  v-if ="this.data.action === 'FOLD'" id="isChipContainer">
       <strong id="chipAction" ><i class="fa fa-remove"></i></strong>
       </div>
-          <div v-if ="this.data.tableAction === 'CALL' " id="isChipContainer">
-      <strong id="chipAction" ><i class="fa fa-dollar"></i></strong><div id="chipMessage">$Message</div>
+               <transition name="Action">
+      <div v-show = this.FoldAction id="isChipContainer">
+      <strong id="chipAction" ><i  style = "padding-left:2px;padding-right:2px;" class="fa fa-remove"></i></strong>
       </div>
+      </transition>
+
+             <transition name="Action">
+      <div v-show = this.CallAction id="isChipContainer">
+      <strong id="chipAction" ><i  style = "padding-left:2px;padding-right:2px;" class="fa fa-dollar"></i></strong>
+      <div id="chipMessage">${{this.data.currentBet}}</div>
+      </div></transition>
+
        <transition name="Action">
       <div v-show = this.BetAction id="isChipContainer">
       <strong id="chipAction" ><i class="fa fa-chevron-up"></i></strong>
+      <div id="chipMessage">${{this.data.currentBet}}</div>
       </div></transition>
-      <div v-if ="this.data.tableAction === 'RAISE' " id="isChipContainer">
-      <strong id="chipAction" ><i class="fa fa-chevron-up"></i></strong><div id="chipMessage">$Message</div>
+      <transition name="Action">
+      <div v-show = this.RasieAction id="isChipContainer">
+      <strong id="chipAction" ><i class="fa fa-chevron-up"></i></strong>
+      <div id="chipMessage">${{this.data.currentBet}}</div>
+      </div></transition>
+      <!-- <div v-show="this.RasieAction" id="isChipContainer">
+      <strong id="chipAction" ><i class="fa fa-chevron-up"></i></strong><div id="chipMessage">${{this.data.currentBet}}</div>
+      </div> -->
+          <transition name="Action">
+      <div v-show = this.CheckAction id="isChipContainer">
+      <strong id="chipAction" ><i class="fa fa-check"></i></strong>
+      <div id="chipMessage">${{this.data.currentBet}}</div>
       </div>
-       <div  v-if ="this.data.tableAction === 'CHECK' " id="isChipContainer">
-      <strong id="chipAction" ><i class="fa fa-check"></i></strong><div id="chipMessage">$Message</div>
-      </div>
-       <transition name="Message"><div v-if ="this.data.tableAction === 'BET' " id="isChipContainer"><div id="chipMessage">$Message</div></div></transition>
+      </transition>
+
     </div>
     <div>
       <button @click="test()"> A test</button>
-       <button @click="test2()"> A test</button>
+       <button @click="test2()"> A test2</button>
       </div>
     <!--Display status big blind small blind  dealer etc   -->
   </div>
@@ -52,9 +73,9 @@ export default {
   data () {
     return {
       player_num: 0,
-      playerAction: this.data.tableAction,
-      RasieMessage: false,
-      Foldction: false,
+      playerAction: this.data.action,
+      RasieAction: false,
+      FoldAction: false,
       CallAction: false,
       CheckAction: false,
       BetAction: false
@@ -65,33 +86,64 @@ export default {
   components: {
     card: Card
   },
-  updated () {
-    this.playerAction = this.data.tableAction
-    if (this.playerAction === 'BET') {
-      this.BetAction = true
-    }
+  updated: function () {
+    // alert('hellow')
+    this.seeAction()
   },
   methods: {
     test () {
-      // this.playerAction = 'none'
-      this.data.tableAction = 'BET'
-      // document.getElementById('chipMessage').classList.toggle('active')
+      this.data.action = 'BET'
     },
     test2 () {
-      // this.playerAction = 'none'
-      this.data.tableAction = ''
-      // this.BetMessage = false
-      // document.getElementById('chipMessage').classList.toggle('active')
+      this.data.action = 'CHECK'
     },
     showRasieMessage () {
       this.BetMessage = true
-      // this.data.tableAction = ''
+    },
+    resetActions () {
+      this.BetAction = false
+      this.RasieAction = false
+      this.FoldAction = false
+      this.CallAction = false
+      this.CheckAction = false
+    },
+    seeAction () {
+      if (this.data.action === 'BET') {
+        alert('YO GON BETS EVERYONE')
+        this.BetAction = true
+      }
+      if (this.data.action === 'RAISE') {
+        alert('YO GON RAISE EVERYONE')
+        this.RasieAction = true
+      }
+      if (this.data.action === 'CALL') {
+        alert('Yo GON CALL EVERYONE')
+        this.CallAction = true
+      }
+      if (this.data.action === 'CHECK') {
+        alert('Yo GON CHECK EVERYONE')
+        this.CheckAction = true
+      }
+      if (this.data.action === 'FOLD') {
+        alert('Yo GON FOLD EVERYONE')
+        this.FoldAction = true
+      }
+      if (this.data.action !== '') {
+        this.data.action = ''
+        let interval = 2200
+        window.setInterval(900)
+        setTimeout(this.resetActions, interval)
+      }
     }
   },
-  computed: {
-    playerAction () {
-      this.playerAction = this.data.tableAction
-      return this.playerAction
+  watch: {
+    playerAction (query) {
+      alert('changed')
+      if (query === 'BET') {
+        alert('change')
+        console.log('hi')
+        this.playerAction = ''
+      }
     }
   }
 }

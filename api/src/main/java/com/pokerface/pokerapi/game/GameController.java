@@ -8,8 +8,8 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.TaskScheduler;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
 
 import java.security.Principal;
 
@@ -22,7 +22,7 @@ import java.security.Principal;
  * It uses a combination of REST and STOMP end points for communication, REST for user initiated communication and STOMP
  * for unprompted communications.
  */
-@Controller
+@RestController
 public class GameController {
     private static final Logger logger = LoggerFactory.getLogger(GameController.class);
     private final GameService gameService;
@@ -108,13 +108,13 @@ public class GameController {
         gameService.playerLeaveGame(gameID,user.getId());
     }
 
-    @PostMapping("/api/v1/matchmaking/basicGame")
-    public void createGame(Principal principal) {
-        UserInfoTransport user = userService.getUser(principal.getName());
-        gameService.matchmake(user.getId());
+   @PostMapping("/api/v1/matchmaking/basicGame")
+   public GameInfoTransport createGame(Principal principal) {       
+       UserInfoTransport user = userService.getUser(principal.getName());
+       long gameId = gameService.matchmake(user.getId());
+        return new GameInfoTransport(gameId);
+   }
 
-    }
-//
 //
 //    @GetMapping("/api/v1/games")
 //    public void getGameListing() {

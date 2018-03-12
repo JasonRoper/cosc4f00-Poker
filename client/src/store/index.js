@@ -1,13 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import game from '@/store/game'
+import gameRequest from '@/store/GameRequest'
 import users from '@/store/users'
 
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
   modules: {
-    game,
+    gameRequest,
     users
   },
   state: {

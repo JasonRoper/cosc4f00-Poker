@@ -5,27 +5,32 @@ import {
   GameError,
   GameFinished,
   GameService,
-  GameStarted,
+  // GameStarted,
   GameState,
+  GameStateType,
   Player,
-  UserCards } from '@/api/gameservice'
-
+  UserCards
+} from '@/api/gameservice'
 import actions from '@/types/actions'
 import CardSuite from '@/types/cards'
 import { Action } from 'vuex'
 
 export default class GameMech {
+  public gameId: number
+
+  // Defines how many players can be at a table
   public numberOfPlayers: number = 5
+
   public hasBet: boolean = false
   public turn: number = 0
   public multiplePlayers: Player[] = []
-  public gameId: number = 0
   public pot: number = 0
   public communityCards: string[] = []
-  public userId: number | null = 0
-  public playerLocation: number = 0
+  public userId: number | null
+  public playerLocation: number = -1
   public userAction: GameAction | null = null
-  public storeAction: GameAction | null = null
+
+  public tableAction: GameActionType[] = []
 
   public endGame: boolean = false
 
@@ -42,49 +47,60 @@ export default class GameMech {
   private lobby: boolean
   private gameService: GameService
 
-  // Generate the websocket paths used for the given gameId
-  // @param gameId - the id of the game
-  constructor (gameId: number, userId: number | null) {
-    this.gameService = new GameService(gameId)
-    if (userId !== null) {
-      this.gameService.onGameUpdated(this.setGameTransport)
-      this.gameService.onGameFinished(this.onGameFinishedEvent)
-      this.gameService.onGameStarted(this.onGameStartedEvent)
-      this.gameService.onUserCards(this.onUserCardsEvent)
-      // this.gameService.onGameError(this.onGameError)
+  /**
+   * Creates a Game Mechanics that the user uses to play the game
+   * @class Creates Game Mechanics class
+   * @param gameId attaches user to listen to gameId
+   * @param userId Creates table for user or for a lobby
+   */
+  constructor (gameId: number, userId?: number) {
+    this.gameService = new GameService(gameId, userId)
+    this.gameId = gameId
 
-      this.setDefaultTransport()
+    this.userId = userId ? userId : null
+
+    this.gameService.onGameUpdated(this.setGameTransport)
+    this.gameService.onGameFinished(this.onGameFinishedEvent)
+    this.gameService.onGameError(this.onGameError)
+
+    if (userId) {
+      this.gameService.onUserCards(this.onUserCardsEvent)
       this.lobby = false
     } else {
       this.gameService.onGameUpdated(this.setGameTransport)
       this.lobby = true
     }
+
+    this.setDefaultTransport()
   }
 
+  /**
+   * Sets a default table for the player
+   * @returns Default Player Object
+   */
   public setDefaultTransport () {
     this.hasBet = false
     this.turn = 0
-    const p: Player = this.defaultPlayer()
     this.multiplePlayers = [{
       id: 0,
       money: 500,
       name: 'javon',
-      tableAction: GameActionType.FOLD,
-      premove: null,
+      action: GameActionType.CALL,
       card1: CardSuite.BLANK_CARD,
       card2: CardSuite.BLANK_CARD,
-      currentBet: 0,
+      currentBet: 600,
+      isTurn: false,
       isPlayer: true,
       isDealer: true
     }, {
       id: 1,
       money: 888,
       name: 'test',
-      tableAction: {} as GameActionType,
-      premove: null,
+      action: null,
       card1: CardSuite.CLUBS_ACE,
       card2: CardSuite.CLUBS_TWO,
       currentBet: 0,
+      isTurn: false,
       isPlayer: false,
       isDealer: false
     }, this.defaultPlayer(), this.defaultPlayer() ,this.defaultPlayer(),this.defaultPlayer()]
@@ -92,36 +108,53 @@ export default class GameMech {
     this.pot = 0
     this.communityCards = [CardSuite.CLUBS_ACE, CardSuite.CLUBS_EIGHT, 'three', 'four', 'five']
     this.userId = 0
-    this.playerLocation = 0
+    this.playerLocation = this.playerLoc()
     this.userAction = null
   }
+
+  /**
+   * Sets a default player
+   */
   public defaultPlayer (): Player {
     const player: Player = {
       id: -1,
       money: 0,
       name: 'defaultPlayer',
-      tableAction: {} as GameActionType,
-      premove: null,
+      action: null,
       card1: CardSuite.BLANK_CARD,
       card2: CardSuite.BLANK_CARD,
       currentBet: 0,
+      isTurn: false,
       isPlayer: false,
       isDealer: false
     }
     return player
   }
-  public getTableAction () {
-    return this.multiplePlayers[this.playerLocation].tableAction
-  }
+
   /**
-   * sendEvent of the game started
+   * Gets Player location within array
+   * @returns player location in the Multiplayer Array
    */
-  public onGameStartedEvent (gameStarted: GameStarted) {
-    this.multiplePlayers = gameStarted.multiplePlayers
+  public playerLoc (): number {
+    for (const play of this.multiplePlayers) {
+      if (play.id === this.userId) {
+        return play.id
+      }
+    }
+    return -1
   }
 
   /**
-   * @param gameFinished Finished Event of the game ending
+   * @returns The possible table actions that the user can use
+   */
+  public getTableAction () {
+    return this.tableAction
+  }
+
+  /**
+   * Handles Game finished event
+   * @event GameFinishedEvent
+   * @param gameFinished The inforamtion that you need to finish a game
    */
   public onGameFinishedEvent (gameFinished: GameFinished) {
     for (const player of this.multiplePlayers) {
@@ -136,29 +169,25 @@ export default class GameMech {
   }
 
   /**
+   * Handles when a Game Error is sent
+   * @event ErrorEvent
    * @param gameError When the game Sends and Error
    */
   public onGameError (gameError: GameError) {
     alert('Error: ' + gameError.error)
     console.log('Error: ' + gameError.error)
   }
+
   /**
-   * send user cards
+   * Handles when user receives cards
+   * @event UserCardsEvent
    * @param userCards
    */
   public onUserCardsEvent (userCards: UserCards) {
     this.multiplePlayers[this.playerLocation].card1 = userCards.card1
     this.multiplePlayers[this.playerLocation].card2 = userCards.card2
   }
-  /**
-   * SendCards to the user
-   * players first card
-   *  players second card
-   * public sendCards (card1: string, card2: string) {
-   * this.multiplePlayers[this.playerLocation].card1 = card1
-   * this.multiplePlayers[this.playerLocation].card2 = card2
-   * }
-   */
+
   /**
    * Adds cards to the Comminity Cards
    * @param card
@@ -170,13 +199,17 @@ export default class GameMech {
   }
 
   /**
-   * storePremove - Stores the premove or resets
+   * Stores the Premove for the user
+   * @param action - holds users GameActionType
+   * @param money - holds how much money the user bet with a particular action
+   * @returns validity of Action that user is attempting to store
    */
   public storePremove (action: GameActionType, money: number): boolean {
     const move: GameAction = { type: action, bet: money }
     if (this.validatePreMove(move) && this.userAction === null) {
       this.disableButton(action)
       this.userAction = move
+      this.sendAction()
       return true
     } else {
       this.setTableActions()
@@ -184,6 +217,11 @@ export default class GameMech {
       return false
     }
   }
+
+  /**
+   * Disables the TableActions based on a users previous action
+   * @param action holds the action of the user
+   */
   public disableButton (action: GameActionType) {
     switch (action) {
       case GameActionType.CHECK:
@@ -206,7 +244,7 @@ export default class GameMech {
     }
   }
   /**
-   * TableActions will give the player the differnet table actions that they can take
+   * Disables specific tableActions based on if there has been a bet at the table
    */
   public setTableActions () {
     if (this.hasBet) {
@@ -246,23 +284,19 @@ export default class GameMech {
         return false
       }
     }
-
     return true
   }
 
+  /**
+   * Validates users action and sends it to the server
+   */
   public sendAction () {
     if (this.userAction !== null) {
-      if (this.storePremove(this.userAction.type, this.userAction.bet)) {
-        if (this.playerLocation === this.turn) {
-          this.send(this.userAction)
-          this.storeAction = this.userAction
-          this.userAction = null
-        }
+      if (this.playerLoc() === this.turn) {
+        this.send(this.userAction)
+        this.userAction = null
       }
     }
-  }
-  public getUser (): Player {
-    return this.multiplePlayers[this.playerLocation]
   }
 
   /**
@@ -270,28 +304,57 @@ export default class GameMech {
    * @param GameState
    */
   public setGameTransport (gameTransport: GameState) {
-    if (gameTransport.gameId === this.gameId) {
-      this.storeAction = null
-      this.communityCards = gameTransport.communityCards
-      this.hasBet = gameTransport.hasBet
-      this.turn = gameTransport.turn
-      this.multiplePlayers = gameTransport.multiplePlayers
-      this.pot = gameTransport.pot
-      // if there is a premove
-      if (this.playerLocation === this.turn) {
-        if (this.userAction !== null) {
-          if (this.validatePreMove(this.userAction)) {
-            const action = (this.userAction).type
-            const bet = (this.userAction).bet
-            this.sendAction()
-            alert('send the action')
-          }
+
+    switch (gameTransport.gameStateType) {
+      case GameStateType.HAND_STARTED: { // The hand has started
+        this.hasBet = gameTransport.hasBet
+        Object.assign(this.multiplePlayers, gameTransport.multiplePlayers)
+        this.pot = gameTransport.pot
+        Object.assign(this.communityCards, gameTransport.communityCards)
+        break
+      }
+      case GameStateType.USER_ACTION: { // This is sent after a player makes an action
+        this.hasBet = gameTransport.hasBet
+        Object.assign(this.multiplePlayers, gameTransport.multiplePlayers)
+        this.pot = gameTransport.pot
+        break
+      }
+      case GameStateType.HAND_FINISHED: { // Equivalent for a winnder being determined from a hand
+        this.hasBet = gameTransport.hasBet
+        Object.assign(this.multiplePlayers, gameTransport.multiplePlayers)
+        this.pot = gameTransport.pot
+        Object.assign(this.communityCards, gameTransport.communityCards)
+        break
+      }
+      case GameStateType.ROUND_FINISHED: { // All players have bet - this results in a new Community cards
+        this.hasBet = gameTransport.hasBet
+        Object.assign(this.multiplePlayers, gameTransport.multiplePlayers)
+        this.pot = gameTransport.pot
+        Object.assign(this.communityCards, gameTransport.communityCards)
+        break
+      }
+      case GameStateType.USER_JOIN: { // A new player has been added to the game
+        this.hasBet = gameTransport.hasBet
+        Object.assign(this.multiplePlayers, gameTransport.multiplePlayers)
+        this.pot = gameTransport.pot
+        Object.assign(this.communityCards, gameTransport.communityCards)
+        break
+      }
+      case GameStateType.USER_LEAVE: { // A new player has left the game
+        Object.assign(this.multiplePlayers, gameTransport.multiplePlayers)
+        break
+      }
+    }
+
+    if (this.playerLoc() === this.turn) {
+      if (this.userAction !== null) {
+        if (this.validatePreMove(this.userAction)) {
+          this.send(this.userAction)
+          alert('sent the action')
         }
       }
-      this.setTableActions()
-      return true
     }
-    return false
+    this.setTableActions()
   }
 
   public isGameRunning () {
@@ -299,7 +362,7 @@ export default class GameMech {
   }
   // can this game accecpt action from this player
   private send (gameAction: GameAction) {
-    this.gameService.sendAction(gameAction)
+    this.gameService.userSendAction(gameAction)
   }
 
 }
