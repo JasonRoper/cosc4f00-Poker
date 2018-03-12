@@ -7,7 +7,7 @@ import PokerClient from '@/api/pokerclient'
 export type GameJoinCallback = (gameId: number) => void
 
 export default class GameRequest {
-  public MATCHMAKING: string = API_V1 + '/matchmaking/basicGame'
+  public MATCHMAKING: string = API_V1 + '/matchmaking/start'
   public JOINGAME: string = API_V1 + '/casualGame/basicGame'
 
   public matchMakingId: number = 0
@@ -16,13 +16,18 @@ export default class GameRequest {
 
   public createGame (): Promise<number | void> {
     const prom = axios.post(this.MATCHMAKING).then((response) => {
+      alert('it is looking for a game')
       // const subPath: string = this.API_V1 + '/' + response.data.matchmakingId.toString() + '/matchmaking'
       this.gameId = response.data.gameId
       // this.onGameJoin(subPath, this.setGameId)
       console.log(response)
-      return this.gameId
+
+      return Promise.resolve(response.data.gameId)
     }).catch((error) => {
+      alert('an error occurred')
+      alert(error)
       console.log(error)
+      return Promise.reject(error)
     })
     return prom
   }

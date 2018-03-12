@@ -306,10 +306,15 @@ export default {
       }
       if (choice === 'CompetitivePoker') {
         alert('Lets Compete Poker')
-        // this.instrcutionPokerMode = false
-        // this.showTable = true
+        alert('Lets Compete Poker')
+        this.instrcutionPokerMode = false
+        this.showTable = true
         this.gameReq.createGame().then(() => {
-          router.push({name: 'Table', params: {gameId: this.gameReq.gameId}})
+          alert('I am pushing you to the table view')
+          alert(this.gameReq.gameId)
+          router.push({name: 'TableView', params: {gameId: this.gameReq.gameId}})
+        }).catch(() => {
+          alert('an error occured - there is no GameId returned')
         })
       }
       if (choice === 'CPUChallenge') {
