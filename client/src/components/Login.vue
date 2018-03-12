@@ -45,7 +45,8 @@
   </div>
 </div>
 <!-- Modal -->
-<div class="modal fade" id="Register" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+<div>
+<div  v-show="this.registModal" class="modal fade " id="Register" data-backdrop="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header bg-success text-white">
@@ -67,7 +68,7 @@
               <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon1"><i class="fa fa-user"></i></span>
               </div>
-              <input type="text" class="form-control" placeholder="Username" aria-label="Username/Email" aria-describedby="basic-addon1">
+              <input v-model="RegisterPlayer.username" type="text" class="form-control" placeholder="Username" aria-label="Username/Email" aria-describedby="basic-addon1">
             </div>
           <!--Username input   -->
           <!-- Password Input -->
@@ -75,25 +76,29 @@
               <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon1"><i class="fa fa-lock"></i></span>
               </div>
-              <input type="password" class="form-control" placeholder="Passowrd" aria-label="Username/Email" aria-describedby="basic-addon1">
-            </div>
+              <input v-model="RegisterPlayer.password"  type="password" class="form-control" placeholder="Passowrd" aria-label="Username/Email" aria-describedby="basic-addon1">
+             </div>
           <!--Password input   -->
             <!--Email input   -->
                       <div class="input-group mb-3">
               <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon1">@</span>
               </div>
-              <input type="Email" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="basic-addon1">
+              <input v-model="RegisterPlayer.email" type="Email" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="basic-addon1">
             </div>
           <!--Email input   -->
+          <div v-show="this.isRegistrationError" >
+            <error-messages :Error="this.ErrorMessage "></error-messages>
+            </div>
       </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger ">Register</button>
-        <button type="button" class="btn btn-warning " data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger " @click="AttemptRegister()">Register</button>
+        <button type="button" class="btn btn-warning "  @click="ResetVariables()" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
+</div>
 </div>
 <!--/Modal -->
 
@@ -147,7 +152,9 @@
       </div><!--=======/ Table:System stats=======-->
 <!--=======/Login Card=======-->
 <div class="card border-dark mb-3 mx-auto" style="max-width: 40rem;">
-  <div class="card-header text-left text-white bg-secondary lead"><i class="fa fa-user-circle pr-2 fa-lg"></i> <u>Login</u></div>
+  <div class="card-header text-left text-white bg-secondary lead"><i class="fa fa-user-circle pr-2 fa-lg"></i> <u>Login</u>
+</div>
+  </div>
     <div class="card-body text-dark">
       <form class="needs-validation" ref="theform" action="/#/Lobby">
   <div class="form-group">
@@ -165,6 +172,9 @@
   <div class="form-group">
      <p class="text-right">Forgot password?<br><a  style="text-decoration:none" href=""><i class="fa fa-sign-in"></i> Password reset </a></p>
   </div>
+   <div v-show="this.isLoginError"> 
+   <error-messages :Error="this.ErrorMessage "></error-messages>
+</div>
 </form>
   </div>
 </div><!--=======/Login Card=======-->
@@ -285,22 +295,29 @@
 </div>
 
 <!--===================================================/Row 3================-->
-</div>
+<!-- </div> -->
 
 <!--=======================================================================/Mai nLanding Body========================================================================= -->
 </div>
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
-// import { mapState } from 'vuex'
-import users from '@/store/users.js'
+import { mapActions } from 'vuex' // used for maping actions of the vue store files
+import ErrorMessages from '@/components/WebComponents/ErrorMessages' // ErrorMessages Components
+// import router from '@/router'
 export default {
   data () {
     return {
+      // Representation of a Player Logging in
       Player: {
         username: '',
         password: ''
+      },
+      // Representation of a  player that wants to register
+      RegisterPlayer: {
+        username: '',
+        password: '',
+        email: ''
       },
       Members: 23000,
       gamesToday: 21000,
@@ -308,16 +325,20 @@ export default {
       Level1Members: 3000,
       Level2Members: 6000,
       Level3Members: 1300,
-      LoginSucessful: false,
-      onPage: true,
-      ErrorMessage: users.state.errors.login
+      registerErrorMessage: [],
+      loginErrorMessage: [],
+      isLoginError: false,
+      isRegistrationError: false,
+      ErrorMessage: '',
+      registModal: false
     }
   },
-  computed: {
-    ...mapState({
-      ErrorMessage: 'errors'
-    })
-
+  watch: {
+    registModal () {
+      if (this.registModal === false) {
+        console.log('somthing')
+      }
+    }
   },
   methods: {
     ...mapActions([
@@ -327,17 +348,62 @@ export default {
     ]),
      // Attempts login  givent the requested fields If the fields are empty then return an aerror
     AttemptLogin () {
-      console.log('Phase 1')
+      this.ResetVariables()
       if ((this.Player.username.length === 0) || (this.Player.password.length === 0)) {
-        return
+        this.isLoginError = true
+        this.ErrorMessage = 'Both Fields Must Be Filled'
+        return // Must add CSS for this action
       } else {
-        // this.storeName(this.Player.username)
         this.login(this.Player)
-        // this.ErrorMessage = this.$store.
-        console.log('errors:', this.ErrorMessage[0])
-        console.log('Phase 2')
+        this.loginErrorMessage = this.$store.state.users.errors.login
+        setTimeout(this.checkLoginErrors, 900)
       }
+    },
+    checkLoginErrors () {
+      if ((this.loginErrorMessage.length === 0)) {
+        this.$router.push('Game')
+      }
+      if (this.loginErrorMessage.length > 0) {
+        alert('all done' + this.loginErrorMessage.length)
+        alert('ans is:' + this.loginErrorMessage[0].message)
+        this.ErrorMessage = this.loginErrorMessage[0].message
+        this.isLoginError = true
+        this.$store.state.users.errors.login = []
+      }
+    },
+    AttemptRegister () {
+      this.ResetVariables()
+      if ((this.RegisterPlayer.username.length === 0) || (this.RegisterPlayer.password.length === 0) || (this.RegisterPlayer.email.length === 0)) {
+        this.isRegistrationError = true
+        this.ErrorMessage = 'All fields must Filled'
+        return // Must add CSS for this action
+      } else {
+        this.register(this.RegisterPlayer)
+        this.registerErrorMessage = this.$store.state.users.errors.registration
+        setTimeout(this.checkRegisterErrors, 900)
+      }
+    },
+    checkRegisterErrors () {
+      if ((this.registerErrorMessage.length === 0)) {
+        this.registModal = false
+        this.$router.push('Game')
+      }
+      if (this.registerErrorMessage.length > 0) {
+        alert('all done' + this.registerErrorMessage.length)
+        alert('ans is:' + this.registerErrorMessage[0].message)
+        this.ErrorMessage = this.registerErrorMessage[0].message
+        this.isRegistrationError = true
+        this.$store.state.users.errors.registration = []
+      }
+    },
+    ResetVariables () {
+      this.isRegistrationError = false
+      this.isLoginError = false
+      this.ErrorMessage = ''
     }
+  },
+  components: {
+    errorMessages: ErrorMessages
   }
 }
 </script>
