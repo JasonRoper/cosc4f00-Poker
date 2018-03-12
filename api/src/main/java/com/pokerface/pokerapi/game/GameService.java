@@ -9,7 +9,7 @@ import java.util.List;
  * GameService is the heart of the logic of the Back End. It communicates solely with the Controller, it handles
  * GameIds and GameAction's to modify the gameState and create and then return Transport objects which are then
  * communicated with the Front End users.
- *
+ * <p>
  * It uses a GameRepository which is where it loads and saves GameStates and the changes it has made to them.
  */
 @Service
@@ -40,11 +40,11 @@ public class GameService {
      * This method takes the message from the Controller when an action is received, it takes that action, interprets
      * it, gets the gamestate and calls appropriate methods. It also grabs the player reference at the table matching
      * the id and sends it along.
-     *
+     * <p>
      * After this is completed handleAction then sets that players last action, and advances to the next player.
      *
-     * @param gameID represenative of the gamestate in the database
-     * @param action the action being performed
+     * @param gameID   represenative of the gamestate in the database
+     * @param action   the action being performed
      * @param playerID the playerID who the action is handling, where they sit
      * @return GameUpdateTransport an update for the user to maintain their gamestate
      */
@@ -60,9 +60,9 @@ public class GameService {
             check(gameState, action, player);
         }
 
-        gameState.setLastGameAction(player.getTableSeatID(),action);
+        gameState.setLastGameAction(player.getTableSeatID(), action);
         gameState.nextTurn();
-        games.save(gameState);
+        gameState = games.save(gameState);
         GameStateTransport presentGameStateTransport = getGameStateTransport(gameState);
 
         return presentGameStateTransport;
@@ -109,12 +109,12 @@ public class GameService {
      * fold allows the user to fold, surrendering the hand in question
      *
      * @param gameState gameState where the user is folding
-     * @param action the data of the fold
-     * @param player is the one who is folding
+     * @param action    the data of the fold
+     * @param player    is the one who is folding
      * @return boolean representing if it went through successfully
      */
     public boolean fold(GameState gameState, GameAction action, Player player) {
-        if (player.getHasFolded()==false) {
+        if (player.getHasFolded() == false) {
             gameState.getPlayers().get(player.getTableSeatID()).setHasFolded(true);
             return true;
         } else {
@@ -126,9 +126,9 @@ public class GameService {
     /**
      * ApplyBet takes a players bet and applies it to the gameState
      *
-     * @param gameState the game being bet on
+     * @param gameState    the game being bet on
      * @param playerGameID the id of the player betting
-     * @param bet the bet being applied
+     * @param bet          the bet being applied
      */
     public void applyBet(GameState gameState, int playerGameID, int bet) {
         gameState.matchBet(playerGameID);
@@ -138,20 +138,22 @@ public class GameService {
     /**
      * isRoundEnd checks if the game is at the end of the round,
      * this chains to the actual call by getting the game first
+     *
      * @param gameID the ID of the game being checked
      * @return a chained boolean of if the round has ended
      */
-    public boolean isRoundEnd(long gameID){
+    public boolean isRoundEnd(long gameID) {
         return isRoundEnd(games.findOne(gameID));
     }
 
     /**
      * isRoundEnd returns a boolean value if the Round, the first or second, is at its end as betting has ceased.
+     *
      * @param gameState of the game being checked
      * @return boolean representing if the round is ended
      */
     public boolean isRoundEnd(GameState gameState) {
-        if (gameState.getPresentTurn() == gameState.getLastBet() && gameState.getLastGameActions().get(gameState.getPreviousTurn()).getType() != GameActionType.BET && gameState.getRound()!=3) {
+        if (gameState.getPresentTurn() == gameState.getLastBet() && gameState.getLastGameActions().get(gameState.getPreviousTurn()).getType() != GameActionType.BET && gameState.getRound() != 3) {
             return true;
         }
         return false;
@@ -159,15 +161,17 @@ public class GameService {
 
     /**
      * isHandEnd is a chain called to isHandEnd with the gameState. THis grabs the gamestate
+     *
      * @param gameID the game being grabbed
      * @return boolean return of chain call
      */
-    public boolean isHandEnd(long gameID){
+    public boolean isHandEnd(long gameID) {
         return isHandEnd(games.findOne(gameID));
     }
 
     /**
      * isHandEnd checks if a hand has ended, has everyone but one player folded, or are we at the showdown?
+     *
      * @param gameState the game being checked
      * @return boolean value representing if the game hand has ended
      */
@@ -196,8 +200,8 @@ public class GameService {
      */
     private void addPlayer(long userID, long gameID) {
         GameState game = games.findOne(gameID);
-game.addPlayer(userID);
-        games.save(game);
+        game.addPlayer(userID);
+        game = games.save(game);
     }
 
 
@@ -209,9 +213,9 @@ game.addPlayer(userID);
      * @return the long id of the game they will join
      */
     public long matchmake(long playerID) {
-        long gameID = 0; // 0 is never a legitimate gameID, this allows error checking for unfound game.
+        long gameID = -1; // -1 is never a legitimate gameID, this allows error checking for unfound game.
         gameID = firstAvailableGame();
-        if (gameID == 0) {
+        if (gameID == -1) {
             gameID = createGame();
         }
         return gameID;
@@ -226,7 +230,7 @@ game.addPlayer(userID);
         List<Long> gameIDs;
         gameIDs = games.findOpenGame();
         if (gameIDs.isEmpty()) {
-            return 0;
+            return -1;
         }
         long gameID = gameIDs.get(0);
         return gameID;
@@ -245,6 +249,7 @@ game.addPlayer(userID);
 
     /**
      * getPlayerID returns the seat of the player.
+     *
      * @param gameID the ID of the game in the repository
      * @param userID the id of the user
      * @return int of where the player is sitting
@@ -255,24 +260,26 @@ game.addPlayer(userID);
 
     /**
      * determineWInnings is the call to return a transport of a hand being ended
+     *
      * @param gameID the gameId to determine
      * @return HandEndTransport an object for the Front End communication
      */
-    public HandEndTransport determineWinnings(long gameID){
+    public HandEndTransport determineWinnings(long gameID) {
         GameState gameState = games.findOne(gameID);
         int[] winners = new int[gameState.getPlayerCount()];
         //DETERMINE WINNERS HERE
-        winners=gameState.getPot().resolveWinnings(winners);
-        HandEndTransport handEndTransport = new HandEndTransport(winners,gameState.getPlayers());
+        winners = gameState.getPot().resolveWinnings(winners);
+        HandEndTransport handEndTransport = new HandEndTransport(winners, gameState.getPlayers());
         return handEndTransport;
     }
 
     /**
      * handleRound ensures the round is advanced
+     *
      * @param gameID tbe gameID whose round is being advanced
      * @return the GameStateTransport of the round
      */
-    public GameStateTransport handleRound(long gameID){
+    public GameStateTransport handleRound(long gameID) {
         GameState gameState = games.findOne(gameID);
         games.save(gameState);
         return getGameStateTransport(gameState);
@@ -281,32 +288,35 @@ game.addPlayer(userID);
     /**
      * This is a chain method that takes a gameID to pass on to get a
      * gameStateTransport for helper use of both this and the Controller
+     *
      * @param gameID the gameId that needs a statetransport
      * @return GameStateTransport is a communication object
      */
-    public GameStateTransport getGameStateTransport(long gameID){
+    public GameStateTransport getGameStateTransport(long gameID) {
         GameState gameState = games.findOne(gameID);
         return getGameStateTransport(gameState);
     }
 
     /**
      * getGameStateTransport returns a GameStateTransport object, representing the gameState for the Front End User
+     *
      * @param gameState the gameState that is being turned into a transport
      * @return GameStateTransport object
      */
-    public GameStateTransport getGameStateTransport(GameState gameState){
-        GameStateTransport gameStateTransport = new GameStateTransport(gameState.getCommunityCardOne(),gameState.getCommunityCardTwo(),gameState.getCommunityCardThree(),gameState.getCommunityCardFour(),gameState.getCommunityCardFive(),gameState.getPot().getSum(),gameState.getBigBlind(),null,null,gameState.getPlayers(),gameState.getLastGameActions(),gameState.getPresentTurn());
-return gameStateTransport;
+    public GameStateTransport getGameStateTransport(GameState gameState) {
+        GameStateTransport gameStateTransport = new GameStateTransport(gameState.getCommunityCardOne(), gameState.getCommunityCardTwo(), gameState.getCommunityCardThree(), gameState.getCommunityCardFour(), gameState.getCommunityCardFive(), gameState.getPot().getSum(), gameState.getBigBlind(), null, null, gameState.getPlayers(), gameState.getLastGameActions(), gameState.getPresentTurn());
+        return gameStateTransport;
     }
 
     /**
      * This function returns all gameStates held by the repository and turns them into gameStateTransports
+     *
      * @return iterable object containing all GameStatesTransports of all GameStates
      */
-    public List<GameStateTransport> getGameStateList(){
+    public List<GameStateTransport> getGameStateList() {
         List<GameStateTransport> gameStateTransports = new ArrayList<>();
         Iterable<GameState> gameStates = games.findAll();
-        for (GameState g : gameStates){
+        for (GameState g : gameStates) {
             gameStateTransports.add(getGameStateTransport(g));
         }
         return gameStateTransports;
@@ -314,23 +324,25 @@ return gameStateTransport;
 
     /**
      * Create game takes settings and creates a game with those settings, returning the ID of that game
+     *
      * @param minPlayers the minimum players to start a game
      * @return long ID of the game
      */
-    public long createGame(int minPlayers){
+    public long createGame(int minPlayers) {
         GameState gameState = new GameState();
         gameState.setMinPlayerCount(minPlayers);
-        games.save(gameState);
+        gameState = games.save(gameState);
         return gameState.getId();
     }
 
     /**
      * Deletes game from repository, called when the game is completed or abandoned.
+     *
      * @param gameID of game to delete
      * @return boolean of if game was found and thus deleted
      */
-    public boolean deleteGame(long gameID){
-        if (games.exists(gameID)){
+    public boolean deleteGame(long gameID) {
+        if (games.exists(gameID)) {
             games.delete(gameID);
             return true;
         } else {
@@ -340,13 +352,14 @@ return gameStateTransport;
 
     /**
      * This function exists to remove people who have left the game, or if the game is to be closed.
+     *
      * @param gameID the long ID of the game to remove the player
      * @param userID the long ID of the user to be removed
      * @return if it worked, boolean value
      */
-    public boolean playerLeaveGame(long gameID, long userID){
+    public boolean playerLeaveGame(long gameID, long userID) {
         games.findOne(gameID).removePlayer(userID);
         return true;
     }
 
-    }
+}
