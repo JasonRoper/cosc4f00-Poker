@@ -15,6 +15,12 @@ public class UserTransport {
     private String username;
     private String email;
 
+    /**
+     * This constructor takes an ID, a UserName and an Email to generate a UserTransport
+     * @param id long for the userID
+     * @param username string for their username
+     * @param email string for their email
+     */
     public UserTransport(long id, String username, String email) {
         this.id = id;
         this.username = username;
@@ -23,31 +29,60 @@ public class UserTransport {
 
     public UserTransport(){}
 
+    /**
+     * Returns the username
+     * @return String of username
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     * Sets a username
+     * @param username String representing username to set
+     */
     public void setUsername(String username) {
         this.username = username;
     }
 
 
+    /**
+     * Returns the email
+     * @return a String of the email
+     */
     public String getEmail() {
         return email;
     }
 
+    /**
+     * Sets the email given
+     * @param email String of the email
+     */
     public void setEmail(String email) {
         this.email = email;
     }
 
+    /**
+     * Returns the userID
+     * @return long representing the ID
+     */
     public long getId() {
         return id;
     }
 
+    /**
+     * Sets the ID
+     * @param id long representing the ID of the user
+     */
     public void setId(long id) {
         this.id = id;
     }
 
+    /**
+     * An ovverride for equals, to confirm two user transports are equivalent
+     * @param o is the object being compared
+     * @return whether or not these objects are requivalent
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -60,6 +95,10 @@ public class UserTransport {
         return email != null ? email.equals(that.email) : that.email == null;
     }
 
+    /**
+     * Used for comparison sake
+     * @return the int value of the hash
+     */
     @Override
     public int hashCode() {
         int result = (int) (id ^ (id >>> 32));

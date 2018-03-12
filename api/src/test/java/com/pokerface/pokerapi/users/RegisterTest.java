@@ -9,6 +9,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.Matchers.any;
 
+/**
+ * Test to see if {@link UserService}'s registration code works correctly
+ */
 public class RegisterTest {
     private BCryptPasswordEncoder passwordEncoder;
     private UserRepository mockUserRepository;

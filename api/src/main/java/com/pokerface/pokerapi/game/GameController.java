@@ -1,57 +1,122 @@
 package com.pokerface.pokerapi.game;
 
+import com.pokerface.pokerapi.users.UserInfoTransport;
+import com.pokerface.pokerapi.users.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
-import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.annotation.SendToUser;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
+/**
+ * The GameController serves vital function as the communication hub of the Front End users and the Back End server.
+ *
+ * It exists to receive incoming messages and using the classes and methods of GameService, UserService and AIService
+ * handle those requests and communication the appropriate message or object.
+ *
+ * It uses a combination of REST and STOMP end points for communication, REST for user initiated communication and STOMP
+ * for unprompted communications.
+ */
 @Controller
 public class GameController {
     private static final Logger logger = LoggerFactory.getLogger(GameController.class);
+    private final GameService gameService;
+    private final UserService userService;
+    private final AIService aiService;
+    private final SimpMessagingTemplate messenger;
 
-    GameRepository games;
-
-    @Autowired
-    public void setGameRepository(GameRepository games){
-        this.games = games;
+    public GameController(final GameService gameService,
+                          final UserService userService,
+                          final AIService aiService,
+                          final TaskScheduler taskScheduler,
+                          final SimpMessagingTemplate messenger) {
+        this.gameService = gameService;
+        this.userService = userService;
+        this.aiService = aiService;
+        this.messenger = messenger;
     }
 
-    @MessageMapping("/game/{id}/play")
-    @SendTo("/messages/game/{id}")
-    public GameUpdateTransport play(GameAction action, @DestinationVariable("id") Long id) {
-        GameState state = games.findOne(id);
-        logger.info("recieved play action for " + id);
-        if (state == null) {
-            logger.info("invalid path request: " + id);
-            throw new IllegalArgumentException("invalid id");
+    /**
+     *
+     */
+    @MessageMapping("/game/{game_id}/control")
+    public void receiveManagementAction() {
+
+    }
+
+
+    @MessageMapping("/game/{game_id}")
+    public void receiveAction(GameAction action, @DestinationVariable("game_id") long gameId, Principal principal) {
+
+        UserInfoTransport user = userService.getUser(principal.getName());
+        int playerId = gameService.getPlayerID(gameId, user.getId());
+
+        GameStateTransport nextGameState = handleAction(gameId, action, playerId);
+
+        while (aiService.isAIPlayer(gameId, nextGameState.nextPlayer())) {
+            GameAction aiAction = aiService.playAction(gameId);
+            nextGameState = handleAction(gameId, aiAction, nextGameState.nextPlayer());
+        }
+    }
+
+    private GameStateTransport handleAction(long gameId, GameAction action, int playerId) {
+        GameStateTransport nextGameState = gameService.handleAction(gameId, action, playerId);
+        messenger.convertAndSend("/messages/game/" + gameId, nextGameState);
+
+        if (gameService.isHandEnd(gameId)) {
+            HandEndTransport winners = gameService.determineWinnings(gameId);
+            nextGameState = gameService.getGameState(gameId);
+            messenger.convertAndSend("/messages/game/" + gameId,
+                    nextGameState.reason(GameStateTransport.Reason.HAND_FINISHED,""));
+        } else if (gameService.isRoundEnd(gameId)){
+            nextGameState = gameService.handleRound(gameId);
+            messenger.convertAndSend("/messages/game/" + gameId,
+                    nextGameState.reason(GameStateTransport.Reason.ROUND_FINSHED,""));
         }
 
-//        state.play(action);
-//        games.save(state);
-//        return state.toTransport();
-return null;
+        return nextGameState;
     }
 
-    @MessageExceptionHandler
-    @SendToUser("/messages/errors")
-    public String handleException(IllegalArgumentException e){
-        return e.toString();
-    }
+//    @PostMapping("/api/v1/matchmaking/basicGame")
+//    public void createGame(Principal principal) {
+//        UserInfoTransport user = userService.getUser(principal.getName());
+//        gameService.matchmake(user.getId());
+//
+//    }
+//
+//
+//    @GetMapping("/api/v1/games")
+//    public void getGameListing() {
+//        gameService.getGameStateList();
+//    }
+//
+//    @PostMapping("/api/v1/games")
+//    public void createCasualGame(Principal principal) {
+//        gameService.createGame(10);
+//    }
 
-    @RequestMapping("/game/new/{id}")
-    @ResponseBody
-    public String createGame(@PathVariable("id") long id) {
-        logger.info("new game created at " + id);
-        GameState state = new GameState(id);
-        games.save(state);
-        return "success! game created at " + Long.toString(state.getId());
+    /**
+     * This method getsGameInfo of a specific game and responds with the info the user needs to display it
+     * @param gameID a long value representing the gameState in repository
+     * @return the GameStateTransport of that game
+     */
+    @GetMapping("/api/v1/games/{id}")
+    public GameStateTransport getGameInfo(@PathVariable("id") long gameID) {
+        return gameService.getGameStateTransport(gameID);
     }
+//
+//    @PutMapping("/api/v1/games/{id}")
+//    public void updateGameRules(@PathVariable("id") long gameId) {
+//
+//    }
+//
+//    @DeleteMapping("/api/v1/games/{id}")
+//    public void deleteOwnedGame(@PathVariable("id") long gameID) {
+//        gameService.deleteGame(gameID)
+//    }
 }
