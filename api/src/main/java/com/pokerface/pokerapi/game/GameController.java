@@ -108,8 +108,13 @@ public class GameController {
         gameService.playerLeaveGame(gameID,user.getId());
     }
 
+    /**
+     * casualGameMatchmaking takes requests from the user for a casual matchmaking game and returns the game
+     * @param principal the user requesting a game
+     * @return a GameInfoTransport containing the game info
+     */
    @PostMapping("/api/v1/matchmaking/basicGame")
-   public GameInfoTransport createGame(Principal principal) {       
+   public GameInfoTransport casualGameMatchmaking(Principal principal) {
        UserInfoTransport user = userService.getUser(principal.getName());
        long gameId = gameService.matchmake(user.getId());
         return new GameInfoTransport(gameId);
