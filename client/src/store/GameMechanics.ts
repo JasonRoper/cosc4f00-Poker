@@ -7,11 +7,10 @@ import {
   GameService,
   // GameStarted,
   GameState,
+  GameStateType,
   Player,
   UserCards
-  // GameEventType
 } from '@/api/gameservice'
-
 import actions from '@/types/actions'
 import CardSuite from '@/types/cards'
 import { Action } from 'vuex'
@@ -61,17 +60,9 @@ export default class GameMech {
     this.userId = userId ? userId : null
 
     this.gameService.onGameUpdated(this.setGameTransport)
-    // this.gameService.onGameFinished(this.onGameFinishedEvent)
-    // this.gameService.onGameStarted(this.onGameStartedEvent)
+    this.gameService.onGameFinished(this.onGameFinishedEvent)
     this.gameService.onGameError(this.onGameError)
-    /*
-    public GAME_UPDATES: string
-    public GAME_FINISHED: string // Displays the winners and losers of the hand - and cards
 
-    public GAME_ERROR: string
-    public USER_CARDS: string
-    public USER_ACTIONS: string
-    */
     if (userId) {
       this.gameService.onUserCards(this.onUserCardsEvent)
       this.lobby = false
@@ -98,6 +89,7 @@ export default class GameMech {
       card1: CardSuite.BLANK_CARD,
       card2: CardSuite.BLANK_CARD,
       currentBet: 600,
+      isTurn: false,
       isPlayer: true,
       isDealer: true
     }, {
@@ -108,6 +100,7 @@ export default class GameMech {
       card1: CardSuite.CLUBS_ACE,
       card2: CardSuite.CLUBS_TWO,
       currentBet: 0,
+      isTurn: false,
       isPlayer: false,
       isDealer: false
     }, this.defaultPlayer(), this.defaultPlayer() ,this.defaultPlayer(),this.defaultPlayer()]
@@ -131,6 +124,7 @@ export default class GameMech {
       card1: CardSuite.BLANK_CARD,
       card2: CardSuite.BLANK_CARD,
       currentBet: 0,
+      isTurn: false,
       isPlayer: false,
       isDealer: false
     }
@@ -158,15 +152,6 @@ export default class GameMech {
   }
 
   /**
-   * Handles Game Started Event
-   * @event GameStartedEvent
-   * @param GameStarted the information that you need to start a game
-   * public onGameStartedEvent (gameStarted: GameStarted) {
-   * this.multiplePlayers = gameStarted.multiplePlayers
-   * }
-   */
-
-  /**
    * Handles Game finished event
    * @event GameFinishedEvent
    * @param gameFinished The inforamtion that you need to finish a game
@@ -181,15 +166,6 @@ export default class GameMech {
     }
     this.endGame = true
     return this.endGame
-  }
-
-  /**
-   * Handles when a Community Card is sent to table
-   * @event GameCommunityCardsEvent
-   * @param card The card that is added to the Community Cards
-   */
-  public onGameCommunityCardsEvent (card: string) {
-    this.communityCards.push(card)
   }
 
   /**
@@ -233,6 +209,7 @@ export default class GameMech {
     if (this.validatePreMove(move) && this.userAction === null) {
       this.disableButton(action)
       this.userAction = move
+      this.sendAction()
       return true
     } else {
       this.setTableActions()
@@ -315,11 +292,9 @@ export default class GameMech {
    */
   public sendAction () {
     if (this.userAction !== null) {
-      if (this.storePremove(this.userAction.type, this.userAction.bet)) {
-        if (this.playerLocation === this.turn) {
-          this.send(this.userAction)
-          this.userAction = null
-        }
+      if (this.playerLoc() === this.turn) {
+        this.send(this.userAction)
+        this.userAction = null
       }
     }
   }
@@ -329,37 +304,57 @@ export default class GameMech {
    * @param GameState
    */
   public setGameTransport (gameTransport: GameState) {
-    switch (gameTransport.gameEventType) {
-      /*
-      case GameEventType.HAND_STARTED: { break }
-      case GameEventType.USER_ACTION: { break }
-      case GameEventType.HAND_FINISHED: { break }
-      case GameEventType.ROUND_FINISHED: { break }
-      case GameEventType.USER_JOIN: { break }
-      case GameEventType.USER_LEAVE: { break }
-      */
+
+    switch (gameTransport.gameStateType) {
+      case GameStateType.HAND_STARTED: { // The hand has started
+        this.hasBet = gameTransport.hasBet
+        Object.assign(this.multiplePlayers, gameTransport.multiplePlayers)
+        this.pot = gameTransport.pot
+        Object.assign(this.communityCards, gameTransport.communityCards)
+        break
+      }
+      case GameStateType.USER_ACTION: { // This is sent after a player makes an action
+        this.hasBet = gameTransport.hasBet
+        Object.assign(this.multiplePlayers, gameTransport.multiplePlayers)
+        this.pot = gameTransport.pot
+        break
+      }
+      case GameStateType.HAND_FINISHED: { // Equivalent for a winnder being determined from a hand
+        this.hasBet = gameTransport.hasBet
+        Object.assign(this.multiplePlayers, gameTransport.multiplePlayers)
+        this.pot = gameTransport.pot
+        Object.assign(this.communityCards, gameTransport.communityCards)
+        break
+      }
+      case GameStateType.ROUND_FINISHED: { // All players have bet - this results in a new Community cards
+        this.hasBet = gameTransport.hasBet
+        Object.assign(this.multiplePlayers, gameTransport.multiplePlayers)
+        this.pot = gameTransport.pot
+        Object.assign(this.communityCards, gameTransport.communityCards)
+        break
+      }
+      case GameStateType.USER_JOIN: { // A new player has been added to the game
+        this.hasBet = gameTransport.hasBet
+        Object.assign(this.multiplePlayers, gameTransport.multiplePlayers)
+        this.pot = gameTransport.pot
+        Object.assign(this.communityCards, gameTransport.communityCards)
+        break
+      }
+      case GameStateType.USER_LEAVE: { // A new player has left the game
+        Object.assign(this.multiplePlayers, gameTransport.multiplePlayers)
+        break
+      }
     }
 
-    this.communityCards = gameTransport.communityCards
-    this.hasBet = gameTransport.hasBet
-    this.turn = gameTransport.turn
-
-    Object.assign(this.multiplePlayers, gameTransport.multiplePlayers)
-
-    this.pot = gameTransport.pot
-    // if there is a premove
-    if (this.playerLocation === this.turn) {
+    if (this.playerLoc() === this.turn) {
       if (this.userAction !== null) {
         if (this.validatePreMove(this.userAction)) {
-          const action = (this.userAction).type
-          const bet = (this.userAction).bet
-          this.sendAction()
-          alert('send the action')
+          this.send(this.userAction)
+          alert('sent the action')
         }
       }
     }
     this.setTableActions()
-
   }
 
   public isGameRunning () {
@@ -367,7 +362,7 @@ export default class GameMech {
   }
   // can this game accecpt action from this player
   private send (gameAction: GameAction) {
-    this.gameService.onUserSendAction(gameAction)
+    this.gameService.userSendAction(gameAction)
   }
 
 }

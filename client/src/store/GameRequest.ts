@@ -10,7 +10,6 @@ export default class GameRequest {
   public MATCHMAKING: string = API_V1 + '/matchmaking/basicGame'
   public JOINGAME: string = API_V1 + '/casualGame/basicGame'
 
-
   public matchMakingId: number = 0
   public gameId: number = -1
   // private onGameJoinCallback: GameJoinCallback

@@ -53,12 +53,11 @@ export interface GameError {
  */
 export interface GameState {
   hasBet: boolean
-  turn: number
   multiplePlayers: PlayerWithoutCards[]
   gameId: number
   pot: number
   communityCards: string[]
-  gameEventType: GameStateType // This is every time that the GAME has UPDATED
+  gameStateType: GameStateType // This is every time that the GAME has UPDATED
 }
 
 /**
@@ -72,6 +71,7 @@ export interface Player {
   card1: string
   card2: string
   currentBet: number
+  isTurn: boolean
   isPlayer: boolean
   isDealer: boolean
 }
@@ -85,6 +85,7 @@ export interface PlayerWithoutCards {
   name: string
   action: GameAction | null
   currentBet: number
+  isTurn: boolean
   isPlayer: boolean
   isDealer: boolean
 }
@@ -102,20 +103,16 @@ export enum GameStateType {
   USER_LEAVE = 'USER_LEAVE' // A new player has left the game
 }
 
+/**
+ * The Event the delivers the users cards
+ * @event - deals users cards
+ */
 export enum UserEventType {
   USER_CARDS = 'USER_CARDS'
 }
-/*
-export interface GameEvent {
-  event: GameEventType,
-  payload: any
-}
-*/
-export interface UserEvent {
-  event: UserEventType,
-  payload: any
-}
-
+/**
+ * Holds different types of Game Actions that a user can make
+ */
 export enum GameActionType {
   BET = 'BET',
   CALL = 'CALL',
@@ -123,17 +120,17 @@ export enum GameActionType {
   FOLD = 'FOLD',
   RAISE = 'RAISE'
 }
-
+/**
+ * Holds Game Actions that a user can make
+ */
 export interface GameAction {
   type: GameActionType,
   bet: number
 }
 
 export type GameUpdatedCallback = (newState: GameState) => void
-export type GameFinishedCallback = (HandFinished: GameFinished) => void
-
+export type GameFinishedCallback = (gameFinished: GameFinished) => void
 export type GameErrorCallback = (gameError: GameError) => void
-
 export type UserCardsCallback = (userCards: UserCards) => void
 export type UserActionsCallback = (action: GameAction) => void
 
@@ -176,7 +173,7 @@ export class GameService {
    * Register a callback to be called when the hand is finished
    * @param callback - will be called when the hand is finished
    */
-  public onHandFinished (callback: GameFinishedCallback) {
+  public onGameFinished (callback: GameFinishedCallback) {
     PokerClient.switchCallback(
       this.gamePaths.GAME_FINISHED,
       this.onGameFinishedCallback,
@@ -211,13 +208,13 @@ export class GameService {
    * Send an action to the server. (Note: this does not manage permissions)
    * @param {GameAction} action - the action that is being taken
    */
-  public onUserSendAction (action: GameAction) {
+  public userSendAction (action: GameAction) {
     PokerClient.send(this.gamePaths.USER_ACTIONS, action)
   }
 
   /**
    * Switch the GameService to begin listening to a different game
-   * @param {Integer} gameId - the id of the new game to be watched
+   * @param {Number} gameId - the id of the new game to be watched
    */
   public switchGame (gameId: number) {
     const newPaths = new GamePaths(gameId)
@@ -246,11 +243,6 @@ export class GameService {
       this.onUserCards
     )
 
-    PokerClient.switchPath(
-      this.gamePaths.USER_ACTIONS,
-      newPaths.USER_ACTIONS,
-      this.onUserSendAction
-    )
     this.gamePaths = newPaths
     this.gameId = gameId
   }
@@ -264,10 +256,10 @@ export class GameService {
    */
   public finish () {
     PokerClient.unsubscribeOn(this.gamePaths.GAME_UPDATES, this.onGameUpdatedCallback)
-    PokerClient.unsubscribeOn(this.gamePaths.GAME_FINISHED, this.onHandFinished)
+    PokerClient.unsubscribeOn(this.gamePaths.GAME_FINISHED, this.onGameFinished)
 
     PokerClient.unsubscribeOn(this.gamePaths.GAME_ERROR, this.onGameError)
     PokerClient.unsubscribeOn(this.gamePaths.USER_CARDS, this.onUserCards)
-    PokerClient.unsubscribeOn(this.gamePaths.USER_ACTIONS, this.onUserSendAction)
+
   }
 }
