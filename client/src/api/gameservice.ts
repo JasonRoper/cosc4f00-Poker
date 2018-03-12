@@ -141,11 +141,11 @@ export class GameService {
   private gameId: number
   private gamePaths: GamePaths
 
-  private onGameUpdatedCallback: GameUpdatedCallback
-  private onGameFinishedCallback: GameFinishedCallback
-  private onGameErrorCallback: GameErrorCallback
-  private onUserEventCallback: UserCardsCallback
-  private onUserActionsCallback: UserActionsCallback
+  private onGameUpdatedCallback: GameUpdatedCallback | null = null
+  private onGameFinishedCallback: GameFinishedCallback | null = null
+  private onGameErrorCallback: GameErrorCallback | null = null
+  private onUserCardsCallback: UserCardsCallback | null = null
+  private onUserActionsCallback: UserActionsCallback | null = null
 
   /**
    * Create a GameService to manage access to the game at gameId
@@ -199,9 +199,9 @@ export class GameService {
   public onUserCards (callback: UserCardsCallback) {
     PokerClient.switchCallback(
       this.gamePaths.USER_CARDS,
-      this.onUserEventCallback,
+      this.onUserCardsCallback,
       callback)
-    this.onUserEventCallback = callback
+    this.onUserCardsCallback = callback
   }
 
   /**
@@ -234,13 +234,13 @@ export class GameService {
     PokerClient.switchPath(
       this.gamePaths.GAME_ERROR,
       newPaths.GAME_ERROR,
-      this.onGameError
+      this.onGameErrorCallback
     )
 
     PokerClient.switchPath(
       this.gamePaths.USER_CARDS,
       newPaths.USER_CARDS,
-      this.onUserCards
+      this.onUserCardsCallback
     )
 
     this.gamePaths = newPaths
@@ -256,9 +256,9 @@ export class GameService {
    */
   public finish () {
     PokerClient.unsubscribeOn(this.gamePaths.GAME_UPDATES, this.onGameUpdatedCallback)
-    PokerClient.unsubscribeOn(this.gamePaths.GAME_FINISHED, this.onGameFinished)
+    PokerClient.unsubscribeOn(this.gamePaths.GAME_FINISHED, this.onGameFinishedCallback)
 
-    PokerClient.unsubscribeOn(this.gamePaths.GAME_ERROR, this.onGameError)
+    PokerClient.unsubscribeOn(this.gamePaths.GAME_ERROR, this.onGameErrorCallback)
     PokerClient.unsubscribeOn(this.gamePaths.USER_CARDS, this.onUserCards)
 
   }

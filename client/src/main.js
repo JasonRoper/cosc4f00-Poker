@@ -21,4 +21,4 @@ new Vue({
 window.axios = axios
 window.commit = store.commit
 window.dispatch = store.dispatch
-
+window.store = store

@@ -101,7 +101,7 @@ class PokerClient {
   private socket: webstomp.Client
   private subscriberMap: Map<string, Subscription>
   private state: WebsocketState
-  private unsentMessages: Array<{path: string, payload: any}>
+  private unsentMessages: Array<{ path: string, payload: any}>
 
   /**
    * Creates a Stomp websocket client.
@@ -138,7 +138,6 @@ class PokerClient {
       this.state = WebsocketState.ERROR
       console.log('failed to connect to websocket at %s', websocketPath)
     }
-
     this.socket.connect({}, connectCallback, errorCallback)
   }
 
@@ -168,7 +167,7 @@ class PokerClient {
       this.socket.send(path, JSON.stringify(payload))
     } else if (this.errorOccurred()) {
       console.log('Websocket(%s): socket in error state, cannot send data {path: %s, payload: %s}',
-      this.websocketPath, path, payload)
+        this.websocketPath, path, payload)
     } else {
       console.log('Websocket(%s): socket not connected yet, enqueuing message', this.websocketPath)
       this.unsentMessages.push({ path, payload: JSON.stringify(payload) })
@@ -194,10 +193,12 @@ class PokerClient {
    * @param path - the path that will be unsubscribed from
    * @param callback - the callback that will be unsubscribed
    */
-  public unsubscribeOn (path: string, callback: EventCallback) {
+  public unsubscribeOn (path: string, callback: EventCallback | null) {
     const subscription = this.subscriberMap.get(path)
     if (subscription) {
-      subscription.removeCallback(callback)
+      if (callback !== null) {
+        subscription.removeCallback(callback)
+      }
       if (subscription.subscribers() === 0) {
         subscription.unsubscribeSocket()
         this.subscriberMap.delete(path)
@@ -213,10 +214,18 @@ class PokerClient {
    * @param newCallback - the new callback that will be called upon
    * events at newPath
    */
-  public switchSubscription (prevPath: string, prevCallback: EventCallback,
-                             newPath: string, newCallback: EventCallback) {
-    this.unsubscribeOn(prevPath, prevCallback)
-    this.subscribeOn(newPath, newCallback)
+  public switchSubscription (
+    prevPath: string,
+    prevCallback: EventCallback | null,
+    newPath: string,
+    newCallback: EventCallback | null) {
+
+    if (prevCallback !== null) {
+      this.unsubscribeOn(prevPath, prevCallback)
+    }
+    if (newCallback !== null) {
+      this.subscribeOn(newPath, newCallback)
+    }
   }
 
   /**
@@ -225,8 +234,10 @@ class PokerClient {
    * @param newPath - the new path that will be subscribed to
    * @param callback - the previous callback
    */
-  public switchPath (prevPath: string, newPath: string, callback: EventCallback) {
-    this.switchSubscription(prevPath, callback, newPath, callback)
+  public switchPath (prevPath: string, newPath: string, callback: EventCallback | null) {
+    if (callback !== null) {
+      this.switchSubscription(prevPath, callback, newPath, callback)
+    }
   }
 
   /**
@@ -235,7 +246,7 @@ class PokerClient {
    * @param prevCallback - the callback that was subscribed to
    * @param newCallback - the new callback that will replace the old callback
    */
-  public switchCallback (path: string, prevCallback: EventCallback, newCallback: EventCallback) {
+  public switchCallback (path: string, prevCallback: EventCallback | null, newCallback: EventCallback | null) {
     this.switchSubscription(path, prevCallback, path, newCallback)
   }
 }
