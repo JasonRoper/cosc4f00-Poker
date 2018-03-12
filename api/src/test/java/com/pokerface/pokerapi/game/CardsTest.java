@@ -5,14 +5,20 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * Test to see if the {@link Card} helper methods are functioning correctly.
+ */
 public class CardsTest {
 
+    /**
+     * Test to see if {@link Card#next()} produces the correct result.
+     */
     @Test
     public void testNext(){
         TestCase[] testCases = new TestCase[]{
                 new TestCase<Card,Card>("two to three", Card.CLUBS_TWO, Card.CLUBS_THREE),
                 new TestCase<Card,Card>("king to ace", Card.CLUBS_KING, Card.CLUBS_ACE),
-                new TestCase<Card,Card>("ace to null", Card.CLUBS_ACE, Card.CLUBS_TWO),
+                new TestCase<Card,Card>("ace to two", Card.CLUBS_ACE, Card.CLUBS_TWO),
         };
 
         for (TestCase<Card,Card> testCase : testCases) {
@@ -20,6 +26,9 @@ public class CardsTest {
         }
     }
 
+    /**
+     * Test to see if {@link Card#rank} correctly gives the correct rank of the cards
+     */
     @Test
     public void testRank(){
         TestCase[] testCases = new TestCase[]{
@@ -34,6 +43,9 @@ public class CardsTest {
         }
     }
 
+    /**
+     * Test to see if {@link Card#suit} correctly produces the suit of the card.
+     */
     @Test
     public void testSuit(){
         TestCase[] testCases = new TestCase[]{

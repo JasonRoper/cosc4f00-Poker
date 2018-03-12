@@ -20,6 +20,9 @@ import java.io.IOException;
 
 import static org.junit.Assert.*;
 
+/**
+ * Test to see if user registration works correctly
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class RegisterTest {
@@ -36,6 +39,11 @@ public class RegisterTest {
     @After
     public void clearUsers() {
         userRepository.deleteAll();
+    }
+
+    @Before
+    public void setUp(){
+        restTemplate = restTemplate.withBasicAuth("admin", "admin");
     }
 
     @Test

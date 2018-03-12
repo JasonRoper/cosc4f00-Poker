@@ -105,6 +105,14 @@ public class GameStateTransport {
 
         }
 
+        /**
+         * Construct a {@link PlayerTransport} with the given data
+         * @param id the player id of this player
+         * @param money the amount of money this player has
+         * @param action the last action that this player took
+         * @param isPlayer whether or not the player is a player or an AI
+         * @param isDealer whether or not this player is the dealer
+         */
         public PlayerTransport(int id, int money, GameAction action, boolean isPlayer, boolean isDealer) {
             this.id = id;
             this.money = money;
@@ -114,6 +122,10 @@ public class GameStateTransport {
         }
     }
 
+    /**
+     * {@link GameStateTransport.Reason} are all of the reasons that the {@link GameStateTransport} can be
+     * sent for.
+     */
     public enum Reason {
         HAND_STARTED,
         PLAYER_ACTION,

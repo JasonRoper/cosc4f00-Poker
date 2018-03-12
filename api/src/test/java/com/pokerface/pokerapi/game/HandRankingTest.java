@@ -1,5 +1,6 @@
 package com.pokerface.pokerapi.game;
 
+import com.pokerface.pokerapi.util.TestCase;
 import org.junit.Test;
 import org.springframework.data.util.Pair;
 
@@ -8,12 +9,18 @@ import java.util.Arrays;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+/**
+ * {@link HandRankingTest} checks to see if {@link HandRanking} is ranking hands correctly.
+ */
 public class HandRankingTest {
 
+    /**
+     * Test to see if a Royal flush is correctly identified by {@link HandRanking}
+     */
     @Test
     public void testRoyalFlush() {
         TestCase[] testCases = new TestCase[]{
-                new TestCase(new Card[]{Card.SPADES_JACK, Card.SPADES_ACE,
+                new TestCase<>(new Card[]{Card.SPADES_JACK, Card.SPADES_ACE,
                         Card.SPADES_QUEEN, Card.SPADES_TEN, Card.SPADES_KING,
                         Card.DIAMONDS_QUEEN, Card.SPADES_SIX}, HandRanking.Type.ROYAL_FLUSH),
 
@@ -22,10 +29,13 @@ public class HandRankingTest {
         testRanking(testCases);
     }
 
+    /**
+     * Test to see if a straight flush is correctly identified by {@link HandRanking}
+     */
     @Test
     public void testStraightFlush() {
         TestCase[] testCases = new TestCase[]{
-                new TestCase(new Card[]{Card.HEARTS_ACE, Card.HEARTS_TWO,
+                new TestCase<>(new Card[]{Card.HEARTS_ACE, Card.HEARTS_TWO,
                         Card.HEARTS_FIVE, Card.HEARTS_FOUR, Card.HEARTS_THREE,
                         Card.SPADES_SIX, Card.DIAMONDS_TWO}, HandRanking.Type.STRAIGHT_FLUSH),
         };
@@ -33,10 +43,13 @@ public class HandRankingTest {
         testRanking(testCases);
     }
 
+    /**
+     * Test to see if a four of a kind is correctly identified by {@link HandRanking}
+     */
     @Test
     public void testFourOfAKind() {
         TestCase[] testCases = new TestCase[]{
-                new TestCase(new Card[]{Card.DIAMONDS_SIX, Card.DIAMONDS_TWO,
+                new TestCase<>(new Card[]{Card.DIAMONDS_SIX, Card.DIAMONDS_TWO,
                         Card.DIAMONDS_FOUR, Card.SPADES_SIX, Card.HEARTS_SIX,
                         Card.SPADES_QUEEN, Card.CLUBS_SIX}, HandRanking.Type.FOUR_OF_A_KIND),
         };
@@ -44,10 +57,13 @@ public class HandRankingTest {
         testRanking(testCases);
     }
 
+    /**
+     * Test to see if a full house is correctly identified by {@link HandRanking}
+     */
     @Test
     public void testFullHouse() {
         TestCase[] testCases = new TestCase[]{
-                new TestCase(new Card[]{Card.SPADES_JACK, Card.HEARTS_JACK,
+                new TestCase<>(new Card[]{Card.SPADES_JACK, Card.HEARTS_JACK,
                         Card.SPADES_QUEEN, Card.HEARTS_QUEEN, Card.DIAMONDS_QUEEN,
                         Card.DIAMONDS_ACE, Card.DIAMONDS_SEVEN}, HandRanking.Type.FULL_HOUSE),
 
@@ -56,10 +72,13 @@ public class HandRankingTest {
         testRanking(testCases);
     }
 
+    /**
+     * Test to see if a flush is correctly identified by {@link HandRanking}
+     */
     @Test
     public void testFlush() {
         TestCase[] testCases = new TestCase[]{
-                new TestCase(new Card[]{Card.HEARTS_ACE, Card.HEARTS_JACK,
+                new TestCase<>(new Card[]{Card.HEARTS_ACE, Card.HEARTS_JACK,
                         Card.HEARTS_QUEEN, Card.HEARTS_FOUR, Card.HEARTS_THREE,
                         Card.SPADES_SIX, Card.DIAMONDS_TWO}, HandRanking.Type.FLUSH),
 
@@ -68,21 +87,24 @@ public class HandRankingTest {
         testRanking(testCases);
     }
 
+    /**
+     * Test to see if a straight is correctly identified by {@link HandRanking}
+     */
     @Test
     public void testStraight() {
         TestCase[] testCases = new TestCase[]{
-                new TestCase(new Card[]{Card.HEARTS_FIVE, Card.DIAMONDS_TWO,
+                new TestCase<>(new Card[]{Card.HEARTS_FIVE, Card.DIAMONDS_TWO,
                         Card.DIAMONDS_FOUR, Card.SPADES_SIX, Card.HEARTS_THREE,
                         Card.SPADES_QUEEN, Card.CLUBS_FIVE}, HandRanking.Type.STRAIGHT),
 
                 // there is a special case where if the high card is the last element
                 // of the straight, there may be an issue.
-                new TestCase(new Card[]{Card.HEARTS_FIVE, Card.DIAMONDS_TWO,
+                new TestCase<>(new Card[]{Card.HEARTS_FIVE, Card.DIAMONDS_TWO,
                         Card.DIAMONDS_FOUR, Card.SPADES_SIX, Card.HEARTS_THREE,
                         Card.SPADES_ACE, Card.CLUBS_FIVE}, HandRanking.Type.STRAIGHT),
 
                 // need to check the wrap around on KING -> ACE
-                new TestCase(new Card[]{Card.HEARTS_FIVE, Card.DIAMONDS_TWO,
+                new TestCase<>(new Card[]{Card.HEARTS_FIVE, Card.DIAMONDS_TWO,
                         Card.CLUBS_TEN, Card.HEARTS_JACK, Card.DIAMONDS_QUEEN,
                         Card.SPADES_KING, Card.CLUBS_ACE}, HandRanking.Type.STRAIGHT),
         };
@@ -90,10 +112,13 @@ public class HandRankingTest {
         testRanking(testCases);
     }
 
+    /**
+     * Test to see if a three of a kind is correctly identified by {@link HandRanking}
+     */
     @Test
     public void testThreeOfAKind() {
         TestCase[] testCases = new TestCase[]{
-                new TestCase(new Card[]{Card.HEARTS_SIX, Card.DIAMONDS_TWO,
+                new TestCase<>(new Card[]{Card.HEARTS_SIX, Card.DIAMONDS_TWO,
                         Card.DIAMONDS_FOUR, Card.SPADES_SIX, Card.HEARTS_ACE,
                         Card.SPADES_QUEEN, Card.CLUBS_SIX}, HandRanking.Type.THREE_OF_A_KIND),
 
@@ -102,10 +127,13 @@ public class HandRankingTest {
         testRanking(testCases);
     }
 
+    /**
+     * Test to see if two pair is correctly identified by {@link HandRanking}
+     */
     @Test
     public void testTwoPair() {
         TestCase[] testCases = new TestCase[]{
-                new TestCase(new Card[]{Card.HEARTS_SEVEN, Card.DIAMONDS_TWO,
+                new TestCase<>(new Card[]{Card.HEARTS_SEVEN, Card.DIAMONDS_TWO,
                         Card.DIAMONDS_FOUR, Card.SPADES_SIX, Card.HEARTS_ACE,
                         Card.SPADES_FOUR, Card.CLUBS_SIX}, HandRanking.Type.TWO_PAIR),
         };
@@ -113,10 +141,13 @@ public class HandRankingTest {
         testRanking(testCases);
     }
 
+    /**
+     * test to see if one pair is correctly identified by {@link HandRanking}
+     */
     @Test
     public void testOnePair() {
         TestCase[] testCases = new TestCase[]{
-                new TestCase(new Card[]{Card.HEARTS_SEVEN, Card.DIAMONDS_TWO,
+                new TestCase<>(new Card[]{Card.HEARTS_SEVEN, Card.DIAMONDS_TWO,
                         Card.DIAMONDS_FOUR, Card.SPADES_SIX, Card.HEARTS_ACE,
                         Card.SPADES_FOUR, Card.SPADES_KING}, HandRanking.Type.ONE_PAIR),
 
@@ -125,10 +156,13 @@ public class HandRankingTest {
         testRanking(testCases);
     }
 
+    /**
+     * Test to see if high card hand is correctly identified by {@link HandRanking}
+     */
     @Test
     public void testHighCard() {
         TestCase[] testCases = new TestCase[]{
-                new TestCase(new Card[]{Card.HEARTS_SEVEN, Card.DIAMONDS_TWO,
+                new TestCase<>(new Card[]{Card.HEARTS_SEVEN, Card.DIAMONDS_TWO,
                         Card.DIAMONDS_FOUR, Card.SPADES_SIX, Card.HEARTS_ACE,
                         Card.SPADES_NINE, Card.SPADES_KING}, HandRanking.Type.HIGH_CARD),
         };
@@ -136,15 +170,23 @@ public class HandRankingTest {
         testRanking(testCases);
     }
 
-    public void testRanking(TestCase[] testCases) {
-        for (TestCase testCase : testCases) {
-            HandRanking ranking = new HandRanking(Arrays.asList(testCase.hand));
+    /**
+     * Test a list of TestCases containing a list of {@link Card}s, and the expected {@link HandRanking.Type}
+     * that the hand should be ranked as
+     * @param testCases the testCases to test
+     */
+    private void testRanking(TestCase<Card[],HandRanking.Type>[] testCases) {
+        for (TestCase<Card[],HandRanking.Type> testCase : testCases) {
+            HandRanking ranking = new HandRanking(Arrays.asList(testCase.getInput()));
 
-            assertEquals("Failed to correctly rank " + testCase.result.toString(),
-                    testCase.result, ranking.getHandType());
+            assertEquals("Failed to correctly rank " + testCase.getCorrectResult().toString(),
+                    testCase.getCorrectResult(), ranking.getHandType());
         }
     }
 
+    /**
+     * Test to see if two hands contain a straight flush, the straight flush with the high card wins.
+     */
     @Test
     public void testStraightFlushTieBreaker() {
         Pair[] testCases = new Pair[]{
@@ -164,6 +206,11 @@ public class HandRankingTest {
         }
     }
 
+    /**
+     * Test to see if two hands contain a four of a kind, the hand with the highest four of a kind wins,
+     * and if they are the same (in the event of the four of a kind being in the community cards) the
+     * remaining high card is then compared, otherwise, tie.
+     */
     @Test
     public void testFourOfAKindTieBreaker() {
         Pair[] testCases = new Pair[]{
@@ -192,6 +239,10 @@ public class HandRankingTest {
         }
     }
 
+    /**
+     * Test to see if two hands contain a full house, the hand with the highest 3 of a kind is wins, and
+     * if it ties, then the hand with with the highest pair wins, otherwise, tie.
+     */
     @Test
     public void testFullHouseTieBreaker() {
         Pair[] testCases = new Pair[]{
@@ -211,6 +262,9 @@ public class HandRankingTest {
         }
     }
 
+    /**
+     * Test to see that if two hand contain a flush, the flush with the highest cards wins.
+     */
     @Test
     public void testFlushTieBreaker() {
         Pair[] testCases = new Pair[]{
@@ -230,6 +284,9 @@ public class HandRankingTest {
         }
     }
 
+    /**
+     * Test to see that if two hands contain a straight, the straight with the highest card wins.
+     */
     @Test
     public void testStraightTieBreaker() {
         Pair[] testCases = new Pair[]{
@@ -249,6 +306,10 @@ public class HandRankingTest {
         }
     }
 
+    /**
+     * Test to see that if two hands contain a 3 of a kind, the hand that contains the highest 3 of a kind
+     * wins, and if they tie, then each hand is ranked by high card twice, otherwise, tie.
+     */
     @Test
     public void testThreeOfAKindTieBreaker() {
         Pair[] testCases = new Pair[]{
@@ -277,6 +338,10 @@ public class HandRankingTest {
         }
     }
 
+    /**
+     * Test to see that if two hands contain two pairs, the hand that contains a higher pair wins. If both
+     * hand have the same pairs, the hand with the highest remaining card wins, otherwise, tie.
+     */
     @Test
     public void testTwoPairTieBreaker() {
         Pair[] testCases = new Pair[]{
@@ -305,6 +370,11 @@ public class HandRankingTest {
         }
     }
 
+    /**
+     * Test to see that if two hands contain a pair, the hand that contains the higher pair wins. If both
+     * hands have the same pair, the player with the highest card wins, if they tie, tie break by high card
+     * two more times, then tie.
+     */
     @Test
     public void testOnePairTieBreaker() {
         Pair[] testCases = new Pair[]{
@@ -342,6 +412,10 @@ public class HandRankingTest {
         }
     }
 
+    /**
+     * Test to see that if two hands do not contain any hand, they are ranked by high card 5 times, otherwise
+     * tie.
+     */
     @Test
     public void testHighCardTieBreaker() {
         Pair[] testCases = new Pair[]{
@@ -371,7 +445,15 @@ public class HandRankingTest {
         }
     }
 
-    public void testTieBreaker(HandRanking.Type type, Card[] winner, Card[] looser) {
+    /**
+     * find out if given two hands, that they are the same hand (of {@code type}), and that the winner hand
+     * is always ranked above the looser hand.
+     *
+     * @param type the type of hand that both winner and looser are expected to be
+     * @param winner the hand that should win among the two hands
+     * @param looser the hand that should loose among the two hands
+     */
+    private void testTieBreaker(HandRanking.Type type, Card[] winner, Card[] looser) {
         HandRanking winnerRanking = new HandRanking(Arrays.asList(winner));
         HandRanking looserRanking = new HandRanking(Arrays.asList(looser));
 
@@ -384,19 +466,13 @@ public class HandRankingTest {
         assertTrue("looser didn't tie with themselves", looserRanking.compareTo(looserRanking) == 0);
     }
 
+    /**
+     * Test to see if {@link HandRanking} functions when given only one card
+     */
     @Test
     public void testLessThanSevenCards() {
         HandRanking ranking = new HandRanking(Arrays.asList(Card.SPADES_KING));
         assertEquals(HandRanking.Type.HIGH_CARD, ranking.getHandType());
     }
 
-    public class TestCase {
-        Card[] hand;
-        HandRanking.Type result;
-
-        public TestCase(Card[] hand, HandRanking.Type result) {
-            this.hand = hand;
-            this.result = result;
-        }
-    }
 }

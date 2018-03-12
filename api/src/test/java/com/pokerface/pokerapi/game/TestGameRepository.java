@@ -9,6 +9,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.Assert.*;
 
+/**
+ * Test to see if {@link GameRepository} is functioning correctly
+ */
 @RunWith(SpringRunner.class)
 @DataJpaTest
 public class TestGameRepository {

@@ -11,6 +11,10 @@ public class UserInfoTransport {
     private long id;
     private String username;
 
+    /**
+     * Create an new {@link UserInfoTransport} from the given {@link User}
+     * @param user the user to create this UserInfoTransport from
+     */
     public UserInfoTransport(User user) {
         this.username = user.getUsername();
         this.id = user.getId();

@@ -13,6 +13,10 @@ public class GameServiceTest {
     GameService gameService;
     GameRepository gameRepository;
 
+    /**
+     * Before each test, mock the {@link GameRepository}, and create the {@link GameService}
+     * to be tested test.
+     */
     @Before
     public void setUp(){
         gameRepository=Mockito.mock(GameRepository.class);

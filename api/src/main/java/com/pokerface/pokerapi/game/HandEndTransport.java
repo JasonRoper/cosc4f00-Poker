@@ -3,7 +3,7 @@ package com.pokerface.pokerapi.game;
 import java.util.List;
 
 /**
- * HandEndTransport is the object the sends whena hand ends and people have won money
+ * HandEndTransport is the object the sends when a hand ends and people have won money
  */
 public class HandEndTransport {
     int[] winnings;
@@ -26,6 +26,10 @@ public class HandEndTransport {
 
     }
 
+    /**
+     * A {@link HandEndTransport.PlayerTransport} represents the cards of a player. It is used to deliver
+     * the cards that a player has at the end of a hand.
+     */
     private class PlayerTransport{
         Card cardOne;
         Card cardTwo;
@@ -34,6 +38,12 @@ public class HandEndTransport {
 
         }
 
+        /**
+         * Create a {@link HandEndTransport.PlayerTransport} with the given cards
+         *
+         * @param cardOne the players first card
+         * @param cardTwo the players second card
+         */
         public PlayerTransport(Card cardOne, Card cardTwo){
             this.cardOne=cardOne;
             this.cardTwo=cardTwo;
