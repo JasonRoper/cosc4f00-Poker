@@ -19,7 +19,7 @@ public class WebsocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
      * <p>
      * assign the {@code /app} prefix to all application handlers, and enable the message broker
      * on {@code /messages }.
-     * @param registry
+     * @param registry the registry to configure.
      */
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
@@ -33,7 +33,7 @@ public class WebsocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
      * This sets the websocket connection to be on {@code /live} and that http://localhost:8081 (the
      * dev server) can connect to this path.
      *
-     * @param registry
+     * @param registry the registry to configure.
      */
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
