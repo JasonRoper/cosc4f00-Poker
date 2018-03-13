@@ -1,10 +1,36 @@
+/**
+ * PockerClient is connects to the websocket and provides an interface that
+ * allows any number of subscriptions to any number of STOMP paths. When a
+ * message is recieved on a path, every subscriber is messaged with the object
+ * that was received.
+ *
+ * PokerClient is a singleton. It is used by importing this module as default.
+ * @example
+ * ```typescript
+ * import PokerClient from '@/api/pokerclient'
+ *
+ * PokerClient.subscribeOn("/a/STOMP/path", function(result) {
+ *   console.log("A message was received: ", result)
+ *   handleResult(result)
+ * })
+ *
+ * PokerClient.send("/another/STOMP/path", {message: "this is a message"})
+ * ```
+ *
+ * Various helper methods are provided to allow easy switching between paths,
+ * and swapping out subscribing functions.
+ */
+
+/**
+ * The path that we connect to is defined in the frontend configuration.
+ */
 import { WEBSOCKET_PATH } from '@/config'
 import webstomp from 'webstomp-client'
 
 type EventCallback = (payload: any) => void
 
 /**
- * Used to manage multiple subscriptions to the websocket.
+ * Subscription is used to manage multiple subscriptions to the websocket.
  */
 class Subscription {
   private path: string

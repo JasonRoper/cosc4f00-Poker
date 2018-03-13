@@ -1,3 +1,11 @@
+/**
+ * The main module initializes the Vue application. It sets App.vue as the root vue node, and
+ * add the Vuex store and the router to the application.
+ */
+
+ /**
+  * Include vue
+  */
 import Vue from 'vue'
 import App from './App'
 import router from './router'
