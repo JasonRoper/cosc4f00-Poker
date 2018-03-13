@@ -1,20 +1,39 @@
+/**
+ * Game Mechanics Class Requests a TableView
+ * A game is joined through subscribing to the necessary STOMP endpoints. 
+ * The Game Mechanics provides all of the information necessary to show a table
+ * Through the subscriptions from game Mechanics it receives new states and can 
+ * send user actions. 
+ * 
+ * For example, when the game is going to be finished and winner must be 
+ * decided a message is received by the GameMechanics indicating this. 
+ */
 
+/**
+ * GameMechanics uses Game service to send and receive updates 
+ */
 import {
   GameAction,
   GameActionType,
   GameError,
   GameFinished,
   GameService,
-  // GameStarted,
   GameState,
   GameStateType,
   Player,
   UserCards
 } from '@/api/gameservice'
-import actions from '@/types/actions'
+
+/**
+ * Import Card Suite that holds all Card Varients
+ */
 import CardSuite from '@/types/cards'
 import { Action } from 'vuex'
 
+/**
+ * Manages all interactions between the game and the server
+ * @class - Game Mechanics Class
+ */
 export default class GameMech {
   public gameId: number
 
@@ -27,10 +46,7 @@ export default class GameMech {
   public pot: number = 0
   public communityCards: string[] = []
   public userId: number | null
-  public playerLocation: number = -1
   public userAction: GameAction | null = null
-
-  public tableAction: GameActionType[] = []
 
   public endGame: boolean = false
 
@@ -63,14 +79,14 @@ export default class GameMech {
     this.gameService.onGameFinished(this.onGameFinishedEvent)
     this.gameService.onGameError(this.onGameError)
 
+    // Verifies if a user Id was passed
     if (userId) {
+      // Allows user to receive cards
       this.gameService.onUserCards(this.onUserCardsEvent)
       this.lobby = false
     } else {
-      this.gameService.onGameUpdated(this.setGameTransport)
       this.lobby = true
     }
-
     this.setDefaultTransport()
   }
 
@@ -108,12 +124,12 @@ export default class GameMech {
     this.pot = 0
     this.communityCards = [CardSuite.CLUBS_ACE, CardSuite.CLUBS_EIGHT, 'three', 'four', 'five']
     this.userId = 0
-    this.playerLocation = this.playerLoc()
     this.userAction = null
   }
 
   /**
    * Sets a default player
+   * @returns Default Player object
    */
   public defaultPlayer (): Player {
     const player: Player = {
@@ -142,13 +158,6 @@ export default class GameMech {
       }
     }
     return -1
-  }
-
-  /**
-   * @returns The possible table actions that the user can use
-   */
-  public getTableAction () {
-    return this.tableAction
   }
 
   /**
@@ -184,8 +193,8 @@ export default class GameMech {
    * @param userCards
    */
   public onUserCardsEvent (userCards: UserCards) {
-    this.multiplePlayers[this.playerLocation].card1 = userCards.card1
-    this.multiplePlayers[this.playerLocation].card2 = userCards.card2
+    this.multiplePlayers[this.playerLoc()].card1 = userCards.card1
+    this.multiplePlayers[this.playerLoc()].card2 = userCards.card2
   }
 
   /**
@@ -267,11 +276,10 @@ export default class GameMech {
    */
   public validatePreMove (move: GameAction) {
     // Confirm that you have enough money
-    if (this.multiplePlayers[this.playerLocation].money < move.bet) {
+    if (this.multiplePlayers[this.playerLoc()].money < move.bet) {
       alert('you do not have enough money')
       return false
     }
-
     // Confirm that you made a valid move
     if (this.hasBet) {
       if (this.possibleAction[1].indexOf(move.type) === -1) {
@@ -287,82 +295,96 @@ export default class GameMech {
     return true
   }
 
-  /**
-   * Validates users action and sends it to the server
-   */
-  public sendAction () {
-    if (this.userAction !== null) {
-      if (this.playerLoc() === this.turn) {
-        this.send(this.userAction)
-        this.userAction = null
-      }
-    }
-  }
+
 
   /**
    *  Sets the Game Transport in the Game Mechanics
    * @param GameState
    */
   public setGameTransport (gameTransport: GameState) {
-
     switch (gameTransport.gameStateType) {
-      case GameStateType.HAND_STARTED: { // The hand has started
+      // Case for when a hand has just started
+      case GameStateType.HAND_STARTED: {
         this.hasBet = gameTransport.hasBet
         Object.assign(this.multiplePlayers, gameTransport.multiplePlayers)
         this.pot = gameTransport.pot
         Object.assign(this.communityCards, gameTransport.communityCards)
         break
       }
-      case GameStateType.USER_ACTION: { // This is sent after a player makes an action
+      // Case for when a player makes an action
+      case GameStateType.USER_ACTION: {
         this.hasBet = gameTransport.hasBet
         Object.assign(this.multiplePlayers, gameTransport.multiplePlayers)
         this.pot = gameTransport.pot
         break
       }
-      case GameStateType.HAND_FINISHED: { // Equivalent for a winnder being determined from a hand
-        this.hasBet = gameTransport.hasBet
-        Object.assign(this.multiplePlayers, gameTransport.multiplePlayers)
-        this.pot = gameTransport.pot
-        Object.assign(this.communityCards, gameTransport.communityCards)
-        break
-      }
-      case GameStateType.ROUND_FINISHED: { // All players have bet - this results in a new Community cards
+      // Case for when a hand is finished and a winner is decided for that hand
+      case GameStateType.HAND_FINISHED: {
         this.hasBet = gameTransport.hasBet
         Object.assign(this.multiplePlayers, gameTransport.multiplePlayers)
         this.pot = gameTransport.pot
         Object.assign(this.communityCards, gameTransport.communityCards)
         break
       }
-      case GameStateType.USER_JOIN: { // A new player has been added to the game
+      // Case for when a new Community card is added to the game
+      case GameStateType.ROUND_FINISHED: {
         this.hasBet = gameTransport.hasBet
         Object.assign(this.multiplePlayers, gameTransport.multiplePlayers)
         this.pot = gameTransport.pot
         Object.assign(this.communityCards, gameTransport.communityCards)
         break
       }
-      case GameStateType.USER_LEAVE: { // A new player has left the game
+      // Case for when a new player is added into the game
+      case GameStateType.USER_JOIN: {
+        this.hasBet = gameTransport.hasBet
+        Object.assign(this.multiplePlayers, gameTransport.multiplePlayers)
+        this.pot = gameTransport.pot
+        Object.assign(this.communityCards, gameTransport.communityCards)
+        break
+      }
+      // Case for when a player has left the game
+      case GameStateType.USER_LEAVE: {
         Object.assign(this.multiplePlayers, gameTransport.multiplePlayers)
         break
       }
     }
 
-    if (this.playerLoc() === this.turn) {
-      if (this.userAction !== null) {
-        if (this.validatePreMove(this.userAction)) {
-          this.send(this.userAction)
-          alert('sent the action')
-        }
-      }
-    }
+    // If the player has premove staged then they will move it
+    this.sendAction() 
+    
     this.setTableActions()
   }
 
+  /**
+   * Confirms that the GameService connection is still running
+   * @returns Boolean
+   */
   public isGameRunning () {
     return this.gameService.connected()
   }
-  // can this game accecpt action from this player
+  /**
+   * Sends action to the server 
+   * @param gameAction - Action to sent to the server
+   */
   private send (gameAction: GameAction) {
     this.gameService.userSendAction(gameAction)
+  }
+
+  /**
+   * Validates users action and sends it to the server
+   */
+  private sendAction () {
+        // Confirms that you have an action to send
+        if (this.userAction !== null) {
+          // Confirms that it is your turn
+          if (this.playerLoc() === this.turn) {
+            // Confirms that this is a valid move
+            if (this.validatePreMove(this.userAction)) {
+              this.send(this.userAction)
+              this.userAction = null
+            }
+          }
+        }
   }
 
 }

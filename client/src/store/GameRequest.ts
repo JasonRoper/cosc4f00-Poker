@@ -15,7 +15,10 @@ export default class GameRequest {
   // private onGameJoinCallback: GameJoinCallback
 
   public createGame (): Promise<number | void> {
-    const prom = axios.post(this.MATCHMAKING, { auth: { username: 'admin', password: 'admin' } }).then((response) => {
+    const prom = axios.post(
+      this.MATCHMAKING, {},
+      { auth: { username: 'admin', password: 'admin' } })
+      .then((response) => {
       alert('it is looking for a game')
       // const subPath: string = this.API_V1 + '/' + response.data.matchmakingId.toString() + '/matchmaking'
       this.gameId = response.data.gameId
