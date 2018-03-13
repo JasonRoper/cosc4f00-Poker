@@ -77,7 +77,7 @@ public class GameController {
      * @param gameID the gameID of the game to be modified
      * @param action the action being performed
      * @param playerID the playerID performing the action
-     * @return
+     * @return a GameStateTrasnport, returning the new state of the game for the Front End user
      */
     private GameStateTransport handleAction(long gameID, GameAction action, int playerID) {
         GameStateTransport nextGameState = gameService.handleAction(gameID, action, playerID);
@@ -108,8 +108,13 @@ public class GameController {
         gameService.playerLeaveGame(gameID,user.getId());
     }
 
+    /**
+     * casualGameMatchmaking takes requests from the user for a casual matchmaking game and returns the game
+     * @param principal the user requesting a game
+     * @return a GameInfoTransport containing the game info
+     */
    @PostMapping("/api/v1/matchmaking/basicGame")
-   public GameInfoTransport createGame(Principal principal) {       
+   public GameInfoTransport casualGameMatchmaking(Principal principal) {
        UserInfoTransport user = userService.getUser(principal.getName());
        long gameId = gameService.matchmake(user.getId());
         return new GameInfoTransport(gameId);
