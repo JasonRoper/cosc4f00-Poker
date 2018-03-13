@@ -3,10 +3,7 @@
  * A game is joined through subscribing to the necessary STOMP endpoints. 
  * The Game Mechanics provides all of the information necessary to show a table
  * Through the subscriptions from game Mechanics it receives new states and can 
- * send user actions. 
- * 
- * For example, when the game is going to be finished and winner must be 
- * decided a message is received by the GameMechanics indicating this. 
+ * send user actions.  
  */
 
 /**
