@@ -323,8 +323,12 @@ public class GameState {
      * @return the amount of players in the game as an int
      */
     public int addPlayer(long playerID){
+        Player player;
         players.add(new Player(playerID));
         playerCount=players.size();
+        player=players.get(playerCount-1);
+        player.setCashOnHand(defaultCashOnHand);
+        player.setTableSeatID(players.size()-1);
         lastGameActions.add(null);
         return players.size();
     }
