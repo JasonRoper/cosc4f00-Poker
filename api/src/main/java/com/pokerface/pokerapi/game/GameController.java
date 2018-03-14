@@ -6,13 +6,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.web.bind.annotation.*;
 
 
 import java.security.Principal;
+import java.util.List;
 
 /**
  * The GameController serves vital function as the communication hub of the Front End users and the Back End server.
@@ -50,6 +50,25 @@ public class GameController {
 
     }
 
+//    @MessageMapping("/game/{game_id}/ready")
+//    public void readyUp(@DestinationVariable("game_id") long gameID, Principal principal){
+//        UserInfoTransport user = userService.getUserByUsername(principal.getName());
+//
+//
+//        if (gameService.readyUp(user.getId())) {
+//            startGame(gameID);
+//        }
+//    }
+//
+//    public void startGame(long gameID) {
+//        List<HandTransport> hands = gameService.deal(gameID);
+//
+//        for (HandTransport hand : hands) {
+//            UserInfoTransport user = userService.getUser(hand.getUserId());
+//            messenger.convertAndSendToUser(hand.getUser(),"/game/" + gameID, hand);
+//        }
+//    }
+
 
     /**
      * receiveAction tales am action from the user and processes it, ultimately passing it to handleAction which then
@@ -61,7 +80,7 @@ public class GameController {
     @MessageMapping("/game/{game_id}")
     public void receiveAction(GameAction action, @DestinationVariable("game_id") long gameID, Principal principal) {
 
-        UserInfoTransport user = userService.getUser(principal.getName());
+        UserInfoTransport user = userService.getUserByUsername(principal.getName());
         int playerId = gameService.getPlayerID(gameID, user.getId());
 
         GameStateTransport nextGameState = handleAction(gameID, action, playerId);
@@ -105,7 +124,7 @@ public class GameController {
      */
     @DeleteMapping("api/v1/game/{gameID}/")
     public void playerLeaveGame(@DestinationVariable("game_id") long gameID, Principal principal){
-        UserInfoTransport user=userService.getUser(principal.getName());
+        UserInfoTransport user=userService.getUserByUsername(principal.getName());
         gameService.playerLeaveGame(gameID,user.getId());
     }
 
@@ -116,7 +135,7 @@ public class GameController {
      */
    @PostMapping("/api/v1/matchmaking/basicGame")
    public GameInfoTransport casualGameMatchmaking(Principal principal) {
-       UserInfoTransport user = userService.getUser(principal.getName());
+       UserInfoTransport user = userService.getUserByUsername(principal.getName());
        long gameID = gameService.matchmake(user.getId());
        GameStateTransport gameStateTransport = gameService.getGameStateTransport(gameID);
        messenger.convertAndSend("/messages/game/" + gameID, gameStateTransport.reason(GameStateTransport.Reason.NEW_PLAYER,"User has joined"));

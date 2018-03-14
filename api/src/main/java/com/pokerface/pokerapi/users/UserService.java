@@ -115,12 +115,21 @@ public class UserService implements UserDetailsService {
     }
 
     /**
-     * getUser gets a UserInfoTransport by using a String of a username
+     * getUserByUsername gets a UserInfoTransport by using a String of a username
      * @param username the String of the username being searched
      * @return UserInfoTransport of the user found
      */
-    public UserInfoTransport getUser(String username) {
+    public UserInfoTransport getUserByUsername(String username) {
         User user = userRepository.findByUsername(username);
+        if (user != null) {
+            return new UserInfoTransport(user);
+        } else {
+            return null;
+        }
+    }
+
+    public UserInfoTransport getUser(long id) {
+        User user = userRepository.findOne(id);
         if (user != null) {
             return new UserInfoTransport(user);
         } else {
