@@ -1,8 +1,11 @@
 package com.pokerface.pokerapi.game;
 
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -267,7 +270,28 @@ public class GameService {
     public HandEndTransport determineWinnings(long gameID) {
         GameState gameState = games.findOne(gameID);
         int[] winners = new int[gameState.getPlayerCount()];
-        //DETERMINE WINNERS HERE
+        List<Card> communityCards = gameState.receiveCommunityCards();
+        List<Pair<Integer,HandRanking>> handRanks = new ArrayList<>();
+
+        for (Player p:gameState.getPlayers()){
+            List<Card>playersCards = new ArrayList<>();
+            playersCards.addAll(p.receiveCards());
+            playersCards.addAll(communityCards);
+            List<Pair<Integer, HandRanking>> hands;
+            handRanks.add(Pair.of(p.getTableSeatID(),new HandRanking(playersCards)));
+        }
+
+        handRanks.sort((a, b) -> a.getSecond().compareTo(b.getSecond()));
+        int counter=1;
+
+        for (int i=0;i<winners.length;i++){
+            winners[handRanks.get(i).getFirst()]=counter;
+            if (handRanks.get(i).getSecond().compareTo(handRanks.get(i+1).getSecond())==0){
+                winners[handRanks.get(i+1).getFirst()]=counter;
+            } else {
+                counter++;
+            }
+        }
         winners = gameState.getPot().resolveWinnings(winners);
         HandEndTransport handEndTransport = new HandEndTransport(winners, gameState.getPlayers());
         return handEndTransport;
@@ -361,5 +385,7 @@ public class GameService {
         games.findOne(gameID).removePlayer(userID);
         return true;
     }
+
+
 
 }

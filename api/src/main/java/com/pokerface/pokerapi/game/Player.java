@@ -1,6 +1,8 @@
 package com.pokerface.pokerapi.game;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A player representation that lives in the GameState
@@ -32,6 +34,13 @@ public class Player {
         hasFolded=false;
         isDealer=false;
         isAI=false;
+    }
+
+    public List<Card> receiveCards(){
+        List<Card> cards =new ArrayList<>();
+        cards.add(cardOne);
+        cards.add(cardTwo);
+        return cards;
     }
 
     /**

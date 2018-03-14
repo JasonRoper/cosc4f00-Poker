@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.web.bind.annotation.*;
@@ -116,8 +117,10 @@ public class GameController {
    @PostMapping("/api/v1/matchmaking/basicGame")
    public GameInfoTransport casualGameMatchmaking(Principal principal) {
        UserInfoTransport user = userService.getUser(principal.getName());
-       long gameId = gameService.matchmake(user.getId());
-        return new GameInfoTransport(gameId);
+       long gameID = gameService.matchmake(user.getId());
+       GameStateTransport gameStateTransport = gameService.getGameStateTransport(gameID);
+       messenger.convertAndSend("/messages/game/" + gameID, gameStateTransport.reason(GameStateTransport.Reason.NEW_PLAYER,"User has joined"));
+        return new GameInfoTransport(gameID);
    }
 
 //
