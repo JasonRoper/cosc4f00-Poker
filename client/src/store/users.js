@@ -1,11 +1,31 @@
+/**
+ * The users vuex module handles everything to do with user accounts.
+ * The username and password are stored here, as well as if the
+ * user account is in an error state.
+ */
+
+ /**
+  * users uses axios in order to send http requests to the server
+  */
 import axios from 'axios'
+
+/**
+ * the path that is to be requested is defined in the config.
+ */
 import { API_V1 } from '@/config'
 
+/**
+ * paths defines all of the user paths that are used in this module
+ */
 const paths = {
   LOGIN: API_V1 + '/users/login',
   REGISTER: API_V1 + '/users'
 }
 
+/**
+ * The state is the state of the users Vuex module. It stores everything
+ * about the logged in user, as well as the user account error state.
+ */
 const state = {
   username: null,
   password: null,
@@ -18,7 +38,15 @@ const state = {
   }
 }
 
+/**
+ * The users module getters are helper methods for accessing the user
+ * state.
+ */
 const getters = {
+  /**
+   * loggedIn tests wether or not there currently is a user logged in.
+   * @param {UserState} state - the User state
+   */
   loggedIn (state) {
     return state.username != null
   }
@@ -36,6 +64,9 @@ function assignUserFields (state, fields) {
   state.email = fields.email
 }
 
+/**
+ * The mutations are all of the ways that the user state can be changed.
+ */
 const mutations = {
   /**
    * Set all of fields related to the user.
@@ -92,10 +123,11 @@ const mutations = {
   }
 }
 
+/**
+ * The actions are the user actions that can be taken. These can be asychonous,
+ * and can call mutations when they complete.
+ */
 const actions = {
-  storeName (context, name) {
-    alert(name + 'hey its')
-  },
   /**
    * log in to the server. This is just a validation function due
    * to the use of HttpBasic authentication
@@ -135,6 +167,14 @@ const actions = {
   },
   /**
    * Register a new user
+   *
+   * the server will respond with an error when:
+   *
+   * 1. the username is < 3 characters or > 20
+   * 2. the email does not represent an actual email
+   * 3. the password is less than 5 characters long
+   * 4. the username already exists
+   * 5. the email already exists
    *
    * @param {Vuex} context - the vuex context
    * @param {RegistrationFields} registrationFields - the username, email and password of the user

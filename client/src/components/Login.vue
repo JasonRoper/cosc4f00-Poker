@@ -342,7 +342,6 @@ export default {
   },
   methods: {
     ...mapActions([
-      'storeName',
       'register',
       'login'
     ]),
