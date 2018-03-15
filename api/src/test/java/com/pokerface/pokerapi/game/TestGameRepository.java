@@ -32,4 +32,9 @@ public class TestGameRepository {
         testEntityManager.persist(new GameState());
         assertNotEquals(gameService.matchmake(1),0);
     }
+@Test
+    public void testMatchmake(){
+        GameService gameService = new GameService(games);
+        assertNotEquals(gameService.matchmake(1),0);
+    }
 }

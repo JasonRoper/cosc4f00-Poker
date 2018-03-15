@@ -17,8 +17,8 @@ public class Player {
     @Enumerated
     private Card cardTwo;
     private int cashOnHand;//User available money in game
-    private long id; // id to the database
-    private int tableSeatID; // id to the game
+    private long userID; // id to the database
+    private int playerID; // id to the game
     private GameState gameState;
     private boolean hasFolded;
     private boolean isAI;
@@ -26,10 +26,10 @@ public class Player {
 
     /**
      * Creates a player with a userID
-     * @param id is the UserID of the player
+     * @param userID is the long UserID of the player
      */
-    public Player(Long id){
-        this.id=id;
+    public Player(Long userID){
+        this.userID=userID;
         cashOnHand=getGameState().defaultCashOnHand;
         hasFolded=false;
         isDealer=false;
@@ -91,13 +91,13 @@ public class Player {
      * returns their table seat ID
      * @return the int representing the id of their seat their PlayerID
      */
-    public int getTableSeatID() { return tableSeatID; }
+    public int getPlayerID() { return playerID; }
 
     /**
      * sets the TabelSeatID to the value
-     * @param tableSeatID int representing the PlayerID
+     * @param playerID int representing the PlayerID
      */
-    public void setTableSeatID(int tableSeatID) { this.tableSeatID =tableSeatID; }
+    public void setPlayerID(int playerID) { this.playerID =playerID; }
 
     /**
      * The ID of where this object exists in the database
@@ -105,16 +105,16 @@ public class Player {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public long getId() {
-        return id;
+    public long getUserID() {
+        return userID;
     }
 
     /**
      * sets the playerID
-     * @param id long value to set
+     * @param userID long value to set
      */
-    public void setId(long id) {
-        this.id = id;
+    public void setUserID(long userID) {
+        this.userID = userID;
     }
 
     /**

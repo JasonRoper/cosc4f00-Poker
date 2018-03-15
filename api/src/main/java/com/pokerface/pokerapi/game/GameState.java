@@ -319,16 +319,15 @@ public class GameState {
 
     /**
      * Adds a player to the game
-     * @param playerID the ID of the player
+     * @param userID the ID of the player
      * @return the amount of players in the game as an int
      */
-    public int addPlayer(long playerID){
-        Player player;
-        players.add(new Player(playerID));
+    public int addPlayer(long userID){
+        Player player = new Player(userID);
+        players.add(player);
         playerCount=players.size();
-        player=players.get(playerCount-1);
         player.setCashOnHand(defaultCashOnHand);
-        player.setTableSeatID(players.size()-1);
+        player.setPlayerID(playerCount-1);
         lastGameActions.add(null);
         return players.size();
     }
@@ -373,7 +372,7 @@ public class GameState {
      */
     public Player getPlayer(long userID){
         for (Player p:players){
-            if (p.getId()==userID){
+            if (p.getUserID()==userID){
                 return p;
             }
         }
@@ -529,7 +528,7 @@ public class GameState {
         if (player.getIsDealer()){
             advanceDealer();
         }
-        if (getPresentTurn()==player.getTableSeatID()){
+        if (getPresentTurn()==player.getPlayerID()){
             nextTurn();
         }
         players.remove(player);

@@ -63,7 +63,7 @@ public class GameService {
             check(gameState, action, player);
         }
 
-        gameState.setLastGameAction(player.getTableSeatID(), action);
+        gameState.setLastGameAction(player.getPlayerID(), action);
         gameState.nextTurn();
         gameState = games.save(gameState);
         GameStateTransport presentGameStateTransport = getGameStateTransport(gameState);
@@ -82,8 +82,8 @@ public class GameService {
     public boolean bet(GameState gameState, GameAction action, Player player) {
         if (player.getCashOnHand() >= action.getBet()) {
             player.setCashOnHand(player.getCashOnHand() - action.getBet()); // remove the bet from the players available cash
-            applyBet(gameState, player.getTableSeatID(), action.getBet()); // apply the bet to gamestate
-            gameState.setLastBet(player.getTableSeatID()); // update who bet last
+            applyBet(gameState, player.getPlayerID(), action.getBet()); // apply the bet to gamestate
+            gameState.setLastBet(player.getPlayerID()); // update who bet last
             return true;
         } else {
             return false;
@@ -99,8 +99,8 @@ public class GameService {
      * @return boolean representing if it went through successfully
      */
     public boolean check(GameState gameState, GameAction action, Player player) {
-        if (player.getCashOnHand() >= gameState.getMinimumBet() - gameState.getPot().getBet(player.getTableSeatID())) {
-            player.setCashOnHand(player.getCashOnHand() - gameState.getMinimumBet() - gameState.getPot().getBet(player.getTableSeatID()));
+        if (player.getCashOnHand() >= gameState.getMinimumBet() - gameState.getPot().getBet(player.getPlayerID())) {
+            player.setCashOnHand(player.getCashOnHand() - gameState.getMinimumBet() - gameState.getPot().getBet(player.getPlayerID()));
             return true;
         } else {
             return false;
@@ -118,7 +118,7 @@ public class GameService {
      */
     public boolean fold(GameState gameState, GameAction action, Player player) {
         if (player.getHasFolded() == false) {
-            gameState.getPlayers().get(player.getTableSeatID()).setHasFolded(true);
+            gameState.getPlayers().get(player.getPlayerID()).setHasFolded(true);
             return true;
         } else {
             return false;
@@ -258,7 +258,7 @@ public class GameService {
      * @return int of where the player is sitting
      */
     public int getPlayerID(long gameID, long userID) {
-        return (games.findOne(gameID).getPlayer(userID)).getTableSeatID();
+        return (games.findOne(gameID).getPlayer(userID)).getPlayerID();
     }
 
     /**
@@ -278,7 +278,7 @@ public class GameService {
             playersCards.addAll(p.receiveCards());
             playersCards.addAll(communityCards);
             List<Pair<Integer, HandRanking>> hands;
-            handRanks.add(Pair.of(p.getTableSeatID(),new HandRanking(playersCards)));
+            handRanks.add(Pair.of(p.getPlayerID(),new HandRanking(playersCards)));
         }
 
         handRanks.sort((a, b) -> a.getSecond().compareTo(b.getSecond()));
