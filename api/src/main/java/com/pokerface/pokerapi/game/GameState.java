@@ -33,9 +33,9 @@ public class GameState {
      * These are game settings
      *
      */
-    private int bigBlind;
-    int minPlayerCount;
-    int defaultCashOnHand;
+    private int bigBlind=12;
+    int minPlayerCount=4;
+    int defaultCashOnHand=100;
 
 
     public GameState(){

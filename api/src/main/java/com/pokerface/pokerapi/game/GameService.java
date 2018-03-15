@@ -212,15 +212,16 @@ public class GameService {
      * This method takes a player's ID and finds a game for them. THe logic for this can be improved
      * as matchmaking algorithms are made more complex.
      *
-     * @param playerID the playerID needing to be added to a game
+     * @param userID the playerID needing to be added to a game
      * @return the long id of the game they will join
      */
-    public long matchmake(long playerID) {
+    public long matchmake(long userID) {
         long gameID = -1; // -1 is never a legitimate gameID, this allows error checking for unfound game.
         gameID = firstAvailableGame();
         if (gameID == -1) {
             gameID = createGame();
         }
+        addPlayer(userID,gameID);
         return gameID;
     }
 
@@ -248,6 +249,19 @@ public class GameService {
     private long createGame() {
         GameState state = new GameState();
         return games.save(state).getId();
+    }
+
+    /**
+     * Create game takes settings and creates a game with those settings, returning the ID of that game
+     *
+     * @param minPlayers the minimum players to start a game
+     * @return long ID of the game
+     */
+    public long createGame(int minPlayers) {
+        GameState gameState = new GameState();
+        gameState.setMinPlayerCount(minPlayers);
+        gameState = games.save(gameState);
+        return gameState.getId();
     }
 
     /**
@@ -344,19 +358,6 @@ public class GameService {
             gameStateTransports.add(getGameStateTransport(g));
         }
         return gameStateTransports;
-    }
-
-    /**
-     * Create game takes settings and creates a game with those settings, returning the ID of that game
-     *
-     * @param minPlayers the minimum players to start a game
-     * @return long ID of the game
-     */
-    public long createGame(int minPlayers) {
-        GameState gameState = new GameState();
-        gameState.setMinPlayerCount(minPlayers);
-        gameState = games.save(gameState);
-        return gameState.getId();
     }
 
     /**
