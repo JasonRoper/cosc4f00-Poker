@@ -35,6 +35,8 @@ public class TestGameRepository {
 @Test
     public void testMatchmake(){
         GameService gameService = new GameService(games);
-        assertNotEquals(gameService.matchmake(1),0);
+        long id = gameService.matchmake(1);
+        assertNotEquals(id,0);
+
     }
 }

@@ -22,9 +22,9 @@ public class GameState {
 
     private int presentTurn;//Whose action is it?
     private int round;//What round are we on, enum? from 0-4, 0 transition value? 1 pre-bet, 2/3/4 is flop turn river respectively.
-    private List<Player> players;
+    private List<Player> players = new ArrayList<>();
     private int playerCount=0;
-    private List<GameAction> lastGameActions;
+    private List<GameAction> lastGameActions = new ArrayList<>();
     private Card communityCardOne,communityCardTwo,communityCardThree,communityCardFour,communityCardFive;
 
     private int previousTurn;
@@ -323,7 +323,7 @@ public class GameState {
      * @return the amount of players in the game as an int
      */
     public int addPlayer(long userID){
-        Player player = new Player(userID);
+        Player player = new Player(userID,this);
         players.add(player);
         playerCount=players.size();
         player.setCashOnHand(defaultCashOnHand);

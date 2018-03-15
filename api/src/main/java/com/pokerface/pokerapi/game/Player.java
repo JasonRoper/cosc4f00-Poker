@@ -24,12 +24,17 @@ public class Player {
     private boolean isAI;
     private boolean isDealer;
 
+    public Player(){
+
+    }
+
     /**
      * Creates a player with a userID
      * @param userID is the long UserID of the player
      */
-    public Player(Long userID){
+    public Player(Long userID, GameState gameState){
         this.userID=userID;
+        this.gameState=gameState;
         cashOnHand=getGameState().defaultCashOnHand;
         hasFolded=false;
         isDealer=false;
