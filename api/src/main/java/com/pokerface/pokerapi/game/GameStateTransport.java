@@ -11,7 +11,7 @@ import java.util.List;
  * or finished and whenever a player leaves or enters.
  */
 public class GameStateTransport {
-    private Card communityCardOne, communityCardTwo, communityCardThree, communityCardFour, communityCardFive;
+    private List<Card> communityCards;
     int potSum;
     int bigBlind;
     int nextPlayer;
@@ -22,38 +22,19 @@ public class GameStateTransport {
 
     }
 
-    /**
-     * This creates a GameStateTransport for full use.
-     *
-     * @param communityCardOne   Each of community cards are identical, representing a card in the community
-     * @param communityCardTwo card two
-     * @param communityCardThree card three
-     * @param communityCardFour card four, in round 2
-     * @param communityCardFive card five, in round 3
-     * @param potSum the sum of the pot
-     * @param bigBlind the amount the bigBlind currently is
-     * @param action the reason the action is being sent
-     * @param event the occurence that made the object be sent
-     * @param players the players in the game, a class for transport
-     * @param gameActions the actions performed
-     * @param nextPlayer whose turn it is now
-     */
-    public GameStateTransport(Card communityCardOne, Card communityCardTwo, Card communityCardThree, Card communityCardFour, Card communityCardFive, int potSum, int bigBlind, Reason action, String event, List<Player> players, List<GameAction> gameActions, int nextPlayer) {
-        this.communityCardOne = communityCardOne;
-        this.communityCardTwo = communityCardTwo;
-        this.communityCardThree = communityCardThree;
-        this.communityCardFour = communityCardFour;
-        this.communityCardFive = communityCardFive;
 
-        this.potSum = potSum;
-        this.bigBlind = bigBlind;
-        this.event = new Event(action, event);
-        this.players = new PlayerTransport[players.size()];
-        for (int i = 0; i < players.size(); i++) {
-            this.players[i] = new PlayerTransport(i, players.get(i).getCashOnHand(), gameActions.get(i), players.get(i).getIsDealer(), players.get(i).getHasFolded());
+    public GameStateTransport(GameState gameState){
+this.communityCards=gameState.receiveCommunityCards();
+
+        this.potSum = gameState.getPot().getSum();
+        this.bigBlind = gameState.getBigBlind();
+        this.players = new PlayerTransport[gameState.getPlayers().size()];
+        for (int i = 0; i < this.players.length; i++) {
+            this.players[i] = new PlayerTransport(i, gameState.getPlayers().get(i).getCashOnHand(), gameState.getLastGameActions().get(i), gameState.getPlayers().get(i).getIsDealer(), gameState.getPlayers().get(i).getHasFolded());
         }
         this.nextPlayer = nextPlayer;
     }
+
 
     /**
      * nextPlayer is the integer of who is next

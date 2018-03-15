@@ -246,7 +246,7 @@ public class GameService {
      *
      * @return long id of the game created
      */
-    private long createGame() {
+    public long createGame() {
         GameState state = new GameState();
         return games.save(state).getId();
     }
@@ -342,7 +342,7 @@ public class GameService {
      * @return GameStateTransport object
      */
     public GameStateTransport getGameStateTransport(GameState gameState) {
-        GameStateTransport gameStateTransport = new GameStateTransport(gameState.getCommunityCardOne(), gameState.getCommunityCardTwo(), gameState.getCommunityCardThree(), gameState.getCommunityCardFour(), gameState.getCommunityCardFive(), gameState.getPot().getSum(), gameState.getBigBlind(), null, null, gameState.getPlayers(), gameState.getLastGameActions(), gameState.getPresentTurn());
+        GameStateTransport gameStateTransport = new GameStateTransport(gameState);
         return gameStateTransport;
     }
 

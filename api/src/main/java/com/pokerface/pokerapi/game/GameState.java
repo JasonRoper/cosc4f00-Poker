@@ -14,12 +14,11 @@ import java.util.List;
 public class GameState {
     private long id;
     private Deck deck; //A 1-1 storage of a stack full of enum cards.
-    private Pot pot; // Each represents how much each player has put in.
+    private Pot pot= new Pot(); // Each represents how much each player has put in.
     //First round, the flop/ the turn/the river
     private int lastBet; //PlayerTableID
     private int dealer; //PlayerTableID
     private int minimumBet; // the minimum bet required to stay in the round
-
     private int presentTurn;//Whose action is it?
     private int round;//What round are we on, enum? from 0-4, 0 transition value? 1 pre-bet, 2/3/4 is flop turn river respectively.
     private List<Player> players = new ArrayList<>();

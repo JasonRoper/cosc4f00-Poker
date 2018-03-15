@@ -63,6 +63,10 @@ public class Pot {
         sum=0;
     }
 
+    public Pot(){
+        sum=0;
+    }
+
 
     /**
      * Adds the amount to the pot the PlayerID bet
