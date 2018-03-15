@@ -465,24 +465,6 @@ public class GameState {
     }
 
     /**
-     * SetCommunityCard takes a card from the deck and places it in the first empty spot
-     * @param communityCard the card to be set, it takes it from the deck if not provided
-     */
-    public void setCommunityCard(Card communityCard){
-        if (communityCardOne==null){
-            communityCardOne=deck.getCard();
-        } else if (communityCardTwo==null){
-            communityCardTwo=deck.getCard();
-        } else if (communityCardThree==null){
-            communityCardThree=deck.getCard();
-        } else if (communityCardFour==null){
-            communityCardFour=deck.getCard();
-        } else if (communityCardFive==null){
-            communityCardFive=deck.getCard();
-        }
-    }
-
-    /**
      * Returns whose turn it was last
      * @return the int of the previous turn
      */
@@ -532,6 +514,33 @@ public class GameState {
         }
         players.remove(player);
         return true;
+    }
+
+    public void startGame(){
+        dealer=0;
+        deck=new Deck();
+        pot = new Pot(playerCount);
+        lastBet=2; // This would represent the small blind last payer. If nobody raises, the round ends when small blind is reached
+        minimumBet=bigBlind;
+        presentTurn=3;
+        round=1;
+        dealCommunityCards();
+        for (Player p: players){
+            p.setCardOne(deck.getCard());
+            p.setCardTwo(deck.getCard());
+        }
+    }
+
+    public void dealCommunityCards(){
+        if (round==1){
+            communityCardOne=deck.getCard();
+            communityCardTwo=deck.getCard();
+            communityCardThree=deck.getCard();
+        } else if (round==2){
+            communityCardFour=deck.getCard();
+        } else if (round==3){
+            communityCardFive=deck.getCard();
+        }
     }
 
 }

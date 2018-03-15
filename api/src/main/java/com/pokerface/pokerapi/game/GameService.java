@@ -387,6 +387,13 @@ public class GameService {
         return true;
     }
 
+    public GameStateTransport gameStart(long gameID){
+        GameState gameState=games.findOne(gameID);
+        gameState.startGame();
+        games.save(gameState);
+        return getGameStateTransport(gameID);
+    }
+
 
 
 }

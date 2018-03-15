@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
  */
 @RunWith(SpringRunner.class)
 @DataJpaTest
-public class TestGameRepository {
+public class GameServiceRepositoryTest {
 
     GameService gameService;
 
@@ -63,7 +63,26 @@ public class TestGameRepository {
         game.addPlayer(1);
         game.addPlayer(2);
         game.addPlayer(3);
-        GameStateTransport transport2=gameService.getGameStateTransport(game.getId());
+        GameStateTransport transport=gameService.getGameStateTransport(game.getId());
+        System.out.println();
+    }
+
+    /**
+     * Tests the game starting state and the resulting transports
+     */
+    @Test
+    public void testStartingGameStateTransport(){
+        GameState game = games.findOne(gameService.createGame());
+        game.addPlayer(1);
+        game.addPlayer(2);
+        game.addPlayer(3);
+        game.addPlayer(4);
+        GameStateTransport transport=gameService.gameStart(game.getId());
+        HandTransport hand;
+        for (Player p:game.getPlayers()){
+            hand=new HandTransport(p.getCardOne(),p.getCardTwo());
+        }
+
         System.out.println();
     }
 
