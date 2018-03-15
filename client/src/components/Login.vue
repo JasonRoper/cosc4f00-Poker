@@ -342,7 +342,6 @@ export default {
   },
   methods: {
     ...mapActions([
-      'storeName',
       'register',
       'login'
     ]),
@@ -354,21 +353,21 @@ export default {
         this.ErrorMessage = 'Both Fields Must Be Filled'
         return // Must add CSS for this action
       } else {
-        this.login(this.Player)
-        this.loginErrorMessage = this.$store.state.users.errors.login
-        setTimeout(this.checkLoginErrors, 900)
+        this.login(this.Player) // Servery queries for login
+        this.loginErrorMessage = this.$store.state.users.errors.login // Sets login errorMessage to the store array to the store array of error login messages
+        setTimeout(this.checkLoginErrors, 900) // Chec Login Errors after 900 ms
       }
     },
     checkLoginErrors () {
-      if ((this.loginErrorMessage.length === 0)) {
-        this.$router.push('Game')
-      }
       if (this.loginErrorMessage.length > 0) {
-        alert('all done' + this.loginErrorMessage.length)
-        alert('ans is:' + this.loginErrorMessage[0].message)
+        // alert('all done' + this.loginErrorMessage.length)
+        // alert('ans is:' + this.loginErrorMessage[0].message)
         this.ErrorMessage = this.loginErrorMessage[0].message
         this.isLoginError = true
         this.$store.state.users.errors.login = []
+      } else
+      if ((this.loginErrorMessage.length === 0)) { // if ater check
+        this.$router.push('Game')
       }
     },
     AttemptRegister () {
@@ -379,21 +378,21 @@ export default {
         return // Must add CSS for this action
       } else {
         this.register(this.RegisterPlayer)
-        this.registerErrorMessage = this.$store.state.users.errors.registration
-        setTimeout(this.checkRegisterErrors, 900)
+        this.registerErrorMessage = this.$store.state.users.errors.registration // Sets Register errorMessage to the store arry of registration errors
+        setTimeout(this.checkRegisterErrors, 900) // Check Registratio Errors after 900 ms
       }
     },
     checkRegisterErrors () {
+      if (this.registerErrorMessage.length > 0) {
+      // alert('all done' + this.registerErrorMessage.length)
+      // alert('ans is:' + this.registerErrorMessage[0].message)
+        this.ErrorMessage = this.registerErrorMessage[0].message // Set the error message
+        this.isRegistrationError = true
+        this.$store.state.users.errors.registration = []
+      } else
       if ((this.registerErrorMessage.length === 0)) {
         this.registModal = false
         this.$router.push('Game')
-      }
-      if (this.registerErrorMessage.length > 0) {
-        alert('all done' + this.registerErrorMessage.length)
-        alert('ans is:' + this.registerErrorMessage[0].message)
-        this.ErrorMessage = this.registerErrorMessage[0].message
-        this.isRegistrationError = true
-        this.$store.state.users.errors.registration = []
       }
     },
     ResetVariables () {
