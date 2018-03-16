@@ -15,6 +15,12 @@ import axios from 'axios'
 import { API_V1 } from '@/config'
 
 /**
+ * PokerClient is needed to set user information on - if they are
+ * authenticated, the websocket needs to include it in it' headers
+ */
+import PokerClient from '@/api/pokerclient'
+
+/**
  * paths defines all of the user paths that are used in this module
  */
 const paths = {
@@ -75,6 +81,7 @@ const mutations = {
    */
   setUser (state, payload) {
     assignUserFields(state, payload)
+    PokerClient.setUsername(payload.username)
   },
   /**
    * set all of the user fields to null.
@@ -82,6 +89,7 @@ const mutations = {
    */
   logout (state) {
     assignUserFields(state, {username: null, password: null, userId: null, email: null})
+    PokerClient.unsetUsername()
   },
   /**
    * add a login error to the list

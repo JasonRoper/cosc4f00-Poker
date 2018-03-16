@@ -12,11 +12,11 @@ import java.util.List;
  */
 public class GameStateTransport {
     private List<Card> communityCards;
-    int potSum;
-    int bigBlind;
-    int nextPlayer;
-    Event event;
-    PlayerTransport[] players;
+    private int potSum;
+    private int bigBlind;
+    private int nextPlayer;
+    private Event event;
+    private PlayerTransport[] players;
 
     public GameStateTransport() {
 
@@ -24,7 +24,7 @@ public class GameStateTransport {
 
 
     public GameStateTransport(GameState gameState){
-this.communityCards=gameState.receiveCommunityCards();
+        this.communityCards=gameState.receiveCommunityCards();
 
         this.potSum = gameState.getPot().getSum();
         this.bigBlind = gameState.getBigBlind();
@@ -37,10 +37,10 @@ this.communityCards=gameState.receiveCommunityCards();
 
 
     /**
-     * nextPlayer is the integer of who is next
+     * getNextPlayer is the integer of who is next
      * @return the int of who is next
      */
-    public int nextPlayer() {
+    public int getNextPlayer() {
         return nextPlayer;
     }
 
@@ -55,12 +55,56 @@ this.communityCards=gameState.receiveCommunityCards();
         return this;
     }
 
+    public List<Card> getCommunityCards() {
+        return communityCards;
+    }
+
+    public void setCommunityCards(List<Card> communityCards) {
+        this.communityCards = communityCards;
+    }
+
+    public int getPotSum() {
+        return potSum;
+    }
+
+    public void setPotSum(int potSum) {
+        this.potSum = potSum;
+    }
+
+    public int getBigBlind() {
+        return bigBlind;
+    }
+
+    public void setBigBlind(int bigBlind) {
+        this.bigBlind = bigBlind;
+    }
+
+    public void setNextPlayer(int nextPlayer) {
+        this.nextPlayer = nextPlayer;
+    }
+
+    public Event getEvent() {
+        return event;
+    }
+
+    public void setEvent(Event event) {
+        this.event = event;
+    }
+
+    public PlayerTransport[] getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(PlayerTransport[] players) {
+        this.players = players;
+    }
+
     /**
      * A class that contains an action, why the event is being sent, and an optional message for extra communication if necessary
      */
     private class Event {
-        Reason action;
-        String message;
+        private Reason action;
+        private String message;
 
         public Event() {
 
@@ -70,17 +114,33 @@ this.communityCards=gameState.receiveCommunityCards();
             this.action = action;
             this.message = message;
         }
+
+        public Reason getAction() {
+            return action;
+        }
+
+        public void setAction(Reason action) {
+            this.action = action;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
     }
 
     /**
      * A Player representation, containing an id, their seat, the money they have, the action they last performed, if they are a player or if they are a dealer.
      */
-    private class PlayerTransport {
-        int id;
-        int money;
-        GameAction action;
-        boolean isPlayer;
-        boolean isDealer;
+    public static class PlayerTransport {
+        private int id;
+        private int money;
+        private GameAction action;
+        private boolean isPlayer;
+        private boolean isDealer;
 
         public PlayerTransport() {
 
@@ -100,6 +160,46 @@ this.communityCards=gameState.receiveCommunityCards();
             this.action = action;
             this.isPlayer = isPlayer;
             this.isDealer = isDealer;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public int getMoney() {
+            return money;
+        }
+
+        public void setMoney(int money) {
+            this.money = money;
+        }
+
+        public GameAction getAction() {
+            return action;
+        }
+
+        public void setAction(GameAction action) {
+            this.action = action;
+        }
+
+        public boolean isPlayer() {
+            return isPlayer;
+        }
+
+        public void setPlayer(boolean player) {
+            isPlayer = player;
+        }
+
+        public boolean isDealer() {
+            return isDealer;
+        }
+
+        public void setDealer(boolean dealer) {
+            isDealer = dealer;
         }
     }
 
