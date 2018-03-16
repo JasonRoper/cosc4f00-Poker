@@ -286,9 +286,9 @@ public class GameState {
      */
     public boolean matchBet (int playerSeatID){
         Player player = players.get(playerSeatID);
-        int difference=minimumBet-pot.getBet(playerSeatID);
+        int difference=minimumBet-players.get(playerSeatID).getBet();
         if (player.getCashOnHand()>=difference){
-            pot.add(difference,playerSeatID);
+            players.get(playerSeatID).addBet(difference);
             player.setCashOnHand(player.getCashOnHand()-difference);
         } else {
             return false;
@@ -305,8 +305,8 @@ public class GameState {
      */
     public boolean placeBet(Player player, int betAmount){
         player.setCashOnHand(player.getCashOnHand()-betAmount);
-        pot.add(betAmount,player.getPlayerID());
-        minimumBet+=betAmount;
+        minimumBet+=betAmount-minimumBet;
+        player.addBet(betAmount);
         return true;
     }
 
@@ -512,7 +512,7 @@ public class GameState {
 
     public void startGame(){
         dealer=0;
-        deck=new Deck();
+        deck=new Deck(this);
         pot = new Pot(playerCount,this);
         lastBet=2; // This would represent the small blind last payer. If nobody raises, the round ends when small blind is reached
         minimumBet=bigBlind;
@@ -520,21 +520,26 @@ public class GameState {
         round=1;
         dealCommunityCards();
         for (Player p: players){
-            p.setCardOne(deck.getCard());
-            p.setCardTwo(deck.getCard());
+            p.setCardOne(deck.dealCard());
+            p.setCardTwo(deck.dealCard());
         }
     }
 
     public void dealCommunityCards(){
         if (round==1){
-            communityCardOne=deck.getCard();
-            communityCardTwo=deck.getCard();
-            communityCardThree=deck.getCard();
+            communityCardOne=deck.dealCard();
+            communityCardTwo=deck.dealCard();
+            communityCardThree=deck.dealCard();
         } else if (round==2){
-            communityCardFour=deck.getCard();
+            communityCardFour=deck.dealCard();
         } else if (round==3){
-            communityCardFive=deck.getCard();
+            communityCardFive=deck.dealCard();
         }
+    }
+
+    public int getBet(int playerID){
+        return players.get(playerID).getBet();
+
     }
 
 }

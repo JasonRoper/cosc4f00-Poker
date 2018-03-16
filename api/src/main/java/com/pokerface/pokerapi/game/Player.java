@@ -17,6 +17,7 @@ public class Player {
     @Enumerated
     private Card cardTwo;
     private int cashOnHand;//User available money in game
+    @Id
     private long userID; // id to the database
     private int playerID; // id to the game
     private GameState gameState;
@@ -24,6 +25,9 @@ public class Player {
     private boolean isAI;
     private boolean isDealer;
     private boolean isAllIn;
+    private int bet;
+
+
 
     public Player(){
 
@@ -192,6 +196,18 @@ public class Player {
 
     public void setAllIn(boolean allIn) {
         isAllIn = allIn;
+    }
+
+    public int getBet() {
+        return bet;
+    }
+
+    public void setBet(int bet) {
+        this.bet = bet;
+    }
+
+    public void addBet(int amount){
+        bet+=amount;
     }
 
 }

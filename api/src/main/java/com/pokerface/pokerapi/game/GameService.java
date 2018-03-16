@@ -82,7 +82,7 @@ public class GameService {
      * @return boolean representing if it went through successfully
      */
     public boolean bet(GameState gameState, GameAction action, Player player) {
-int amountToBet=action.getBet()+gameState.getMinimumBet()-gameState.getPot().getBet(player.getPlayerID());
+int amountToBet=action.getBet()+gameState.getMinimumBet()-player.getBet();
 if (amountToBet>=player.getCashOnHand()){
 return allIn(gameState,player);
 } else {
@@ -107,13 +107,8 @@ return true;
      * @return boolean representing if it went through successfully
      */
     public boolean check(GameState gameState, GameAction action, Player player) {
-        if (player.getCashOnHand() >= gameState.getMinimumBet() - gameState.getPot().getBet(player.getPlayerID())) {
-            player.setCashOnHand(player.getCashOnHand() - gameState.getMinimumBet() - gameState.getPot().getBet(player.getPlayerID()));
-            return true;
-        } else {
-            return false;
-        }
 
+return true;
     }
 
     /**
@@ -219,6 +214,7 @@ return true;
             gameID = createGame();
         }
         addPlayer(userID,gameID);
+
         return gameID;
     }
 
@@ -303,7 +299,7 @@ return true;
                 counter++;
             }
         }
-        winners = gameState.getPot().resolveWinnings(winners);
+        //winners = gameState.getPot().resolveWinnings(winners);
         HandEndTransport handEndTransport = new HandEndTransport(winners, gameState.getPlayers());
         return handEndTransport;
     }

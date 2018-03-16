@@ -14,7 +14,6 @@ import java.util.List;
 @Entity
 @Table(name = "pot")
 public class Pot {
-    public int[] pot;
     private int sum;
     private long id;
     private GameState gameState;
@@ -59,13 +58,11 @@ public class Pot {
      * @param players int of players
      */
     public Pot(int players,GameState gameState){
-        pot=new int[players];
         sum=0;
         this.gameState=gameState;
     }
 
     public Pot(int playerCount){
-        pot=new int[playerCount];
         sum=0;
     }
 
@@ -73,24 +70,12 @@ public class Pot {
         sum=0;
     }
 
-
-    /**
-     * Adds the amount to the pot the PlayerID bet
-     *
-     * @param amount bet, as int
-     * @param playerSeatID the player betting
-     */
-    public void add(double amount, int playerSeatID){
-        pot[playerSeatID]+=amount;
-        sum+=amount;
-    }
-
     /**
      * This method returns an array containing the winnings of each player
      * @param ranking the ranking of the relative hands of each player
      * @return an array determining the amount each player has won
      */
-    public int[] resolveWinnings(int[] ranking){
+    public int[] resolveWinnings(int[] ranking, int[] pot){
 
         int[] totalWinnings= new int[pot.length];
         int players=pot.length;
@@ -142,12 +127,6 @@ public class Pot {
         return totalWinnings;
     }
 
-    /**
-     * Returns how much that player has bet
-     * @param playerSeatID the plaer to check
-     * @return the integer of their bet
-     */
-    public int getBet (int playerSeatID) {return pot[playerSeatID];}
 
     /**
      * Returns the sum of the pot

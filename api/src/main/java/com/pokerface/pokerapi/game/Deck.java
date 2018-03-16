@@ -11,6 +11,10 @@ import java.util.Stack;
 @Entity
 @Table(name = "deck")
 public class Deck {
+    int ten=0;
+
+
+
     @ElementCollection(targetClass = Card.class)
     @JoinTable(name = "deck", joinColumns = @JoinColumn(name = "id"))
     @Column(name = "cards", nullable = false)
@@ -33,7 +37,11 @@ public class Deck {
      * cards that have not yet been pulled until 52 cards have been chosen in a random order
      */
     public Deck(){
+    }
+
+    public Deck(GameState gameState){
         int cards=0;
+        this.gameState=gameState;
         boolean[] taken = new boolean[52];
         Random rand = new Random(System.currentTimeMillis());
         while (cards!=52){
@@ -88,7 +96,8 @@ public class Deck {
      * A one to one relationship, each deck belongs to a GameState, and each GameState belongs to a Deck.
      * @return GameState the deck belongs to.
      */
-    @OneToOne(mappedBy = "deck")
+    @OneToOne
+    @JoinColumn(name="gameState")
     public GameState getGameState() {
         return gameState;
     }
@@ -97,16 +106,8 @@ public class Deck {
      * getCard is used to return a single card, used in draws
      * @return a Card object from the 'top' of the deck
      */
-    public Card getCard() {
+    public Card dealCard() {
         return cards.pop();
-    }
-
-    /**
-     * setCard return a card to the deck, likely unused.
-     * @param card the card being pushed
-     */
-    public void setCard(Card card) {
-        this.cards.push(card);
     }
 
     /**
@@ -115,5 +116,21 @@ public class Deck {
      */
     public void setGameState(GameState gameState) {
         this.gameState = gameState;
+    }
+
+    public int getTen() {
+        return ten;
+    }
+
+    public void setTen(int ten) {
+        this.ten = ten;
+    }
+
+    public Stack<Card> getCards() {
+        return cards;
+    }
+
+    public void setCards(Stack<Card> cards) {
+        this.cards = cards;
     }
 }

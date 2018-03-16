@@ -26,7 +26,7 @@ public class DeckTest {
     @Test
     public void emptyDeck(){
         for (int i=0;i<52;i++){
-            card=deck.getCard();
+            card=deck.dealCard();
         }
     }
 }

@@ -121,12 +121,8 @@ public class AIService {
      * @return the action being performed
      */
     private GameAction raise(GameState gameState,int playerNumber){
-        GameAction gameAction;
-if (gameState.getMinimumBet()-gameState.getPot().getBet(playerNumber)+gameState.getBigBlind()<gameState.getPlayer(playerNumber).getCashOnHand()) {
-    gameAction = new GameAction(GameActionType.RAISE, gameState.getBigBlind() / 2);
-} else {
-    return allIn(gameState,playerNumber);
-}
+    GameAction gameAction = new GameAction(GameActionType.RAISE, gameState.getBigBlind() / 2);
+
         return gameAction;
     }
 
