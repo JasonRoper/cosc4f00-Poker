@@ -25,7 +25,10 @@ new Vue({
   render: h => h(App)
 })
 
+import PokerClient from '@/api/pokerclient'
+
 window.axios = axios
 window.commit = store.commit
 window.dispatch = store.dispatch
 window.store = store
+window.pokerclient = PokerClient

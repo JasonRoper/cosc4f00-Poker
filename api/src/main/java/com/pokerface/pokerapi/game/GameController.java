@@ -6,13 +6,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.web.bind.annotation.*;
 
 
 import java.security.Principal;
-import java.util.List;
 
 /**
  * The GameController serves vital function as the communication hub of the Front End users and the Back End server.
@@ -73,21 +73,21 @@ public class GameController {
     /**
      * receiveAction tales am action from the user and processes it, ultimately passing it to handleAction which then
      * passed it to its gameService to modify gameState and transport those changes
-     * @param action the action being performed
+     * @param action the action that the user has sent
      * @param gameID the long gameID the action is being performed on
-     * @param principal the principal authenticated user performing the action
+     * @param userID the user that the message was received from
      */
-    @MessageMapping("/game/{game_id}")
-    public void receiveAction(GameAction action, @DestinationVariable("game_id") long gameID, Principal principal) {
-
-        UserInfoTransport user = userService.getUserByUsername(principal.getName());
-        int playerId = gameService.getPlayerID(gameID, user.getId());
+    @MessageMapping("/game/{game_id}/{user_id}")
+    public void receiveAction(@Payload GameAction action,
+                              @DestinationVariable("game_id") long gameID,
+                              @DestinationVariable("user_id") long userID) {
+        int playerId = gameService.getPlayerID(gameID, userID);
 
         GameStateTransport nextGameState = handleAction(gameID, action, playerId);
 
-        while (aiService.isAIPlayer(gameID, nextGameState.nextPlayer())) {
+        while (aiService.isAIPlayer(gameID, nextGameState.getNextPlayer())) {
             GameAction aiAction = aiService.playAction(gameID);
-            nextGameState = handleAction(gameID, aiAction, nextGameState.nextPlayer());
+            nextGameState = handleAction(gameID, aiAction, nextGameState.getNextPlayer());
         }
     }
 
@@ -138,7 +138,8 @@ public class GameController {
        UserInfoTransport user = userService.getUserByUsername(principal.getName());
        long gameID = gameService.matchmake(user.getId());
        GameStateTransport gameStateTransport = gameService.getGameStateTransport(gameID);
-       messenger.convertAndSend("/messages/game/" + gameID, gameStateTransport.reason(GameStateTransport.Reason.NEW_PLAYER,"User has joined"));
+       messenger.convertAndSend("/messages/game/" + gameID,
+               gameStateTransport.reason(GameStateTransport.Reason.NEW_PLAYER,"User has joined"));
         return new GameInfoTransport(gameID);
    }
 

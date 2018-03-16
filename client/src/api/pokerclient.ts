@@ -120,6 +120,22 @@ enum WebsocketState {
 }
 
 /**
+ * PokerHeaders contains all of the context information needed to be sent along
+ * with a message through the websocket
+ */
+class PokerHeaders {
+  public user: string
+
+  /**
+   * Create a new PokerHeaders with the given username
+   * @param username - the username to send to the server
+   */
+  public constructor (username: string) {
+    this.user = username
+  }
+}
+
+/**
  * Manage multiple subscriptions to different paths in a websocket.
  */
 class PokerClient {
@@ -127,7 +143,8 @@ class PokerClient {
   private socket: webstomp.Client
   private subscriberMap: Map<string, Subscription>
   private state: WebsocketState
-  private unsentMessages: Array<{ path: string, payload: any}>
+  private unsentMessages: Array<{ path: string, payload: any }>
+  private headers: PokerHeaders | undefined
 
   /**
    * Creates a Stomp websocket client.
@@ -139,10 +156,15 @@ class PokerClient {
     this.subscriberMap = new Map()
     this.unsentMessages = []
     this.state = WebsocketState.DISCONNECTED
+    this.headers = undefined
 
-    const connectCallback = () => {
+    const connectCallback = (response: webstomp.Frame | undefined) => {
       this.state = WebsocketState.CONNECTED
       console.log('connected to websocket at %s', websocketPath)
+
+      if (response) {
+        console.log('connection frame: ', response)
+      }
 
       // Subscribe to all paths that were subscribed to while connecting
       this.subscriberMap.forEach((sub, key, map) => {
@@ -154,7 +176,8 @@ class PokerClient {
       // response that is triggered due to a enqueued message.
       // TODO: check to see if rate limiting is required
       this.unsentMessages.forEach((element) => {
-        this.socket.send(element.path, element.payload)
+
+        this.socket.send(element.path, element.payload, { ...(this.headers) })
       })
     }
 
@@ -164,7 +187,7 @@ class PokerClient {
       this.state = WebsocketState.ERROR
       console.log('failed to connect to websocket at %s', websocketPath)
     }
-    this.socket.connect({}, connectCallback, errorCallback)
+    this.socket.connect('', '', connectCallback, errorCallback)
   }
 
   /**
@@ -190,7 +213,7 @@ class PokerClient {
    */
   public send (path: string, payload: any) {
     if (this.connected()) {
-      this.socket.send(path, JSON.stringify(payload))
+      this.socket.send(path, JSON.stringify(payload), { ...(this.headers) })
     } else if (this.errorOccurred()) {
       console.log('Websocket(%s): socket in error state, cannot send data {path: %s, payload: %s}',
         this.websocketPath, path, payload)
@@ -274,6 +297,14 @@ class PokerClient {
    */
   public switchCallback (path: string, prevCallback: EventCallback | null, newCallback: EventCallback | null) {
     this.switchSubscription(path, prevCallback, path, newCallback)
+  }
+
+  public setLogin (username: string) {
+    this.headers = new PokerHeaders(username)
+  }
+
+  public unsetLogin () {
+    this.headers = undefined
   }
 }
 
