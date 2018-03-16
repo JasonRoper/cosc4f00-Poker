@@ -86,4 +86,25 @@ public class GameServiceRepositoryTest {
         System.out.println();
     }
 
+    @Test
+    public void testGamePlay(){
+        GameState game = games.findOne(gameService.createGame());
+        long gameID=game.getId();
+        game.addPlayer(1);
+        game.addPlayer(2);
+        game.addPlayer(3);
+        game.addPlayer(4);
+        game.startGame();
+        gameService.handleAction(gameID,createAction(1,GameActionType.BET,10),gameService.getPlayerID(gameID,1));
+        gameService.handleAction(gameID,createAction(2,GameActionType.BET,10),gameService.getPlayerID(gameID,2));
+        gameService.handleAction(gameID,createAction(3,GameActionType.BET,10),gameService.getPlayerID(gameID,3));
+        gameService.handleAction(gameID,createAction(4,GameActionType.BET,10),gameService.getPlayerID(gameID,4));
+        game=games.findOne(gameID);
+        System.out.println();
+    }
+
+    public GameAction createAction(long userID,GameActionType actionType,int bet){
+        return new GameAction(userID,actionType,bet);
+    }
+
 }

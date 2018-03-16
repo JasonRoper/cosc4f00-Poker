@@ -299,21 +299,15 @@ public class GameState {
 
     /**
      * placeBet places a bet
-     * @param playerSeatID the player betting
+     * @param player the player betting
      * @param betAmount the amount being bet
      * @return if it worked
      */
-    public boolean placeBet(int playerSeatID, int betAmount){
-        Player player=players.get(playerSeatID);
-        if (player.getCashOnHand()>=betAmount){
-            pot.add(betAmount,playerSeatID);
-            player.setCashOnHand(player.getCashOnHand()-betAmount);
-            lastBet=playerSeatID;
-            minimumBet+=betAmount;
-        } else {
-            return false;
-        }
-       return true;
+    public boolean placeBet(Player player, int betAmount){
+        player.setCashOnHand(player.getCashOnHand()-betAmount);
+        pot.add(betAmount,player.getPlayerID());
+        minimumBet+=betAmount;
+        return true;
     }
 
     /**
@@ -519,7 +513,7 @@ public class GameState {
     public void startGame(){
         dealer=0;
         deck=new Deck();
-        pot = new Pot(playerCount);
+        pot = new Pot(playerCount,this);
         lastBet=2; // This would represent the small blind last payer. If nobody raises, the round ends when small blind is reached
         minimumBet=bigBlind;
         presentTurn=3;

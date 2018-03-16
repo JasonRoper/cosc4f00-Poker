@@ -58,8 +58,14 @@ public class Pot {
      * Creates a pot of size players
      * @param players int of players
      */
-    public Pot(int players){
+    public Pot(int players,GameState gameState){
         pot=new int[players];
+        sum=0;
+        this.gameState=gameState;
+    }
+
+    public Pot(int playerCount){
+        pot=new int[playerCount];
         sum=0;
     }
 

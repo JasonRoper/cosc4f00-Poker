@@ -54,18 +54,20 @@ public class GameService {
     public GameStateTransport handleAction(long gameID, GameAction action, int playerID) {
 
         GameState gameState = games.findOne(gameID);
-        Player player = gameState.getPlayer(playerID);
-        if (action.getType() == GameActionType.BET) {
-            bet(gameState, action, player);
-        } else if (action.getType() == GameActionType.FOLD) {
-            fold(gameState, action, player);
-        } else if (action.getType() == GameActionType.CHECK) {
-            check(gameState, action, player);
-        }
+        if (gameState.getPresentTurn()==playerID) {
+            Player player = gameState.getPlayer(playerID);
+            if (action.getType() == GameActionType.BET) {
+                bet(gameState, action, player);
+            } else if (action.getType() == GameActionType.FOLD) {
+                fold(gameState, action, player);
+            } else if (action.getType() == GameActionType.CHECK) {
+                check(gameState, action, player);
+            }
 
-        gameState.setLastGameAction(player.getPlayerID(), action);
-        gameState.nextTurn();
-        gameState = games.save(gameState);
+            gameState.setLastGameAction(player.getPlayerID(), action);
+            gameState.nextTurn();
+            gameState = games.save(gameState);
+        }
         GameStateTransport presentGameStateTransport = getGameStateTransport(gameState);
 
         return presentGameStateTransport;
@@ -80,14 +82,20 @@ public class GameService {
      * @return boolean representing if it went through successfully
      */
     public boolean bet(GameState gameState, GameAction action, Player player) {
-        if (player.getCashOnHand() >= action.getBet()) {
-            player.setCashOnHand(player.getCashOnHand() - action.getBet()); // remove the bet from the players available cash
-            applyBet(gameState, player.getPlayerID(), action.getBet()); // apply the bet to gamestate
-            gameState.setLastBet(player.getPlayerID()); // update who bet last
-            return true;
-        } else {
-            return false;
-        }
+int amountToBet=action.getBet()+gameState.getMinimumBet()-gameState.getPot().getBet(player.getPlayerID());
+if (amountToBet>=player.getCashOnHand()){
+return allIn(gameState,player);
+} else {
+    gameState.placeBet(player,amountToBet);
+}
+
+return true;
+    }
+
+    public boolean allIn(GameState gameState, Player player){
+
+
+        return true;
     }
 
     /**
@@ -126,17 +134,6 @@ public class GameService {
 
     }
 
-    /**
-     * ApplyBet takes a players bet and applies it to the gameState
-     *
-     * @param gameState    the game being bet on
-     * @param playerGameID the id of the player betting
-     * @param bet          the bet being applied
-     */
-    public void applyBet(GameState gameState, int playerGameID, int bet) {
-        gameState.matchBet(playerGameID);
-        gameState.placeBet(playerGameID, bet);
-    }
 
     /**
      * isRoundEnd checks if the game is at the end of the round,

@@ -23,6 +23,7 @@ public class Player {
     private boolean hasFolded;
     private boolean isAI;
     private boolean isDealer;
+    private boolean isAllIn;
 
     public Player(){
 
@@ -39,6 +40,7 @@ public class Player {
         hasFolded=false;
         isDealer=false;
         isAI=false;
+        isAllIn=false;
     }
 
     public List<Card> receiveCards(){
@@ -182,6 +184,14 @@ public class Player {
      */
     public void setAI(boolean AI) {
         isAI = AI;
+    }
+
+    public boolean isAllIn() {
+        return isAllIn;
+    }
+
+    public void setAllIn(boolean allIn) {
+        isAllIn = allIn;
     }
 
 }
