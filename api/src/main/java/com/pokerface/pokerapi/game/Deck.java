@@ -1,6 +1,10 @@
 package com.pokerface.pokerapi.game;
 
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.Stack;
 
@@ -14,18 +18,25 @@ public class Deck {
     int ten=0;
 
 
-
-    @ElementCollection(targetClass = Card.class)
-    @JoinTable(name = "deck", joinColumns = @JoinColumn(name = "id"))
-    @Column(name = "cards", nullable = false)
-    @Enumerated
     /**
      * cards is the deck of cards in a Deck object. It is a stack, of Card type.
      */
-    private Stack<Card> cards = new Stack<Card>();
+    @Enumerated
+    private List<Card> cards;
     /**
      * id is the identifier of the deck, used as a primary key to identify which game it belongs to.
      */
+
+    @ElementCollection
+
+    public List<Card> getCards() {
+        return cards;
+    }
+
+    public void setCards(List<Card> cards) {
+        this.cards = cards;
+    }
+
     private long id;
     /**
      * this is a reference object to the game it belongs to
@@ -41,6 +52,7 @@ public class Deck {
 
     public Deck(GameState gameState){
         int cards=0;
+        this.cards=new ArrayList<>();
         this.gameState=gameState;
         boolean[] taken = new boolean[52];
         Random rand = new Random(System.currentTimeMillis());
@@ -107,7 +119,7 @@ public class Deck {
      * @return a Card object from the 'top' of the deck
      */
     public Card dealCard() {
-        return cards.pop();
+        return cards.remove(cards.size()-1);
     }
 
     /**
@@ -124,13 +136,5 @@ public class Deck {
 
     public void setTen(int ten) {
         this.ten = ten;
-    }
-
-    public Stack<Card> getCards() {
-        return cards;
-    }
-
-    public void setCards(Stack<Card> cards) {
-        this.cards = cards;
     }
 }

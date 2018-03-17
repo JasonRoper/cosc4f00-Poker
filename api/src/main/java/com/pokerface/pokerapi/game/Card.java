@@ -1,5 +1,7 @@
 package com.pokerface.pokerapi.game;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.Comparator;
 
 /**
