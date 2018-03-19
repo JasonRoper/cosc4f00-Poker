@@ -6,7 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,52 +45,111 @@ public class GameController {
     }
 
     /**
-     *
+     * receivedManagmentAction receives authetnicated actions from the managing user to modify settings of the game.
      */
     @MessageMapping("/game/{game_id}/control")
     public void receiveManagementAction() {
 
     }
 
+//    @MessageMapping("/game/{game_id}/ready")
+//    public void readyUp(@DestinationVariable("game_id") long gameID, Principal principal){
+//        UserInfoTransport user = userService.getUserByUsername(principal.getName());
+//
+//
+//        if (gameService.readyUp(user.getId())) {
+//            startGame(gameID);
+//        }
+//    }
+//
+//    public void startGame(long gameID) {
+//        List<HandTransport> hands = gameService.deal(gameID);
+//
+//        for (HandTransport hand : hands) {
+//            UserInfoTransport user = userService.getUser(hand.getUserId());
+//            messenger.convertAndSendToUser(hand.getUser(),"/game/" + gameID, hand);
+//        }
+//    }
 
+
+    /**
+     * receiveAction tales am action from the user and processes it, ultimately passing it to handleAction which then
+     * passed it to its gameService to modify gameState and transport those changes
+     * @param action the action that the user has sent
+     * @param gameID the long gameID the action is being performed on
+     * @param principal the user that sent this message
+     */
     @MessageMapping("/game/{game_id}")
-    public void receiveAction(GameAction action, @DestinationVariable("game_id") long gameId, Principal principal) {
+    public void receiveAction(@Payload GameAction action,
+                              @DestinationVariable("game_id") long gameID,
+                              Principal principal) {
+        UserInfoTransport user = userService.getUserByUsername(principal.getName());
+        int playerId = gameService.getPlayerID(gameID, user.getId());
 
-        UserInfoTransport user = userService.getUser(principal.getName());
-        int playerId = gameService.getPlayerID(gameId, user.getId());
+        GameStateTransport nextGameState = handleAction(gameID, action, playerId);
 
-        GameStateTransport nextGameState = handleAction(gameId, action, playerId);
-
-        while (aiService.isAIPlayer(gameId, nextGameState.nextPlayer())) {
-            GameAction aiAction = aiService.playAction(gameId);
-            nextGameState = handleAction(gameId, aiAction, nextGameState.nextPlayer());
+        while (aiService.isAIPlayer(gameID, nextGameState.getNextPlayer())) {
+            GameAction aiAction = aiService.playAction(gameID);
+            nextGameState = handleAction(gameID, aiAction, nextGameState.getNextPlayer());
         }
     }
 
-    private GameStateTransport handleAction(long gameId, GameAction action, int playerId) {
-        GameStateTransport nextGameState = gameService.handleAction(gameId, action, playerId);
-        messenger.convertAndSend("/messages/game/" + gameId, nextGameState);
+    @MessageMapping("test")
+    public void testWebsocket(@Payload long number, Principal principal) {
+        messenger.convertAndSend("/messages/game", principal.getName() + " is talking to me");
+        messenger.convertAndSendToUser(principal.getName(), "/messages/game", "but I love you most");
+    }
 
-        if (gameService.isHandEnd(gameId)) {
-            HandEndTransport winners = gameService.determineWinnings(gameId);
-            nextGameState = gameService.getGameState(gameId);
-            messenger.convertAndSend("/messages/game/" + gameId,
+    /**
+     * handleAction is what takes a received action and breaks it down to send to gameService. This updates the
+     * gameState and returns a transport object for the user to update their Front End
+     * @param gameID the gameID of the game to be modified
+     * @param action the action being performed
+     * @param playerID the playerID performing the action
+     * @return a GameStateTrasnport, returning the new state of the game for the Front End user
+     */
+    private GameStateTransport handleAction(long gameID, GameAction action, int playerID) {
+        GameStateTransport nextGameState = gameService.handleAction(gameID, action, playerID);
+        messenger.convertAndSend("/messages/game/" + gameID, nextGameState);
+
+        if (gameService.isHandEnd(gameID)) {
+            HandEndTransport winners = gameService.determineWinnings(gameID);
+            nextGameState = gameService.getGameState(gameID);
+            messenger.convertAndSend("/messages/game/" + gameID,
                     nextGameState.reason(GameStateTransport.Reason.HAND_FINISHED,""));
-        } else if (gameService.isRoundEnd(gameId)){
-            nextGameState = gameService.handleRound(gameId);
-            messenger.convertAndSend("/messages/game/" + gameId,
+        } else if (gameService.isRoundEnd(gameID)){
+            nextGameState = gameService.handleRound(gameID);
+            messenger.convertAndSend("/messages/game/" + gameID,
                     nextGameState.reason(GameStateTransport.Reason.ROUND_FINSHED,""));
         }
 
         return nextGameState;
     }
 
+    /**
+     * playerLeaveGame takes requests from a player to leave a game, or if they are idle for too long and removes them
+     * @param gameID the long gameID to remove
+     * @param principal the user identification
+     */
+    @DeleteMapping("api/v1/game/{gameID}/")
+    public void playerLeaveGame(@DestinationVariable("game_id") long gameID, Principal principal){
+        UserInfoTransport user=userService.getUserByUsername(principal.getName());
+        gameService.playerLeaveGame(gameID,user.getId());
+    }
+
+    /**
+     * casualGameMatchmaking takes requests from the user for a casual matchmaking game and returns the game
+     * @param principal the user requesting a game
+     * @return a GameInfoTransport containing the game info
+     */
    @PostMapping("/api/v1/matchmaking/basicGame")
-   public GameInfoTransport createGame(Principal principal) {
-       
-       UserInfoTransport user = userService.getUser(principal.getName());
-       long gameId = gameService.matchmake(user.getId());
-        return new GameInfoTransport(gameId);
+   public GameInfoTransport casualGameMatchmaking(Principal principal) {
+       UserInfoTransport user = userService.getUserByUsername(principal.getName());
+       long gameID = gameService.matchmake(user.getId());
+       GameStateTransport gameStateTransport = gameService.getGameStateTransport(gameID);
+       messenger.convertAndSend("/messages/game/" + gameID,
+               gameStateTransport.reason(GameStateTransport.Reason.NEW_PLAYER,"User has joined"));
+        return new GameInfoTransport(gameID);
    }
 
 //
@@ -120,4 +182,6 @@ public class GameController {
 //    public void deleteOwnedGame(@PathVariable("id") long gameID) {
 //        gameService.deleteGame(gameID)
 //    }
+
+
 }

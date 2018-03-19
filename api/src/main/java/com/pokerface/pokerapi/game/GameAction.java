@@ -21,6 +21,12 @@ public class GameAction {
 
     }
 
+    public GameAction(long userID, GameActionType actionType,int bet){
+        this.id=userID;
+        type=actionType;
+        this.bet=bet;
+    }
+
     /**
      * This creates an GameAction, only done for copying received actions into lastAction in the GameState
      * @param type is the type of action, an enum of GameActionType

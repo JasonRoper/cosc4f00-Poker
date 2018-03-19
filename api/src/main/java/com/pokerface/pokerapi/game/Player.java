@@ -1,6 +1,8 @@
 package com.pokerface.pokerapi.game;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A player representation that lives in the GameState
@@ -15,23 +17,41 @@ public class Player {
     @Enumerated
     private Card cardTwo;
     private int cashOnHand;//User available money in game
-    private long id; // id to the database
-    private int tableSeatID; // id to the game
+    @Id
+    private long userID; // id to the database
+    private int playerID; // id to the game
     private GameState gameState;
     private boolean hasFolded;
     private boolean isAI;
     private boolean isDealer;
+    private boolean isAllIn;
+    private int bet;
+
+
+
+    public Player(){
+
+    }
 
     /**
      * Creates a player with a userID
-     * @param id is the UserID of the player
+     * @param userID is the long UserID of the player
      */
-    public Player(Long id){
-        this.id=id;
+    public Player(Long userID, GameState gameState){
+        this.userID=userID;
+        this.gameState=gameState;
         cashOnHand=getGameState().defaultCashOnHand;
         hasFolded=false;
         isDealer=false;
         isAI=false;
+        isAllIn=false;
+    }
+
+    public List<Card> receiveCards(){
+        List<Card> cards =new ArrayList<>();
+        cards.add(cardOne);
+        cards.add(cardTwo);
+        return cards;
     }
 
     /**
@@ -82,13 +102,13 @@ public class Player {
      * returns their table seat ID
      * @return the int representing the id of their seat their PlayerID
      */
-    public int getTableSeatID() { return tableSeatID; }
+    public int getPlayerID() { return playerID; }
 
     /**
      * sets the TabelSeatID to the value
-     * @param tableSeatID int representing the PlayerID
+     * @param playerID int representing the PlayerID
      */
-    public void setTableSeatID(int tableSeatID) { this.tableSeatID =tableSeatID; }
+    public void setPlayerID(int playerID) { this.playerID =playerID; }
 
     /**
      * The ID of where this object exists in the database
@@ -96,16 +116,16 @@ public class Player {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public long getId() {
-        return id;
+    public long getUserID() {
+        return userID;
     }
 
     /**
      * sets the playerID
-     * @param id long value to set
+     * @param userID long value to set
      */
-    public void setId(long id) {
-        this.id = id;
+    public void setUserID(long userID) {
+        this.userID = userID;
     }
 
     /**
@@ -168,6 +188,26 @@ public class Player {
      */
     public void setAI(boolean AI) {
         isAI = AI;
+    }
+
+    public boolean isAllIn() {
+        return isAllIn;
+    }
+
+    public void setAllIn(boolean allIn) {
+        isAllIn = allIn;
+    }
+
+    public int getBet() {
+        return bet;
+    }
+
+    public void setBet(int bet) {
+        this.bet = bet;
+    }
+
+    public void addBet(int amount){
+        bet+=amount;
     }
 
 }

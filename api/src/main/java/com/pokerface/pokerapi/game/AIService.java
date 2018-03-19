@@ -2,6 +2,8 @@ package com.pokerface.pokerapi.game;
 
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -37,6 +39,7 @@ import java.util.Random;
 @Service
 public class AIService {
     GameRepository games;
+    HandRanking handRanking;
 
     /**
      * The {@link AIService} depends on the {@link GameRepository}.
@@ -54,6 +57,7 @@ public class AIService {
      * @return the GameAction the ai has decided to perform
      */
     public GameAction playAction(long gameID){
+        List<Card> cards = new ArrayList<>();
         GameState gameState;
         gameState=games.findOne(gameID);
         int playerNumber=gameState.getPresentTurn();
@@ -77,12 +81,15 @@ public class AIService {
      * @return an integer value from 1-10 that gives the value of the hand
      */
     private int handEvaluation(){
-
         return 0;
     }
 
+
     /**
-     * Performs the action of folding, will consider other factors to see if it really wishes to fold
+     * The fold action has a double check to see if its hand is worth keeping in play
+     * @param gameState a gameState object to folding
+     * @param playerNumber the user who is folding
+     * @return GameAction
      */
     private GameAction fold(GameState gameState,int playerNumber){
         GameAction gameAction;
@@ -92,8 +99,12 @@ public class AIService {
         return gameAction;
     }
 
+
     /**
-     * Performs the check action, may consider other actions and decide to do another action instead
+     * check returns a check action, it is a safe game continuing action that keeps the game in play.
+     * @param gameState the gameState being done
+     * @param playerNumber the playerNumber performing the check
+     * @return the GameAction being performed
      */
     private GameAction check(GameState gameState,int playerNumber){
         GameAction gameAction;
@@ -104,18 +115,23 @@ public class AIService {
     }
 
     /**
-     * Performs the raise action, the amount may be determined by other factors
+     * Takes the gameState and sees if the AI should apply a raise, making sure it has enough money
+     * @param gameState the gameState the action is being applied to
+     * @param playerNumber the playerID at that game
+     * @return the action being performed
      */
     private GameAction raise(GameState gameState,int playerNumber){
-        GameAction gameAction;
-
-        gameAction=new GameAction(GameActionType.RAISE,gameState.getBigBlind()/2);
+    GameAction gameAction = new GameAction(GameActionType.RAISE, gameState.getBigBlind() / 2);
 
         return gameAction;
     }
 
     /**
-     * Decides to go all in, may be called if the AI doesn't have enough cash to check or raise
+     * AllIn bets all of the AI's money, done rarely, more often with a better hand but also out of the blue sometimes.
+     * raise function can call this if they do not have enough money to bet, to ake sure it's handle properly.
+     * @param gameState the gameState they are all inning on
+     * @param playerNumber their seat at that table
+     * @return the action being performed
      */
     private GameAction allIn(GameState gameState,int playerNumber){
         GameAction gameAction;

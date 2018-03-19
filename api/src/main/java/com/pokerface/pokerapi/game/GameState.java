@@ -1,6 +1,7 @@
 package com.pokerface.pokerapi.game;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,17 +14,16 @@ import java.util.List;
 public class GameState {
     private long id;
     private Deck deck; //A 1-1 storage of a stack full of enum cards.
-    private Pot pot; // Each represents how much each player has put in.
+    private Pot pot= new Pot(); // Each represents how much each player has put in.
     //First round, the flop/ the turn/the river
     private int lastBet; //PlayerTableID
     private int dealer; //PlayerTableID
     private int minimumBet; // the minimum bet required to stay in the round
-
     private int presentTurn;//Whose action is it?
     private int round;//What round are we on, enum? from 0-4, 0 transition value? 1 pre-bet, 2/3/4 is flop turn river respectively.
-    private List<Player> players;
+    private List<Player> players = new ArrayList<>();
     private int playerCount=0;
-    private List<GameAction> lastGameActions;
+    private List<GameAction> lastGameActions = new ArrayList<>();
     private Card communityCardOne,communityCardTwo,communityCardThree,communityCardFour,communityCardFive;
 
     private int previousTurn;
@@ -32,9 +32,9 @@ public class GameState {
      * These are game settings
      *
      */
-    private int bigBlind;
-    int minPlayerCount;
-    int defaultCashOnHand;
+    private int bigBlind=12;
+    int minPlayerCount=4;
+    int defaultCashOnHand=100;
 
 
     public GameState(){
@@ -286,9 +286,9 @@ public class GameState {
      */
     public boolean matchBet (int playerSeatID){
         Player player = players.get(playerSeatID);
-        int difference=minimumBet-pot.getBet(playerSeatID);
+        int difference=minimumBet-players.get(playerSeatID).getBet();
         if (player.getCashOnHand()>=difference){
-            pot.add(difference,playerSeatID);
+            players.get(playerSeatID).addBet(difference);
             player.setCashOnHand(player.getCashOnHand()-difference);
         } else {
             return false;
@@ -299,31 +299,28 @@ public class GameState {
 
     /**
      * placeBet places a bet
-     * @param playerSeatID the player betting
+     * @param player the player betting
      * @param betAmount the amount being bet
      * @return if it worked
      */
-    public boolean placeBet(int playerSeatID, int betAmount){
-        Player player=players.get(playerSeatID);
-        if (player.getCashOnHand()>=betAmount){
-            pot.add(betAmount,playerSeatID);
-            player.setCashOnHand(player.getCashOnHand()-betAmount);
-            lastBet=playerSeatID;
-            minimumBet+=betAmount;
-        } else {
-            return false;
-        }
-       return true;
+    public boolean placeBet(Player player, int betAmount){
+        player.setCashOnHand(player.getCashOnHand()-betAmount);
+        minimumBet+=betAmount-minimumBet;
+        player.addBet(betAmount);
+        return true;
     }
 
     /**
      * Adds a player to the game
-     * @param playerID the ID of the player
+     * @param userID the ID of the player
      * @return the amount of players in the game as an int
      */
-    public int addPlayer(long playerID){
-        players.add(new Player(playerID));
+    public int addPlayer(long userID){
+        Player player = new Player(userID,this);
+        players.add(player);
         playerCount=players.size();
+        player.setCashOnHand(defaultCashOnHand);
+        player.setPlayerID(playerCount-1);
         lastGameActions.add(null);
         return players.size();
     }
@@ -368,7 +365,7 @@ public class GameState {
      */
     public Player getPlayer(long userID){
         for (Player p:players){
-            if (p.getId()==userID){
+            if (p.getUserID()==userID){
                 return p;
             }
         }
@@ -423,6 +420,25 @@ public class GameState {
     }
 
     /**
+     * Creates a list of the communityCards to return them
+     * @return a list of the communityCards
+     */
+    public List<Card> receiveCommunityCards() {
+        List<Card> cards = new ArrayList<>();
+
+        cards.add(getCommunityCardOne());
+        cards.add(getCommunityCardTwo());
+        cards.add(getCommunityCardThree());
+        if (round <= 2) {
+            cards.add(getCommunityCardFour());
+        }
+        if (round <= 3) {
+            cards.add(getCommunityCardFive());
+        }
+        return cards;
+    }
+
+    /**
      * All Community Cards return the card position, one through to five
      * @return return the community card being requested
      */
@@ -440,24 +456,6 @@ public class GameState {
     }
     public Card getCommunityCardFive(){
         return communityCardFive;
-    }
-
-    /**
-     * SetCommunityCard takes a card from the deck and places it in the first empty spot
-     * @param communityCard the card to be set, it takes it from the deck if not provided
-     */
-    public void setCommunityCard(Card communityCard){
-        if (communityCardOne==null){
-            communityCardOne=deck.getCard();
-        } else if (communityCardTwo==null){
-            communityCardTwo=deck.getCard();
-        } else if (communityCardThree==null){
-            communityCardThree=deck.getCard();
-        } else if (communityCardFour==null){
-            communityCardFour=deck.getCard();
-        } else if (communityCardFive==null){
-            communityCardFive=deck.getCard();
-        }
     }
 
     /**
@@ -498,6 +496,50 @@ public class GameState {
 
     public void setCommunityCardFive(Card communityCardFive) {
         this.communityCardFive = communityCardFive;
+    }
+
+    public boolean removePlayer(long userID){
+        Player player=getPlayer(userID);
+        if (player.getIsDealer()){
+            advanceDealer();
+        }
+        if (getPresentTurn()==player.getPlayerID()){
+            nextTurn();
+        }
+        players.remove(player);
+        return true;
+    }
+
+    public void startGame(){
+        dealer=0;
+        deck=new Deck(this);
+        pot = new Pot(playerCount,this);
+        lastBet=2; // This would represent the small blind last payer. If nobody raises, the round ends when small blind is reached
+        minimumBet=bigBlind;
+        presentTurn=3;
+        round=1;
+        dealCommunityCards();
+        for (Player p: players){
+            p.setCardOne(deck.dealCard());
+            p.setCardTwo(deck.dealCard());
+        }
+    }
+
+    public void dealCommunityCards(){
+        if (round==1){
+            communityCardOne=deck.dealCard();
+            communityCardTwo=deck.dealCard();
+            communityCardThree=deck.dealCard();
+        } else if (round==2){
+            communityCardFour=deck.dealCard();
+        } else if (round==3){
+            communityCardFive=deck.dealCard();
+        }
+    }
+
+    public int getBet(int playerID){
+        return players.get(playerID).getBet();
+
     }
 
 }

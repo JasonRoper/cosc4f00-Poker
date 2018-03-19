@@ -1,10 +1,36 @@
+/**
+ * PockerClient is connects to the websocket and provides an interface that
+ * allows any number of subscriptions to any number of STOMP paths. When a
+ * message is recieved on a path, every subscriber is messaged with the object
+ * that was received.
+ *
+ * PokerClient is a singleton. It is used by importing this module as default.
+ * @example
+ * ```typescript
+ * import PokerClient from '@/api/pokerclient'
+ *
+ * PokerClient.subscribeOn("/a/STOMP/path", function(result) {
+ *   console.log("A message was received: ", result)
+ *   handleResult(result)
+ * })
+ *
+ * PokerClient.send("/another/STOMP/path", {message: "this is a message"})
+ * ```
+ *
+ * Various helper methods are provided to allow easy switching between paths,
+ * and swapping out subscribing functions.
+ */
+
+/**
+ * The path that we connect to is defined in the frontend configuration.
+ */
 import { WEBSOCKET_PATH } from '@/config'
 import webstomp from 'webstomp-client'
 
 type EventCallback = (payload: any) => void
 
 /**
- * Used to manage multiple subscriptions to the websocket.
+ * Subscription is used to manage multiple subscriptions to the websocket.
  */
 class Subscription {
   private path: string
@@ -88,9 +114,25 @@ class Subscription {
  * Possible states the websocket can be in.
  */
 enum WebsocketState {
-  CONNECTED,
-  DISCONNECTED,
-  ERROR
+  CONNECTED = 'CONNECTED',
+  DISCONNECTED = 'DISCONNECTED',
+  ERROR = 'ERROR'
+}
+
+/**
+ * PokerHeaders contains all of the context information needed to be sent along
+ * with a message through the websocket
+ */
+class PokerHeaders {
+  public user: string
+
+  /**
+   * Create a new PokerHeaders with the given username
+   * @param username - the username to send to the server
+   */
+  public constructor (username: string) {
+    this.user = username
+  }
 }
 
 /**
@@ -101,7 +143,8 @@ class PokerClient {
   private socket: webstomp.Client
   private subscriberMap: Map<string, Subscription>
   private state: WebsocketState
-  private unsentMessages: Array<{ path: string, payload: any}>
+  private unsentMessages: Array<{ path: string, payload: any }>
+  private headers: PokerHeaders | undefined
 
   /**
    * Creates a Stomp websocket client.
@@ -113,10 +156,23 @@ class PokerClient {
     this.subscriberMap = new Map()
     this.unsentMessages = []
     this.state = WebsocketState.DISCONNECTED
+    this.headers = undefined
+    this.connect()
+  }
 
-    const connectCallback = () => {
+  /**
+   * connect is a helper function that will connet to the websocket.
+   */
+  public connect (doAfter?: (frame: webstomp.Frame | undefined) => void) {
+    // if we're already connected, do nothing
+    if (this.connected()) {
+      if (doAfter) doAfter(undefined)
+      return
+    }
+
+    const connectCallback = (response: webstomp.Frame | undefined) => {
       this.state = WebsocketState.CONNECTED
-      console.log('connected to websocket at %s', websocketPath)
+      console.log('connected to websocket at %s', this.websocketPath)
 
       // Subscribe to all paths that were subscribed to while connecting
       this.subscriberMap.forEach((sub, key, map) => {
@@ -128,16 +184,20 @@ class PokerClient {
       // response that is triggered due to a enqueued message.
       // TODO: check to see if rate limiting is required
       this.unsentMessages.forEach((element) => {
-        this.socket.send(element.path, element.payload)
+
+        this.socket.send(element.path, element.payload, { ...(this.headers) })
       })
+
+      if (doAfter) doAfter(response)
     }
 
     // No error handling right now - if you fail to connect, you're just
     // fucked
     const errorCallback = () => {
       this.state = WebsocketState.ERROR
-      console.log('failed to connect to websocket at %s', websocketPath)
+      console.log('failed to connect to websocket at %s', this.websocketPath)
     }
+
     this.socket.connect({}, connectCallback, errorCallback)
   }
 
@@ -156,6 +216,26 @@ class PokerClient {
   }
 
   /**
+   * disconnect the websocket.
+   *
+   * @param doAfter the function that will be called after the client has disconnected
+   */
+  public disconnect (doAfter: () => void) {
+    this.state = WebsocketState.DISCONNECTED
+    this.socket.disconnect(doAfter)
+  }
+
+  /**
+   * Reconnect with the websocket.
+   */
+  public reconnect () {
+    this.disconnect(() => {
+      this.socket = webstomp.client(this.websocketPath)
+      this.connect()
+    })
+  }
+
+  /**
    * Send the payload to the given path.
    * If the socket hasn't connected yet, enqueue it to be sent
    * on success
@@ -164,7 +244,7 @@ class PokerClient {
    */
   public send (path: string, payload: any) {
     if (this.connected()) {
-      this.socket.send(path, JSON.stringify(payload))
+      this.socket.send(path, JSON.stringify(payload), { ...(this.headers) })
     } else if (this.errorOccurred()) {
       console.log('Websocket(%s): socket in error state, cannot send data {path: %s, payload: %s}',
         this.websocketPath, path, payload)

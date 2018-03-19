@@ -1,7 +1,10 @@
+/**
+ * Defines enum of Card Objects
+ */
 export default {
-//  Turn down Cards
+  //  Turn down Cards
   BLANK_CARD: 'blank card',
-//  Spades
+  //  Spades
   SPADES_ACE: 'spades ace',
   SPADES_TWO: 'spades two',
   SPADES_THREE: 'spades three',
@@ -15,7 +18,7 @@ export default {
   SPADES_JACK: 'spades jack',
   SPADES_QUEEN: 'spades queen',
   SPADES_KING: 'spades king',
-// Hearts
+  // Hearts
   HEARTS_ACE: 'hearts ace',
   HEARTS_TWO: 'hearts two',
   HEARTS_THREE: 'hearts three',
@@ -29,7 +32,7 @@ export default {
   HEARTS_JACK: 'hearts jack',
   HEARTS_QUEEN: 'hearts queen',
   HEARTS_KING: 'hearts king',
-// Diamonds
+  // Diamonds
   DIAMONDS_ACE: 'diamonds ace',
   DIAMONDS_TWO: 'diamonds two',
   DIAMONDS_THREE: 'diamonds three',
@@ -43,7 +46,7 @@ export default {
   DIAMONDS_JACK: 'diamonds jack',
   DIAMONDS_QUEEN: 'diamonds queen',
   DIAMONDS_KING: 'diamonds king',
-// Clubs
+  // Clubs
   CLUBS_ACE: 'clubs ace',
   CLUBS_TWO: 'clubs two',
   CLUBS_THREE: 'clubs three',

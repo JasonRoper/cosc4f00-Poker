@@ -1,9 +1,50 @@
-import PokerClient from '@/api/pokerclient'
 /**
- * Helper class that will build the paths used to access a game
+ * The game serivce wraps all communication over the websocket that relates to playing a
+ * game.
+ *
+ * All objects that are communicated over the websocket have interfaces defined in this module.
+ *
+ * Currently the STOMP paths:
+ * ```
+ * /app/game/{id}/play recieves a GameAction
+ * /messages/game/{id} sends a GameState
+ * /messages/game/{id}/status sends a GameFinished
+ * /messages/game/{id}/error sends a GameError
+ * /messages/game/{id}/{userid}/cards sends the players cards
+ * ```
+ * have an interface provided.
+ *
+ * The GameService can be used by:
+ * @example
+ * ```typescript
+ * import { GameService } from '@/api/gameservice'
+ * function connectToGame(gameId: number): GameService {
+ *   let gameService = new GameService(gameId)
+ *   gameService.onGameUpdated(handleGameUpdated)
+ *   gameService.onGameFinished(handleGameFinished)
+ *   gameService.onGameError(handleGameError)
+ *   gameService.onUserCards(handleUserCards)
+ *   return gameService
+ * }
+ *
+ * function exitGame(gameService: GameService) {
+ *   gameService.finish()
+ *   // ...handle other exit conditions
+ * }
+ * ```
+ */
+
+/**
+ * The gameservice uses PokerClient to send and recieve
+ * messages to the websocket.
+ */
+import PokerClient from '@/api/pokerclient'
+
+/**
+ * GamePaths is a helper class that will build the paths used to access a game
  * with the given id.
  */
-export default class GamePaths {
+export class GamePaths {
   public GAME_UPDATES: string
   public GAME_FINISHED: string // Displays the winners and losers of the hand - and cards
   public GAME_ERROR: string
@@ -24,7 +65,7 @@ export default class GamePaths {
 
     this.USER_ACTIONS = '/app/game/' + gameId + '/play'
 
-    this.USER_CARDS = userId ? messageGame + gameId + '/' + userId + '/cards' : ''
+    this.USER_CARDS = 'user' + messageGame + gameId
   }
 }
 
@@ -36,6 +77,9 @@ export interface UserCards {
   card2: string
 }
 
+/**
+ * The GameFinished interface is sent whenever a hand is finished.
+ */
 export interface GameFinished {
   winner: number
   time: number
@@ -91,9 +135,9 @@ export interface PlayerWithoutCards {
 }
 
 /**
- * GameEventType always sends GameState objecct and determinds what ty
+ * GameStateType is sent with a GameState object to tell the client why the GameState
+ * was sent.
  */
-
 export enum GameStateType {
   HAND_STARTED = 'HAND_STARTED', // USER Joins the GAME
   USER_ACTION = 'USER_ACTION', // This is sent after a player makes an action
@@ -104,13 +148,6 @@ export enum GameStateType {
 }
 
 /**
- * The Event the delivers the users cards
- * @event - deals users cards
- */
-export enum UserEventType {
-  USER_CARDS = 'USER_CARDS'
-}
-/**
  * Holds different types of Game Actions that a user can make
  */
 export enum GameActionType {
@@ -120,6 +157,7 @@ export enum GameActionType {
   FOLD = 'FOLD',
   RAISE = 'RAISE'
 }
+
 /**
  * Holds Game Actions that a user can make
  */
@@ -128,14 +166,32 @@ export interface GameAction {
   bet: number
 }
 
+/**
+ * The GameUpdatedCallback is the type of function that will
+ * be called when the GameService recieves a GameState
+ */
 export type GameUpdatedCallback = (newState: GameState) => void
-export type GameFinishedCallback = (gameFinished: GameFinished) => void
-export type GameErrorCallback = (gameError: GameError) => void
-export type UserCardsCallback = (userCards: UserCards) => void
-export type UserActionsCallback = (action: GameAction) => void
 
 /**
- * Manages all access to games on the server
+ * The GameFinishedCallback is the type of function that will be
+ * called when the GameService recieves a GameFinished update
+ */
+export type GameFinishedCallback = (gameFinished: GameFinished) => void
+
+/**
+ * The GameErrorCallback is the type of function that will be
+ * called when the GameService recieves a GameError update
+ */
+export type GameErrorCallback = (gameError: GameError) => void
+
+/**
+ * The GameFinishedCallback is the type of function that will be
+ * called when the GameService recieves the users cards
+ */
+export type UserCardsCallback = (userCards: UserCards) => void
+
+/**
+ * The GameService manages access to a games events on the server.
  */
 export class GameService {
   private gameId: number
@@ -145,7 +201,6 @@ export class GameService {
   private onGameFinishedCallback: GameFinishedCallback | null = null
   private onGameErrorCallback: GameErrorCallback | null = null
   private onUserCardsCallback: UserCardsCallback | null = null
-  private onUserActionsCallback: UserActionsCallback | null = null
 
   /**
    * Create a GameService to manage access to the game at gameId
@@ -263,3 +318,5 @@ export class GameService {
 
   }
 }
+
+export default GameService
