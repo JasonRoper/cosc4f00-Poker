@@ -1,22 +1,11 @@
 <template>
 
 <div id="page-bg"    class="container-fluid text-sm-center mycontent ">
-
-  <!-- MenuIcon -->
-  <!-- <div id="sidebar"> -->
     <div class="menu-icon" @click="toggleSidebar()" >
       <span></span>
       <span></span>
       <span></span>
     </div>
-  <!-- </div>   -->
-
-  <!--/Menu Icon-->
-  <!-- Side Bar Content -->
-  <!--  -->
-
-
-  <!--/Side BAr content  -->
   <div class="container text-sm-center mycontent "  >
     <!-- <div  class=" container text-lg-center"> -->
     <div class="row">
@@ -26,18 +15,8 @@
     <ul class="menu">
       <li><a href="#">Poker Pals</a></li>
        <li><a href="#">Pals</a></li>
-      <!-- <li><a href="#">Games</a></li> -->
-      <!-- <li><a href="#">Groups</a></li> -->
-      <!-- <li><a href="#">Leave game</a></li> if in a game leave game -->
       <li><a href="#">Options</a></li>
       <li><a href="#">Sign Out</a></li>
-    </ul>
-    <ul class="social-icon ">
-      <li><a href="#"><i class=" fa fa-twitter fa-lg fa-2x " aria-hidden="true"></i></a></li>
-      <li><a href="#"><i class=" fa fa-google-plus fa-lg fa-2x" aria-hidden="true"></i></a></li>
-      <li><a href="#"><i class=" fa fa-linkedin fa-lg fa-2x" aria-hidden="true"></i></a></li>
-      <li><a href="#"><i class=" fa fa-instagram fa-lg fa-2x" aria-hidden="true"></i></a></li>
-
     </ul>
   </div>
 </div>
