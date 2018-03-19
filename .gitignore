@@ -3,3 +3,4 @@ dist
 .vscode
 tsout
 client/test/unit/coverage
+client/debug.log
