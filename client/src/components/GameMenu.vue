@@ -300,15 +300,13 @@ export default {
     },
     chipChoice: function (choice) {
       if (choice === 'PokerTutorial') {
-        this.gameReq.createGame().then(() => {
-          this.$router.push({name: 'Table', params: {gameId: this.gameReq.gameId}})
-        })
+        this.$router.push('Table')
       }
       if (choice === 'CompetitivePoker') {
         alert('Lets Compete Poker')
         alert('Lets Compete Poker')
-        this.instrcutionPokerMode = false
-        this.showTable = true
+        // this.instrcutionPokerMode = false
+        // this.showTable = true
         this.gameReq.createGame().then(() => {
           alert('I am pushing you to the table view')
           alert(this.gameReq.gameId)

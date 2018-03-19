@@ -1,22 +1,11 @@
 <template>
 
 <div id="page-bg"    class="container-fluid text-sm-center mycontent ">
-
-  <!-- MenuIcon -->
-  <!-- <div id="sidebar"> -->
     <div class="menu-icon" @click="toggleSidebar()" >
       <span></span>
       <span></span>
       <span></span>
     </div>
-  <!-- </div>   -->
-
-  <!--/Menu Icon-->
-  <!-- Side Bar Content -->
-  <!--  -->
-
-
-  <!--/Side BAr content  -->
   <div class="container text-sm-center mycontent "  >
     <!-- <div  class=" container text-lg-center"> -->
     <div class="row">
@@ -26,18 +15,8 @@
     <ul class="menu">
       <li><a href="#">Poker Pals</a></li>
        <li><a href="#">Pals</a></li>
-      <li><a href="#">Games</a></li>
-      <li><a href="#">Groups</a></li>
-      <li><a href="#">Trophics</a></li>
       <li><a href="#">Options</a></li>
-      <li><a href="#">Sign Outs</a></li>
-    </ul>
-    <ul class="social-icon ">
-      <li><a href="#"><i class=" fa fa-twitter fa-lg fa-2x " aria-hidden="true"></i></a></li>
-      <li><a href="#"><i class=" fa fa-google-plus fa-lg fa-2x" aria-hidden="true"></i></a></li>
-      <li><a href="#"><i class=" fa fa-linkedin fa-lg fa-2x" aria-hidden="true"></i></a></li>
-      <li><a href="#"><i class=" fa fa-instagram fa-lg fa-2x" aria-hidden="true"></i></a></li>
-
+      <li><a href="#">Sign Out</a></li>
     </ul>
   </div>
 </div>
@@ -55,7 +34,7 @@
   <div class="col-sm-center text-center" >
     <div class="CompleteTable">
       <div v-if="this.userId === null">
-        <seat v-for="player in this.mechanics.multiplePlayers" :key="player.id" :data="player"></seat>
+        <seat  class="player" v-for="player in this.getOpponents()" :key="player.id" :data="player"></seat>
 
       </div>
               <div class="inner-tableBorder">
@@ -153,12 +132,6 @@
 
 
 <script>
-/**
- * A simple checkbox component.
- * @module components/basic/checkbox
- * @param {number} [disabled=false] - Disabled component
- * @param {string[]} model - Required, need two way
- */
 import Player from '@/components/table/Player.vue'
 import Card from '@/components/table/Card'
 import TableActions from '@/components/table/TableActions'
@@ -279,6 +252,7 @@ export default {
       window.addEventListener('resize', this.adjustsideBar)
     })
     // Circle equation for displaying player corectly  in a circle
+    // Put Get Opponents in the players
     let players = document.getElementsByClassName('player')
     let numberofPoints = players.length
     let degreeIncrument = 360 / numberofPoints
@@ -288,7 +262,6 @@ export default {
     let theta = 0
     for (let i = 0; i < numberofPoints; i++) {
       theta = theta + degreeIncrument
-      // x = radius * Math.cos(degrees * Math.PI / 180.0).toFixed(3) // convert raidains
       x = radius * Math.cos(theta * Math.PI / 180.0).toFixed(3) // Convert to radians
       y = radius * Math.sin(theta * Math.PI / 180.0).toFixed(3)
       players[i].style.transform = 'translateX(' + x + 'pt) translateY(' + y + 'pt)'

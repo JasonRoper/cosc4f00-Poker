@@ -8,15 +8,6 @@
       <span></span>
       <span></span>
     </div>
-  <!-- </div>   -->
-
-  <!--/Menu Icon-->
-  <!-- Side Bar Content -->
-  <!--  -->
-
-
-  <!--/Side BAr content  -->
-
 
   <div class="container text-sm-center mycontent "  >
     <!-- <div  class=" container text-lg-center"> -->
@@ -29,24 +20,13 @@
       <li><a href="#">Poker Pals</a></li>
        <li><a href="#">Pals</a></li>
       <li><a href="#">Games</a></li>
-      <li><a href="#">Groups</a></li>
-      <li><a href="#">Trophics</a></li>
-      <li><a href="#">Options</a></li>
-      <li><a href="#">Sign Outs</a></li>
-    </ul>
-    <ul class="social-icon ">
-      <li><a href="#"><i class=" fa fa-twitter fa-lg fa-2x " aria-hidden="true"></i></a></li>
-      <li><a href="#"><i class=" fa fa-google-plus fa-lg fa-2x" aria-hidden="true"></i></a></li>
-      <li><a href="#"><i class=" fa fa-linkedin fa-lg fa-2x" aria-hidden="true"></i></a></li>
-      <li><a href="#"><i class=" fa fa-instagram fa-lg fa-2x" aria-hidden="true"></i></a></li>
-
+      <li><a href="#">Option</a></li>
+      <li><a href="#">Sign Out</a></li>
     </ul>
   </div>
 </div>
 
-
-      <div id="page-content" class="col">
-
+ <div id="page-content" class="col">
 <ul class="nav nav-tabs" id="myTab" role="tablist">
   <li class="nav-item">
     <a class="nav-link active" id="game-tab" data-toggle="tab" href="#game" role="tab" aria-controls="game" aria-selected="true">Game</a>
