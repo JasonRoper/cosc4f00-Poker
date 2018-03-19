@@ -1,13 +1,13 @@
 /**
  * Game Mechanics Class Requests a TableView
- * A game is joined through subscribing to the necessary STOMP endpoints. 
+ * A game is joined through subscribing to the necessary STOMP endpoints.
  * The Game Mechanics provides all of the information necessary to show a table
- * Through the subscriptions from game Mechanics it receives new states and can 
- * send user actions.  
+ * Through the subscriptions from game Mechanics it receives new states and can
+ * send user actions.
  */
 
 /**
- * GameMechanics uses Game service to send and receive updates 
+ * GameMechanics uses Game service to send and receive updates
  */
 import {
   GameAction,
@@ -292,8 +292,6 @@ export default class GameMech {
     return true
   }
 
-
-
   /**
    *  Sets the Game Transport in the Game Mechanics
    * @param GameState
@@ -347,8 +345,7 @@ export default class GameMech {
     }
 
     // If the player has premove staged then they will move it
-    this.sendAction() 
-    
+    this.sendAction()
     this.setTableActions()
   }
 
@@ -360,7 +357,7 @@ export default class GameMech {
     return this.gameService.connected()
   }
   /**
-   * Sends action to the server 
+   * Sends action to the server
    * @param gameAction - Action to sent to the server
    */
   private send (gameAction: GameAction) {
@@ -371,17 +368,17 @@ export default class GameMech {
    * Validates users action and sends it to the server
    */
   private sendAction () {
-        // Confirms that you have an action to send
-        if (this.userAction !== null) {
-          // Confirms that it is your turn
-          if (this.playerLoc() === this.turn) {
-            // Confirms that this is a valid move
-            if (this.validatePreMove(this.userAction)) {
-              this.send(this.userAction)
-              this.userAction = null
-            }
-          }
+    // Confirms that you have an action to send
+    if (this.userAction !== null) {
+      // Confirms that it is your turn
+      if (this.playerLoc() === this.turn) {
+        // Confirms that this is a valid move
+        if (this.validatePreMove(this.userAction)) {
+          this.send(this.userAction)
+          this.userAction = null
         }
+      }
+    }
   }
 
 }

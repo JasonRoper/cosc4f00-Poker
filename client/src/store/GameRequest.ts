@@ -7,7 +7,8 @@
  * let gameId = game.createGame()
  * ```
  */
-
+import GamePaths from '@/api/gameservice'
+import PokerClient from '@/api/pokerclient'
 /**
  * API_V1 - Holds webpath data that will interact with client
  */
@@ -17,13 +18,11 @@ import { API_V1 } from '@/config'
  */
 import axios from 'axios'
 /**
- * GamePaths - Imports game paths 
+ * GamePaths - Imports game paths
  */
-import GamePaths from '@/api/gameservice'
-import PokerClient from '@/api/pokerclient'
 /**
  * Game Request will request for a new game to be created or join specified game
- * @class - Requests new games to be created or joins games 
+ * @class - Requests new games to be created or joins games
  */
 
 export default class GameRequest {
