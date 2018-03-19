@@ -58,14 +58,14 @@ export class GamePaths {
   constructor (gameId: number, userId?: number) {
     const messageGame = '/messages/game/'
 
-    this.GAME_UPDATES = messageGame + gameId + '/' + userId
+    this.GAME_UPDATES = messageGame + gameId
     this.GAME_FINISHED = messageGame + gameId + '/status'
 
     this.GAME_ERROR = messageGame + gameId + '/error'
 
     this.USER_ACTIONS = '/app/game/' + gameId + '/play'
 
-    this.USER_CARDS = userId ? messageGame + gameId + '/' + userId + '/cards' : ''
+    this.USER_CARDS = 'user' + messageGame + gameId
   }
 }
 

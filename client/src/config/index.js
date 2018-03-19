@@ -11,7 +11,7 @@ export const BASE_PATH = 'localhost:8443'
  * API_V1 defines the root path that all api v1 queries will be based
  * off of.
  */
-export const API_V1 = '/api/v1' // 'https://' + BASE_PATH + '/api/v1'
+export const API_V1 = 'https://' + BASE_PATH + '/api/v1' // 'https://' + BASE_PATH + '/api/v1'
 
 /**
  * The WEBSOCKET_PATH is the path to connect to the websocket.

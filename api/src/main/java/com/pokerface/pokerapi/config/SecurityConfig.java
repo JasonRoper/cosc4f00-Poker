@@ -1,6 +1,7 @@
 package com.pokerface.pokerapi.config;
 
 import com.pokerface.pokerapi.users.UserService;
+import org.springframework.boot.autoconfigure.security.Http401AuthenticationEntryPoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -11,6 +12,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
+import org.springframework.security.web.savedrequest.NullRequestCache;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -73,12 +79,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/v1/**").hasRole("USER")
                 // allow anyone to access the front end
                 .antMatchers("/**").permitAll()
-                // csrf protection disabled for now to facilitate development
-                .and().csrf().disable()
-                // allow cross site requests also to facilitate development
-                .cors()
                 // allow authentication with HTTP basic (ie. every request sends a username and password)
-                .and().httpBasic();
+                .and().httpBasic()
+                // need to use cookie csrf protection without HttpOnly flag in order for it to work with
+                // axios and new Websocket()
+                .and().csrf().disable() //csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                .cors().disable()
+                // enable logging out to invalidate the JSESSION cookie
+                .logout().permitAll().logoutUrl("/api/v1/users/logout")
+                // we don't want the default authentication popup to show if we are not authenticated
+                .and().exceptionHandling().authenticationEntryPoint(new Http401AuthenticationEntryPoint("FormBased"));
     }
 
     /**

@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 
@@ -39,8 +41,10 @@ public class UserController {
      * @return the response, if it was successful or not
      */
     @PostMapping()
-    public ResponseEntity<UserTransport> register(@Valid @RequestBody RegistrationFields fields) {
-        return new ResponseEntity<>(userService.register(fields), HttpStatus.CREATED);
+    public ResponseEntity<UserTransport> register(@Valid @RequestBody RegistrationFields fields, HttpServletRequest request) throws ServletException {
+        ResponseEntity<UserTransport> response = new  ResponseEntity<>(userService.register(fields), HttpStatus.CREATED);
+        request.login(fields.getUsername(), fields.getPassword());
+        return response;
     }
 
     /**

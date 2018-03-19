@@ -4,19 +4,20 @@
  * user account is in an error state.
  */
 
- /**
-  * users uses axios in order to send http requests to the server
-  */
+/**
+ * users uses axios in order to send http requests to the server
+ */
 import axios from 'axios'
 
 /**
  * the path that is to be requested is defined in the config.
  */
-import { API_V1 } from '@/config'
+import {
+  API_V1
+} from '@/config'
 
 /**
- * PokerClient is needed to set user information on - if they are
- * authenticated, the websocket needs to include it in it' headers
+ * Need to reconnect with the websocket whenever the authentication state changes
  */
 import PokerClient from '@/api/pokerclient'
 
@@ -25,7 +26,8 @@ import PokerClient from '@/api/pokerclient'
  */
 const paths = {
   LOGIN: API_V1 + '/users/login',
-  REGISTER: API_V1 + '/users'
+  REGISTER: API_V1 + '/users',
+  LOGOUT: API_V1 + '/users/logout'
 }
 
 /**
@@ -34,9 +36,7 @@ const paths = {
  */
 const state = {
   username: null,
-  password: null,
   userId: null,
-  email: null,
   status: true,
   errors: {
     login: [],
@@ -61,13 +61,11 @@ const getters = {
 /**
  * set the user relevant fields in the state
  * @param {UserState} state - the UserState
- * @param {username: string, password: string, userId: number, email: string} fields - the fields to set
+ * @param {username: string, userId: number, email: string} fields - the fields to set
  */
 function assignUserFields (state, fields) {
   state.username = fields.username
-  state.password = fields.password
   state.userId = fields.userId
-  state.email = fields.email
 }
 
 /**
@@ -81,15 +79,16 @@ const mutations = {
    */
   setUser (state, payload) {
     assignUserFields(state, payload)
-    PokerClient.setUsername(payload.username)
   },
   /**
    * set all of the user fields to null.
    * @param {UserState} state - the user state
    */
   logout (state) {
-    assignUserFields(state, {username: null, password: null, userId: null, email: null})
-    PokerClient.unsetUsername()
+    assignUserFields(state, {
+      username: null,
+      userId: null
+    })
   },
   /**
    * add a login error to the list
@@ -137,6 +136,37 @@ const mutations = {
  */
 const actions = {
   /**
+   * Tell the api to forget our session cookie, and, if successful, clear
+   * the state of the user
+   * @param {Vuex} - the vuex context
+   */
+  logout (context) {
+    axios.post(paths.LOGOUT).then((response) => {
+      context.commit('logout')
+      // need to reconnect to the websocket in order to remove the previous authentication
+      PokerClient.reconnect()
+    })
+  },
+  /**
+   * test to see if we are logged in (via session cookie), if we are,
+   * set the user fields.
+   *
+   * @param {Vuex} context - the vuex context
+   */
+  verifyLoginState (context) {
+    axios.get(paths.LOGIN).then((response) => {
+      const loginInfo = {
+        userId: response.data.id,
+        username: response.data.username
+      }
+      context.commit('setUser', loginInfo)
+
+      // don't need to reconnect to the pokerclient here because if we have an
+      // active session, the pokerclient will have connected with that session
+      // even before this login request is called.
+    })
+  },
+  /**
    * log in to the server. This is just a validation function due
    * to the use of HttpBasic authentication
    * @param {Vuex} context - the vuex context
@@ -148,28 +178,41 @@ const actions = {
       context.commit('logout')
     }
 
-    axios.get(paths.LOGIN,
-      {
-        auth: {
-          username: loginInfo.username,
-          password: loginInfo.password}
+    axios.get(paths.LOGIN, {
+      auth: {
+        username: loginInfo.username,
+        password: loginInfo.password
       }
-    ).then(function (response) {
+    }).then(function (response) {
       loginInfo.userId = response.data.id
       context.commit('setUser', loginInfo)
+      // need to reconnect to the websocket in order to have the new authentication
+      // associated with it
+      PokerClient.reconnect()
     }).catch(function (reason) {
       if (!reason.response) {
-        context.commit('addGlobalError', {error: 'NetworKError', module: 'users', reason: reason})
+        context.commit('addGlobalError', {
+          error: 'NetworKError',
+          module: 'users',
+          reason: reason
+        })
         return
       }
 
       let error = reason.response.data.error
       switch (error) {
         case 'Unauthorized':
-          context.commit('addLoginError', {error: 'AuthenticationError', message: 'Error Authenticating'})
+          context.commit('addLoginError', {
+            error: 'AuthenticationError',
+            message: 'Error Authenticating'
+          })
           break
         default:
-          context.commit('addGlobalError', {error: 'UnknownLoginError', module: 'users', reason: reason})
+          context.commit('addGlobalError', {
+            error: 'UnknownLoginError',
+            module: 'users',
+            reason: reason
+          })
       }
     })
   },
@@ -194,46 +237,61 @@ const actions = {
 
     context.commit('resetRegistrationErrors')
     axios.post(paths.REGISTER, registrationFields)
-    .then(function (response) {
-      // success - the response body contains a userId, username and email - need to add password
-      context.commit('setUser', {
-        username: response.data.username,
-        userId: response.data.id,
-        email: response.data.email,
-        password: registrationFields.password })
-    }).catch(function (reason) {
-      if (!reason.response) {
-        console.log('unhandled error occured: ', reason)
-        context.commit('addGlobalError', {error: 'NetworkError', module: 'users', reason: reason})
-        return
-      }
+      .then(function (response) {
+        // success - the response body contains a userId, username and email - need to add password
+        context.commit('setUser', {
+          username: response.data.username,
+          userId: response.data.id
+        })
 
-      const body = reason.response.data
-
-      switch (body.exception) {
-        case 'com.pokerface.pokerapi.users.EmailAlreadyExistsException':
-          context.commit('addRegistrationError', { field: 'email', message: body.message })
-          break
-        case 'com.pokerface.pokerapi.users.UsernameAlreadyExistsException':
-          context.commit('addRegistrationError', { field: 'username', message: body.message })
-          break
-        case 'org.springframework.web.bind.MethodArgumentNotValidException':
-          // In the case of a validation error, the server will return a list
-          // of errors that occured, iterate through all of them, and set the
-          // error state accordingly
-          for (var error of body.errors) {
-            context.commit('addRegistrationError', {
-              field: error.field,
-              message: error.field + ' ' + error.defaultMessage
-            })
-          }
-          break
-        default:
-          context.commit('addGlobalError', {error: 'UnknownRegistrationError',
+        // need to reconnect to the websocket in order to have the new authentication
+        // associated with it
+        PokerClient.reconnect()
+      }).catch(function (reason) {
+        if (!reason.response) {
+          console.log('unhandled error occured: ', reason)
+          context.commit('addGlobalError', {
+            error: 'NetworkError',
             module: 'users',
-            reason: reason})
-      }
-    })
+            reason: reason
+          })
+          return
+        }
+
+        const body = reason.response.data
+
+        switch (body.exception) {
+          case 'com.pokerface.pokerapi.users.EmailAlreadyExistsException':
+            context.commit('addRegistrationError', {
+              field: 'email',
+              message: body.message
+            })
+            break
+          case 'com.pokerface.pokerapi.users.UsernameAlreadyExistsException':
+            context.commit('addRegistrationError', {
+              field: 'username',
+              message: body.message
+            })
+            break
+          case 'org.springframework.web.bind.MethodArgumentNotValidException':
+            // In the case of a validation error, the server will return a list
+            // of errors that occured, iterate through all of them, and set the
+            // error state accordingly
+            for (var error of body.errors) {
+              context.commit('addRegistrationError', {
+                field: error.field,
+                message: error.field + ' ' + error.defaultMessage
+              })
+            }
+            break
+          default:
+            context.commit('addGlobalError', {
+              error: 'UnknownRegistrationError',
+              module: 'users',
+              reason: reason
+            })
+        }
+      })
   }
 }
 

@@ -31,7 +31,8 @@ module.exports = {
       '/api': {
         target: 'https://localhost:8443',
         secure: false,
-        changeOrigin: true
+        changeOrigin: true,
+        cookieDomainRewrite: '',
       }
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"

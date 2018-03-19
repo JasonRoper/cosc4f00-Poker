@@ -7,7 +7,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.web.bind.annotation.*;
 
@@ -75,13 +77,14 @@ public class GameController {
      * passed it to its gameService to modify gameState and transport those changes
      * @param action the action that the user has sent
      * @param gameID the long gameID the action is being performed on
-     * @param userID the user that the message was received from
+     * @param principal the user that sent this message
      */
-    @MessageMapping("/game/{game_id}/{user_id}")
+    @MessageMapping("/game/{game_id}")
     public void receiveAction(@Payload GameAction action,
                               @DestinationVariable("game_id") long gameID,
-                              @DestinationVariable("user_id") long userID) {
-        int playerId = gameService.getPlayerID(gameID, userID);
+                              Principal principal) {
+        UserInfoTransport user = userService.getUserByUsername(principal.getName());
+        int playerId = gameService.getPlayerID(gameID, user.getId());
 
         GameStateTransport nextGameState = handleAction(gameID, action, playerId);
 
@@ -89,6 +92,12 @@ public class GameController {
             GameAction aiAction = aiService.playAction(gameID);
             nextGameState = handleAction(gameID, aiAction, nextGameState.getNextPlayer());
         }
+    }
+
+    @MessageMapping("test")
+    public void testWebsocket(@Payload long number, Principal principal) {
+        messenger.convertAndSend("/messages/game", principal.getName() + " is talking to me");
+        messenger.convertAndSendToUser(principal.getName(), "/messages/game", "but I love you most");
     }
 
     /**

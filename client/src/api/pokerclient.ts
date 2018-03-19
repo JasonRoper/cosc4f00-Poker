@@ -114,9 +114,9 @@ class Subscription {
  * Possible states the websocket can be in.
  */
 enum WebsocketState {
-  CONNECTED,
-  DISCONNECTED,
-  ERROR
+  CONNECTED = 'CONNECTED',
+  DISCONNECTED = 'DISCONNECTED',
+  ERROR = 'ERROR'
 }
 
 /**
@@ -157,14 +157,22 @@ class PokerClient {
     this.unsentMessages = []
     this.state = WebsocketState.DISCONNECTED
     this.headers = undefined
+    this.connect()
+  }
+
+  /**
+   * connect is a helper function that will connet to the websocket.
+   */
+  public connect (doAfter?: (frame: webstomp.Frame | undefined) => void) {
+    // if we're already connected, do nothing
+    if (this.connected()) {
+      if (doAfter) doAfter(undefined)
+      return
+    }
 
     const connectCallback = (response: webstomp.Frame | undefined) => {
       this.state = WebsocketState.CONNECTED
-      console.log('connected to websocket at %s', websocketPath)
-
-      if (response) {
-        console.log('connection frame: ', response)
-      }
+      console.log('connected to websocket at %s', this.websocketPath)
 
       // Subscribe to all paths that were subscribed to while connecting
       this.subscriberMap.forEach((sub, key, map) => {
@@ -179,15 +187,18 @@ class PokerClient {
 
         this.socket.send(element.path, element.payload, { ...(this.headers) })
       })
+
+      if (doAfter) doAfter(response)
     }
 
     // No error handling right now - if you fail to connect, you're just
     // fucked
     const errorCallback = () => {
       this.state = WebsocketState.ERROR
-      console.log('failed to connect to websocket at %s', websocketPath)
+      console.log('failed to connect to websocket at %s', this.websocketPath)
     }
-    this.socket.connect('', '', connectCallback, errorCallback)
+
+    this.socket.connect({}, connectCallback, errorCallback)
   }
 
   /**
@@ -202,6 +213,26 @@ class PokerClient {
    */
   public errorOccurred (): boolean {
     return this.state === WebsocketState.ERROR
+  }
+
+  /**
+   * disconnect the websocket.
+   *
+   * @param doAfter the function that will be called after the client has disconnected
+   */
+  public disconnect (doAfter: () => void) {
+    this.state = WebsocketState.DISCONNECTED
+    this.socket.disconnect(doAfter)
+  }
+
+  /**
+   * Reconnect with the websocket.
+   */
+  public reconnect () {
+    this.disconnect(() => {
+      this.socket = webstomp.client(this.websocketPath)
+      this.connect()
+    })
   }
 
   /**
@@ -297,14 +328,6 @@ class PokerClient {
    */
   public switchCallback (path: string, prevCallback: EventCallback | null, newCallback: EventCallback | null) {
     this.switchSubscription(path, prevCallback, path, newCallback)
-  }
-
-  public setLogin (username: string) {
-    this.headers = new PokerHeaders(username)
-  }
-
-  public unsetLogin () {
-    this.headers = undefined
   }
 }
 
