@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
  */
 @RunWith(SpringRunner.class)
 @DataJpaTest
-public class GameServiceRepositoryTest {
+public class GameLoopTest {
 
     GameService gameService;
 
@@ -28,68 +28,14 @@ public class GameServiceRepositoryTest {
     private TestEntityManager testEntityManager;
 
     @Before
-    public void setUpTest(){
+    public void setUpTest() {
         gameService = new GameService(games);
     }
 
-    @Test
-    public void testQuery(){
-        testEntityManager.persist(new GameState());
-        testEntityManager.persist(new GameState());
-        testEntityManager.persist(new GameState());
-        testEntityManager.persist(new GameState());
-        testEntityManager.persist(new GameState());
-        assertNotEquals(gameService.matchmake(1),0);
-    }
-
-    /**
-     * This test not only tests matchmake but also addPlayer, createGame and the repositories custom query as well
-     * as its ability to save new game updates.
-     */
-    @Test
-    public void testMatchmake(){
-        long id = gameService.matchmake(1);
-        assertNotEquals(id,0);
-    }
 
     @Test
-    public void testNullGameStateTransport(){
-        GameState game = games.findOne(gameService.createGame());
-        GameStateTransport transport=gameService.getGameStateTransport(game.getId());
-        System.out.println();
-    }
-
-    @Test
-    public void testWaitingGameStateTransport(){
-        GameState game = games.findOne(gameService.createGame());
-        game.addPlayer(1);
-        game.addPlayer(2);
-        game.addPlayer(3);
-        GameStateTransport transport=gameService.getGameStateTransport(game.getId());
-        System.out.println();
-    }
-
-    /**
-     * Tests the game starting state and the resulting transports
-     */
-    @Test
-    public void testStartingGameStateTransport(){
-        GameState game = games.findOne(gameService.createGame());
-        game.addPlayer(1);
-        game.addPlayer(2);
-        game.addPlayer(3);
-        game.addPlayer(4);
-        GameStateTransport transport=gameService.gameStart(game.getId());
-        HandTransport hand;
-        for (Player p:game.getPlayers()){
-            hand=new HandTransport(p.getCardOne(),p.getCardTwo());
-        }
-
-        System.out.println();
-    }
-
-    @Test
-    public void testGamePlay(){
+    public void testMultipleGameStart(){
+        GameState game2= games.findOne(gameService.createGame());
         GameState game = games.findOne(gameService.createGame());
         long gameID=game.getId();
         game.addPlayer(1);
@@ -108,10 +54,28 @@ public class GameServiceRepositoryTest {
         gameService.handleAction(gameID,createAction(2,GameActionType.BET,39230),gameService.getPlayerID(gameID,2));
         gameService.handleAction(gameID,createAction(3,GameActionType.FOLD,0),gameService.getPlayerID(gameID,3));
         System.out.println();
+
+
+        gameID=game2.getId();
+        game2.addPlayer(5);
+        game2.addPlayer(6);
+        game2.addPlayer(7);
+        game2.addPlayer(8);
+        game2.startGame();
+        gameService.handleAction(gameID,createAction(5,GameActionType.BET,10),gameService.getPlayerID(gameID,5));
+        gameService.handleAction(gameID,createAction(6,GameActionType.BET,10),gameService.getPlayerID(gameID,6));
+        gameService.handleAction(gameID,createAction(7,GameActionType.BET,10),gameService.getPlayerID(gameID,7));
+        gameService.handleAction(gameID,createAction(8,GameActionType.BET,10),gameService.getPlayerID(gameID,8));
+        game2=games.findOne(gameID);
+        games.save(game);
+        game2=games.findOne(gameID);
+        gameService.handleAction(gameID,createAction(5,GameActionType.CHECK,0),gameService.getPlayerID(gameID,5));
+        gameService.handleAction(gameID,createAction(6,GameActionType.BET,39230),gameService.getPlayerID(gameID,6));
+        gameService.handleAction(gameID,createAction(7,GameActionType.FOLD,0),gameService.getPlayerID(gameID,7));
+        System.out.println();
     }
 
     public GameAction createAction(long userID,GameActionType actionType,int bet){
         return new GameAction(userID,actionType,bet);
     }
-
 }

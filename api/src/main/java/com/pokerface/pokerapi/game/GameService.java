@@ -54,13 +54,13 @@ public class GameService {
     public GameStateTransport handleAction(long gameID, GameAction action, int playerID) {
 
         GameState gameState = games.findOne(gameID);
-        if (gameState.getPresentTurn()==playerID) {
+        if (gameState.getPresentTurn() == playerID) {
             Player player = gameState.getPlayer(playerID);
-            if (action.getType() == GameActionType.BET) {
+            if (action.getType() == GameActionType.BET||action.getType()==GameActionType.RAISE) {
                 bet(gameState, action, player);
             } else if (action.getType() == GameActionType.FOLD) {
                 fold(gameState, action, player);
-            } else if (action.getType() == GameActionType.CHECK) {
+            } else if (action.getType() == GameActionType.CHECK||action.getType()==GameActionType.CALL) {
                 check(gameState, action, player);
             }
 
@@ -82,20 +82,20 @@ public class GameService {
      * @return boolean representing if it went through successfully
      */
     public boolean bet(GameState gameState, GameAction action, Player player) {
-int amountToBet=action.getBet()+gameState.getMinimumBet()-player.getBet();
-if (amountToBet>=player.getCashOnHand()){
-return allIn(gameState,player);
-} else {
-    gameState.placeBet(player,amountToBet);
-}
+        int amountToBet = action.getBet() + gameState.getMinimumBet() - player.getBet();
+        if (amountToBet >= player.getCashOnHand()) {
+            return allIn(gameState, player);
+        } else {
+            gameState.placeBet(player, amountToBet);
+        }
 
-return true;
+        return true;
     }
 
-    public boolean allIn(GameState gameState, Player player){
+    public boolean allIn(GameState gameState, Player player) {
         player.setAllIn(true);
-        int amountToBet=player.getCashOnHand();
-        gameState.placeBet(player,amountToBet);
+        int amountToBet = player.getCashOnHand();
+        gameState.placeBet(player, amountToBet);
         return true;
     }
 
@@ -108,13 +108,13 @@ return true;
      * @return boolean representing if it went through successfully
      */
     public boolean check(GameState gameState, GameAction action, Player player) {
-        int amountToBet=gameState.getMinimumBet()-player.getBet();
-        if (amountToBet>player.getCashOnHand()){
-            return allIn(gameState,player);
+        int amountToBet = gameState.getMinimumBet() - player.getBet();
+        if (amountToBet > player.getCashOnHand()) {
+            return allIn(gameState, player);
         }
         gameState.placeCheck(player);
 
-return true;
+        return true;
     }
 
     /**
@@ -154,7 +154,7 @@ return true;
      * @return boolean representing if the round is ended
      */
     public boolean isRoundEnd(GameState gameState) {
-        if (gameState.getPresentTurn() == gameState.getLastBet() && gameState.getPlayers().get(gameState.getPreviousTurn()).getLastGameAction().getType()!=GameActionType.BET && gameState.getRound() != 3) {
+        if (gameState.getPresentTurn() == gameState.getLastBet()) {
             return true;
         }
         return false;
@@ -177,19 +177,20 @@ return true;
      * @return boolean value representing if the game hand has ended
      */
     public boolean isHandEnd(GameState gameState) {
-        int notFolded = 0;
+        int folded = 0;
+
         for (Player p : gameState.getPlayers()) {
-            if (!p.getHasFolded()) {
-                notFolded++;
+            if (p.getHasFolded()) {
+                folded++;
             }
         }
-        if (notFolded == 1) {
-            if (gameState.getRound() == 3) {
-                return false;
-            }
-            gameState.advanceDealer();
+
+        if (folded >= gameState.getPlayerCount() - 1) {
+            return true;
+        } else if (isRoundEnd(gameState) && gameState.getRound() == 3) {
             return true;
         }
+
         return false;
     }
 
@@ -201,8 +202,11 @@ return true;
      */
     private void addPlayer(long userID, long gameID) {
         GameState game = games.findOne(gameID);
-        game.addPlayer(userID);
+        if (!game.hasPlayer(userID)) {
+            game.addPlayer(userID);
+        }
         game = games.save(game);
+
     }
 
 
@@ -219,7 +223,7 @@ return true;
         if (gameID == -1) {
             gameID = createGame();
         }
-        addPlayer(userID,gameID);
+        addPlayer(userID, gameID);
 
         return gameID;
     }
@@ -283,23 +287,23 @@ return true;
         GameState gameState = games.findOne(gameID);
         int[] winners = new int[gameState.getPlayerCount()];
         List<Card> communityCards = gameState.receiveCommunityCards();
-        List<Pair<Integer,HandRanking>> handRanks = new ArrayList<>();
+        List<Pair<Integer, HandRanking>> handRanks = new ArrayList<>();
 
-        for (Player p:gameState.getPlayers()){
-            List<Card>playersCards = new ArrayList<>();
+        for (Player p : gameState.getPlayers()) {
+            List<Card> playersCards = new ArrayList<>();
             playersCards.addAll(p.receiveCards());
             playersCards.addAll(communityCards);
             List<Pair<Integer, HandRanking>> hands;
-            handRanks.add(Pair.of(p.getPlayerID(),new HandRanking(playersCards)));
+            handRanks.add(Pair.of(p.getPlayerID(), new HandRanking(playersCards)));
         }
 
         handRanks.sort((a, b) -> a.getSecond().compareTo(b.getSecond()));
-        int counter=1;
+        int counter = 1;
 
-        for (int i=0;i<winners.length;i++){
-            winners[handRanks.get(i).getFirst()]=counter;
-            if (handRanks.get(i).getSecond().compareTo(handRanks.get(i+1).getSecond())==0){
-                winners[handRanks.get(i+1).getFirst()]=counter;
+        for (int i = 0; i < winners.length; i++) {
+            winners[handRanks.get(i).getFirst()] = counter;
+            if (handRanks.get(i).getSecond().compareTo(handRanks.get(i + 1).getSecond()) == 0) {
+                winners[handRanks.get(i + 1).getFirst()] = counter;
             } else {
                 counter++;
             }
@@ -385,13 +389,12 @@ return true;
         return true;
     }
 
-    public GameStateTransport gameStart(long gameID){
-        GameState gameState=games.findOne(gameID);
+    public GameStateTransport gameStart(long gameID) {
+        GameState gameState = games.findOne(gameID);
         gameState.startGame();
         games.save(gameState);
         return getGameStateTransport(gameID);
     }
-
 
 
 }
