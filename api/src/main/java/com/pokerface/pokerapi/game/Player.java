@@ -26,6 +26,7 @@ public class Player {
     private boolean isDealer;
     private boolean isAllIn;
     private int bet;
+    private GameAction lastGameAction=null;
 
 
 
@@ -38,6 +39,7 @@ public class Player {
      * @param userID is the long UserID of the player
      */
     public Player(Long userID, GameState gameState){
+        lastGameAction=new GameAction(null,0,this);
         this.userID=userID;
         this.gameState=gameState;
         cashOnHand=getGameState().defaultCashOnHand;
@@ -115,7 +117,6 @@ public class Player {
      * @return the long userID of the Player
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     public long getUserID() {
         return userID;
     }
@@ -208,6 +209,29 @@ public class Player {
 
     public void addBet(int amount){
         bet+=amount;
+    }
+
+    public boolean isDealer() {
+        return isDealer;
+    }
+
+    public void setDealer(boolean dealer) {
+        isDealer = dealer;
+    }
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn
+    public GameAction getLastGameAction() {
+        return lastGameAction;
+    }
+
+    public void setLastGameAction(GameAction lastGameAction) {
+this.lastGameAction=lastGameAction;
+    }
+
+    public void updateLastGameAction(GameAction lastGameAction){
+        this.lastGameAction.setType(lastGameAction.getType());
+        this.lastGameAction.setBet(lastGameAction.getBet());
     }
 
 }

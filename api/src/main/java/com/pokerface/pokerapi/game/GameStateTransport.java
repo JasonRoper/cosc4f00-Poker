@@ -30,7 +30,7 @@ public class GameStateTransport {
         this.bigBlind = gameState.getBigBlind();
         this.players = new PlayerTransport[gameState.getPlayers().size()];
         for (int i = 0; i < this.players.length; i++) {
-            this.players[i] = new PlayerTransport(i, gameState.getPlayers().get(i).getCashOnHand(), gameState.getLastGameActions().get(i), gameState.getPlayers().get(i).getIsDealer(), gameState.getPlayers().get(i).getHasFolded());
+            this.players[i] = new PlayerTransport(i, gameState.getPlayers().get(i).getCashOnHand(), gameState.getPlayers().get(i).getLastGameAction(), gameState.getPlayers().get(i).getIsDealer(), gameState.getPlayers().get(i).getHasFolded());
         }
         this.nextPlayer = nextPlayer;
     }

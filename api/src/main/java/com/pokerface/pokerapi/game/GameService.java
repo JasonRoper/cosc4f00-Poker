@@ -64,7 +64,7 @@ public class GameService {
                 check(gameState, action, player);
             }
 
-            gameState.setLastGameAction(player.getPlayerID(), action);
+            player.updateLastGameAction(action);
             gameState.nextTurn();
             gameState = games.save(gameState);
         }
@@ -93,8 +93,9 @@ return true;
     }
 
     public boolean allIn(GameState gameState, Player player){
-
-
+        player.setAllIn(true);
+        int amountToBet=player.getCashOnHand();
+        gameState.placeBet(player,amountToBet);
         return true;
     }
 
@@ -107,6 +108,11 @@ return true;
      * @return boolean representing if it went through successfully
      */
     public boolean check(GameState gameState, GameAction action, Player player) {
+        int amountToBet=gameState.getMinimumBet()-player.getBet();
+        if (amountToBet>player.getCashOnHand()){
+            return allIn(gameState,player);
+        }
+        gameState.placeCheck(player);
 
 return true;
     }
@@ -148,7 +154,7 @@ return true;
      * @return boolean representing if the round is ended
      */
     public boolean isRoundEnd(GameState gameState) {
-        if (gameState.getPresentTurn() == gameState.getLastBet() && gameState.getLastGameActions().get(gameState.getPreviousTurn()).getType() != GameActionType.BET && gameState.getRound() != 3) {
+        if (gameState.getPresentTurn() == gameState.getLastBet() && gameState.getPlayers().get(gameState.getPreviousTurn()).getLastGameAction().getType()!=GameActionType.BET && gameState.getRound() != 3) {
             return true;
         }
         return false;
@@ -240,8 +246,7 @@ return true;
      * @return long id of the game created
      */
     public long createGame() {
-        GameState state = new GameState();
-        return games.save(state).getId();
+        return createGame(4);
     }
 
     /**

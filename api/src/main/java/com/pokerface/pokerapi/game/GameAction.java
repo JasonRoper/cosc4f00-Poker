@@ -14,11 +14,18 @@ import javax.persistence.*;
 public class GameAction {
     private GameActionType type;
     private int bet;
-    private GameState gameState;
+    private Player player;
     private long id; // id to the database
 
     public GameAction(){
 
+    }
+
+    public GameAction(GameActionType actionType,int bet,Player player){
+        this.player=player;
+        this.id=player.getUserID();
+        type=actionType;
+        this.bet=bet;
     }
 
     public GameAction(long userID, GameActionType actionType,int bet){
@@ -67,18 +74,18 @@ public class GameAction {
      */
     public void setBet(int bet){this.bet=bet;}
 
-    @ManyToOne
-    @JoinColumn(name="gameState")
-    public GameState getGameState() {
-        return gameState;
+    @OneToOne
+    @JoinColumn(name="player")
+    public Player getPlayer() {
+        return player;
     }
 
     /**
      * setGameState sets the gameState for storage purposes of lastAction
-     * @param gameState the gameState being set
+     * @param player the gameState being set
      */
-    public void setGameState(GameState gameState) {
-        this.gameState = gameState;
+    public void setPlayer(Player player) {
+        this.player=player;
     }
 
     /**
