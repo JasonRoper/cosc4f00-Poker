@@ -337,14 +337,10 @@ public class GameState {
      * nextTurn advances to the next players turn
      */
     public void nextTurn(){
+        previousTurn=presentTurn;
         while(true) {
-            previousTurn=presentTurn;
-            presentTurn++;
-
-            if (presentTurn == players.size()) {
-                presentTurn = 0;
-            }
-            if (!players.get(presentTurn).getHasFolded()){
+            presentTurn=advanceCounter(presentTurn);
+            if (!players.get(presentTurn).getHasFolded()&&!players.get(presentTurn).isAllIn()){
                 break;
             }
         }
@@ -478,7 +474,7 @@ public class GameState {
         dealer=0;
         deck=new Deck(this);
         pot = new Pot(playerCount,this);
-        lastBet=2; // This would represent the small blind last payer. If nobody raises, the round ends when small blind is reached
+
         minimumBet=0;
         presentTurn=advanceCounter(dealer);
         placeBet(players.get(presentTurn),bigBlind);
@@ -486,6 +482,7 @@ public class GameState {
         placeBet(players.get(presentTurn),bigBlind/2);
         presentTurn=advanceCounter(presentTurn);
         round=1;
+        lastBet=presentTurn; // This would represent the small blind last payer. If nobody raises, the round ends when small blind is reached
         dealCommunityCards();
         for (Player p: players){
             p.setCardOne(deck.dealCard());
@@ -516,6 +513,15 @@ public class GameState {
             counter=0;
         }
         return counter;
+    }
+
+    public boolean hasPlayer(long userID){
+        for (Player p:players){
+            if (p.getUserID()==userID){
+                return true;
+            }
+        }
+        return false;
     }
 
 }

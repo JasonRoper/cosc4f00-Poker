@@ -10,7 +10,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "gameaction")
-@JsonIgnoreProperties(value={"gameState","id"})
+@JsonIgnoreProperties(value={"player","id"})
 public class GameAction {
     private GameActionType type;
     private int bet;
