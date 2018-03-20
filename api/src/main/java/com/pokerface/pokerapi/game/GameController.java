@@ -116,14 +116,14 @@ public class GameController {
                 new GameStateTransport.PlayerTransport(
                         1,
                         200,
-                        new GameAction(admin.getId(), GameActionType.BET, 1),
+                        new GameAction(GameActionType.BET, 1),
                         true,
                         true
                 ), // admin
                 new GameStateTransport.PlayerTransport(
                         2,
                         10000,
-                        new GameAction(jason.getId(), GameActionType.BET, 1),
+                        new GameAction(GameActionType.BET, 1),
                         true,
                         false
                 )}); // jason

@@ -23,7 +23,6 @@ public class GameState {
     private int round;//What round are we on, enum? from 0-4, 0 transition value? 1 pre-bet, 2/3/4 is flop turn river respectively.
     private List<Player> players = new ArrayList<>();
     private int playerCount=0;
-    private List<GameAction> lastGameActions = new ArrayList<>();
     private Card communityCardOne,communityCardTwo,communityCardThree,communityCardFour,communityCardFive;
 
     private int previousTurn;
@@ -280,24 +279,6 @@ public class GameState {
     }
 
     /**
-     * matchBet returns a boolean value of if the player can match the minimum bet, and then does so
-     * @param playerSeatID of the better trying to match the current bet
-     * @return boolean value representing of if it was successful
-     */
-    public boolean matchBet (int playerSeatID){
-        Player player = players.get(playerSeatID);
-        int difference=minimumBet-players.get(playerSeatID).getBet();
-        if (player.getCashOnHand()>=difference){
-            players.get(playerSeatID).addBet(difference);
-            player.setCashOnHand(player.getCashOnHand()-difference);
-        } else {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * placeBet places a bet
      * @param player the player betting
      * @param betAmount the amount being bet
@@ -305,11 +286,23 @@ public class GameState {
      */
     public boolean placeBet(Player player, int betAmount){
         player.setCashOnHand(player.getCashOnHand()-betAmount);
-        minimumBet+=betAmount-minimumBet;
+        minimumBet=Math.max(betAmount+player.getBet(),minimumBet);
         player.addBet(betAmount);
+        setLastBet(player.getPlayerID());
         return true;
     }
 
+    /**
+     * Checks, sets the players bet up to the minimum bet.
+     * @param player
+     * @return
+     */
+    public boolean placeCheck(Player player){
+        int amount=minimumBet-player.getBet();
+        player.setCashOnHand(player.getCashOnHand()-amount);
+        player.addBet(amount);
+        return true;
+    }
     /**
      * Adds a player to the game
      * @param userID the ID of the player
@@ -321,7 +314,6 @@ public class GameState {
         playerCount=players.size();
         player.setCashOnHand(defaultCashOnHand);
         player.setPlayerID(playerCount-1);
-        lastGameActions.add(null);
         return players.size();
     }
 
@@ -389,34 +381,6 @@ public class GameState {
         if (dealer>=players.size()){
             dealer=0;
         }
-    }
-
-    /**
-     * getLastGameActions returns the player mapped lists of GameAction
-     * @return List of gameActions
-     */
-    @OneToMany(mappedBy = "gameState", cascade = CascadeType.ALL)
-    @OrderColumn
-    public List<GameAction> getLastGameActions() {
-        return lastGameActions;
-    }
-
-    /**
-     * Sets a list of gameActions
-     * @param lastGameActions the gameActions to be set
-     */
-    public void setLastGameActions(List<GameAction> lastGameActions) {
-        this.lastGameActions = lastGameActions;
-    }
-
-    /**
-     * This writes a players last action to the list
-     * @param playerID the player who did the action
-     * @param action the action they performed
-     */
-    public void setLastGameAction(int playerID, GameAction action){
-        lastGameActions.remove(playerID);
-        lastGameActions.add(playerID,action);
     }
 
     /**
@@ -515,8 +479,12 @@ public class GameState {
         deck=new Deck(this);
         pot = new Pot(playerCount,this);
         lastBet=2; // This would represent the small blind last payer. If nobody raises, the round ends when small blind is reached
-        minimumBet=bigBlind;
-        presentTurn=3;
+        minimumBet=0;
+        presentTurn=advanceCounter(dealer);
+        placeBet(players.get(presentTurn),bigBlind);
+        presentTurn=advanceCounter(presentTurn);
+        placeBet(players.get(presentTurn),bigBlind/2);
+        presentTurn=advanceCounter(presentTurn);
         round=1;
         dealCommunityCards();
         for (Player p: players){
@@ -540,6 +508,14 @@ public class GameState {
     public int getBet(int playerID){
         return players.get(playerID).getBet();
 
+    }
+
+    public int advanceCounter(int counter){
+        counter++;
+        if (counter==playerCount){
+            counter=0;
+        }
+        return counter;
     }
 
 }
