@@ -24,7 +24,7 @@ import {
 /**
  * Import Card Suite that holds all Card Varients
  */
-import CardSuite from '@/types/cards'
+import { Card } from '@/types/cards'
 import { Action } from 'vuex'
 
 /**
@@ -99,8 +99,8 @@ export default class GameMech {
       money: 500,
       name: 'javon',
       action: GameActionType.CALL,
-      card1: CardSuite.BLANK_CARD,
-      card2: CardSuite.BLANK_CARD,
+      card1: Card.BLANK_CARD,
+      card2: Card.BLANK_CARD,
       currentBet: 600,
       isTurn: false,
       isPlayer: true,
@@ -110,8 +110,8 @@ export default class GameMech {
       money: 888,
       name: 'test',
       action: null,
-      card1: CardSuite.CLUBS_ACE,
-      card2: CardSuite.CLUBS_TWO,
+      card1: Card.CLUBS_ACE,
+      card2: Card.CLUBS_TWO,
       currentBet: 0,
       isTurn: false,
       isPlayer: false,
@@ -119,7 +119,7 @@ export default class GameMech {
     }, this.defaultPlayer(), this.defaultPlayer() ,this.defaultPlayer(),this.defaultPlayer()]
     this.gameId = 0
     this.pot = 0
-    this.communityCards = [CardSuite.CLUBS_ACE, CardSuite.CLUBS_EIGHT, 'three', 'four', 'five']
+    this.communityCards = [Card.CLUBS_ACE, Card.CLUBS_EIGHT, 'three', 'four', 'five']
     this.userId = 0
     this.userAction = null
   }
@@ -134,8 +134,8 @@ export default class GameMech {
       money: 0,
       name: 'defaultPlayer',
       action: null,
-      card1: CardSuite.BLANK_CARD,
-      card2: CardSuite.BLANK_CARD,
+      card1: Card.BLANK_CARD,
+      card2: Card.BLANK_CARD,
       currentBet: 0,
       isTurn: false,
       isPlayer: false,
@@ -347,8 +347,8 @@ export default class GameMech {
     }
 
     // If the player has premove staged then they will move it
-    this.sendAction() 
-    
+    this.sendAction()
+
     this.setTableActions()
   }
 
@@ -360,7 +360,7 @@ export default class GameMech {
     return this.gameService.connected()
   }
   /**
-   * Sends action to the server 
+   * Sends action to the server
    * @param gameAction - Action to sent to the server
    */
   private send (gameAction: GameAction) {
@@ -371,17 +371,17 @@ export default class GameMech {
    * Validates users action and sends it to the server
    */
   private sendAction () {
-        // Confirms that you have an action to send
-        if (this.userAction !== null) {
-          // Confirms that it is your turn
-          if (this.playerLoc() === this.turn) {
-            // Confirms that this is a valid move
-            if (this.validatePreMove(this.userAction)) {
-              this.send(this.userAction)
-              this.userAction = null
-            }
-          }
+    // Confirms that you have an action to send
+    if (this.userAction !== null) {
+      // Confirms that it is your turn
+      if (this.playerLoc() === this.turn) {
+        // Confirms that this is a valid move
+        if (this.validatePreMove(this.userAction)) {
+          this.send(this.userAction)
+          this.userAction = null
         }
+      }
+    }
   }
 
 }

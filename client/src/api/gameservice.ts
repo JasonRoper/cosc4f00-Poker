@@ -39,6 +39,7 @@
  * messages to the websocket.
  */
 import PokerClient from '@/api/pokerclient'
+import { Card } from '@/types/cards'
 
 /**
  * GamePaths is a helper class that will build the paths used to access a game
@@ -73,8 +74,8 @@ export class GamePaths {
  * UserCards - which will hold the cards to the user
  */
 export interface UserCards {
-  card1: string
-  card2: string
+  card1: Card
+  card2: Card
 }
 
 /**
@@ -100,7 +101,7 @@ export interface GameState {
   multiplePlayers: PlayerWithoutCards[]
   gameId: number
   pot: number
-  communityCards: string[]
+  communityCards: Card[]
   gameStateType: GameStateType // This is every time that the GAME has UPDATED
 }
 
@@ -112,8 +113,8 @@ export interface Player {
   id: number
   name: string
   action: GameActionType | null
-  card1: string
-  card2: string
+  card1: Card
+  card2: Card
   currentBet: number
   isTurn: boolean
   isPlayer: boolean
