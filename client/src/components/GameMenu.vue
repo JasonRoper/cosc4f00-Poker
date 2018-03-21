@@ -216,9 +216,9 @@
 <script>
 import AvailbleGame from '@/components/AvailbleGame.vue'
 import Player from '@/components/table/Player.vue'
-import Card from '@/components/table/Card'
+import CardView from '@/components/table/Card'
 import TableActions from '@/components/table/TableActions'
-import CardSuite from '@/types/cards'
+import { Card } from '@/types/cards'
 import Actions from '@/types/actions'
 import TableView from '@/components/TableView'
 import GameMech from '@/store/GameMechanics.ts'
@@ -239,7 +239,7 @@ export default {
         id: 1,
         username: 'Jasddon',
         account: 100000,
-        cards: [CardSuite.HEARTS_ACE, CardSuite.SPADES_TWO],
+        cards: [Card.HEARTS_ACE, Card.SPADES_TWO],
         bet: 110
 
       },
@@ -247,7 +247,7 @@ export default {
         id: 2,
         username: 'Lucy',
         account: 100000,
-        cards: [CardSuite.HEARTS_ACE, CardSuite.SPADES_TWO],
+        cards: [Card.HEARTS_ACE, Card.SPADES_TWO],
         bet: 210
       },
       {
@@ -255,18 +255,18 @@ export default {
         username: 'Javon',
         account: 1000000,
         bet: 110,
-        cards: [CardSuite.HEARTS_ACE, CardSuite.SPADES_TWO],
+        cards: [Card.HEARTS_ACE, Card.SPADES_TWO],
         nextAction: Actions.NONE
       }],
       state: {
         active: 2,
-        communityCards: [CardSuite.HEARTS_EIGHT, CardSuite.SPADES_THREE, CardSuite.SPADES_ACE],
+        communityCards: [Card.HEARTS_EIGHT, Card.SPADES_THREE, Card.SPADES_ACE],
         lobby: true,
         pot: 0
 
       },
       empty: {
-        card: CardSuite.HEARTS_EIGHT
+        card: Card.HEARTS_EIGHT
       }
     }
   },
@@ -330,7 +330,7 @@ export default {
   components: {
     player: Player,
     actions: TableActions,
-    card: Card,
+    card: CardView,
     tableView: TableView,
     availbleGame: AvailbleGame
   }

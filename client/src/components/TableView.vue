@@ -133,9 +133,9 @@
 
 <script>
 import Player from '@/components/table/Player.vue'
-import Card from '@/components/table/Card'
+import CardView from '@/components/table/Card'
 import TableActions from '@/components/table/TableActions'
-import CardSuite from '@/types/cards'
+import { Card } from '@/types/cards'
 // import Actions from '@/types/actions'
 // import { GameService, GameActionType } from '@/api/gameservice'
 import GameMech from '@/store/GameMechanics.ts'
@@ -217,7 +217,7 @@ export default {
       this.$forceUpdate()
     },
     communityCards: function () {
-      this.mechanics.sendCommunityCards(CardSuite.BLANK_CARD)
+      this.mechanics.sendCommunityCards(Card.BLANK_CARD)
     },
     toggleSidebar: function () {
       document.getElementById('sidebar').classList.toggle('active')
@@ -231,7 +231,7 @@ export default {
   components: {
     player: Player,
     actions: TableActions,
-    card: Card,
+    card: CardView,
     seat: Seat
   },
   created () {

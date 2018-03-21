@@ -1,17 +1,23 @@
 <template>
 
-  <div  class="Playingcard" :class="this.card">
+  <div  class="Playingcard" :class="cssMappings[this.card]">
     <div  class='Pcard'>
-    {{this.card}} 
+    {{this.card}}
     </div>
 
   </div>
 </template>
 
 <script>
+import { cssMappings } from '@/types/cards'
 export default {
   props: {
     card: [String]
+  },
+  data () {
+    return {
+      cssMappings
+    }
   }
 }
 </script>
