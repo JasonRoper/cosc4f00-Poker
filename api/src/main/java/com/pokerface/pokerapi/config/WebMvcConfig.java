@@ -1,7 +1,9 @@
 package com.pokerface.pokerapi.config;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.*;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 /**
  * {@link WebMvcConfig} configures how requests are handled.
@@ -36,3 +38,4 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         //registry.addViewController("/**").setViewName("/index.html");
     }
 }
+
