@@ -11,6 +11,7 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -53,6 +54,10 @@ public class GameController {
 
     }
 
+    @Scheduled(fixedRate = 1000)
+    public void checkEvents(){
+        gameService.startGames();
+    }
 //    @MessageMapping("/game/{game_id}/ready")
 //    public void readyUp(@DestinationVariable("game_id") long gameID, Principal principal){
 //        UserInfoTransport user = userService.getUserByUsername(principal.getName());

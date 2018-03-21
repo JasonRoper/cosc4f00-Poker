@@ -24,6 +24,8 @@ public class GameState {
     private List<Player> players = new ArrayList<>();
     private int playerCount=0;
     private Card communityCardOne,communityCardTwo,communityCardThree,communityCardFour,communityCardFive;
+    private Long startTime=null;
+    private boolean hasStarted=false;
 
     private int previousTurn;
 
@@ -314,6 +316,9 @@ public class GameState {
         playerCount=players.size();
         player.setCashOnHand(defaultCashOnHand);
         player.setPlayerID(playerCount-1);
+        if (playerCount>=minPlayerCount&&hasStarted==false){
+            startTime=System.currentTimeMillis()+10000;
+        }
         return players.size();
     }
 
@@ -488,6 +493,7 @@ public class GameState {
             p.setCardOne(deck.dealCard());
             p.setCardTwo(deck.dealCard());
         }
+        hasStarted=true;
     }
 
     public void dealCommunityCards(){
@@ -523,5 +529,22 @@ public class GameState {
         }
         return false;
     }
+
+    public Long getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Long startTime) {
+        this.startTime = startTime;
+    }
+
+    public boolean isHasStarted() {
+        return hasStarted;
+    }
+
+    public void setHasStarted(boolean hasStarted) {
+        this.hasStarted = hasStarted;
+    }
+
 
 }
