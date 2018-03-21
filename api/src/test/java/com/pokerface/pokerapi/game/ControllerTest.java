@@ -32,7 +32,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-@TestPropertySource(locations = "classpath:test.properties")
 public class ControllerTest {
 
     @Value("${local.server.port}")
@@ -65,8 +64,6 @@ public class ControllerTest {
         mvc.perform(post("/api/v1/matchmaking/basicGame"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.gameId").isNumber());
-
-
     }
 
     @Test
