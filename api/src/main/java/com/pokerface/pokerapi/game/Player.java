@@ -27,6 +27,7 @@ public class Player {
     private boolean isAllIn;
     private int bet;
     private GameAction lastGameAction=null;
+    int winnings;
 
 
 
@@ -47,6 +48,7 @@ public class Player {
         isDealer=false;
         isAI=false;
         isAllIn=false;
+
     }
 
     public List<Card> receiveCards(){

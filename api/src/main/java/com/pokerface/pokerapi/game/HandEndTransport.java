@@ -6,9 +6,7 @@ import java.util.List;
  * HandEndTransport is the object the sends when a hand ends and people have won money
  */
 public class HandEndTransport {
-    int[] winnings;
     PlayerTransport[] players;
-
     public HandEndTransport(){
 
     }
@@ -21,33 +19,11 @@ public class HandEndTransport {
     public HandEndTransport(int[] winnings, List<Player> players){
         this.players = new PlayerTransport[players.size()];
         for (int i=0;i<players.size();i++){
-            this.players[i]=new PlayerTransport(players.get(i).getCardOne(),players.get(i).getCardTwo());
+            this.players[i]=new PlayerTransport(players.get(i).getPlayerID(),players.get(i).getCashOnHand(),players.get(i).getLastGameAction(),players.get(i).isAI(),players.get(i).isDealer(),players.get(i).getHasFolded(),winnings[i],players.get(i).getCardOne(),players.get(i).getCardTwo(),players.get(i).getBet());
         }
 
     }
 
-    /**
-     * A {@link HandEndTransport.PlayerTransport} represents the cards of a player. It is used to deliver
-     * the cards that a player has at the end of a hand.
-     */
-    private class PlayerTransport{
-        Card cardOne;
-        Card cardTwo;
 
-        public PlayerTransport(){
-
-        }
-
-        /**
-         * Create a {@link HandEndTransport.PlayerTransport} with the given cards
-         *
-         * @param cardOne the players first card
-         * @param cardTwo the players second card
-         */
-        public PlayerTransport(Card cardOne, Card cardTwo){
-            this.cardOne=cardOne;
-            this.cardTwo=cardTwo;
-        }
-    }
 
 }
