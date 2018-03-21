@@ -32,6 +32,23 @@ public class GameLoopTest {
         gameService = new GameService(games);
     }
 
+    @Test
+    public void newRound(){
+        GameState game = games.findOne(gameService.createGame());
+        long gameID=game.getId();
+        game.addPlayer(10);
+        game.addPlayer(11);
+        game.addPlayer(12);
+        game.addPlayer(13);
+        game.startGame();
+        gameService.handleAction(gameID,createAction(13,GameActionType.CHECK,10),gameService.getPlayerID(gameID,13));
+        gameService.handleAction(gameID,createAction(10,GameActionType.CHECK,10),gameService.getPlayerID(gameID,10));
+        gameService.handleAction(gameID,createAction(11,GameActionType.CHECK,10),gameService.getPlayerID(gameID,11));
+        gameService.handleAction(gameID,createAction(12,GameActionType.CHECK,10),gameService.getPlayerID(gameID,12));
+        gameService.handleAction(gameID,createAction(13,GameActionType.CHECK,10),gameService.getPlayerID(gameID,13));
+        gameService.handleAction(gameID,createAction(10,GameActionType.CHECK,10),gameService.getPlayerID(gameID,10));
+    }
+
 
     @Test
     public void testMultipleGameStart(){

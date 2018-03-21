@@ -63,7 +63,6 @@ public class GameService {
             } else if (action.getType() == GameActionType.CHECK||action.getType()==GameActionType.CALL) {
                 check(gameState, action, player);
             }
-
             player.updateLastGameAction(action);
             gameState.nextTurn();
             gameState = games.save(gameState);
