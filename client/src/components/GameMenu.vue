@@ -195,9 +195,9 @@
   <h4 href="#" class="">
     Availble Games 
   </h4>
-         <availbleGame  v-for="player in this.mechanics.multiplePlayers" :key="player.id" :gameData="player">
+        <!-- <availbleGame  v-for="player in this.mechanics.multiplePlayers" :key="player.id" :gameData="player">
         </availbleGame>
-</div>
+--></div>
 </form>
       </div>
     </div>
@@ -216,12 +216,12 @@
 <script>
 import AvailbleGame from '@/components/AvailbleGame.vue'
 import Player from '@/components/table/Player.vue'
-import Card from '@/components/table/Card'
+import CardView from '@/components/table/Card'
 import TableActions from '@/components/table/TableActions'
-import CardSuite from '@/types/cards'
+import { Card } from '@/types/cards'
 import Actions from '@/types/actions'
 import TableView from '@/components/TableView'
-import GameMech from '@/store/GameMechanics.ts'
+// import GameMech from '@/store/GameMechanics.ts'
 import router from '@/router'
 import GameRequest from '@/store/GameRequest.ts'
 export default {
@@ -234,12 +234,12 @@ export default {
       casualPokerMode: false,
       competitivePokerMode: false,
       showTable: false,
-      mechanics: new GameMech(0, this.userId),
+      // mechanics: new GameMech(0, this.userId),
       opponents: [{
         id: 1,
         username: 'Jasddon',
         account: 100000,
-        cards: [CardSuite.HEARTS_ACE, CardSuite.SPADES_TWO],
+        cards: [Card.HEARTS_ACE, Card.SPADES_TWO],
         bet: 110
 
       },
@@ -247,7 +247,7 @@ export default {
         id: 2,
         username: 'Lucy',
         account: 100000,
-        cards: [CardSuite.HEARTS_ACE, CardSuite.SPADES_TWO],
+        cards: [Card.HEARTS_ACE, Card.SPADES_TWO],
         bet: 210
       },
       {
@@ -255,18 +255,18 @@ export default {
         username: 'Javon',
         account: 1000000,
         bet: 110,
-        cards: [CardSuite.HEARTS_ACE, CardSuite.SPADES_TWO],
+        cards: [Card.HEARTS_ACE, Card.SPADES_TWO],
         nextAction: Actions.NONE
       }],
       state: {
         active: 2,
-        communityCards: [CardSuite.HEARTS_EIGHT, CardSuite.SPADES_THREE, CardSuite.SPADES_ACE],
+        communityCards: [Card.HEARTS_EIGHT, Card.SPADES_THREE, Card.SPADES_ACE],
         lobby: true,
         pot: 0
 
       },
       empty: {
-        card: CardSuite.HEARTS_EIGHT
+        card: Card.HEARTS_EIGHT
       }
     }
   },
@@ -304,9 +304,8 @@ export default {
       }
       if (choice === 'CompetitivePoker') {
         alert('Lets Compete Poker')
-        alert('Lets Compete Poker')
-        // this.instrcutionPokerMode = false
-        // this.showTable = true
+        this.instrcutionPokerMode = false
+        this.showTable = true
         this.gameReq.createGame().then(() => {
           alert('I am pushing you to the table view')
           alert(this.gameReq.gameId)
@@ -330,7 +329,7 @@ export default {
   components: {
     player: Player,
     actions: TableActions,
-    card: Card,
+    card: CardView,
     tableView: TableView,
     availbleGame: AvailbleGame
   }

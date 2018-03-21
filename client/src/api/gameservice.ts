@@ -39,6 +39,7 @@
  * messages to the websocket.
  */
 import PokerClient from '@/api/pokerclient'
+import { Card } from '@/types/cards'
 
 /**
  * GamePaths is a helper class that will build the paths used to access a game
@@ -57,13 +58,12 @@ export class GamePaths {
    */
   constructor (gameId: number, userId?: number) {
     const messageGame = '/messages/game/'
-
     this.GAME_UPDATES = messageGame + gameId
     this.GAME_FINISHED = messageGame + gameId + '/status'
 
     this.GAME_ERROR = messageGame + gameId + '/error'
 
-    this.USER_ACTIONS = '/app/game/' + gameId + '/play'
+    this.USER_ACTIONS = '/app/game/' + gameId + '/gamestate'
 
     this.USER_CARDS = 'user' + messageGame + gameId
   }
@@ -73,16 +73,15 @@ export class GamePaths {
  * UserCards - which will hold the cards to the user
  */
 export interface UserCards {
-  card1: string
-  card2: string
+  card1: Card
+  card2: Card
 }
 
 /**
  * The GameFinished interface is sent whenever a hand is finished.
  */
 export interface GameFinished {
-  winner: number
-  time: number
+  multiplePlayers: Player
 }
 
 /**
@@ -96,12 +95,20 @@ export interface GameError {
  * GameState which will hold the state of the game
  */
 export interface GameState {
-  hasBet: boolean
   multiplePlayers: PlayerWithoutCards[]
+<<<<<<< Updated upstream
   gameId: number
   pot: number
-  communityCards: string[]
+  communityCards: Card[]
   gameStateType: GameStateType // This is every time that the GAME has UPDATED
+=======
+
+  nextPlayer: number // Players who turn it is
+  bigBlind: number
+  potSum: number
+  communityCards: Card[]
+  event: Event // This is every time that the GAME has UPDATED
+>>>>>>> Stashed changes
 }
 
 /**
@@ -112,12 +119,13 @@ export interface Player {
   id: number
   name: string
   action: GameActionType | null
-  card1: string
-  card2: string
+  card1: Card
+  card2: Card
   currentBet: number
-  isTurn: boolean
   isPlayer: boolean
   isDealer: boolean
+  isFold: boolean
+  winnings: number
 }
 
 /**
@@ -125,26 +133,26 @@ export interface Player {
  */
 export interface PlayerWithoutCards {
   money: number
-  id: number
+  playerID: number // Location within the array
   name: string
   action: GameAction | null
-  currentBet: number
-  isTurn: boolean
+  currentBet: number // Total amount of money that has been transfered
   isPlayer: boolean
   isDealer: boolean
+  isFold: boolean
 }
 
 /**
  * GameStateType is sent with a GameState object to tell the client why the GameState
  * was sent.
  */
-export enum GameStateType {
+export enum Event {
   HAND_STARTED = 'HAND_STARTED', // USER Joins the GAME
-  USER_ACTION = 'USER_ACTION', // This is sent after a player makes an action
+  USER_ACTION = 'PLAYER_ACTION', // This is sent after a player makes an action
   HAND_FINISHED = 'HAND_FINISHED', // Equivalent for a winnder being determined from a hand
   ROUND_FINISHED = 'ROUND_FINISHED', // All players have bet - this results in a new Community cards
-  USER_JOIN = 'USER_JOIN',// A new player has been added to the game
-  USER_LEAVE = 'USER_LEAVE' // A new player has left the game
+  USER_JOIN = 'PLAYER_JOIN',// A new player has been added to the game
+  USER_LEAVE = 'PLAYER_LEAVE' // A new player has left the game
 }
 
 /**
@@ -170,7 +178,7 @@ export interface GameAction {
  * The GameUpdatedCallback is the type of function that will
  * be called when the GameService recieves a GameState
  */
-export type GameUpdatedCallback = (newState: GameState) => void
+export type GameUpdatedCallback = (newState: any) => void
 
 /**
  * The GameFinishedCallback is the type of function that will be

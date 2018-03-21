@@ -20,9 +20,10 @@ public class TestSerialization {
 
         GameStateTransport testTransport = new GameStateTransport();
         testTransport.reason(GameStateTransport.Reason.HAND_STARTED, "the hand has started");
-        testTransport.setPlayers(new GameStateTransport.PlayerTransport[3]);
+        testTransport.setPlayers(new PlayerTransport[3]);
         for (int i = 0 ; i < 3 ; i++)
-            testTransport.getPlayers()[i] = new GameStateTransport.PlayerTransport(i,200,null, true, false);
+            //int id, int money, GameAction action, boolean isPlayer, boolean isDealer,boolean isFold,int amountBet,String name
+            testTransport.getPlayers()[i] = new PlayerTransport(i,200,null, true, false,false,0,"Sam");
         String val = mapper.writer().writeValueAsString(testTransport);
 
     }

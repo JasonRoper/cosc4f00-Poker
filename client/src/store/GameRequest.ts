@@ -30,12 +30,12 @@ export default class GameRequest {
   public gameId: number = -1
 
   public createGame (): Promise<number | void> {
-    const prom = axios.post(
-      this.MATCHMAKING, {},
-      { auth: { username: 'admin', password: 'admin' } })
-      .then((response) => {
+    // , {})
+    // , { auth: { username: 'admin', password: 'admin' } })
+    const prom = axios.post(this.MATCHMAKING, {}).then((response) => {
       alert('it is looking for a game')
       this.gameId = response.data.gameId
+      alert(response)
       console.log(response)
       return Promise.resolve(response.data.gameId)
     }).catch((error) => {

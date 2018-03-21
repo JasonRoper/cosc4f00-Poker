@@ -3,7 +3,6 @@
  * add the Vuex store and the router to the application.
  */
 
-
 /**
  * Need to import axios first in order to set defaults
  */

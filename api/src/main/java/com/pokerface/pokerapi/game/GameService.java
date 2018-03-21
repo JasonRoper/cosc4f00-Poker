@@ -63,7 +63,6 @@ public class GameService {
             } else if (action.getType() == GameActionType.CHECK||action.getType()==GameActionType.CALL) {
                 check(gameState, action, player);
             }
-
             player.updateLastGameAction(action);
             gameState.nextTurn();
             gameState = games.save(gameState);
@@ -308,7 +307,6 @@ public class GameService {
                 counter++;
             }
         }
-        //winners = gameState.getPot().resolveWinnings(winners);
         HandEndTransport handEndTransport = new HandEndTransport(winners, gameState.getPlayers());
         return handEndTransport;
     }
@@ -396,5 +394,13 @@ public class GameService {
         return getGameStateTransport(gameID);
     }
 
-
+    public List<GameStateTransport> startGames(){
+        List<GameStateTransport> gameStateTransports= new ArrayList<GameStateTransport>();
+        List<GameState>gameStates=games.findWaitingToStartGames(System.currentTimeMillis());
+        for (GameState g : gameStates){
+            g.startGame();
+            gameStateTransports.add(getGameStateTransport(g));
+        }
+        return gameStateTransports;
+    }
 }

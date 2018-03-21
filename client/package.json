@@ -5,7 +5,7 @@
   "author": "Jason Roper <jkmroper@gmail.com>",
   "private": true,
   "scripts": {
-    "test": "npm run unit && npm run e2e",
+    "test": "jest -i",
     "dev": "node build/dev-server.js",
     "start": "npm run dev",
     "build": "node build/build.js",
@@ -18,6 +18,7 @@
   "dependencies": {
     "ajv": "^6.1.1",
     "axios": "^0.17.0",
+    "jest-vue-preprocessor": "^1.4.0",
     "jquery": "^3.3.1",
     "popper.js": "^1.12.9",
     "typedoc": "^0.11.1",
@@ -79,6 +80,7 @@
     "vue-loader": "^13.0.4",
     "vue-style-loader": "^3.0.1",
     "vue-template-compiler": "^2.4.2",
+    "vue-test-utils": "^1.0.0-beta.11",
     "webpack": "^2.6.1",
     "webpack-bundle-analyzer": "^2.2.1",
     "webpack-dev-middleware": "^1.10.0",
@@ -93,5 +95,18 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "jest": {
+    "moduleNameMapper": {
+      "^vue$": "vue/dist/vue.common.js"
+    },
+    "moduleFileExtensions": [
+      "js",
+      "vue"
+    ],
+    "transform": {
+      "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
+      ".*\\.(vue)$": "<rootDir>/node_modules/jest-vue-preprocessor"
+    }
+  }
 }

@@ -2,21 +2,23 @@
   <div id="app">
     <router-view>
     </router-view>
+    <div>{{messages}}</div>
   </div>
 </template>
 
 <script>
-import NavBar from '@/components/NavBar.vue'
+// import NavBar from '../src/components/NavBar.vue'
 export default {
   name: 'app',
   data () {
     return {
-      onHomePage: true
+      messages: ['doc']
+      // onHomePage: true
     }
-  },
-  components: {
-    navBar: NavBar
   }
+  // components: {
+  //   navBar: NavBar
+  // }
 }
 </script>
 

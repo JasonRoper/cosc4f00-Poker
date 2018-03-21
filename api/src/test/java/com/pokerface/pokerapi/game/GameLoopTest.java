@@ -32,6 +32,23 @@ public class GameLoopTest {
         gameService = new GameService(games);
     }
 
+    @Test
+    public void newRound(){
+        GameState game = games.findOne(gameService.createGame());
+        long gameID=game.getId();
+        game.addPlayer(10);
+        game.addPlayer(11);
+        game.addPlayer(12);
+        game.addPlayer(13);
+        game.startGame();
+        gameService.handleAction(gameID,createAction(13,GameActionType.CHECK,10),gameService.getPlayerID(gameID,13));
+        gameService.handleAction(gameID,createAction(10,GameActionType.CHECK,10),gameService.getPlayerID(gameID,10));
+        gameService.handleAction(gameID,createAction(11,GameActionType.CHECK,10),gameService.getPlayerID(gameID,11));
+        gameService.handleAction(gameID,createAction(12,GameActionType.CHECK,10),gameService.getPlayerID(gameID,12));
+        gameService.handleAction(gameID,createAction(13,GameActionType.CHECK,10),gameService.getPlayerID(gameID,13));
+        gameService.handleAction(gameID,createAction(10,GameActionType.CHECK,10),gameService.getPlayerID(gameID,10));
+    }
+
 
     @Test
     public void testMultipleGameStart(){
@@ -47,9 +64,6 @@ public class GameLoopTest {
         gameService.handleAction(gameID,createAction(2,GameActionType.BET,10),gameService.getPlayerID(gameID,2));
         gameService.handleAction(gameID,createAction(3,GameActionType.BET,10),gameService.getPlayerID(gameID,3));
         gameService.handleAction(gameID,createAction(4,GameActionType.BET,10),gameService.getPlayerID(gameID,4));
-        game=games.findOne(gameID);
-        games.save(game);
-        game=games.findOne(gameID);
         gameService.handleAction(gameID,createAction(1,GameActionType.CHECK,0),gameService.getPlayerID(gameID,1));
         gameService.handleAction(gameID,createAction(2,GameActionType.BET,39230),gameService.getPlayerID(gameID,2));
         gameService.handleAction(gameID,createAction(3,GameActionType.FOLD,0),gameService.getPlayerID(gameID,3));
