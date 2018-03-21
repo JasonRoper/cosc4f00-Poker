@@ -27,12 +27,17 @@ public class Player {
     private boolean isAllIn;
     private int bet;
     private GameAction lastGameAction=null;
-    int winnings;
+    private String name="";
 
 
 
     public Player(){
 
+    }
+
+    public Player (Long userID, GameState gameState,String name){
+        this(userID,gameState);
+        this.name=name;
     }
 
     /**
@@ -229,6 +234,14 @@ public class Player {
 
     public void setLastGameAction(GameAction lastGameAction) {
 this.lastGameAction=lastGameAction;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void updateLastGameAction(GameAction lastGameAction){

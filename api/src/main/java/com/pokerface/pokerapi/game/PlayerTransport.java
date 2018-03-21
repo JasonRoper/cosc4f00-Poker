@@ -7,8 +7,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
  * A Player representation, containing an id, their seat, the money they have, the action they last performed, if they are a player or if they are a dealer.
  */
 public class PlayerTransport {
-    private int id;
+    private int playerID;
     private int money;
+    private String name;
     private GameAction action;
     private boolean isPlayer;
     private boolean isDealer;
@@ -16,7 +17,7 @@ public class PlayerTransport {
     private Card cardOne;
     private Card cardTwo;
     private Integer winnings;
-    private int amountBet;
+    private int currentBet;
 
     public PlayerTransport() {
 
@@ -30,8 +31,8 @@ public class PlayerTransport {
      * @param isPlayer whether or not the player is a player or an AI
      * @param isDealer whether or not this player is the dealer
      */
-    public PlayerTransport(int id, int money, GameAction action, boolean isPlayer, boolean isDealer,boolean isFold,int amountBet) {
-        this.id = id;
+    public PlayerTransport(int id, int money, GameAction action, boolean isPlayer, boolean isDealer,boolean isFold,int amountBet,String name) {
+        this.playerID = id;
         this.money = money;
         this.action = action;
         this.isPlayer = isPlayer;
@@ -39,22 +40,23 @@ public class PlayerTransport {
         this.isFold=isFold;
         cardOne=null;
         cardTwo=null;
-        this.amountBet=amountBet;
+        this.currentBet=amountBet;
+        this.name=name;
     }
 
-    public PlayerTransport(int id, int money, GameAction action, boolean isPlayer, boolean isDealer,boolean isFold, int winnings, Card cardOne, Card cardTwo,int amountBet){
-        this(id,money,action,isPlayer,isDealer,isFold,amountBet);
+    public PlayerTransport(int id, int money, GameAction action, boolean isPlayer, boolean isDealer,boolean isFold, int winnings, Card cardOne, Card cardTwo,int amountBet, String name){
+        this(id,money,action,isPlayer,isDealer,isFold,amountBet,name);
         this.winnings=winnings;
         this.cardOne=cardOne;
         this.cardTwo=cardTwo;
     }
 
     public int getId() {
-        return id;
+        return playerID;
     }
 
     public void setId(int id) {
-        this.id = id;
+        this.playerID = id;
     }
 
     public int getMoney() {

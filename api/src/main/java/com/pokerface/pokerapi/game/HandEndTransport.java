@@ -19,7 +19,7 @@ public class HandEndTransport {
     public HandEndTransport(int[] winnings, List<Player> players){
         this.players = new PlayerTransport[players.size()];
         for (int i=0;i<players.size();i++){
-            this.players[i]=new PlayerTransport(players.get(i).getPlayerID(),players.get(i).getCashOnHand(),players.get(i).getLastGameAction(),players.get(i).isAI(),players.get(i).isDealer(),players.get(i).getHasFolded(),winnings[i],players.get(i).getCardOne(),players.get(i).getCardTwo(),players.get(i).getBet());
+            this.players[i]=new PlayerTransport(players.get(i).getPlayerID(),players.get(i).getCashOnHand(),players.get(i).getLastGameAction(),players.get(i).isAI(),players.get(i).isDealer(),players.get(i).getHasFolded(),winnings[i],players.get(i).getCardOne(),players.get(i).getCardTwo(),players.get(i).getBet(),players.get(i).getName());
         }
 
     }

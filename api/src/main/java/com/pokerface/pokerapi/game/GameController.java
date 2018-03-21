@@ -120,7 +120,8 @@ public class GameController {
                         true,
                         true,
                         true,
-                        0
+                        0,
+                        "Sal"
                 ), // admin
                 new PlayerTransport(
                         2,
@@ -129,14 +130,14 @@ public class GameController {
                         true,
                         false,
                         true,
-            0
+            0,
+                        "Fred"
                 )}); // jason
         gameState.setBigBlind(10);
         gameState.setCommunityCards(Arrays.asList(new Card[]{Card.SPADES_QUEEN, Card.SPADES_SEVEN, Card.SPADES_KING}));
         gameState.setPotSum(30);
 
         return gameState.reason(GameStateTransport.Reason.PLAYER_ACTION, "");
-
     }
 
         @MessageMapping("test")
@@ -193,7 +194,7 @@ public class GameController {
             long gameID = gameService.matchmake(user.getId());
             GameStateTransport gameStateTransport = gameService.getGameStateTransport(gameID);
             messenger.convertAndSend("/messages/game/" + gameID,
-                    gameStateTransport.reason(GameStateTransport.Reason.NEW_PLAYER, "User has joined"));
+                    gameStateTransport.reason(GameStateTransport.Reason.PLAYER_JOINED, "User has joined"));
             return new GameInfoTransport(gameID);
         }
 
