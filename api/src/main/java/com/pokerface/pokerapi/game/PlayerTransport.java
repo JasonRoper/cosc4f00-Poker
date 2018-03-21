@@ -115,11 +115,11 @@ public class PlayerTransport {
         this.cardTwo = cardTwo;
     }
 
-    public int getWinnings() {
+    public Integer getWinnings() {
         return winnings;
     }
 
-    public void setWinnings(int winnings) {
+    public void setWinnings(Integer winnings) {
         this.winnings = winnings;
     }
 }

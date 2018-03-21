@@ -378,10 +378,12 @@ public class GameState {
      * advances to the dealer to the next player
      */
     public void advanceDealer(){
+        players.get(dealer).setDealer(false);
         dealer++;
         if (dealer>=players.size()){
             dealer=0;
         }
+        players.get(dealer).setDealer(true);
     }
 
     /**
