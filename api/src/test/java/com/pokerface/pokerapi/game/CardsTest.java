@@ -9,7 +9,6 @@ import static org.junit.Assert.assertEquals;
  * Test to see if the {@link Card} helper methods are functioning correctly.
  */
 public class CardsTest {
-
     /**
      * Test to see if {@link Card#next()} produces the correct result.
      */

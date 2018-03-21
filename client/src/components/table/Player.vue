@@ -59,7 +59,7 @@
 
     </div>
     <div>
-      <!-- <button @click="test()"> A test</button> -->
+      <button @click="test()"> A test</button>
        <!-- <button @click="test2()"> A test2</button> -->
       </div>
     <!--Display status big blind small blind  dealer etc   -->
@@ -92,7 +92,13 @@ export default {
   },
   methods: {
     test () {
-      this.data.action = 'BET'
+      // const brain = require('brain.js')
+      // const network = new brain.NeuralNetwork()
+      // network.train([
+      // { input: { height: 60, weight: 150 }, output: { adult:1 } }
+      // ])
+      // const result = network.run({ height: 78, weight: 200 })
+      // console.log(result)
     },
     test2 () {
       this.data.action = 'CHECK'

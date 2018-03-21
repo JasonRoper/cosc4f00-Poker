@@ -3,15 +3,17 @@
  * add the Vuex store and the router to the application.
  */
 
- /**
-  * Include vue
-  */
-
+/**
+ * Need to import axios first in order to set defaults
+ */
 import axios from 'axios'
 
 // we need cookies to be attached
 axios.defaults.withCredentials = true
 
+/**
+ * Include vue
+ */
 import Vue from 'vue'
 import App from './App'
 import router from './router'

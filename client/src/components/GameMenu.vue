@@ -4,14 +4,16 @@
         <div v-show="GameMenu">
         <h2 class="display-4 text-white pb-3 text-left ml-5 pl-5 mr-0 mt-5 pt-5"><u>MAIN MENU</u> </h2>
         <div class="text-center mx-4 ">
-        <div class="chip-holder"><button class="around-words inner-yellow btn btn-lg" @click="showInstructPoker()"><hr><button class="inner-button  btn btn-lg">Instructional Poker</button><hr></button></div>
-      <div class="chip-holder"><button class="around-words inner-green btn btn-lg" @click="showCasualPoker()"><hr><div class="button-title">Casual Poker</div><hr></button></div>
-        <div class="chip-holder"><button class="around-words inner-blue btn btn-lg" @click="chipChoice('CompetitivePoker')"><hr><button class="btn btn-lg">Competitive Poker</button><hr></button></div>
+        <div class="chip-holder"><button class="around-words inner-yellow btn btn-lg" @click="showInstructPoker()"><hr><div class="inner-button  btn btn-lg">Instructional Poker</div><hr></button></div>
+      <div class="chip-holder"><button class="around-words inner-green btn btn-lg" @click="showCasualPoker()"><hr><div >Casual Poker</div><hr></button></div>
+        <div class="chip-holder"><button class="around-words inner-blue btn btn-lg" @click="chipChoice('CompetitivePoker')"><hr><div class="btn btn-lg">Competitive Poker</div><hr></button></div>
       </div>
       </div>
           <div  v-show="instrcutionPokerMode">
       <div >
-      <h2 class="display-4 text-white  text-left ml-5 pl-5 mr-0 mt-5 pt-5 "> <button type="button" class="btn btn-default btn-circle" @click="backButton()">back</button><u>Instructional(CPU) Poker</u> </h2>
+      <h2 class="display-4 text-white  text-left ml-5 pl-5 mr-0 mt-3 pt-3 "> 
+        <button type="button" class="btn btn-default btn-circle backButton  inner-blue" @click="backButton()"><i class="fa fa-arrow-left  fa-2x"></i></button><br>
+        <u>Instructional(CPU) Poker</u> </h2>
        <div class="pt-5 mt-5">
        <div class="chip-holder "><button class="around-words inner-grey btn btn-lg" @click="chipChoice('PokerTutorial')"><hr><div class="button-title">Poker Tutorial</div><hr></button></div>
         <div class="chip-holder "><button data-toggle="modal" data-target="#Register2" class="around-words inner-orange btn btn-lg"><hr> CPU Challenge<hr></button></div>
@@ -25,7 +27,7 @@
       </div>
       <div  v-show="casualPokerMode">
       <div>
-      <h2 class="display-4 text-white text-left ml-5 pl-5 mr-0 "> <button type="button" class="btn btn-default btn-circle" @click="backButton()">back</button><u>Casual</u> </h2>
+      <h2 class="display-4 text-white text-left ml-3 pl-3 mt-3 pt-3"> <button type="button" class="btn btn-default btn-circle backButton  inner-green" @click="backButton()"><i class="fa fa-arrow-left  fa-2x"></i></button><br><u>Casual Poker</u> </h2>
               <div class="pt-0">
          <div class="chip-holder pt-5 mt-5"><button class="around-words2 inner-grey btn btn-lg" data-toggle="modal" data-target="#CreateCasualPoker"><hr><div class="button-title">Create Game</div><hr></button></div>
         <div class="chip-holder pt-5 mt-5"><button class="around-words2 inner-blue btn btn-lg" data-toggle="modal" data-target="#JoinCasualPoker"><hr><button class="btn btn-lg">Join Game</button><hr></button></div>
@@ -195,9 +197,9 @@
   <h4 href="#" class="">
     Availble Games 
   </h4>
-         <availbleGame  v-for="player in this.mechanics.multiplePlayers" :key="player.id" :gameData="player">
+        <!-- <availbleGame  v-for="player in this.mechanics.multiplePlayers" :key="player.id" :gameData="player">
         </availbleGame>
-</div>
+--></div>
 </form>
       </div>
     </div>
@@ -216,12 +218,12 @@
 <script>
 import AvailbleGame from '@/components/AvailbleGame.vue'
 import Player from '@/components/table/Player.vue'
-import Card from '@/components/table/Card'
+import CardView from '@/components/table/Card'
 import TableActions from '@/components/table/TableActions'
-import CardSuite from '@/types/cards'
+import { Card } from '@/types/cards'
 import Actions from '@/types/actions'
 import TableView from '@/components/TableView'
-import GameMech from '@/store/GameMechanics.ts'
+// import GameMech from '@/store/GameMechanics.ts'
 import router from '@/router'
 import GameRequest from '@/store/GameRequest.ts'
 export default {
@@ -234,12 +236,12 @@ export default {
       casualPokerMode: false,
       competitivePokerMode: false,
       showTable: false,
-      mechanics: new GameMech(0, this.userId),
+      // mechanics: new GameMech(0, this.userId),
       opponents: [{
         id: 1,
         username: 'Jasddon',
         account: 100000,
-        cards: [CardSuite.HEARTS_ACE, CardSuite.SPADES_TWO],
+        cards: [Card.HEARTS_ACE, Card.SPADES_TWO],
         bet: 110
 
       },
@@ -247,7 +249,7 @@ export default {
         id: 2,
         username: 'Lucy',
         account: 100000,
-        cards: [CardSuite.HEARTS_ACE, CardSuite.SPADES_TWO],
+        cards: [Card.HEARTS_ACE, Card.SPADES_TWO],
         bet: 210
       },
       {
@@ -255,18 +257,18 @@ export default {
         username: 'Javon',
         account: 1000000,
         bet: 110,
-        cards: [CardSuite.HEARTS_ACE, CardSuite.SPADES_TWO],
+        cards: [Card.HEARTS_ACE, Card.SPADES_TWO],
         nextAction: Actions.NONE
       }],
       state: {
         active: 2,
-        communityCards: [CardSuite.HEARTS_EIGHT, CardSuite.SPADES_THREE, CardSuite.SPADES_ACE],
+        communityCards: [Card.HEARTS_EIGHT, Card.SPADES_THREE, Card.SPADES_ACE],
         lobby: true,
         pot: 0
 
       },
       empty: {
-        card: CardSuite.HEARTS_EIGHT
+        card: Card.HEARTS_EIGHT
       }
     }
   },
@@ -300,13 +302,12 @@ export default {
     },
     chipChoice: function (choice) {
       if (choice === 'PokerTutorial') {
-        this.$router.push('Table')
+        this.$router.push('TutorialTable')
       }
       if (choice === 'CompetitivePoker') {
         alert('Lets Compete Poker')
-        alert('Lets Compete Poker')
-        // this.instrcutionPokerMode = false
-        // this.showTable = true
+        this.instrcutionPokerMode = false
+        this.showTable = true
         this.gameReq.createGame().then(() => {
           alert('I am pushing you to the table view')
           alert(this.gameReq.gameId)
@@ -330,7 +331,7 @@ export default {
   components: {
     player: Player,
     actions: TableActions,
-    card: Card,
+    card: CardView,
     tableView: TableView,
     availbleGame: AvailbleGame
   }

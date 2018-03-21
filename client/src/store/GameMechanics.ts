@@ -3,7 +3,7 @@
  * A game is joined through subscribing to the necessary STOMP endpoints. 
  * The Game Mechanics provides all of the information necessary to show a table
  * Through the subscriptions from game Mechanics it receives new states and can 
- * send user actions.  
+ * send user actions.
  */
 
 /**

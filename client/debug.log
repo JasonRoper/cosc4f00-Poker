@@ -91,3 +91,42 @@
 [0319/135211.123:ERROR:crash_report_database_win.cc(427)] unexpected header
 [0319/141757.471:ERROR:crash_report_database_win.cc(427)] unexpected header
 [0319/151914.569:ERROR:crash_report_database_win.cc(427)] unexpected header
+[0319/155321.979:ERROR:crash_report_database_win.cc(427)] unexpected header
+[0319/160322.036:ERROR:crash_report_database_win.cc(427)] unexpected header
+[0319/160322.036:ERROR:crash_report_database_win.cc(427)] unexpected header
+[0319/160821.981:ERROR:crash_report_database_win.cc(427)] unexpected header
+[0319/162322.005:ERROR:crash_report_database_win.cc(427)] unexpected header
+[0319/165942.659:ERROR:crash_report_database_win.cc(427)] unexpected header
+[0319/170144.669:ERROR:crash_report_database_win.cc(427)] unexpected header
+[0319/171442.970:ERROR:crash_report_database_win.cc(427)] unexpected header
+[0319/172942.980:ERROR:crash_report_database_win.cc(427)] unexpected header
+[0319/174443.046:ERROR:crash_report_database_win.cc(427)] unexpected header
+[0319/175943.113:ERROR:crash_report_database_win.cc(427)] unexpected header
+[0319/181443.142:ERROR:crash_report_database_win.cc(427)] unexpected header
+[0319/182943.144:ERROR:crash_report_database_win.cc(427)] unexpected header
+[0319/184443.145:ERROR:crash_report_database_win.cc(427)] unexpected header
+[0319/185943.146:ERROR:crash_report_database_win.cc(427)] unexpected header
+[0319/191443.146:ERROR:crash_report_database_win.cc(427)] unexpected header
+[0319/192943.160:ERROR:crash_report_database_win.cc(427)] unexpected header
+[0319/194443.161:ERROR:crash_report_database_win.cc(427)] unexpected header
+[0319/195943.166:ERROR:crash_report_database_win.cc(427)] unexpected header
+[0319/201443.322:ERROR:crash_report_database_win.cc(427)] unexpected header
+[0319/202943.324:ERROR:crash_report_database_win.cc(427)] unexpected header
+[0319/204443.331:ERROR:crash_report_database_win.cc(427)] unexpected header
+[0319/205943.359:ERROR:crash_report_database_win.cc(427)] unexpected header
+[0319/211443.366:ERROR:crash_report_database_win.cc(427)] unexpected header
+[0319/212943.368:ERROR:crash_report_database_win.cc(427)] unexpected header
+[0319/214443.491:ERROR:crash_report_database_win.cc(427)] unexpected header
+[0319/215943.493:ERROR:crash_report_database_win.cc(427)] unexpected header
+[0319/221443.493:ERROR:crash_report_database_win.cc(427)] unexpected header
+[0319/222943.494:ERROR:crash_report_database_win.cc(427)] unexpected header
+[0319/224443.501:ERROR:crash_report_database_win.cc(427)] unexpected header
+[0319/225943.502:ERROR:crash_report_database_win.cc(427)] unexpected header
+[0319/231443.507:ERROR:crash_report_database_win.cc(427)] unexpected header
+[0319/232943.511:ERROR:crash_report_database_win.cc(427)] unexpected header
+[0319/233501.519:ERROR:process_reader_win.cc(123)] NtOpenThread: {Access Denied} A process has requested access to an object, but has not been granted those access rights. (0xc0000022)
+[0319/233502.269:ERROR:exception_snapshot_win.cc(88)] thread ID 3988 not found in process
+[0319/233502.269:WARNING:crash_report_exception_handler.cc(62)] ProcessSnapshotWin::Initialize failed
+[0319/233502.269:ERROR:scoped_process_suspend.cc(40)] NtResumeProcess: An attempt was made to access an exiting process. (0xc000010a)
+[0320/144035.318:ERROR:crash_report_database_win.cc(427)] unexpected header
+[0321/141546.619:ERROR:crash_report_database_win.cc(427)] unexpected header

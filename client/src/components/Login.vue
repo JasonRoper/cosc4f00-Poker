@@ -313,6 +313,9 @@ import ErrorMessages from '@/components/WebComponents/ErrorMessages' // ErrorMes
 export default {
   data () {
     return {
+      /* The Name of the Component.
+      */
+      name: 'login',
       // Representation of a Player Logging in
       Player: {
         username: '',
@@ -335,7 +338,8 @@ export default {
       isLoginError: false,
       isRegistrationError: false,
       ErrorMessage: '',
-      registModal: false
+      registModal: false,
+      after: false
     }
   },
   watch: {
@@ -359,20 +363,19 @@ export default {
         return // Must add CSS for this action
       } else {
         this.login(this.Player) // Servery queries for login
-        this.loginErrorMessage = this.$store.state.users.errors.login // Sets login errorMessage to the store array to the store array of error login messages
-        setTimeout(this.checkLoginErrors, 900) // Chec Login Errors after 900 ms
+        this.loginErrorMessage = this.$store.state.users.errors.login // Sets login errorMessage to the store array to the store array of error login message
+        setTimeout(this.checkLoginErrors, 3000) // Chec Login Errors after 900 ms
       }
     },
     checkLoginErrors () {
       if (this.loginErrorMessage.length > 0) {
-        // alert('all done' + this.loginErrorMessage.length)
-        // alert('ans is:' + this.loginErrorMessage[0].message)
         this.ErrorMessage = this.loginErrorMessage[0].message
         this.isLoginError = true
         this.$store.state.users.errors.login = []
-      } else
+      }
       if ((this.loginErrorMessage.length === 0)) { // if ater check
         this.$router.push('Game')
+        alert('start game')
       }
     },
     AttemptRegister () {
