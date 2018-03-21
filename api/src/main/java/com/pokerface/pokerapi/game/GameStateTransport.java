@@ -16,7 +16,7 @@ public class GameStateTransport {
     private int bigBlind;
     private int nextPlayer;
     private Event event;
-    private PlayerTransport[] players;
+    private PlayerTransport[] multiplePlayers;
 
     public GameStateTransport() {
 
@@ -28,9 +28,9 @@ public class GameStateTransport {
 
         this.potSum = gameState.getPot().getSum();
         this.bigBlind = gameState.getBigBlind();
-        this.players = new PlayerTransport[gameState.getPlayers().size()];
-        for (int i = 0; i < this.players.length; i++) {
-            this.players[i] = new PlayerTransport(i, gameState.getPlayers().get(i).getCashOnHand(), gameState.getPlayers().get(i).getLastGameAction(), gameState.getPlayers().get(i).getIsDealer(), gameState.getPlayers().get(i).getHasFolded());
+        this.multiplePlayers = new PlayerTransport[gameState.getPlayers().size()];
+        for (int i = 0; i < this.multiplePlayers.length; i++) {
+            this.multiplePlayers[i] = new PlayerTransport(i, gameState.getPlayers().get(i).getCashOnHand(), gameState.getPlayers().get(i).getLastGameAction(), gameState.getPlayers().get(i).isAI(), gameState.getPlayers().get(i).getIsDealer(), gameState.getPlayers().get(i).getHasFolded(),gameState.getPlayers().get(i).getBet(),gameState.getPlayers().get(i).getName());
         }
         this.nextPlayer = nextPlayer;
     }
@@ -92,11 +92,11 @@ public class GameStateTransport {
     }
 
     public PlayerTransport[] getPlayers() {
-        return players;
+        return multiplePlayers;
     }
 
     public void setPlayers(PlayerTransport[] players) {
-        this.players = players;
+        this.multiplePlayers = players;
     }
 
     /**
@@ -133,77 +133,6 @@ public class GameStateTransport {
     }
 
     /**
-     * A Player representation, containing an id, their seat, the money they have, the action they last performed, if they are a player or if they are a dealer.
-     */
-    public static class PlayerTransport {
-        private int id;
-        private int money;
-        private GameAction action;
-        private boolean isPlayer;
-        private boolean isDealer;
-
-        public PlayerTransport() {
-
-        }
-
-        /**
-         * Construct a {@link PlayerTransport} with the given data
-         * @param id the player id of this player
-         * @param money the amount of money this player has
-         * @param action the last action that this player took
-         * @param isPlayer whether or not the player is a player or an AI
-         * @param isDealer whether or not this player is the dealer
-         */
-        public PlayerTransport(int id, int money, GameAction action, boolean isPlayer, boolean isDealer) {
-            this.id = id;
-            this.money = money;
-            this.action = action;
-            this.isPlayer = isPlayer;
-            this.isDealer = isDealer;
-        }
-
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public int getMoney() {
-            return money;
-        }
-
-        public void setMoney(int money) {
-            this.money = money;
-        }
-
-        public GameAction getAction() {
-            return action;
-        }
-
-        public void setAction(GameAction action) {
-            this.action = action;
-        }
-
-        public boolean isPlayer() {
-            return isPlayer;
-        }
-
-        public void setPlayer(boolean player) {
-            isPlayer = player;
-        }
-
-        public boolean isDealer() {
-            return isDealer;
-        }
-
-        public void setDealer(boolean dealer) {
-            isDealer = dealer;
-        }
-    }
-
-    /**
      * {@link GameStateTransport.Reason} are all of the reasons that the {@link GameStateTransport} can be
      * sent for.
      */
@@ -212,7 +141,7 @@ public class GameStateTransport {
         PLAYER_ACTION,
         ROUND_FINSHED,
         HAND_FINISHED,
-        NEW_PLAYER,
+        PLAYER_JOINED,
         PLAYER_LEFT,
     }
 }

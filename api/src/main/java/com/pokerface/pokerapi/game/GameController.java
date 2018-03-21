@@ -111,28 +111,33 @@ public class GameController {
         } else {
             gameState.setNextPlayer(2);
         }
-
-        gameState.setPlayers(new GameStateTransport.PlayerTransport[]{
-                new GameStateTransport.PlayerTransport(
+//int id, int money, GameAction action, boolean isPlayer, boolean isDealer,boolean isFold,int amountBet
+        gameState.setPlayers(new PlayerTransport[]{
+                new PlayerTransport(
                         1,
                         200,
                         new GameAction(GameActionType.BET, 1),
                         true,
-                        true
+                        true,
+                        true,
+                        0,
+                        "Sal"
                 ), // admin
-                new GameStateTransport.PlayerTransport(
+                new PlayerTransport(
                         2,
                         10000,
                         new GameAction(GameActionType.BET, 1),
                         true,
-                        false
+                        false,
+                        true,
+            0,
+                        "Fred"
                 )}); // jason
         gameState.setBigBlind(10);
         gameState.setCommunityCards(Arrays.asList(new Card[]{Card.SPADES_QUEEN, Card.SPADES_SEVEN, Card.SPADES_KING}));
         gameState.setPotSum(30);
 
         return gameState.reason(GameStateTransport.Reason.PLAYER_ACTION, "");
-
     }
 
         @MessageMapping("test")
@@ -189,7 +194,7 @@ public class GameController {
             long gameID = gameService.matchmake(user.getId());
             GameStateTransport gameStateTransport = gameService.getGameStateTransport(gameID);
             messenger.convertAndSend("/messages/game/" + gameID,
-                    gameStateTransport.reason(GameStateTransport.Reason.NEW_PLAYER, "User has joined"));
+                    gameStateTransport.reason(GameStateTransport.Reason.PLAYER_JOINED, "User has joined"));
             return new GameInfoTransport(gameID);
         }
 
