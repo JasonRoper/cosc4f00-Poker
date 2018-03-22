@@ -314,8 +314,8 @@ export default class GameMech {
         money: item.money,
         name: item.name,
         action: null,
-        card1: Card.BLANK_CARD,
-        card2: Card.BLANK_CARD,
+        card1: Card.CLUBS_EIGHT,
+        card2: Card.CLUBS_KING,
         currentBet: 0,
         isFold: item.fold,
         winnings: 0,
@@ -326,7 +326,7 @@ export default class GameMech {
     })
     Array.from(gameTransport.communityCards).forEach((card: any) => {
       if (card === null) {
-        this.communityCards.push(Card.BLANK_CARD)
+        this.communityCards.push(Card.CLUBS_ACE)
       } else {
         this.communityCards.push(card)
       }
