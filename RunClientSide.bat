@@ -1,3 +1,3 @@
-cd .\client
+cd client
 yarn
-yarn run dev
+yarn dev

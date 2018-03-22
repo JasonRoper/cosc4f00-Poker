@@ -19,6 +19,8 @@ import static org.junit.Assert.*;
 @DataJpaTest
 public class GameServiceRepositoryTest {
 
+    private int userID=1;
+
     GameService gameService;
 
     @Autowired
@@ -108,6 +110,30 @@ public class GameServiceRepositoryTest {
         gameService.handleAction(gameID,createAction(2,GameActionType.BET,39230),gameService.getPlayerID(gameID,2));
         gameService.handleAction(gameID,createAction(3,GameActionType.FOLD,0),gameService.getPlayerID(gameID,3));
         System.out.println();
+    }
+
+    @Test
+    public void testFindPlayerByUserID(){
+        GameState gameState=setUpGame();
+        GameState gameState2=setUpGame();
+        long gameID=gameState.getId();
+        List<Long>test=games.findAllGamesWithUser(1);
+        List<Long>test1=games.findAllGamesWithUser(5);
+        List<Long>test2=games.findAllGamesWithUser(3923);
+        assertEquals(test.get(0).longValue(),1);
+        assertEquals(test1.get(0).longValue(),2);
+        assertTrue(test2.isEmpty());
+        System.out.println();
+    }
+
+    private GameState setUpGame(){
+        GameState game = games.findOne(gameService.createGame());
+        for (int i=0;i<4;i++) {
+            game.addPlayer(userID, "");
+userID++;
+        }
+        game.startGame();
+        return game;
     }
 
     public GameAction createAction(long userID,GameActionType actionType,int bet){

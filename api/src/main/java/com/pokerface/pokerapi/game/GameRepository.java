@@ -21,6 +21,9 @@ public interface GameRepository extends CrudRepository<GameState, Long> {
     @Query("SELECT g FROM GameState g where g.startTime IS NOT NULL AND g.startTime<=?1 AND g.hasStarted=FALSE")
     List<GameState> findWaitingToStartGames(long currentTime);
 
+    @Query("SELECT g.id FROM GameState g inner join g.players p where p.userID=?1")
+    List<Long> findAllGamesWithUser(long userID);
+
 
 }
 

@@ -380,7 +380,7 @@ public class GameService {
      * @param userID the long ID of the user to be removed
      * @return if it worked, boolean value
      */
-    public boolean playerLeaveGame(long gameID, long userID) {
+    public boolean removePlayer(long gameID, long userID) {
         games.findOne(gameID).removePlayer(userID);
         return true;
     }

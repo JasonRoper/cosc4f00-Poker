@@ -4,6 +4,8 @@ import com.pokerface.pokerapi.users.UserInfoTransport;
 import com.pokerface.pokerapi.users.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -178,17 +180,6 @@ public class GameController {
         }
 
         /**
-         * playerLeaveGame takes requests from a player to leave a game, or if they are idle for too long and removes them
-         * @param gameID the long gameID to remove
-         * @param principal the user identification
-         */
-        @DeleteMapping("api/v1/game/{gameID}/")
-        public void playerLeaveGame ( @DestinationVariable("game_id") long gameID, Principal principal){
-            UserInfoTransport user = userService.getUserByUsername(principal.getName());
-            gameService.playerLeaveGame(gameID, user.getId());
-        }
-
-        /**
          * casualGameMatchmaking takes requests from the user for a casual matchmaking game and returns the game
          * @param principal the user requesting a game
          * @return a GameInfoTransport containing the game info
@@ -233,6 +224,15 @@ public class GameController {
 //    public void deleteOwnedGame(@PathVariable("id") long gameID) {
 //        gameService.deleteGame(gameID)
 //    }
+
+    @DeleteMapping("/api/v1/games/{id}")
+    public ResponseEntity leaveGame(@PathVariable("id") long gameID, Principal principal){
+        gameService.removePlayer(gameID,userService.getUserByUsername(principal.getName()).getId());
+        GameStateTransport gameStateTransport = gameService.getGameStateTransport(gameID);
+        gameStateTransport.reason(GameStateTransport.Reason.PLAYER_LEFT,principal.getName()+" has left.");
+        messenger.convertAndSend("/messages/games/"+gameID,gameStateTransport);
+        return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+    }
 
 
     }
