@@ -117,6 +117,7 @@ export interface Player {
   isPlayer: boolean
   isDealer: boolean
   isFold: boolean
+  isTurn: boolean
   winnings: number
 }
 

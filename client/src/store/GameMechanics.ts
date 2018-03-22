@@ -116,6 +116,7 @@ export default class GameMech {
       currentBet: 600,
       isPlayer: true,
       isDealer: true,
+      isTurn: false,
       isFold: true,
       winnings: 0
     }, {
@@ -129,6 +130,7 @@ export default class GameMech {
       isFold: false,
       winnings: 0,
       isPlayer: false,
+      isTurn: false,
       isDealer: false
     }, this.defaultPlayer(), this.defaultPlayer() ,this.defaultPlayer(),this.defaultPlayer()]
     this.gameId = 0
@@ -151,6 +153,7 @@ export default class GameMech {
       card2: Card.BLANK_CARD,
       currentBet: 0,
       isFold: false,
+      isTurn: false,
       winnings: 0,
       isPlayer: false,
       isDealer: false
@@ -305,22 +308,48 @@ export default class GameMech {
    * @param GameState
    */
   public setGameTransport (gameTransport: any) {
+
+    switch (gameTransport.event) {
+      default: {
+        this.defaultGameTransport(gameTransport)
+      }
+    }
+    /*
+      HAND_STARTED = 'HAND_STARTED', // USER Joins the GAME
+      USER_ACTION = 'PLAYER_ACTION', // This is sent after a player makes an action
+      HAND_FINISHED = 'HAND_FINISHED', // Equivalent for a winnder being determined from a hand
+      ROUND_FINISHED = 'ROUND_FINISHED', // All players have bet - this results in a new Community cards
+      USER_JOIN = 'PLAYER_JOIN',// A new player has been added to the game
+      USER_LEAVE = 'PLAYER_LEAVE' //
+    */ 
+    // If the player has premove staged then they will move it
+    // this.sendAction()
+    // this.setTableActions()
+
+  }
+
+  public defaultGameTransport (gameTransport: any) {
+    this.multiplePlayers = []
+    this.communityCards = []
     alert('GameTransport')
     console.log(gameTransport)
     // this.multiplePlayers[0].action = gameTransport.players[0].action
-    gameTransport.players.forEach((item: any) => {
+    gameTransport.players.forEach((item: any, index: number) => {
+      const act: GameActionType | null = (item.action.type !== null) ? item.action : null
+      const userTurn: boolean = (index === gameTransport.nextPlayer)
       const player: Player = {
         id: item.id,
         money: item.money,
         name: item.name,
-        action: null,
+        action: act,
         card1: Card.CLUBS_EIGHT,
         card2: Card.CLUBS_KING,
         currentBet: 0,
         isFold: item.fold,
         winnings: 0,
         isPlayer: item.player,
-        isDealer: item.dealer
+        isDealer: item.dealer,
+        isTurn: userTurn
       }
       this.multiplePlayers.push(player)
     })
@@ -331,108 +360,14 @@ export default class GameMech {
         this.communityCards.push(card)
       }
     })
-    // = gameTransport.players[0].dealer
-    // this.multiplePlayers[0].isFold = gameTransport.players[0].fold
-    // this.multiplePlayers[0].id = gameTransport.players[0].id
-    // this.multiplePlayers[0].money = gameTransport.players[0].money
-    // this.multiplePlayers[0].name = gameTransport.players[0].name
+    this.bigBlind = gameTransport.bigBlind
+    if(gameTransport.event !== null) {
+      switch(gameTransport.event) {
 
-    // alert('finished transport')
-    // Object.assign(this.multiplePlayers, gameTransport.multiplePlayers)
-    // this.communityCards[0] = gameTransport.communityCards[0]
-    // for (const player of gameTransport.multiplePlayers) {
-    //   alert(player)
-    //  }
-    // this.communityCards[0] = 'SPADES_QUEEN'
-    // CardSuite.CLUBS_THREE
-    // this.multiplePlayers[this.location].name = 'test123'
-    // alert(gameTransport.communityCards[0])
-    // {"communityCards":["SPADES_QUEEN","SPADES_SEVEN","SPADES_KING"],"potSum"
-    // :30,"bigBlind":10,"nextPlayer":2,"event":null,"players":[{"id":1,"money":200
-    // ,"action":{"type":"BET","bet":1},"player":true,"dealer":true},{"id":2,"money":10000,"
-    // action":{"type":"BET","bet":1},"player":true,"dealer":false}]}
-    /*this.userId = gameTransport.
-    this.multiplePlayers = gameTransport.
-    //Players
-      //id
-      //money
-      //action
-      //isPlayer
-      //isDealer
-    // bigBlind
-    //pot
-    //community cards
-    gameState.setPlayers(new GameStateTransport.PlayerTransport[]{
-            new GameStateTransport.PlayerTransport(
-                    1,
-                    200,
-                    new GameAction(GameActionType.BET, 1),
-                    true,
-                    true
-            ), // admin
-            new GameStateTransport.PlayerTransport(
-                    2,
-                    10000,
-                    new GameAction(GameActionType.BET, 1),
-                    true,
-                    false
-            )}); // jason
-    gameState.setBigBlind(10);
-    gameState.setCommunityCards(Arrays.asList(new Card[]{Card.SPADES_QUEEN, Card.SPADES_SEVEN, Card.SPADES_KING}));
-    gameState.setPotSum(30);
-*/
-/*
-    switch (gameTransport.gameStateType) {
-      // Case for when a hand has just started
-      case GameStateType.HAND_STARTED: {
-        this.hasBet = gameTransport.hasBet
-        Object.assign(this.multiplePlayers, gameTransport.multiplePlayers)
-        this.pot = gameTransport.pot
-        Object.assign(this.communityCards, gameTransport.communityCards)
-        break
       }
-      // Case for when a player makes an action
-      case GameStateType.USER_ACTION: {
-        this.hasBet = gameTransport.hasBet
-        Object.assign(this.multiplePlayers, gameTransport.multiplePlayers)
-        this.pot = gameTransport.pot
-        break
-      }
-      // Case for when a hand is finished and a winner is decided for that hand
-      case GameStateType.HAND_FINISHED: {
-        this.hasBet = gameTransport.hasBet
-        Object.assign(this.multiplePlayers, gameTransport.multiplePlayers)
-        this.pot = gameTransport.pot
-        Object.assign(this.communityCards, gameTransport.communityCards)
-        break
-      }
-      // Case for when a new Community card is added to the game
-      case GameStateType.ROUND_FINISHED: {
-        this.hasBet = gameTransport.hasBet
-        Object.assign(this.multiplePlayers, gameTransport.multiplePlayers)
-        this.pot = gameTransport.pot
-        Object.assign(this.communityCards, gameTransport.communityCards)
-        break
-      }
-      // Case for when a new player is added into the game
-      case GameStateType.USER_JOIN: {
-        this.hasBet = gameTransport.hasBet
-        Object.assign(this.multiplePlayers, gameTransport.multiplePlayers)
-        this.pot = gameTransport.pot
-        Object.assign(this.communityCards, gameTransport.communityCards)
-        break
-      }
-      // Case for when a player has left the game
-      case GameStateType.USER_LEAVE: {
-        Object.assign(this.multiplePlayers, gameTransport.multiplePlayers)
-        break
-      }
-    }*/
-
-    // If the player has premove staged then they will move it
-    // this.sendAction()
-    // this.setTableActions()
-
+    }
+    this.turn = gameTransport.nextPlayer
+    this.potSum = gameTransport.potSum
   }
 
   /**
