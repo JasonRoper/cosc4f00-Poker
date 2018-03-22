@@ -57,8 +57,6 @@ public class UserService implements UserDetailsService {
         this.userRepository.save(adam);
         this.userRepository.save(javon);
         this.userRepository.save(ashley);
-
-
     }
 
     /**

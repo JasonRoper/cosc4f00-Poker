@@ -197,10 +197,10 @@ public class GameService {
      * @param userID UserID of player being added,
      * @param gameID gameID they are being added to
      */
-    private void addPlayer(long userID, long gameID) {
+    private void addPlayer(long userID, long gameID, String userName) {
         GameState game = games.findOne(gameID);
         if (!game.hasPlayer(userID)) {
-            game.addPlayer(userID);
+            game.addPlayer(userID,userName);
         }
         game = games.save(game);
 
@@ -214,13 +214,13 @@ public class GameService {
      * @param userID the playerID needing to be added to a game
      * @return the long id of the game they will join
      */
-    public long matchmake(long userID) {
+    public long matchmake(long userID, String userName) {
         long gameID = -1; // -1 is never a legitimate gameID, this allows error checking for unfound game.
         gameID = firstAvailableGame();
         if (gameID == -1) {
             gameID = createGame();
         }
-        addPlayer(userID, gameID);
+        addPlayer(userID, gameID, userName);
 
         return gameID;
     }

@@ -196,7 +196,7 @@ public class GameController {
         @PostMapping("/api/v1/matchmaking/basicGame")
         public GameInfoTransport casualGameMatchmaking (Principal principal){
             UserInfoTransport user = userService.getUserByUsername(principal.getName());
-            long gameID = gameService.matchmake(user.getId());
+            long gameID = gameService.matchmake(user.getId(), user.getUsername());
             GameStateTransport gameStateTransport = gameService.getGameStateTransport(gameID);
             messenger.convertAndSend("/messages/game/" + gameID,
                     gameStateTransport.reason(GameStateTransport.Reason.PLAYER_JOINED, "User has joined"));
