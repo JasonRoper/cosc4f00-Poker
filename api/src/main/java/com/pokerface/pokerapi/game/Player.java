@@ -27,12 +27,11 @@ public class Player {
     private boolean isAllIn;
     private int bet;
     private GameAction lastGameAction=null;
-    private String name="";
+    private String name="Default";
 
 
 
     public Player(){
-
     }
 
     public Player (Long userID, GameState gameState,String name){
@@ -53,7 +52,7 @@ public class Player {
         isDealer=false;
         isAI=false;
         isAllIn=false;
-
+        this.name="Default";
     }
 
     public List<Card> receiveCards(){
