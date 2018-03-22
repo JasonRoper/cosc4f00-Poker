@@ -122,4 +122,12 @@ public class PlayerTransport {
     public void setWinnings(Integer winnings) {
         this.winnings = winnings;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

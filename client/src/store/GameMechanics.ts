@@ -381,7 +381,6 @@ export default class GameMech {
     }*/
 
     // If the player has premove staged then they will move it
-
   }
 
   /**
