@@ -121,6 +121,7 @@ npm manifest:
       },
       "moduleFileExtensions": [
         "js",
+        "json",
         "vue"
       ],
       "transform": {

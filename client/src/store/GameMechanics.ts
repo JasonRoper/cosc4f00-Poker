@@ -9,6 +9,7 @@
 /**
  * GameMechanics uses Game service to send and receive updates
  */
+
 import {
   Event,
   GameAction,
@@ -20,12 +21,19 @@ import {
   Player,
   UserCards
 } from '@/api/gameservice'
+import { API_V1 } from '@/config'
+import axios from 'axios'
 
 /**
  * Import Card Suite that holds all Card Varients
  */
-import { Card } from '@/types/cards'
 import { Action } from 'vuex'
+
+import { Card } from '@/types/cards'
+
+/**
+ * Axios - Imports axios which is used to send POST and GET requests
+ */
 
 /**
  * Manages all interactions between the game and the server
@@ -56,7 +64,6 @@ export default class GameMech {
   public checkAction: number = 0
   public possibleAction: GameActionType [][] = [[GameActionType.BET, GameActionType.FOLD, GameActionType.CHECK],
     [GameActionType.CALL, GameActionType.RAISE, GameActionType.FOLD], [GameActionType.FOLD]]
-  public location: number
   private lobby: boolean
   private gameService: GameService
 
@@ -68,11 +75,8 @@ export default class GameMech {
    */
   constructor (gameId: number, userId?: number) {
     this.gameService = new GameService(gameId, userId)
-    this.setDefaultTransport()
     this.gameId = gameId
     this.userId = userId ? userId : null
-    this.location = Math.round(Math.random() * 5)
-    // alert('UserID ' + this.location)
     this.gameService.onGameUpdated(this.setGameTransport.bind(this))
     this.gameService.onGameFinished(this.onGameFinishedEvent.bind(this))
     this.gameService.onGameError(this.onGameError.bind(this))
@@ -85,6 +89,14 @@ export default class GameMech {
     } else {
       this.lobby = true
     }
+    axios.get(API_V1 + '/games/' + this.gameId).then((responce) => {
+      alert('got game state')
+      alert(responce)
+      this.setGameTransport(responce.data)
+    }).catch((error) => {
+      alert('having an error')
+      alert(error)
+    })
   }
 
   /**
@@ -194,9 +206,9 @@ export default class GameMech {
    * @param card
    */
   public onGameComminityCardsEvent (card: string) {
-    if (this.communityCards.length <= 5) {
-      this.communityCards.push(card)
-    }
+    // if (this.communityCards.length <= 5) {
+    //  this.communityCards.push(card)
+    // }
   }
 
   /**
@@ -293,10 +305,47 @@ export default class GameMech {
    * @param GameState
    */
   public setGameTransport (gameTransport: any) {
-    this.communityCards[0] = 'SPADES_QUEEN'
-    // CardSuite.CLUBS_THREE
     alert('GameTransport')
-    this.multiplePlayers[this.location].name = 'test123'
+    console.log(gameTransport)
+    // this.multiplePlayers[0].action = gameTransport.players[0].action
+    gameTransport.players.forEach((item: any) => {
+      const player: Player = {
+        id: item.id,
+        money: item.money,
+        name: item.name,
+        action: null,
+        card1: Card.BLANK_CARD,
+        card2: Card.BLANK_CARD,
+        currentBet: 0,
+        isFold: item.fold,
+        winnings: 0,
+        isPlayer: item.player,
+        isDealer: item.dealer
+      }
+      this.multiplePlayers.push(player)
+    })
+    Array.from(gameTransport.communityCards).forEach((card: any) => {
+      if (card === null) {
+        this.communityCards.push(Card.BLANK_CARD)
+      } else {
+        this.communityCards.push(card)
+      }
+    })
+    // = gameTransport.players[0].dealer
+    // this.multiplePlayers[0].isFold = gameTransport.players[0].fold
+    // this.multiplePlayers[0].id = gameTransport.players[0].id
+    // this.multiplePlayers[0].money = gameTransport.players[0].money
+    // this.multiplePlayers[0].name = gameTransport.players[0].name
+
+    // alert('finished transport')
+    // Object.assign(this.multiplePlayers, gameTransport.multiplePlayers)
+    // this.communityCards[0] = gameTransport.communityCards[0]
+    // for (const player of gameTransport.multiplePlayers) {
+    //   alert(player)
+    //  }
+    // this.communityCards[0] = 'SPADES_QUEEN'
+    // CardSuite.CLUBS_THREE
+    // this.multiplePlayers[this.location].name = 'test123'
     // alert(gameTransport.communityCards[0])
     // {"communityCards":["SPADES_QUEEN","SPADES_SEVEN","SPADES_KING"],"potSum"
     // :30,"bigBlind":10,"nextPlayer":2,"event":null,"players":[{"id":1,"money":200
@@ -381,6 +430,9 @@ export default class GameMech {
     }*/
 
     // If the player has premove staged then they will move it
+    // this.sendAction()
+    // this.setTableActions()
+
   }
 
   /**

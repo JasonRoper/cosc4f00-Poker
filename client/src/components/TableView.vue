@@ -151,12 +151,10 @@ import GameMech from '@/store/GameMechanics.ts'
 import Seat from '@/components/table/Seat'
 import {GameActionType} from '../api/gameservice'
 export default {
-  name: 'checkbox',
-  introduction: 'an amazing checkbox',
   props: ['userId'],
   data () {
     return {
-      mechanics: new GameMech(1, 0),
+      mechanics: new GameMech(1, this.userId),
       // this.userId),
       numberofPlayer: 0,
       BigBlindCurrentBet: 0,

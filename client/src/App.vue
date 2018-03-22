@@ -6,18 +6,17 @@
 </template>
 
 <script>
-// import NavBar from '../src/components/NavBar.vue'
+import NavBar from '../src/components/NavBar.vue'
 export default {
   name: 'app',
   data () {
     return {
-      messages: ['doc']
-      // onHomePage: true
+      onHomePage: true
     }
+  },
+  components: {
+    navBar: NavBar
   }
-  // components: {
-  //   navBar: NavBar
-  // }
 }
 </script>
 

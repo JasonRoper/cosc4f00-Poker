@@ -63,7 +63,7 @@ export class GamePaths {
 
     this.GAME_ERROR = messageGame + gameId + '/error'
 
-    this.USER_ACTIONS = '/app/game/' + gameId + '/gamestate'
+    this.USER_ACTIONS = '/app/game/' + gameId
 
     this.USER_CARDS = 'user' + messageGame + gameId
   }
@@ -96,7 +96,6 @@ export interface GameError {
  */
 export interface GameState {
   multiplePlayers: PlayerWithoutCards[]
-
   nextPlayer: number // Players who turn it is
   bigBlind: number
   potSum: number
