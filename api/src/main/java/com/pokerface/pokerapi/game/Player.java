@@ -39,11 +39,6 @@ public class Player {
         this.name=name;
     }
 
-    public Player (Long userID, GameState gameState,String name){
-        this(userID,gameState);
-        this.name=name;
-    }
-
     /**
      * Creates a player with a userID
      * @param userID is the long UserID of the player
