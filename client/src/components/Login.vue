@@ -164,7 +164,7 @@
     <input v-model="Player.password" ref="myTestField2" type="password" class="form-control" id="formGroupExampleInput2" placeholder="Password">
   </div>
     <div class="form-group">
-      <button class="btn btn-darkgrey btn-lg btn-block text-dark text-center" type="button" value = "Login"  @click="AttemptLogin()"><i class="fa fa-sign-in"></i> Login</button>
+      <button class="btn btn-darkgrey btn-lg btn-block text-dark text-center registerButton" type="button" value = "Login"  @click="AttemptLogin()"><i class="fa fa-sign-in"></i> Login</button>
   </div>
   <div class="form-group">
       <button class="btn btn-warning btn-lg btn-block text-dark  text-center" type="button" value ="Register"  data-toggle="modal" data-target="#Register">  <i class="fa fa-sign-in"></i> Register</button>
@@ -311,11 +311,11 @@ import { mapActions } from 'vuex' // used for maping actions of the vue store fi
 import ErrorMessages from '@/components/WebComponents/ErrorMessages' // ErrorMessages Components
 // import router from '@/router'
 export default {
+  name: 'Login',
   data () {
     return {
       /* The Name of the Component.
       */
-      name: 'login',
       // Representation of a Player Logging in
       Player: {
         username: '',
