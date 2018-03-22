@@ -310,12 +310,13 @@ public class GameState {
      * @param userID the ID of the player
      * @return the amount of players in the game as an int
      */
-    public int addPlayer(long userID){
+    public int addPlayer(long userID,String name){
         Player player = new Player(userID,this);
         players.add(player);
         playerCount=players.size();
         player.setCashOnHand(defaultCashOnHand);
         player.setPlayerID(playerCount-1);
+        player.setName(name);
         if (playerCount>=minPlayerCount&&hasStarted==false){
             startTime=System.currentTimeMillis()+10000;
         }

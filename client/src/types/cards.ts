@@ -46,10 +46,7 @@ export enum Card {
   CLUBS_ACE = 'CLUBS_ACE',
   CLUBS_TWO = 'CLUBS_TWO',
   CLUBS_THREE = 'CLUBS_THREE',
-<<<<<<< Updated upstream
-=======
   CLUBS_FOUR = 'CLUBS_FOUR',
->>>>>>> Stashed changes
   CLUBS_FIVE = 'CLUBS_FIVE',
   CLUBS_SIX = 'CLUBS_SIX',
   CLUBS_SEVEN = 'CLUBS_SEVEN',
@@ -113,10 +110,7 @@ export const cssMappings = {
   [Card.CLUBS_ACE]: 'clubs ace',
   [Card.CLUBS_TWO]: 'clubs two',
   [Card.CLUBS_THREE]: 'clubs three',
-<<<<<<< Updated upstream
-=======
   [Card.CLUBS_FOUR]: 'clubs four',
->>>>>>> Stashed changes
   [Card.CLUBS_FIVE]: 'clubs five',
   [Card.CLUBS_SIX]: 'clubs six',
   [Card.CLUBS_SEVEN]: 'clubs seven',

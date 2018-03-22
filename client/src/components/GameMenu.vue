@@ -302,7 +302,7 @@ export default {
     },
     chipChoice: function (choice) {
       if (choice === 'PokerTutorial') {
-        this.$router.push('TutorialTable')
+        this.$router.push('Table')
       }
       if (choice === 'CompetitivePoker') {
         alert('Lets Compete Poker')

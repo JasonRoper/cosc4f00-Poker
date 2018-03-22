@@ -45,8 +45,18 @@ public class UserService implements UserDetailsService {
                 encoder.encode("password"),
                 "jason@pokerpals.org");
         admin.setRole("ROLE_USER,ROLE_ADMIN");
+        User adam = new User("adam", encoder.encode("password"),"adam@pokerpals.org");
+        User javon = new User("javon", encoder.encode("password"),"javon@pokerpals.org");
+        User ashley = new User("ashley", encoder.encode("password"),"ashley@pokerpals.org");
+        jason.setRole("ROLE_USER,ROLE_ADMIN");
+        javon.setRole("ROLE_USER,ROLE_ADMIN");
+        ashley.setRole("ROLE_USER,ROLE_ADMIN");
+        adam.setRole("ROLE_USER,ROLE_ADMIN");
         this.userRepository.save(jason);
         this.userRepository.save(admin);
+        this.userRepository.save(adam);
+        this.userRepository.save(javon);
+        this.userRepository.save(ashley);
     }
 
     /**

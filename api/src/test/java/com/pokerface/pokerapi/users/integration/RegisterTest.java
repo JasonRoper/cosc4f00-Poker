@@ -7,18 +7,23 @@ import com.pokerface.pokerapi.users.User;
 import com.pokerface.pokerapi.users.UserRepository;
 import com.pokerface.pokerapi.users.UserTransport;
 import com.pokerface.pokerapi.util.TestCase;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Test to see if user registration works correctly
@@ -42,12 +47,12 @@ public class RegisterTest {
     }
 
     @Before
-    public void setUp(){
+    public void setUp() {
         restTemplate = restTemplate.withBasicAuth("admin", "admin");
     }
 
     @Test
-    public void registerSuccessful(){
+    public void registerSuccessful() {
         RegistrationFields[] testCases = new RegistrationFields[]{
                 new RegistrationFields("Jason", "afsjkd;afk", "jkmroper@gmail.com")
         };
@@ -71,11 +76,11 @@ public class RegisterTest {
 
     @Test
     public void fieldValidation() throws IOException {
-        TestCase[] testCases = new TestCase[] {
+        TestCase[] testCases = new TestCase[]{
                 new TestCase<>("Username is too short",
                         new RegistrationFields("", "asdkfl;aas", "t1@gmail.com"),
                         "size must be between 3 and 20"
-                        ),
+                ),
                 new TestCase<>("Username is too long",
                         new RegistrationFields("thisisareallylongusername", "asdkfl;aas", "t2@gmail.com"),
                         "size must be between 3 and 20"),
@@ -99,7 +104,7 @@ public class RegisterTest {
                         new RegistrationFields("email3", "validPassword", null),
                         "may not be empty"),
         };
-        for (TestCase<RegistrationFields,String> testCase : testCases) {
+        for (TestCase<RegistrationFields, String> testCase : testCases) {
             ResponseEntity<String> response = restTemplate.postForEntity(
                     "/users",
                     testCase.getInput(),
@@ -112,7 +117,7 @@ public class RegisterTest {
             Assert.assertEquals(testCase.getMessage() + ": Validation error didn't occur",
                     "Validation failed for object='registrationFields'. Error count: 1",
                     root.get("message").asText()
-                    );
+            );
 
             JsonNode errors = root.get("errors");
             Assert.assertEquals(testCase.getMessage() + " : more than one error", 1, errors.size());
@@ -134,7 +139,7 @@ public class RegisterTest {
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 
         JsonNode root = objectMapper.readTree(response.getBody());
-        assertEquals("com.pokerface.pokerapi.users.UsernameAlreadyExistsException", root.get("exception").asText() );
+        assertEquals("com.pokerface.pokerapi.users.UsernameAlreadyExistsException", root.get("exception").asText());
     }
 
     @Test
@@ -150,6 +155,6 @@ public class RegisterTest {
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 
         JsonNode root = objectMapper.readTree(response.getBody());
-        assertEquals("com.pokerface.pokerapi.users.EmailAlreadyExistsException", root.get("exception").asText() );
+        assertEquals("com.pokerface.pokerapi.users.EmailAlreadyExistsException", root.get("exception").asText());
     }
 }

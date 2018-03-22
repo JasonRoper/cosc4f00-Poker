@@ -130,3 +130,7 @@
 [0319/233502.269:ERROR:scoped_process_suspend.cc(40)] NtResumeProcess: An attempt was made to access an exiting process. (0xc000010a)
 [0320/144035.318:ERROR:crash_report_database_win.cc(427)] unexpected header
 [0321/141546.619:ERROR:crash_report_database_win.cc(427)] unexpected header
+<<<<<<< Updated upstream
+[0321/204224.373:ERROR:crash_report_database_win.cc(427)] unexpected header
+=======
+>>>>>>> Stashed changes

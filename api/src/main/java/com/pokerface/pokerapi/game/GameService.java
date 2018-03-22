@@ -4,8 +4,6 @@ import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -17,7 +15,7 @@ import java.util.List;
  */
 @Service
 public class GameService {
-    GameRepository games;
+    private GameRepository games;
 
     /**
      * This constructor grabs the repository for access to the database
@@ -67,9 +65,9 @@ public class GameService {
             gameState.nextTurn();
             gameState = games.save(gameState);
         }
-        GameStateTransport presentGameStateTransport = getGameStateTransport(gameState);
 
-        return presentGameStateTransport;
+
+        return getGameStateTransport(gameState);
     }
 
     /**
@@ -91,7 +89,7 @@ public class GameService {
         return true;
     }
 
-    public boolean allIn(GameState gameState, Player player) {
+    private boolean allIn(GameState gameState, Player player) {
         player.setAllIn(true);
         int amountToBet = player.getCashOnHand();
         gameState.placeBet(player, amountToBet);
@@ -106,7 +104,7 @@ public class GameService {
      * @param player    the player who is performing the action
      * @return boolean representing if it went through successfully
      */
-    public boolean check(GameState gameState, GameAction action, Player player) {
+    private boolean check(GameState gameState, GameAction action, Player player) {
         int amountToBet = gameState.getMinimumBet() - player.getBet();
         if (amountToBet > player.getCashOnHand()) {
             return allIn(gameState, player);
@@ -124,7 +122,7 @@ public class GameService {
      * @param player    is the one who is folding
      * @return boolean representing if it went through successfully
      */
-    public boolean fold(GameState gameState, GameAction action, Player player) {
+    private boolean fold(GameState gameState, GameAction action, Player player) {
         if (player.getHasFolded() == false) {
             gameState.getPlayers().get(player.getPlayerID()).setHasFolded(true);
             return true;
@@ -199,10 +197,10 @@ public class GameService {
      * @param userID UserID of player being added,
      * @param gameID gameID they are being added to
      */
-    private void addPlayer(long userID, long gameID) {
+    private void addPlayer(long userID, long gameID, String userName) {
         GameState game = games.findOne(gameID);
         if (!game.hasPlayer(userID)) {
-            game.addPlayer(userID);
+            game.addPlayer(userID,userName);
         }
         game = games.save(game);
 
@@ -216,13 +214,13 @@ public class GameService {
      * @param userID the playerID needing to be added to a game
      * @return the long id of the game they will join
      */
-    public long matchmake(long userID) {
+    public long matchmake(long userID, String userName) {
         long gameID = -1; // -1 is never a legitimate gameID, this allows error checking for unfound game.
         gameID = firstAvailableGame();
         if (gameID == -1) {
             gameID = createGame();
         }
-        addPlayer(userID, gameID);
+        addPlayer(userID, gameID, userName);
 
         return gameID;
     }
