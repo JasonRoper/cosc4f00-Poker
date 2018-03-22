@@ -8,6 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
@@ -16,6 +20,7 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.socket.WebSocketHttpHeaders;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
@@ -32,6 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
+@TestPropertySource(locations = "classpath:test.properties")
 public class ControllerTest {
 
     @Value("${local.server.port}")
@@ -42,18 +48,34 @@ public class ControllerTest {
     @Autowired
     private MockMvc mvc;
 
+    @Autowired
+    private TestRestTemplate restTemplate;
+
     @Before
     public void setup(){
-        this.URL = "wss://localhost:" + port + "/live";
+        this.URL = "ws://localhost:" + port + "/live";
     }
 
-    public StompSession getStompSession() throws InterruptedException, ExecutionException, TimeoutException, KeyManagementException, NoSuchAlgorithmException {
+    public StompSession getStompSession(String username, String password) throws InterruptedException, ExecutionException, TimeoutException, KeyManagementException, NoSuchAlgorithmException {
 
         StandardWebSocketClient socket = new StandardWebSocketClient();
 
         WebSocketStompClient stompClient = new WebSocketStompClient(socket);
+        stompClient.setMessageConverter(new MappingJackson2MessageConverter());
 
-        return stompClient.connect(this.URL, new StompSessionHandlerAdapter() {
+        WebSocketHttpHeaders headers = new WebSocketHttpHeaders();
+        if (username != null) {
+            restTemplate = restTemplate.withBasicAuth(username, password);
+
+            ResponseEntity<String> response = restTemplate.getForEntity("/api/v1/users/login", String.class);
+            String cookies = response.getHeaders().getFirst(HttpHeaders.SET_COOKIE);
+            headers.add(HttpHeaders.COOKIE, cookies.split(";")[0]);
+        }
+
+        return stompClient.connect(this.URL, headers, new StompSessionHandlerAdapter() {
+            @Override
+            public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
+            }
         }).get();
     }
 
@@ -67,9 +89,8 @@ public class ControllerTest {
     }
 
     @Test
-    @WithUserDetails("admin")
     public void testTestEndpoint() throws Exception {
-        StompSession session = getStompSession();
+        StompSession session = getStompSession("admin", "admin");
         session.subscribe("/messages/game", new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders headers) {
@@ -81,6 +102,7 @@ public class ControllerTest {
                 Assert.assertEquals("admin is talking to me", (String) payload);
             }
         });
+
         session.send("/app/test", 1);
     }
 }

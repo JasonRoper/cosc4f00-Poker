@@ -39,7 +39,7 @@ public class GameServiceRepositoryTest {
         testEntityManager.persist(new GameState());
         testEntityManager.persist(new GameState());
         testEntityManager.persist(new GameState());
-        assertNotEquals(gameService.matchmake(1),0);
+        assertNotEquals(gameService.matchmake(1, ""),0);
     }
 
     /**
@@ -48,7 +48,7 @@ public class GameServiceRepositoryTest {
      */
     @Test
     public void testMatchmake(){
-        long id = gameService.matchmake(1);
+        long id = gameService.matchmake(1,"");
         assertNotEquals(id,0);
     }
 
@@ -62,9 +62,9 @@ public class GameServiceRepositoryTest {
     @Test
     public void testWaitingGameStateTransport(){
         GameState game = games.findOne(gameService.createGame());
-        game.addPlayer(1);
-        game.addPlayer(2);
-        game.addPlayer(3);
+        game.addPlayer(1, "");
+        game.addPlayer(2, "");
+        game.addPlayer(3, "");
         GameStateTransport transport=gameService.getGameStateTransport(game.getId());
         System.out.println();
     }
@@ -75,10 +75,10 @@ public class GameServiceRepositoryTest {
     @Test
     public void testStartingGameStateTransport(){
         GameState game = games.findOne(gameService.createGame());
-        game.addPlayer(1);
-        game.addPlayer(2);
-        game.addPlayer(3);
-        game.addPlayer(4);
+        game.addPlayer(1, " ");
+        game.addPlayer(2, "");
+        game.addPlayer(3, " ");
+        game.addPlayer(4, "");
         GameStateTransport transport=gameService.gameStart(game.getId());
         HandTransport hand;
         for (Player p:game.getPlayers()){
@@ -92,10 +92,10 @@ public class GameServiceRepositoryTest {
     public void testGamePlay(){
         GameState game = games.findOne(gameService.createGame());
         long gameID=game.getId();
-        game.addPlayer(1);
-        game.addPlayer(2);
-        game.addPlayer(3);
-        game.addPlayer(4);
+        game.addPlayer(1, "");
+        game.addPlayer(2, "");
+        game.addPlayer(3, "");
+        game.addPlayer(4, "");
         game.startGame();
         gameService.handleAction(gameID,createAction(1,GameActionType.BET,10),gameService.getPlayerID(gameID,1));
         gameService.handleAction(gameID,createAction(2,GameActionType.BET,10),gameService.getPlayerID(gameID,2));

@@ -36,10 +36,10 @@ public class GameLoopTest {
     public void newRound(){
         GameState game = games.findOne(gameService.createGame());
         long gameID=game.getId();
-        game.addPlayer(10);
-        game.addPlayer(11);
-        game.addPlayer(12);
-        game.addPlayer(13);
+        game.addPlayer(10, "");
+        game.addPlayer(11, "");
+        game.addPlayer(12, "");
+        game.addPlayer(13, "");
         game.startGame();
         gameService.handleAction(gameID,createAction(13,GameActionType.CHECK,10),gameService.getPlayerID(gameID,13));
         gameService.handleAction(gameID,createAction(10,GameActionType.CHECK,10),gameService.getPlayerID(gameID,10));
@@ -55,10 +55,10 @@ public class GameLoopTest {
         GameState game2= games.findOne(gameService.createGame());
         GameState game = games.findOne(gameService.createGame());
         long gameID=game.getId();
-        game.addPlayer(1);
-        game.addPlayer(2);
-        game.addPlayer(3);
-        game.addPlayer(4);
+        game.addPlayer(1, "");
+        game.addPlayer(2, "");
+        game.addPlayer(3, "");
+        game.addPlayer(4, "");
         game.startGame();
         gameService.handleAction(gameID,createAction(1,GameActionType.BET,10),gameService.getPlayerID(gameID,1));
         gameService.handleAction(gameID,createAction(2,GameActionType.BET,10),gameService.getPlayerID(gameID,2));
@@ -71,10 +71,10 @@ public class GameLoopTest {
 
 
         gameID=game2.getId();
-        game2.addPlayer(5);
-        game2.addPlayer(6);
-        game2.addPlayer(7);
-        game2.addPlayer(8);
+        game2.addPlayer(5, "");
+        game2.addPlayer(6, "");
+        game2.addPlayer(7, "");
+        game2.addPlayer(8, "");
         game2.startGame();
         gameService.handleAction(gameID,createAction(5,GameActionType.BET,10),gameService.getPlayerID(gameID,5));
         gameService.handleAction(gameID,createAction(6,GameActionType.BET,10),gameService.getPlayerID(gameID,6));

@@ -30,6 +30,7 @@ import static org.junit.Assert.assertNotNull;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestPropertySource(locations = "classpath:test.properties")
 public class RegisterTest {
 
     @Autowired
@@ -46,19 +47,14 @@ public class RegisterTest {
         userRepository.deleteAll();
     }
 
-    @Before
-    public void setUp() {
-        restTemplate = restTemplate.withBasicAuth("admin", "admin");
-    }
-
     @Test
     public void registerSuccessful() {
         RegistrationFields[] testCases = new RegistrationFields[]{
-                new RegistrationFields("Jason", "afsjkd;afk", "jkmroper@gmail.com")
+                new RegistrationFields("Jasona", "afsjkd;afk", "jkmroper@gmail.com")
         };
 
         for (RegistrationFields testCase : testCases) {
-            ResponseEntity<UserTransport> responseEntity = restTemplate.postForEntity("/users",
+            ResponseEntity<UserTransport> responseEntity = restTemplate.postForEntity("/api/v1/users",
                     testCase, UserTransport.class);
 
             assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
@@ -106,7 +102,7 @@ public class RegisterTest {
         };
         for (TestCase<RegistrationFields, String> testCase : testCases) {
             ResponseEntity<String> response = restTemplate.postForEntity(
-                    "/users",
+                    "/api/v1/users",
                     testCase.getInput(),
                     String.class);
 
@@ -132,7 +128,7 @@ public class RegisterTest {
         userRepository.save(existingRecord);
 
         ResponseEntity<String> response = restTemplate.postForEntity(
-                "/users",
+                "/api/v1/users",
                 new RegistrationFields("user1", "somePassword", "uniqueemail@gmail.com"),
                 String.class
         );
@@ -148,7 +144,7 @@ public class RegisterTest {
         userRepository.save(existingRecord);
 
         ResponseEntity<String> response = restTemplate.postForEntity(
-                "/users",
+                "/api/v1/users",
                 new RegistrationFields("randomuser", "somePassword", "user1@gmail.com"),
                 String.class
         );
