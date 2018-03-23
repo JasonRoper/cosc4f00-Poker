@@ -10,6 +10,7 @@ import axios from 'axios'
 
 // we need cookies to be attached
 axios.defaults.withCredentials = true
+axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
 
 /**
  * Include vue
