@@ -41,7 +41,7 @@ public class GameServiceRepositoryTest {
         testEntityManager.persist(new GameState());
         testEntityManager.persist(new GameState());
         testEntityManager.persist(new GameState());
-        assertNotEquals(gameService.matchmake(1, ""),0);
+        assertNotEquals(gameService.casualMatchmake(1, ""),0);
     }
 
     /**
@@ -50,7 +50,7 @@ public class GameServiceRepositoryTest {
      */
     @Test
     public void testMatchmake(){
-        long id = gameService.matchmake(1,"");
+        long id = gameService.casualMatchmake(1,"");
         assertNotEquals(id,0);
     }
 
@@ -120,8 +120,8 @@ public class GameServiceRepositoryTest {
         List<Long>test=games.findAllGamesWithUser(1);
         List<Long>test1=games.findAllGamesWithUser(5);
         List<Long>test2=games.findAllGamesWithUser(3923);
-        assertEquals(test.get(0).longValue(),1);
-        assertEquals(test1.get(0).longValue(),2);
+        assertEquals(test.get(0).longValue(),gameState.getId());
+        assertEquals(test1.get(0).longValue(),gameState2.getId());
         assertTrue(test2.isEmpty());
         System.out.println();
     }
