@@ -21,8 +21,9 @@ import {
   Player,
   UserCards
 } from '@/api/gameservice'
+
+import axios from '@/api/axios'
 import { API_V1 } from '@/config'
-import axios from 'axios'
 
 /**
  * Import Card Suite that holds all Card Varients

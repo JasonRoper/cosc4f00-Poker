@@ -4,21 +4,13 @@
  */
 
 /**
- * Need to import axios first in order to set defaults
- */
-import axios from 'axios'
-
-// we need cookies to be attached
-axios.defaults.withCredentials = true
-axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
-
-/**
  * Include vue
  */
 import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from '@/store'
+import axios from '@/api/axios'
 
 import VModal from 'vue-js-modal'
 

@@ -12,7 +12,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
@@ -82,8 +81,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/**").permitAll()
                 // allow authentication with HTTP basic (ie. every request sends a username and password)
                 .and().httpBasic()
-                // we don't want the default authentication popup to show if we are not authenticated
-                .and().exceptionHandling().authenticationEntryPoint(new Http401AuthenticationEntryPoint("FormBased"))
                 // need to use cookie csrf protection without HttpOnly flag in order for it to work with
                 // axios and new Websocket()
                 .and().csrf().disable() //csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
