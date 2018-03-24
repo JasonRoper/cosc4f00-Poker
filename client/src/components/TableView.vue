@@ -281,6 +281,24 @@ export default {
       console.log('heres you x: ' + x + 'here your y:' + y + 'at ' + theta)
     }
   },
+  updated: function () {
+    alert('Updated the board')
+    let players = document.getElementsByClassName('player')
+    let numberofPoints = players.length
+    let degreeIncrument = 360 / numberofPoints
+    var radius = 238 // 280
+    var x = 0
+    var y = 0
+    let theta = 0
+    for (let i = 0; i < numberofPoints; i++) {
+      theta = theta + degreeIncrument
+      x = radius * Math.cos(theta * Math.PI / 180.0).toFixed(3) // Convert to radians
+      y = radius * Math.sin(theta * Math.PI / 180.0).toFixed(3)
+      players[i].style.transform = 'translateX(' + x + 'pt) translateY(' + y + 'pt)'
+      console.log('heres you x: ' + x + 'here your y:' + y + 'at ' + theta)
+    }
+    // this.$forceUpdate()
+  },
   destroyed () {
     if (this.gameService) {
       this.gameService.finish()

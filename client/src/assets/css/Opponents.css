@@ -62,7 +62,7 @@ perspective: 700px;
    z-index: 1;
    position: relative;
    bottom: -20%;
-   perspective: 700px;
+   /* perspective: 700px; */
    /* transform: rotatex(60deg); */
    /* left:-100%; */
    /* transform: scale(0.8); */
