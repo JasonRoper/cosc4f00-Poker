@@ -200,6 +200,9 @@ public class GameController {
 
             messenger.convertAndSend("/messages/game/" + gameID,
                     nextGameState.reason(GameStateTransport.Reason.HAND_FINISHED, ""));
+            if (gameService.getGameType(gameID).equals("COMPETITIVE")){
+                int[] ratingChanges=gameService.calculateRatingChanges(gameID);
+            }
         } else if (gameService.isRoundEnd(gameID)) {
             nextGameState = gameService.handleRound(gameID);
             messenger.convertAndSend("/messages/game/" + gameID,
@@ -231,13 +234,23 @@ public class GameController {
     @PostMapping("/api/v1/matchmaking/basicGame")
     public GameInfoTransport casualGameMatchmaking(Principal principal) {
         UserInfoTransport user = userService.getUserByUsername(principal.getName());
-        long gameID = gameService.matchmake(user.getId(), user.getUsername());
+        long gameID = gameService.casualMatchmake(user.getId(), user.getUsername());
         GameStateTransport gameStateTransport = gameService.getGameStateTransport(gameID);
         messenger.convertAndSend("/messages/game/" + gameID,
                 gameStateTransport.reason(GameStateTransport.Reason.PLAYER_JOINED, "User has joined"));
         return new GameInfoTransport(gameID);
     }
 
+
+    @PostMapping("/api/v1/matchmaking/competitiveGame")
+    public GameInfoTransport competitiveGameMatchmaking(Principal principal) {
+        UserInfoTransport user = userService.getUserByUsername(principal.getName());
+        long gameID = gameService.competitiveMatchmake(user.getId(), user.getUsername());
+        GameStateTransport gameStateTransport = gameService.getGameStateTransport(gameID);
+        messenger.convertAndSend("/messages/game/" + gameID,
+                gameStateTransport.reason(GameStateTransport.Reason.PLAYER_JOINED, "User has joined"));
+        return new GameInfoTransport(gameID);
+    }
 //
 //    @GetMapping("/api/v1/games")
 //    public void getGameListing() {

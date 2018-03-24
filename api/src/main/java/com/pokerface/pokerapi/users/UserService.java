@@ -151,4 +151,11 @@ public class UserService implements UserDetailsService {
             return null;
         }
     }
+
+    public int applyRatingChange( long userID,int ratingChange){
+        User user = userRepository.findOne(userID);
+        user.setRating(user.getRating()+ratingChange);
+        userRepository.save(user);
+        return user.getRating();
+    }
 }

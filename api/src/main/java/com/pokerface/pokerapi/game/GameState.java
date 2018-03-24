@@ -26,6 +26,7 @@ public class GameState {
     private Card communityCardOne,communityCardTwo,communityCardThree,communityCardFour,communityCardFive;
     private Long startTime=null;
     private boolean hasStarted=false;
+    private GameType gameType;
 
     private int previousTurn;
 
@@ -67,6 +68,12 @@ public class GameState {
         this.presentTurn=3;
         this.minPlayerCount=minPlayerCount;
         this.defaultCashOnHand=defaultCashOnHand;
+        gameType=GameType.CASUAL;
+    }
+
+    public GameState(long id,int bigBlind,int minPlayerCount, int defaultCashOnHand, GameType gameType){
+        this(id,bigBlind,minPlayerCount,defaultCashOnHand);
+        this.gameType=gameType;
     }
 
     /**
@@ -549,5 +556,17 @@ public class GameState {
         this.hasStarted = hasStarted;
     }
 
+    public enum GameType{
+        CUSTOM,
+        CASUAL,
+        COMPETETIVE
+    }
 
+    public GameType getGameType() {
+        return gameType;
+    }
+
+    public void setGameType(GameType gameType) {
+        this.gameType = gameType;
+    }
 }

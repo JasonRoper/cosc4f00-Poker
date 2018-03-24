@@ -15,14 +15,23 @@ public interface GameRepository extends CrudRepository<GameState, Long> {
      * A custom query which when called returns a list of IDs of games that need a player.
      * @return List of Long ids of games without full players
      */
-    @Query("SELECT g.id FROM GameState g where g.playerCount<=4")
+    @Query("SELECT g.id FROM GameState g where g.playerCount<=g.minPlayerCount")
     List<Long> findOpenGame();
+
+    @Query("SELECT g.id FROM GameState g where g.playerCount<=g.minPlayerCount AND g.gameType=1")
+    List<Long> findOpenCasualGame();
+
+    @Query("Select g.id FROM GameState g where g.playerCount<=g.minPlayerCount AND g.gameType=2")
+    List<Long> findOpenCompetetiveGame();
+
 
     @Query("SELECT g FROM GameState g where g.startTime IS NOT NULL AND g.startTime<=?1 AND g.hasStarted=FALSE")
     List<GameState> findWaitingToStartGames(long currentTime);
 
     @Query("SELECT g.id FROM GameState g inner join g.players p where p.userID=?1")
     List<Long> findAllGamesWithUser(long userID);
+
+
 
 
 }
