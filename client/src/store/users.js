@@ -201,9 +201,9 @@ const actions = {
         return
       }
 
-      let error = reason.response.data.error
-      switch (error) {
-        case 'Unauthorized':
+      let error = reason.response
+      switch (error.status) {
+        case 401:
           context.commit('addLoginError', {
             error: 'AuthenticationError',
             message: 'Error Authenticating'
