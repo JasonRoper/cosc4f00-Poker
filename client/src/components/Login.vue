@@ -164,7 +164,7 @@
     <input v-model="Player.password" ref="myTestField2" type="password" class="form-control" id="formGroupExampleInput2" placeholder="Password">
   </div>
     <div class="form-group">
-      <button class="btn btn-darkgrey btn-lg btn-block text-dark text-center" type="button" value = "Login"  @click="AttemptLogin()"><i class="fa fa-sign-in"></i> Login</button>
+      <button class="btn btn-darkgrey btn-lg btn-block text-dark text-center registerButton" type="button" value = "Login"  @click="AttemptLogin()"><i class="fa fa-sign-in"></i> Login</button>
   </div>
   <div class="form-group">
       <button class="btn btn-warning btn-lg btn-block text-dark  text-center" type="button" value ="Register"  data-toggle="modal" data-target="#Register">  <i class="fa fa-sign-in"></i> Register</button>
@@ -311,8 +311,11 @@ import { mapActions } from 'vuex' // used for maping actions of the vue store fi
 import ErrorMessages from '@/components/WebComponents/ErrorMessages' // ErrorMessages Components
 // import router from '@/router'
 export default {
+  name: 'Login',
   data () {
     return {
+      /* The Name of the Component.
+      */
       // Representation of a Player Logging in
       Player: {
         username: '',
@@ -335,7 +338,8 @@ export default {
       isLoginError: false,
       isRegistrationError: false,
       ErrorMessage: '',
-      registModal: false
+      registModal: false,
+      after: false
     }
   },
   watch: {
@@ -359,20 +363,19 @@ export default {
         return // Must add CSS for this action
       } else {
         this.login(this.Player) // Servery queries for login
-        this.loginErrorMessage = this.$store.state.users.errors.login // Sets login errorMessage to the store array to the store array of error login messages
-        setTimeout(this.checkLoginErrors, 900) // Chec Login Errors after 900 ms
+        this.loginErrorMessage = this.$store.state.users.errors.login // Sets login errorMessage to the store array to the store array of error login message
+        setTimeout(this.checkLoginErrors, 3000) // Chec Login Errors after 900 ms
       }
     },
     checkLoginErrors () {
       if (this.loginErrorMessage.length > 0) {
-        // alert('all done' + this.loginErrorMessage.length)
-        // alert('ans is:' + this.loginErrorMessage[0].message)
         this.ErrorMessage = this.loginErrorMessage[0].message
         this.isLoginError = true
         this.$store.state.users.errors.login = []
-      } else
+      }
       if ((this.loginErrorMessage.length === 0)) { // if ater check
         this.$router.push('Game')
+        alert('start game')
       }
     },
     AttemptRegister () {

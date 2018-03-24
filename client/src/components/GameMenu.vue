@@ -4,14 +4,16 @@
         <div v-show="GameMenu">
         <h2 class="display-4 text-white pb-3 text-left ml-5 pl-5 mr-0 mt-5 pt-5"><u>MAIN MENU</u> </h2>
         <div class="text-center mx-4 ">
-        <div class="chip-holder"><button class="around-words inner-yellow btn btn-lg" @click="showInstructPoker()"><hr><button class="inner-button  btn btn-lg">Instructional Poker</button><hr></button></div>
-      <div class="chip-holder"><button class="around-words inner-green btn btn-lg" @click="showCasualPoker()"><hr><div class="button-title">Casual Poker</div><hr></button></div>
-        <div class="chip-holder"><button class="around-words inner-blue btn btn-lg" @click="chipChoice('CompetitivePoker')"><hr><button class="btn btn-lg">Competitive Poker</button><hr></button></div>
+        <div class="chip-holder"><button class="around-words inner-yellow btn btn-lg" @click="showInstructPoker()"><hr><div class="inner-button  btn btn-lg">Instructional Poker</div><hr></button></div>
+      <div class="chip-holder"><button class="around-words inner-green btn btn-lg" @click="showCasualPoker()"><hr><div >Casual Poker</div><hr></button></div>
+        <div class="chip-holder"><button class="around-words inner-blue btn btn-lg" @click="chipChoice('CompetitivePoker')"><hr><div class="btn btn-lg">Competitive Poker</div><hr></button></div>
       </div>
       </div>
           <div  v-show="instrcutionPokerMode">
       <div >
-      <h2 class="display-4 text-white  text-left ml-5 pl-5 mr-0 mt-5 pt-5 "> <button type="button" class="btn btn-default btn-circle" @click="backButton()">back</button><u>Instructional(CPU) Poker</u> </h2>
+      <h2 class="display-4 text-white  text-left ml-5 pl-5 mr-0 mt-3 pt-3 "> 
+        <button type="button" class="btn btn-default btn-circle backButton  inner-blue" @click="backButton()"><i class="fa fa-arrow-left  fa-2x"></i></button><br>
+        <u>Instructional(CPU) Poker</u> </h2>
        <div class="pt-5 mt-5">
        <div class="chip-holder "><button class="around-words inner-grey btn btn-lg" @click="chipChoice('PokerTutorial')"><hr><div class="button-title">Poker Tutorial</div><hr></button></div>
         <div class="chip-holder "><button data-toggle="modal" data-target="#Register2" class="around-words inner-orange btn btn-lg"><hr> CPU Challenge<hr></button></div>
@@ -25,7 +27,7 @@
       </div>
       <div  v-show="casualPokerMode">
       <div>
-      <h2 class="display-4 text-white text-left ml-5 pl-5 mr-0 "> <button type="button" class="btn btn-default btn-circle" @click="backButton()">back</button><u>Casual</u> </h2>
+      <h2 class="display-4 text-white text-left ml-3 pl-3 mt-3 pt-3"> <button type="button" class="btn btn-default btn-circle backButton  inner-green" @click="backButton()"><i class="fa fa-arrow-left  fa-2x"></i></button><br><u>Casual Poker</u> </h2>
               <div class="pt-0">
          <div class="chip-holder pt-5 mt-5"><button class="around-words2 inner-grey btn btn-lg" data-toggle="modal" data-target="#CreateCasualPoker"><hr><div class="button-title">Create Game</div><hr></button></div>
         <div class="chip-holder pt-5 mt-5"><button class="around-words2 inner-blue btn btn-lg" data-toggle="modal" data-target="#JoinCasualPoker"><hr><button class="btn btn-lg">Join Game</button><hr></button></div>

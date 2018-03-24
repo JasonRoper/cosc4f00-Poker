@@ -13,7 +13,6 @@ import Lobby from '@/components/Lobby'
 import NavBar from '@/components/NavBar'
 import Game from '@/components/Game'
 import TableView from '@/components/TableView'
-
 Vue.use(Router)
 
 export default new Router({

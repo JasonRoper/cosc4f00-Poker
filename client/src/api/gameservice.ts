@@ -63,7 +63,7 @@ export class GamePaths {
 
     this.GAME_ERROR = messageGame + gameId + '/error'
 
-    this.USER_ACTIONS = '/app/game/' + gameId + '/gamestate'
+    this.USER_ACTIONS = '/app/game/' + gameId
 
     this.USER_CARDS = 'user' + messageGame + gameId
   }
@@ -96,19 +96,11 @@ export interface GameError {
  */
 export interface GameState {
   multiplePlayers: PlayerWithoutCards[]
-<<<<<<< Updated upstream
-  gameId: number
-  pot: number
-  communityCards: Card[]
-  gameStateType: GameStateType // This is every time that the GAME has UPDATED
-=======
-
   nextPlayer: number // Players who turn it is
   bigBlind: number
   potSum: number
   communityCards: Card[]
   event: Event // This is every time that the GAME has UPDATED
->>>>>>> Stashed changes
 }
 
 /**

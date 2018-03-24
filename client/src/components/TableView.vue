@@ -1,11 +1,14 @@
 <template>
 
-<div id="page-bg"    class="container-fluid text-sm-center mycontent ">
+<div id="page-bg"    class=" text-sm-center mycontent ">
     <div class="menu-icon" @click="toggleSidebar()" >
       <span></span>
       <span></span>
       <span></span>
     </div>
+
+   
+
   <div class="container text-sm-center mycontent "  >
     <!-- <div  class=" container text-lg-center"> -->
     <div class="row">
@@ -28,11 +31,15 @@
     <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Community</a>
   </div>
 </nav>
+    <!-- <div class="menu-back-icon"> -->
+      <button type="button" class="btn btn-default btn-circle TablebackButton  inner-blue" @click="backButton()"><i class="fa fa-arrow-left  fa-2x"></i></button><br>
+    <!-- </div> -->
 <div class="tab-content" id="nav-tabContent">
   <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-    <div class="pt-5 mt-3" >
-  <div class="col-sm-center text-center" >
-    <div class="CompleteTable">
+    <div class="" >
+
+  <div class="col-sm-center text-center finalSetup" >
+    <div class="">
       <div v-if="this.userId === null">
         <seat  class="player" v-for="player in this.getOpponents()" :key="player.id" :data="player"></seat>
 
@@ -40,9 +47,9 @@
               <div class="inner-tableBorder">
           <player  class="player" v-for="player in this.mechanics.multiplePlayers" :key="player.id" :data="player">
         </player>
-        <div>
-         <h2 class="display-4 pr-4 pb-0  text-white">PokerPals!!<img src="../assets/Webgraphics/poker.png" width="70" height="70"></h2>
-         <h5 class=" mr-5  pt-0 text-info">Pot:{{this.mechanics.pot}}</h5>
+        <div class="CompleteTable">
+         <h2 class="display-4  text-white table-title">PokerPals!!<img src="../assets/Webgraphics/poker.png" width="70" height="70"></h2>
+         <h5 class=" mr-5  pt-2 text-info">Pot:{{this.mechanics.pot}}</h5>
       <p class='Communitycards  ml-4  '>
         <card class='size' v-for="card in this.mechanics.communityCards" :key="card" :card="card"></card>
       </p>
@@ -144,12 +151,10 @@ import GameMech from '@/store/GameMechanics.ts'
 import Seat from '@/components/table/Seat'
 import {GameActionType} from '../api/gameservice'
 export default {
-  name: 'checkbox',
-  introduction: 'an amazing checkbox',
   props: ['userId'],
   data () {
     return {
-      mechanics: new GameMech(1, 0),
+      mechanics: new GameMech(1, this.userId),
       // this.userId),
       numberofPlayer: 0,
       BigBlindCurrentBet: 0,
@@ -231,6 +236,9 @@ export default {
     adjustsideBar: function () {
       document.getElementById('page-content').classList.remove('active')
       document.getElementById('sidebar').classList.remove('active')
+    },
+    backButton: function () {
+      this.$router.push('Game')
     }
   },
   components: {
