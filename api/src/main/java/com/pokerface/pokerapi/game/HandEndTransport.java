@@ -6,7 +6,8 @@ import java.util.List;
  * HandEndTransport is the object the sends when a hand ends and people have won money
  */
 public class HandEndTransport {
-    PlayerTransport[] players;
+    private PlayerTransport[] players;
+
     public HandEndTransport(){
 
     }
@@ -24,6 +25,11 @@ public class HandEndTransport {
 
     }
 
+    public PlayerTransport[] getPlayers() {
+        return players;
+    }
 
-
+    public void setPlayers(PlayerTransport[] players) {
+        this.players = players;
+    }
 }

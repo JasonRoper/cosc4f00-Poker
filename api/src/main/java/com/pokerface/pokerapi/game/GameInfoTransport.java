@@ -6,7 +6,7 @@ public class GameInfoTransport {
     public GameInfoTransport() {
 
     }
-    
+
     public GameInfoTransport(long gameId) {
         this.gameId = gameId;
     }
