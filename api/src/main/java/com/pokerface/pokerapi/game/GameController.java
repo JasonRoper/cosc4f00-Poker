@@ -177,8 +177,8 @@ public class GameController {
 
     @MessageMapping("test")
     public void testWebsocket(@Payload long number, Principal principal) {
-        messenger.convertAndSend("/messages/game", principal.getName() + " is talking to me");
-        messenger.convertAndSendToUser(principal.getName(), "/messages/game", "but I love you most");
+        messenger.convertAndSend("/messages/game", new GameInfoTransport(number));
+        messenger.convertAndSendToUser(principal.getName(), "/messages/game", new GameInfoTransport(number));
     }
 
     /**

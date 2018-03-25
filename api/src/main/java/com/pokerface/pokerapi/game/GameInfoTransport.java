@@ -2,6 +2,10 @@ package com.pokerface.pokerapi.game;
 
 public class GameInfoTransport {
     private long gameId;
+
+    public GameInfoTransport() {
+
+    }
     
     public GameInfoTransport(long gameId) {
         this.gameId = gameId;
