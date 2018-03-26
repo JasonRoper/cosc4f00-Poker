@@ -1,6 +1,8 @@
 package com.pokerface.pokerapi.game;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * GameStateTransport is the object that is communicated by the GameController to the Front End user, it represents
@@ -143,5 +145,26 @@ public class GameStateTransport {
         HAND_FINISHED,
         PLAYER_JOINED,
         PLAYER_LEFT,
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GameStateTransport that = (GameStateTransport) o;
+        return getPotSum() == that.getPotSum() &&
+                getBigBlind() == that.getBigBlind() &&
+                getNextPlayer() == that.getNextPlayer() &&
+                Objects.equals(getCommunityCards(), that.getCommunityCards()) &&
+                Objects.equals(getEvent(), that.getEvent()) &&
+                Arrays.equals(multiplePlayers, that.multiplePlayers);
+    }
+
+    @Override
+    public int hashCode() {
+
+        int result = Objects.hash(getCommunityCards(), getPotSum(), getBigBlind(), getNextPlayer(), getEvent());
+        result = 31 * result + Arrays.hashCode(multiplePlayers);
+        return result;
     }
 }

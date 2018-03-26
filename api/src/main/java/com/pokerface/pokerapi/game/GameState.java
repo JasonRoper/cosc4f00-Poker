@@ -3,6 +3,7 @@ package com.pokerface.pokerapi.game;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * GameState stores everything necessary to know about the state of a game.
@@ -568,5 +569,40 @@ public class GameState {
 
     public void setGameType(GameType gameType) {
         this.gameType = gameType;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GameState gameState = (GameState) o;
+        return getId() == gameState.getId() &&
+                getLastBet() == gameState.getLastBet() &&
+                getDealer() == gameState.getDealer() &&
+                getMinimumBet() == gameState.getMinimumBet() &&
+                getPresentTurn() == gameState.getPresentTurn() &&
+                getRound() == gameState.getRound() &&
+                getPlayerCount() == gameState.getPlayerCount() &&
+                isHasStarted() == gameState.isHasStarted() &&
+                getPreviousTurn() == gameState.getPreviousTurn() &&
+                getBigBlind() == gameState.getBigBlind() &&
+                getMinPlayerCount() == gameState.getMinPlayerCount() &&
+                getDefaultCashOnHand() == gameState.getDefaultCashOnHand() &&
+                Objects.equals(getDeck(), gameState.getDeck()) &&
+                Objects.equals(getPot(), gameState.getPot()) &&
+                Objects.equals(getPlayers(), gameState.getPlayers()) &&
+                getCommunityCardOne() == gameState.getCommunityCardOne() &&
+                getCommunityCardTwo() == gameState.getCommunityCardTwo() &&
+                getCommunityCardThree() == gameState.getCommunityCardThree() &&
+                getCommunityCardFour() == gameState.getCommunityCardFour() &&
+                getCommunityCardFive() == gameState.getCommunityCardFive() &&
+                Objects.equals(getStartTime(), gameState.getStartTime()) &&
+                getGameType() == gameState.getGameType();
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(getId(), getDeck(), getPot(), getLastBet(), getDealer(), getMinimumBet(), getPresentTurn(), getRound(), getPlayers(), getPlayerCount(), getCommunityCardOne(), getCommunityCardTwo(), getCommunityCardThree(), getCommunityCardFour(), getCommunityCardFive(), getStartTime(), isHasStarted(), getGameType(), getPreviousTurn(), getBigBlind(), getMinPlayerCount(), getDefaultCashOnHand());
     }
 }

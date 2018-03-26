@@ -1,7 +1,12 @@
 package com.pokerface.pokerapi.game;
 
+import com.pokerface.pokerapi.users.RegistrationFields;
 import com.pokerface.pokerapi.users.User;
+import com.pokerface.pokerapi.users.UserInfoTransport;
+import com.pokerface.pokerapi.users.UserService;
+import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +26,7 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -30,23 +36,37 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations = "classpath:test.properties")
-public class TestGame {
+public class GameTest {
     @Value("${local.server.port}")
     private int port;
     private String URL;
+    private List<Long> userIDs=new ArrayList();
 
+    @Autowired
+    private GameRepository gameRepository;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private TestRestTemplate restTemplate;
 
-
     @Before
     public void setup() {
         this.URL = "ws://localhost:" + port + "/live";
+    }
+
+    @Test
+    public void testUserRepositorySetUp(){
+        setUpUserRepository();
+        List<UserInfoTransport>listOfUsers=userService.listUsers();
+        cleanUpUserRepository();
+        System.out.println();
     }
 
     @Test
@@ -65,16 +85,36 @@ public class TestGame {
         ResponseEntity<GameInfoTransport> matchmakingResponse = adminRest.postForEntity("/api/v1/matchmaking/basicGame", null, GameInfoTransport.class);
         assertEquals(matchmakingResponse.getStatusCode(), HttpStatus.OK);
 
+        ResponseEntity<GameStateTransport> gameStateResponse = adminRest.getForEntity("/api/v1/games/"+matchmakingResponse.getBody().getGameId(),GameStateTransport.class);
+        assertEquals(gameStateResponse.getStatusCode(),HttpStatus.OK);
+
+        GameState gameState = gameRepository.findOne(matchmakingResponse.getBody().getGameId());
+        assertEquals(gameStateResponse,new GameStateTransport(gameState));
+        assertNull(gameStateResponse.getBody().getCommunityCards());
+
+
+
+        System.out.println();
+
+    }
+
+    @Test
+    public void testMatchmakingWhenGameExists() throws ExecutionException, InterruptedException, TimeoutException{
+        setUpUserRepository();
+        createTestGameState(GameStage.CREATED, GameState.GameType.CASUAL);
+        TestRestTemplate adminRest = restTemplate.withBasicAuth("admin", "admin");
+
+        ResponseEntity<GameInfoTransport> matchmakingResponse = adminRest.postForEntity("/api/v1/matchmaking/basicGame", null, GameInfoTransport.class);
+        assertEquals(matchmakingResponse.getStatusCode(), HttpStatus.OK);
+
         WebsocketSession adminWebsocket = new WebsocketSession("admin", "admin");
 
         CompletableFuture<GameStateTransport> future = adminWebsocket.subscribe(
                 "/messages/game/" + matchmakingResponse.getBody().getGameId(),
                 GameStateTransport.class);
-        GameStateTransport nextGameState = future.get(1000, TimeUnit.SECONDS);
+        GameStateTransport nextGameState = future.get(10, TimeUnit.SECONDS);
+        cleanUpUserRepository();
     }
-
-    @Test
-    public void testMatchmakingWhenGameExists(){}
 
     @Test
     public void testMatchmakingWhenAnotherGameIsStarted() {}
@@ -121,13 +161,21 @@ public class TestGame {
     @Test
     public void testPlayerDisconnectAndTimeOutDuringGame() {}
 
-    public GameState createTestGameState(GameStage stage) {
+    public GameState createTestGameState(GameStage stage,GameState.GameType gameType) {
         GameState result = new GameState();
+        UserInfoTransport user;
+        if (stage==GameStage.CREATED){
+            user=userService.getUser(userIDs.get(0));
+            userIDs.remove(0);
+            result.setGameType(gameType);
+            result.addPlayer(user.getId(),user.getUsername());
+        }
+        gameRepository.save(result);
         return result;
     }
 
     public enum GameStage {
-        WAITING, STARTING, STARTED, OVER
+        CREATED, WAITING, STARTING, STARTED, OVER
     }
 
 
@@ -170,7 +218,7 @@ public class TestGame {
             this.futures = new TreeMap<>();
 
             if (username != null && password != null) {
-                TestRestTemplate restTemplate = TestGame.this.restTemplate.withBasicAuth(username, password);
+                TestRestTemplate restTemplate = GameTest.this.restTemplate.withBasicAuth(username, password);
                 ResponseEntity<String> response = restTemplate.getForEntity("/api/v1/users/login", String.class);
                 authCookie = response.getHeaders().getFirst(HttpHeaders.SET_COOKIE).split(";")[0];
             }
@@ -232,6 +280,26 @@ public class TestGame {
         public void disconnect() {
             session.disconnect();
         }
+    }
+
+    public void setUpUserRepository(){
+        char nameLetter='a';
+        for (int i=0;i<25;i++){
+            String name="ab"+nameLetter;
+            nameLetter++;
+            userIDs.add(userService.register(new RegistrationFields(name,"Password",nameLetter+"@gmail.com")).getId());
+        }
+    }
+
+    public void cleanUpUserRepository(){
+        for (Long ID:userIDs) {
+            userService.deleteUser(ID);
+        }
+        userIDs=new ArrayList();
+    }
+
+    private void cleanUpGameRepositiry(){
+        gameRepository.deleteAll();
     }
 
 }
