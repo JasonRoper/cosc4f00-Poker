@@ -22,6 +22,8 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -40,9 +42,6 @@ public class TestGame {
 
     @Autowired
     private TestRestTemplate restTemplate;
-
-
-    CompletableFuture future;
 
 
     @Before
@@ -67,6 +66,7 @@ public class TestGame {
         assertEquals(matchmakingResponse.getStatusCode(), HttpStatus.OK);
 
         WebsocketSession adminWebsocket = new WebsocketSession("admin", "admin");
+
         CompletableFuture<GameStateTransport> future = adminWebsocket.subscribe(
                 "/messages/game/" + matchmakingResponse.getBody().getGameId(),
                 GameStateTransport.class);
@@ -107,7 +107,10 @@ public class TestGame {
     public void testAllButOneFold() {}
 
     @Test
-    public void testShowdown() {}
+    public void testShowdownTie() {}
+
+    @Test
+    public void testShowdownWinner() {}
 
     @Test
     public void testPlayerDisconnectWhenGameShouldStart() {}
@@ -150,7 +153,7 @@ public class TestGame {
 
     public class WebsocketSession {
 
-        private CompletableFuture future;
+        private Map<String, CompletableFuture> futures;
         private StompSession session;
         private String authCookie;
         private String path;
@@ -159,17 +162,18 @@ public class TestGame {
          * Create an unauthenticated websocket connection
          */
         public WebsocketSession() throws ExecutionException, InterruptedException {
-            this.path = URL;
-            this.connect();
+            this(null, null);
         }
 
         public WebsocketSession(String username, String password) throws ExecutionException, InterruptedException {
-
-            TestRestTemplate restTemplate = TestGame.this.restTemplate.withBasicAuth(username, password);
             this.path = URL;
+            this.futures = new TreeMap<>();
 
-            ResponseEntity<String> response = restTemplate.getForEntity("/api/v1/users/login", String.class);
-            authCookie = response.getHeaders().getFirst(HttpHeaders.SET_COOKIE).split(";")[0];
+            if (username != null && password != null) {
+                TestRestTemplate restTemplate = TestGame.this.restTemplate.withBasicAuth(username, password);
+                ResponseEntity<String> response = restTemplate.getForEntity("/api/v1/users/login", String.class);
+                authCookie = response.getHeaders().getFirst(HttpHeaders.SET_COOKIE).split(";")[0];
+            }
 
             this.connect();
         }
@@ -201,7 +205,8 @@ public class TestGame {
                         System.out.println("cannot parse payload, invalid UTF-8");
                     }
                     System.out.println("Exception occurred on command: " + command + " with headers: " + headers + " on payload: " + str + " with exception: " + exception);
-                    if (future != null) {
+
+                    for (CompletableFuture future : futures.values()) {
                         future.cancel(true);
                     }
 
@@ -209,18 +214,13 @@ public class TestGame {
             }).get();
         }
 
-        public<T> CompletableFuture<T> makeFuture() {
-            CompletableFuture<T> future = new CompletableFuture<>();
-            this.future = future;
-            return future;
-        }
-
         public StompSession getSession() {
             return session;
         }
 
         public<T> CompletableFuture<T> subscribe(String path, Class<T> type) {
-            CompletableFuture<T> future = makeFuture();
+            CompletableFuture<T> future = new CompletableFuture<>();
+            this.futures.put(path, future);
             session.subscribe(path, new MyStompFrameHandler<>(future, type));
             return future;
         }
