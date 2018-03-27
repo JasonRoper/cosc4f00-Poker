@@ -72,7 +72,7 @@ overflow: auto;
 #sidebar .menu
 {
   margin: 0;
-  padding: 40px 0;
+  padding: 20px 0;
 
 }
 
@@ -105,7 +105,10 @@ overflow: auto;
   color: #fff;
  } 
 
-
+.SideBarContent{
+  position: relative;
+  top: 83px;
+}
 /* .tab-content  */
  /* { */
   /* height: 100vh; */

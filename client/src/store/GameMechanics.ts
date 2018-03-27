@@ -55,6 +55,8 @@ export default class GameMech {
   public userAction: GameAction | null = null
 
   public endGame: boolean = false
+  public currentValue: number = 0
+  public previouscurrentValue: number = 0
 
   public disable: number = 1
   public enableButton: number = 0
@@ -91,15 +93,36 @@ export default class GameMech {
       this.lobby = true
     }
     axios.get(API_V1 + '/games/' + this.gameId).then((responce) => {
-      alert('got game state')
-      alert(responce)
+      // alert('got game state')
+      // alert(responce)
       this.setGameTransport(responce.data)
     }).catch((error) => {
       alert('having an error')
       alert(error)
     })
   }
-
+  /*Was attempting to get the length of the players for table update*/
+  public getMultiplayers () {
+    axios.get(API_V1 + '/games/' + this.gameId).then((responce) => {
+      // alert('got game state')
+      // alert(responce)
+      this.currentValue = (responce.data.players.length)
+    }).catch((error) => {
+      alert('having an error')
+      alert(error)
+    })
+    return this.currentValue
+  }
+  public setGame () {
+    axios.get(API_V1 + '/games/' + this.gameId).then((responce) => {
+      // alert('got game state')
+      // alert(responce)
+      this.setGameTransport(responce.data)
+    }).catch((error) => {
+      alert('having an error')
+      alert(error)
+    })
+  }
   /**
    * Sets a default table for the player
    * @returns Default Player Object
@@ -306,8 +329,10 @@ export default class GameMech {
    * @param GameState
    */
   public setGameTransport (gameTransport: any) {
-    alert('GameTransport')
+    // alert('GameTransport')
     console.log(gameTransport)
+    this.communityCards = []
+    this.multiplePlayers = []
     // this.multiplePlayers[0].action = gameTransport.players[0].action
     gameTransport.players.forEach((item: any) => {
       const player: Player = {
