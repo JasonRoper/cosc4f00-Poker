@@ -15,6 +15,11 @@ public class HandTransport {
     this.cardTwo=cardTwo;
   }
 
+  public HandTransport(Player player){
+    this.cardOne=player.getCardOne();
+    this.cardTwo=player.getCardTwo();
+  }
+
   public Card getCardOne() {
     return cardOne;
   }

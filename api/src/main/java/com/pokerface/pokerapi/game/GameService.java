@@ -437,6 +437,22 @@ public class GameService {
         int[] ratingChanges=new int[gameState.getPlayerCount()];
 
 
+
         return ratingChanges;
+    }
+
+    public long[] getUserIDsFromGame(long gameID){
+        GameState gameState = games.findOne(gameID);
+       long[] userIDs = new long[gameState.getPlayerCount()];
+       for (int i=0; i<userIDs.length;i++){
+           userIDs[0]=gameState.getPlayers().get(i).getUserID();
+       }
+
+       return userIDs;
+    }
+
+    public HandTransport getHandTransport(long gameID, long userID){
+        GameState gameState = games.findOne(gameID);
+        return new HandTransport(gameState.getPlayer(userID));
     }
 }

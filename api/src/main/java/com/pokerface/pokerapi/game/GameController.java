@@ -175,6 +175,11 @@ public class GameController {
         return gameState.reason(GameStateTransport.Reason.PLAYER_ACTION, "");
     }
 
+//    @SendTo("game/{game_id}/{user_id}")
+//    public HandTransport sendHand(@DestinationVariable("game_id")long gameID, @DestinationVariable("user_id")long userID){
+//        return gameService.getHandTransport(gameID,userID);
+//    }
+
     @MessageMapping("test")
     public void testWebsocket(@Payload long number, Principal principal) {
         messenger.convertAndSend("/messages/game", new GameInfoTransport(number));
@@ -202,6 +207,10 @@ public class GameController {
                     nextGameState.reason(GameStateTransport.Reason.HAND_FINISHED, ""));
             if (gameService.getGameType(gameID).equals("COMPETITIVE")){
                 int[] ratingChanges=gameService.calculateRatingChanges(gameID);
+                long[] userIDs=gameService.getUserIDsFromGame(gameID);
+                for (int i=0;i<userIDs.length;i++){
+                    userService.applyRatingChange(userIDs[i],ratingChanges[i]);
+                }
             }
         } else if (gameService.isRoundEnd(gameID)) {
             nextGameState = gameService.handleRound(gameID);
@@ -272,6 +281,8 @@ public class GameController {
     public GameStateTransport getGameInfo(@PathVariable("id") long gameID) {
         return gameService.getGameStateTransport(gameID);
     }
+
+
 //
 //    @PutMapping("/api/v1/games/{id}")
 //    public void updateGameRules(@PathVariable("id") long gameId) {
