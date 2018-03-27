@@ -139,6 +139,7 @@ public class GameStateTransport {
      * sent for.
      */
     public enum Reason {
+        GAME_STARTED,
         HAND_STARTED,
         PLAYER_ACTION,
         ROUND_FINSHED,

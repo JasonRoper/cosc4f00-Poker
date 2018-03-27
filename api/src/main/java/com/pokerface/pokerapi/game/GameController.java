@@ -60,7 +60,17 @@ public class GameController {
 
     @Scheduled(fixedRate = 1000)
     public void checkEvents() {
-        gameService.startGames();
+        List<Long> startedGames = gameService.startingGameIDs();
+        for (Long gameID :startedGames) {
+            GameStateTransport gameTransport = gameService.getGameState(gameID);
+            gameTransport.reason(GameStateTransport.Reason.GAME_STARTED, "the game has started");
+            messenger.convertAndSend("/messages/game/"+gameID, gameTransport);
+            for(long userID: gameService.getUserIDsFromGame(gameID)) {
+                UserInfoTransport user = userService.getUser(userID);
+                HandTransport userHand = gameService.getHandTransport(gameID, userID);
+                messenger.convertAndSendToUser(user.getUsername(), "/messages/game/"+gameID, userHand);
+            }
+        }
     }
 //    @MessageMapping("/game/{game_id}/ready")
 //    public void readyUp(@DestinationVariable("game_id") long gameID, Principal principal){

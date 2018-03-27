@@ -418,7 +418,7 @@ public class GameService {
         return getGameStateTransport(gameID);
     }
 
-    public List<GameStateTransport> startGames(){
+    public List<GameStateTransport> startingGames(){
         List<GameStateTransport> gameStateTransports= new ArrayList<GameStateTransport>();
         List<GameState>gameStates=games.findWaitingToStartGames(System.currentTimeMillis());
         for (GameState g : gameStates){
@@ -426,6 +426,12 @@ public class GameService {
             gameStateTransports.add(getGameStateTransport(g));
         }
         return gameStateTransports;
+    }
+
+    public List<Long> startingGameIDs(){
+        List<Long> gameIDs = new ArrayList<>();
+        gameIDs=games.findWaitingToStartGamesIDs(System.currentTimeMillis());
+        return gameIDs;
     }
 
     public String getGameType(long gameID){
