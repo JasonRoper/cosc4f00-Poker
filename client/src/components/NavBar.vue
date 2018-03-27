@@ -44,7 +44,7 @@
 <!--==================*
     MODAL Login!!!
 *==================-->
-<div class="modal fade" id="Register2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+<div class="modal fade" id="Register2" tabindex="-1" role="dialog"   data-backdrop="false" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header bg-danger text-white">
@@ -62,7 +62,7 @@
               <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon1">@</span>
               </div>
-              <input type="text" class="form-control" placeholder="Username/Email" aria-label="Username/Email" aria-describedby="basic-addon1">
+              <input v-model="Player.username" type="text" class="form-control" placeholder="Username/Email" aria-label="Username/Email" aria-describedby="basic-addon1">
             </div>
           <!--Username input   -->
           <!-- Password Input -->
@@ -70,13 +70,14 @@
               <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon1"><i class="fa fa-lock"></i></span>
               </div>
-              <input type="password" class="form-control" placeholder="Passowrd" aria-label="Username/Email" aria-describedby="basic-addon1">
+              <input v-model="Player.password" type="password" class="form-control" placeholder="Passowrd" aria-label="Username/Email" aria-describedby="basic-addon1">
             </div>
           <!--Password input   -->
+           <error-messages  :Error="this.ErrorMessage "  v-show="this.isLoginError"></error-messages>
       </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-success ">Login</button>
+        <button type="button" class="btn btn-success" @click="AttemptLogin()">Login</button>
         <button type="button" class="btn btn-info " data-dismiss="modal">Close</button>
       </div>
     </div>
@@ -89,21 +90,64 @@
 import Login from '@/components/Login'
 import Features from '@/components/Features'
 import About from '@/components/About'
-
+import ErrorMessages from '@/components/WebComponents/ErrorMessages' // ErrorMessages Components
+import { mapActions } from 'vuex' // used for maping actions of the vue store files
 export default{
   data: function () {
     return {
-      Showhome: true
+      Showhome: true,
+      ErrorMessage: '',
+      isLoginError: false,
+      // Representation of a Player Logging in
+      Player: {
+        username: '',
+        password: ''
+      }
     }
   },
   components: {
     login: Login,
     features: Features,
-    about: About
+    about: About,
+    errorMessages: ErrorMessages
   },
   methods: {
+    ...mapActions([
+      'register',
+      'login'
+    ]),
+         // Attempts login  givent the requested fields If the fields are empty then return an aerror
+    AttemptLogin () {
+      this.ResetVariables()
+      if ((this.Player.username.length === 0) || (this.Player.password.length === 0)) {
+        this.isLoginError = true
+        this.ErrorMessage = 'Both Fields Must Be Filled'
+        return // Must add CSS for this action
+      } else {
+        this.login(this.Player) // Servery queries for login
+        this.loginErrorMessage = this.$store.state.users.errors.login // Sets login errorMessage to the store array to the store array of error login message
+        setTimeout(this.checkLoginErrors, 3000) // Chec Login Errors after 900 ms
+      }
+    },
+    checkLoginErrors () {
+      if (this.loginErrorMessage.length > 0) {
+        this.ErrorMessage = this.loginErrorMessage[0].message
+        this.isLoginError = true
+        return
+        // this.$store.state.users.errors.login = []
+      }
+      if ((this.loginErrorMessage.length === 0)) { // if ater check
+        this.$router.push('Game')
+        alert('start game')
+      }
+    },
     showLoginModal () {
       this.$modal.show('hello-world')
+    },
+    ResetVariables () {
+      this.isRegistrationError = false
+      this.isLoginError = false
+      this.ErrorMessage = ''
     }
   }
 }

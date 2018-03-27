@@ -113,8 +113,8 @@ public class UserService implements UserDetailsService {
     /**
      * Deletes the users from the repository
      */
-    public void deleteUser() {
-        //TODO: not implemented
+    public void deleteUser(long userID) {
+        userRepository.delete(userID);
     }
 
     /**

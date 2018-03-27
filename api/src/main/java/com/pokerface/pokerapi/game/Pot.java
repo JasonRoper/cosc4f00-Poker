@@ -3,6 +3,7 @@ package com.pokerface.pokerapi.game;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Pot is a representation of the money being held for a hand of Poker.
@@ -140,6 +141,18 @@ public class Pot {
      */
     public void setSum(int value) {sum=value;}
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Pot pot = (Pot) o;
+        return getSum() == pot.getSum() &&
+                getId() == pot.getId();
+    }
 
+    @Override
+    public int hashCode() {
 
+        return Objects.hash(getSum(), getId());
+    }
 }

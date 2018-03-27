@@ -21,6 +21,24 @@ public class UserInfoTransport {
     }
 
     /**
+     * Create a new {@link UserInfoTransport} from the given parameters
+     *
+     * @param id the user id of the {@link User} this {@link UserInfoTransport} represents
+     * @param username the username of the {@link User} that this {@link UserInfoTransport} represents
+     */
+    public UserInfoTransport(long id, String username) {
+        this.id = id;
+        this.username = username;
+    }
+
+    /**
+     * Create a new {@link UserInfoTransport} with empty values. this is required in order for Jackson to
+     * deserialize this class.
+     */
+    public UserInfoTransport() {
+    }
+
+    /**
      * GetUserName returns the username of the object
      * @return String username
      */

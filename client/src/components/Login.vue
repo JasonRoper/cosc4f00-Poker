@@ -59,6 +59,9 @@
       <div class="modal-body">
         <h5 class="text-left pb-4">Create Account</h5>
         <form>
+            <div v-show="this.isRegistrationError" >
+            <error-messages class=".error-messages" :Error="this.ErrorMessage "></error-messages>
+            </div>
           <!--Username input   -->
           <div class="form-group mb-3">
              <div class="input-group mb-3">
@@ -87,14 +90,11 @@
               <input v-model="RegisterPlayer.email" type="Email" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="basic-addon1">
             </div>
           <!--Email input   -->
-          <div v-show="this.isRegistrationError" >
-            <error-messages :Error="this.ErrorMessage "></error-messages>
-            </div>
       </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger " @click="AttemptRegister()">Register</button>
-        <button type="button" class="btn btn-warning "  @click="ResetVariables()" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger registerButton " @click="AttemptRegister()">Register</button>
+        <button type="button" class="btn btn-warning "  @click="ResetVariables2()" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
@@ -157,24 +157,24 @@
   </div>
     <div class="card-body text-dark">
       <form class="needs-validation" ref="theform" action="/#/Lobby">
+     <div v-show="this.isLoginError"> 
+   <error-messages class = "error-messages" :Error="this.ErrorMessage "></error-messages>
+</div>
   <div class="form-group">
-    <input  v-model="Player.username" ref="myTestField" type="text" class="form-control" id="formGroupExampleInput" placeholder="UserName/Email">
+    <input  v-model="Player.username" ref="myTestField" type="text" class="form-control nameInput" id="formGroupExampleInput" placeholder="UserName/Email">
   </div>
   <div class="form-group">
-    <input v-model="Player.password" ref="myTestField2" type="password" class="form-control" id="formGroupExampleInput2" placeholder="Password">
+    <input v-model="Player.password" ref="myTestField2" type="password" class="form-control passwordInput" id="formGroupExampleInput2" placeholder="Password">
   </div>
     <div class="form-group">
-      <button class="btn btn-darkgrey btn-lg btn-block text-dark text-center registerButton" type="button" value = "Login"  @click="AttemptLogin()"><i class="fa fa-sign-in"></i> Login</button>
+      <button class="btn btn-darkgrey btn-lg btn-block text-dark text-center loginButton" type="button" value = "Login"  @click="AttemptLogin()" :disabled="(this.clickedLogin === true)||(this.clickedRegister === true)"><i class="fa fa-sign-in"></i> Login</button>
   </div>
   <div class="form-group">
-      <button class="btn btn-warning btn-lg btn-block text-dark  text-center" type="button" value ="Register"  data-toggle="modal" data-target="#Register">  <i class="fa fa-sign-in"></i> Register</button>
+      <button class="btn btn-warning btn-lg btn-block text-dark  text-center " type="button" value ="Register"  data-toggle="modal" data-target="#Register" :disabled="(this.clickedLogin === true )||(this.clickedRegister === true )">  <i class="fa fa-sign-in"></i> Register</button>
   </div>
   <div class="form-group">
      <p class="text-right">Forgot password?<br><a  style="text-decoration:none" href=""><i class="fa fa-sign-in"></i> Password reset </a></p>
   </div>
-   <div v-show="this.isLoginError"> 
-   <error-messages :Error="this.ErrorMessage "></error-messages>
-</div>
 </form>
   </div>
 </div><!--=======/Login Card=======-->
@@ -333,19 +333,64 @@ export default {
       Level1Members: 3000,
       Level2Members: 6000,
       Level3Members: 1300,
-      registerErrorMessage: [],
-      loginErrorMessage: [],
+      // registerErrorMessage: [],
+      // loginErrorMessage: [],
       isLoginError: false,
       isRegistrationError: false,
       ErrorMessage: '',
       registModal: false,
-      after: false
+      after: false,
+      clickedLogin: false,
+      clickedRegister: false,
+      checked: false,
+      checkedRegisterErrors: false,
+      iszero: false,
+      LoginisBlank: true,
+      RegisterisBlank: true
     }
   },
   watch: {
+    checked () {
+      if ((this.checked === true) && (this.isLoginError === false)) {
+        this.$router.push('Game')
+      }
+    },
+    checkedRegisterErrors () {
+      if ((this.checkedRegisterErrors === true) && (this.isRegistrationError === false)) {
+        this.$router.push('Game')
+      }
+    },
     registModal () {
       if (this.registModal === false) {
         console.log('somthing')
+      }
+    },
+    loginErrorMessage () {
+      // Checks  to see if the number of errors are greater thatn zero then checks those errors
+      if (this.loginErrorMessage.length > 0) {
+        // this.checkLoginErrors()
+        return
+      }
+      // after = true
+    },
+    registerErrorMessage () {
+      // Checks  to see if the number of errors are greater thatn zero then checks those errors
+      if (this.registerErrorMessage.length > 0) {
+        // this.checkRegisterErrors()
+        return
+      }
+    }
+  },
+  computed: {
+    loginErrorMessage () {
+      // if(this.after === true)
+      if (this.LoginisBlank === false) {
+        return this.$store.state.users.errors.login // Sets login errorMessage to the store array to the store array of error login message
+      }
+    },
+    registerErrorMessage () {
+      if (this.RegisterisBlank === false) {
+        return this.$store.state.users.errors.registration // Sets login errorMessage to the store array to the store array of error login message
       }
     }
   },
@@ -354,59 +399,68 @@ export default {
       'register',
       'login'
     ]),
-     // Attempts login  givent the requested fields If the fields are empty then return an aerror
+     /*
+      Attempts login  givent the requested fields If the fields
+       are empty then return an aerror
+    */
     AttemptLogin () {
-      this.ResetVariables()
+      this.clickedLogin = true
       if ((this.Player.username.length === 0) || (this.Player.password.length === 0)) {
-        this.isLoginError = true
+        this.LoginisBlank = true
+        this.isLoginError = true  // there is an error
+        this.clickedLogin = false // Click login reset
         this.ErrorMessage = 'Both Fields Must Be Filled'
         return // Must add CSS for this action
       } else {
+        this.LoginisBlank = false
         this.login(this.Player) // Servery queries for login
-        this.loginErrorMessage = this.$store.state.users.errors.login // Sets login errorMessage to the store array to the store array of error login message
+        // add animation
         setTimeout(this.checkLoginErrors, 3000) // Chec Login Errors after 900 ms
       }
+      this.ResetVariables()
     },
     checkLoginErrors () {
+      console.log(this.loginErrorMessage.length)
       if (this.loginErrorMessage.length > 0) {
         this.ErrorMessage = this.loginErrorMessage[0].message
         this.isLoginError = true
-        this.$store.state.users.errors.login = []
       }
-      if ((this.loginErrorMessage.length === 0)) { // if ater check
-        this.$router.push('Game')
-        alert('start game')
-      }
+      this.checked = true
     },
     AttemptRegister () {
-      this.ResetVariables()
+      this.clickedLogin = true
       if ((this.RegisterPlayer.username.length === 0) || (this.RegisterPlayer.password.length === 0) || (this.RegisterPlayer.email.length === 0)) {
+        this.RegisterisBlank = true
         this.isRegistrationError = true
+        this.clickedRegister = false
         this.ErrorMessage = 'All fields must Filled'
         return // Must add CSS for this action
       } else {
+        this.RegisterisBlank = false
         this.register(this.RegisterPlayer)
-        this.registerErrorMessage = this.$store.state.users.errors.registration // Sets Register errorMessage to the store arry of registration errors
-        setTimeout(this.checkRegisterErrors, 900) // Check Registratio Errors after 900 ms
+        setTimeout(this.checkRegisterErrors, 4000) // Check Registratio Errors after 900 ms
       }
+      this.ResetVariables()
     },
     checkRegisterErrors () {
       if (this.registerErrorMessage.length > 0) {
-      // alert('all done' + this.registerErrorMessage.length)
-      // alert('ans is:' + this.registerErrorMessage[0].message)
         this.ErrorMessage = this.registerErrorMessage[0].message // Set the error message
         this.isRegistrationError = true
-        this.$store.state.users.errors.registration = []
-      } else
-      if ((this.registerErrorMessage.length === 0)) {
-        this.registModal = false
-        this.$router.push('Game')
       }
+      this.checkedRegisterErrors = true
     },
     ResetVariables () {
       this.isRegistrationError = false
       this.isLoginError = false
       this.ErrorMessage = ''
+      this.checked = false
+      this.checkedRegisterErrors = false
+      this.clickedLogin = false
+      this.clickedRegister = false
+    },
+    ResetVariables2 () {
+      this.clickedLogin = false
+      this.clickedRegister = false
     }
   },
   components: {

@@ -223,7 +223,6 @@ import TableActions from '@/components/table/TableActions'
 import { Card } from '@/types/cards'
 import Actions from '@/types/actions'
 import TableView from '@/components/TableView'
-// import GameMech from '@/store/GameMechanics.ts'
 import router from '@/router'
 import GameRequest from '@/store/GameRequest.ts'
 export default {

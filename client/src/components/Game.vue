@@ -14,14 +14,13 @@
 
     <div class="row">
             <div id="sidebar"  class="col">
-  <div >
-    <a href="#" ><img src="../assets/Webgraphics/Opponent.svg" class=" border border-white rounded-circle" width="70" height="70"></a>
+  <div class="SideBarContent" >
+    <a href="" ><img src="../assets/Webgraphics/Opponent.svg" class=" border border-white rounded-circle" width="70" height="70"></a>
     <ul class="menu">
-      <li><a href="#">Poker Pals</a></li>
+      <li><a>Poker Pals</a></li>
        <li><a href="#">Pals</a></li>
-      <li><a href="#">Games</a></li>
-      <li><a href="#">Option</a></li>
-      <li><a href="#">Sign Out</a></li>
+      <li><a href="#">Options</a></li>
+      <li><a @click="logOut()">Sign Out</a></li>
     </ul>
   </div>
 </div>
@@ -58,6 +57,7 @@
 <script>
 import TableView from '@/components/TableView'
 import GameMenu from '@/components/GameMenu'
+import { mapActions } from 'vuex' // used for maping actions of the vue store files
 export default{
   data () {
     return {
@@ -83,6 +83,9 @@ export default{
     window.removeEventListener('resize', this.adjustsideBar)
   },
   methods: {
+    ...mapActions([
+      'logout'
+    ]),
     toggleSidebar: function () {
       document.getElementById('sidebar').classList.toggle('active')
       document.getElementById('page-content').classList.toggle('active')
@@ -90,6 +93,10 @@ export default{
     adjustsideBar: function () {
       document.getElementById('page-content').classList.remove('active')
       document.getElementById('sidebar').classList.remove('active')
+    },
+    logOut: function () {
+      this.logout()
+      this.$router.push('Home')
     }
   }
 }

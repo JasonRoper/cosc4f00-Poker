@@ -6,13 +6,13 @@
 }
 .Playingcard{
   width:107px;
-  height:143px;
+  height:142px;
   background-repeat: no-repeat;
 }
 .blank.card{
     background: url("../cards/Back Blue 1.png");
-    height:100%;
-    width:100%;
+    /* height: 140px; */
+/* width:210px;; */
     background-repeat: no-repeat;
 }
 
