@@ -140,6 +140,7 @@ export interface PlayerWithoutCards {
  * was sent.
  */
 export enum Event {
+  GAME_STARTED = 'GAME_STARTED', //Game should be startable and give hands.
   HAND_STARTED = 'HAND_STARTED', // USER Joins the GAME
   USER_ACTION = 'PLAYER_ACTION', // This is sent after a player makes an action
   HAND_FINISHED = 'HAND_FINISHED', // Equivalent for a winnder being determined from a hand
