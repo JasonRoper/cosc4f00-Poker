@@ -62,7 +62,7 @@ public class GameController {
     public void checkEvents() {
         List<Long> startedGames = gameService.startingGameIDs();
         for (Long gameID :startedGames) {
-            GameStateTransport gameTransport = gameService.getGameStateTransport(gameID);
+            GameStateTransport gameTransport = gameService.gameStart(gameID);
             gameTransport.reason(GameStateTransport.Reason.GAME_STARTED, "the game has started");
             messenger.convertAndSend("/messages/game/"+gameID, gameTransport);
             for(long userID: gameService.getUserIDsFromGame(gameID)) {

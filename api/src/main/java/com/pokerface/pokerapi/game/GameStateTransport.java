@@ -31,8 +31,10 @@ public class GameStateTransport {
         this.potSum = gameState.getPot().getSum();
         this.bigBlind = gameState.getBigBlind();
         this.multiplePlayers = new PlayerTransport[gameState.getPlayerCount()];
+
         for (int i = 0; i < this.multiplePlayers.length; i++) {
-            this.multiplePlayers[i] = new PlayerTransport(i, gameState.getPlayers().get(i).getCashOnHand(), gameState.getPlayers().get(i).getLastGameAction(), gameState.getPlayers().get(i).isAI(), gameState.getPlayers().get(i).getIsDealer(), gameState.getPlayers().get(i).getHasFolded(),gameState.getPlayers().get(i).getBet(),gameState.getPlayers().get(i).getName());
+            Player player = gameState.getPlayers().get(i);
+            this.multiplePlayers[i] = new PlayerTransport(i, player.getCashOnHand(), player.getLastGameAction(), player.isAI(), player.getIsDealer(), player.getHasFolded(),player.getBet(),player.getName());
         }
         this.nextPlayer = gameState.getPresentTurn();
     }

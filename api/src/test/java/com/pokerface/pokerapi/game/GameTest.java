@@ -153,14 +153,16 @@ public class GameTest {
         ResponseEntity<GameStateTransport> gameStateResponse = adminRest.getForEntity("/api/v1/games/"+matchmakingResponse.getBody().getGameId(),GameStateTransport.class);
         assertEquals(gameStateResponse.getStatusCode(),HttpStatus.OK);
 
+        Iterable<GameState>gameStates=gameRepository.findAll();
+
         GameState gameState = gameRepository.findOne(matchmakingResponse.getBody().getGameId());
         assertEquals(gameStateResponse.getBody(),new GameStateTransport(gameState)); // First join
-        Iterable<GameState>gameStates=gameRepository.findAll();
+        gameStates=gameRepository.findAll();
         Iterable<Long>gameLongIDs=gameRepository.findOpenCasualGame();
         try {
             TimeUnit.SECONDS.sleep(60);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+
         }
         System.out.println();
     }

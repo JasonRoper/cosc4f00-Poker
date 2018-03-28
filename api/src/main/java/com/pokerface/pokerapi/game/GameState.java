@@ -278,14 +278,8 @@ public class GameState {
         return players;
     }
 
-
-    /**
-     * setPlayers sets the players in a game
-     * @param players being set into the game
-     */
     public void setPlayers(List<Player> players) {
-        this.players= players;
-        playerCount=players.size();
+        this.players = players;
     }
 
     /**
