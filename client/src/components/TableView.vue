@@ -13,13 +13,13 @@
     <!-- <div  class=" container text-lg-center"> -->
     <div class="row">
             <div id="sidebar"  class="col">
-  <div >
-    <a href="#" ><img src="../assets/Webgraphics/Opponent.svg" class=" border border-white rounded-circle" width="70" height="70"></a>
+  <div class="SideBarContent" >
+    <a href="" ><img src="../assets/Webgraphics/Opponent.svg" class=" border border-white rounded-circle" width="70" height="70"></a>
     <ul class="menu">
-      <li><a href="#">Poker Pals</a></li>
+      <li><a>Poker Pals</a></li>
        <li><a href="#">Pals</a></li>
       <li><a href="#">Options</a></li>
-      <li><a href="#">Sign Out</a></li>
+      <li><a @click="logOut()">Sign Out</a></li>
     </ul>
   </div>
 </div>
@@ -142,14 +142,15 @@
 import Player from '@/components/table/Player.vue'
 import CardView from '@/components/table/Card'
 import TableActions from '@/components/table/TableActions'
-import { Card } from '@/types/cards'
+import { Card } from '@/types/cards.ts'
+import { mapActions } from 'vuex' // used for maping actions of the vue store files
 // import Actions from '@/types/actions'
 // import { GameService, GameActionType } from '@/api/gameservice'
 import GameMech from '@/store/GameMechanics.ts'
 // import { GameAction } from '../api/gameservice'
 // import Game from '@/store/game.ts'
 import Seat from '@/components/table/Seat'
-import {GameActionType} from '../api/gameservice'
+import {GameActionType} from '@/api/gameservice.ts'
 export default {
   props: ['userId'],
   data () {
@@ -157,19 +158,49 @@ export default {
       mechanics: new GameMech(1, this.userId),
       // this.userId),
       numberofPlayer: 0,
+      // numberofPlayers: 0,
+      preivousnumberofPlayers: 0,
       BigBlindCurrentBet: 0,
       user: 0,
       opponents: 0
     }
   },
+  /*
+  Below Should really be updated to avoid visual issues
+  */
   watch: {
+    preivousnumberofPlayers  () {
+      this.mechanics = new GameMech(1, this.userId)
+    },
     mechanics: function (newValue, oldValue) {
       this.user = this.getUser()
       this.opponents = this.getOpponents()
-      this.$forceUpdate()
+      // this.$forceUpdate()
+    },
+    numberofPlayers () {
+      console.log(this.numberofPlayers)
+      this.mechanics.setGame()
+    }
+  },
+  computed: {
+    mechanics () {
+      return new GameMech(1, this.userId)
+    },
+    numberofPlayers () {
+      return this.mechanics.getMultiplayers()
     }
   },
   methods: {
+    force () {
+      console.log(this.mechanics.getMultiplayers())
+    },
+    ...mapActions([
+      'logout'
+    ]),
+    logOut: function () {
+      this.logout()
+      this.$router.push('Home')
+    },
     getUser: function () {
       return this.mechanics.getUser()
     },
@@ -280,6 +311,23 @@ export default {
       players[i].style.transform = 'translateX(' + x + 'pt) translateY(' + y + 'pt)'
       console.log('heres you x: ' + x + 'here your y:' + y + 'at ' + theta)
     }
+    setInterval(this.force, 3000) // checking if player ammount has changed to update board
+  },
+  updated: function () {
+    let players = document.getElementsByClassName('player')
+    let numberofPoints = players.length
+    let degreeIncrument = 360 / numberofPoints
+    var radius = 238 // 280
+    var x = 0
+    var y = 0
+    let theta = 0
+    for (let i = 0; i < numberofPoints; i++) {
+      theta = theta + degreeIncrument
+      x = radius * Math.cos(theta * Math.PI / 180.0).toFixed(3) // Convert to radians
+      y = radius * Math.sin(theta * Math.PI / 180.0).toFixed(3)
+      players[i].style.transform = 'translateX(' + x + 'pt) translateY(' + y + 'pt)'
+      console.log('heres you x: ' + x + 'here your y:' + y + 'at ' + theta)
+    }
   },
   destroyed () {
     if (this.gameService) {
@@ -289,6 +337,5 @@ export default {
 }
 
 </script>
-
-<style src="@/assets/css/Table.css"></style>
 <style src="@/assets/css/GameNav.css"></style>
+<style src="@/assets/css/Table.css"></style>

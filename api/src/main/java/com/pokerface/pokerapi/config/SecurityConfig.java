@@ -86,9 +86,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().csrf().disable() //csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .cors().disable()
                 // enable logging out to invalidate the JSESSION cookie
-                .logout().permitAll().logoutUrl("/api/v1/users/logout")
-                // we don't want the default authentication popup to show if we are not authenticated
-                .and().exceptionHandling().authenticationEntryPoint(new Http401AuthenticationEntryPoint("FormBased"));
+                .logout().permitAll().logoutUrl("/api/v1/users/logout");
+
+
     }
 
     /**

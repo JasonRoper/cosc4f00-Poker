@@ -20,9 +20,10 @@ import {
   GameState,
   Player,
   UserCards
-} from '@/api/gameservice'
+} from '@/api/gameservice.ts'
+
+import axios from '@/api/axios'
 import { API_V1 } from '@/config'
-import axios from 'axios'
 
 /**
  * Import Card Suite that holds all Card Varients
@@ -54,6 +55,8 @@ export default class GameMech {
   public userAction: GameAction | null = null
 
   public endGame: boolean = false
+  public currentValue: number = 0
+  public previouscurrentValue: number = 0
 
   public disable: number = 1
   public enableButton: number = 0
@@ -90,15 +93,39 @@ export default class GameMech {
       this.lobby = true
     }
     axios.get(API_V1 + '/games/' + this.gameId).then((responce) => {
-      alert('got game state')
-      alert(responce)
+      // alert('got game state')
+      // alert(responce)
       this.setGameTransport(responce.data)
     }).catch((error) => {
       alert('having an error')
       alert(error)
     })
   }
-
+  /*Was attempting to get the length of the players for table update*/
+  public getMultiplayers () {
+    axios.get(API_V1 + '/games/' + this.gameId).then((responce) => {
+      // alert('got game state')
+      // alert(responce)
+      this.currentValue = (responce.data.players.length)
+    }).catch((error) => {
+      alert('having an error')
+      alert(error)
+    })
+    return this.currentValue
+  }
+  /*
+  Sets Game State to give new game
+  */
+  public setGame () {
+    axios.get(API_V1 + '/games/' + this.gameId).then((responce) => {
+      // alert('got game state')
+      // alert(responce)
+      this.setGameTransport(responce.data)
+    }).catch((error) => {
+      alert('having an error')
+      alert(error)
+    })
+  }
   /**
    * Sets a default table for the player
    * @returns Default Player Object
@@ -308,6 +335,7 @@ export default class GameMech {
    * @param GameState
    */
   public setGameTransport (gameTransport: any) {
+<<<<<<< HEAD
 
     switch (gameTransport.event) {
       default: {
@@ -332,7 +360,12 @@ export default class GameMech {
     this.multiplePlayers = []
     this.communityCards = []
     alert('GameTransport')
+=======
+    // alert('GameTransport')
+>>>>>>> b4f7f8960fd672bfee1ed8adbe4928b0ca7cfc57
     console.log(gameTransport)
+    this.communityCards = []
+    this.multiplePlayers = []
     // this.multiplePlayers[0].action = gameTransport.players[0].action
     gameTransport.players.forEach((item: any, index: number) => {
       const act: GameActionType | null = (item.action.type !== null) ? item.action : null

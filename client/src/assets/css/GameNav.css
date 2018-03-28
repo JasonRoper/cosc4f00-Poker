@@ -1,4 +1,8 @@
- .menu-icon {
+.nameTitle {
+  color: #e2e2e2;
+  
+}
+.menu-icon {
   position: fixed;
   top: 20px;
   /* Change to 20px from the left  */
@@ -72,7 +76,7 @@ overflow: auto;
 #sidebar .menu
 {
   margin: 0;
-  padding: 40px 0;
+  padding: 20px 0;
 
 }
 
@@ -105,7 +109,10 @@ overflow: auto;
   color: #fff;
  } 
 
-
+.SideBarContent{
+  position: relative;
+  top: 83px;
+}
 /* .tab-content  */
  /* { */
   /* height: 100vh; */

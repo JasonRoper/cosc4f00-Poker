@@ -40,6 +40,7 @@ import java.util.Random;
 public class AIService {
     GameRepository games;
     HandRanking handRanking;
+    HandRanking lowPair;
 
     /**
      * The {@link AIService} depends on the {@link GameRepository}.
@@ -57,9 +58,13 @@ public class AIService {
      * @return the GameAction the ai has decided to perform
      */
     public GameAction playAction(long gameID){
+        lowPair=createLowPair();
         List<Card> cards = new ArrayList<>();
         GameState gameState;
         gameState=games.findOne(gameID);
+        cards.addAll(gameState.getPlayers().get(gameState.getPresentTurn()).receiveCards());
+        cards.addAll(gameState.receiveCommunityCards());
+        handRanking=new HandRanking(cards);
         int playerNumber=gameState.getPresentTurn();
         int roll;
         Random rand = new Random(System.currentTimeMillis());
@@ -135,7 +140,9 @@ public class AIService {
      */
     private GameAction allIn(GameState gameState,int playerNumber){
         GameAction gameAction;
-
+        if (handRanking.compareTo(lowPair)<1){
+            return raise(gameState,playerNumber);
+        }
         gameAction=new GameAction(GameActionType.RAISE, gameState.getPlayers().get(playerNumber).getCashOnHand());
 
         return gameAction;
@@ -149,5 +156,12 @@ public class AIService {
      */
     public boolean isAIPlayer(long gameID,int playerID){
       return games.findOne(gameID).getPlayer(playerID).isAI();
+    }
+
+    public HandRanking createLowPair(){
+        List<Card> hand = new ArrayList<>();
+        hand.add(Card.CLUBS_EIGHT);
+        hand.add(Card.SPADES_EIGHT);
+        return new HandRanking(hand);
     }
 }

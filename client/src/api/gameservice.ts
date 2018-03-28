@@ -38,8 +38,8 @@
  * The gameservice uses PokerClient to send and recieve
  * messages to the websocket.
  */
-import PokerClient from '@/api/pokerclient'
-import { Card } from '@/types/cards'
+import PokerClient from '@/api/pokerclient.ts'
+import { Card } from '@/types/cards.ts'
 
 /**
  * GamePaths is a helper class that will build the paths used to access a game

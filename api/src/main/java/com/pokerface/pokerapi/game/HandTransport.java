@@ -4,8 +4,8 @@ package com.pokerface.pokerapi.game;
  * HandTransport contains two cards, sent in the event of a newHand being dealt
  */
 public class HandTransport {
-  Card cardOne;
-  Card cardTwo;
+  private Card cardOne;
+  private Card cardTwo;
 
   public HandTransport() {
   }
@@ -15,4 +15,24 @@ public class HandTransport {
     this.cardTwo=cardTwo;
   }
 
+  public HandTransport(Player player){
+    this.cardOne=player.getCardOne();
+    this.cardTwo=player.getCardTwo();
+  }
+
+  public Card getCardOne() {
+    return cardOne;
+  }
+
+  public void setCardOne(Card cardOne) {
+    this.cardOne = cardOne;
+  }
+
+  public Card getCardTwo() {
+    return cardTwo;
+  }
+
+  public void setCardTwo(Card cardTwo) {
+    this.cardTwo = cardTwo;
+  }
 }

@@ -9,14 +9,17 @@
  */
 import GamePaths from '@/api/gameservice'
 import PokerClient from '@/api/pokerclient'
+
+/**
+ * Axios - Imports axios which is used to send POST and GET requests
+ */
+import axios from '@/api/axios'
+
 /**
  * API_V1 - Holds webpath data that will interact with client
  */
 import { API_V1 } from '@/config'
-/**
- * Axios - Imports axios which is used to send POST and GET requests
- */
-import axios from 'axios'
+
 /**
  * GamePaths - Imports game paths
  */

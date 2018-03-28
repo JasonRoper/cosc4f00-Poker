@@ -214,11 +214,22 @@ public class GameService {
      * @param userID the playerID needing to be added to a game
      * @return the long id of the game they will join
      */
-    public long matchmake(long userID, String userName) {
+    public long casualMatchmake(long userID, String userName) {
         long gameID = -1; // -1 is never a legitimate gameID, this allows error checking for unfound game.
-        gameID = firstAvailableGame();
+        gameID = firstAvailableGame(GameState.GameType.CASUAL);
         if (gameID == -1) {
-            gameID = createGame();
+            gameID = createGame(4,GameState.GameType.CASUAL);
+        }
+        addPlayer(userID, gameID, userName);
+
+        return gameID;
+    }
+
+    public long competitiveMatchmake(long userID, String userName) {
+        long gameID = -1; // -1 is never a legitimate gameID, this allows error checking for unfound game.
+        gameID = firstAvailableGame(GameState.GameType.COMPETETIVE);
+        if (gameID == -1) {
+            gameID = createGame(4,GameState.GameType.COMPETETIVE);
         }
         addPlayer(userID, gameID, userName);
 
@@ -230,9 +241,15 @@ public class GameService {
      *
      * @return the ID of the available game
      */
-    private long firstAvailableGame() {
+    private long firstAvailableGame(GameState.GameType gameType) {
         List<Long> gameIDs;
-        gameIDs = games.findOpenGame();
+        if (gameType== GameState.GameType.COMPETETIVE){
+            gameIDs = games.findOpenCompetetiveGame();
+        } else if (gameType== GameState.GameType.CASUAL){
+            gameIDs = games.findOpenCasualGame();
+        } else {
+            gameIDs = games.findOpenGame();
+        }
         if (gameIDs.isEmpty()) {
             return -1;
         }
@@ -262,6 +279,15 @@ public class GameService {
         gameState = games.save(gameState);
         return gameState.getId();
     }
+
+    public long createGame(int minPlayers, GameState.GameType gameType){
+        long gameID=createGame(minPlayers);
+        GameState gameState=games.findOne(gameID);
+        gameState.setGameType(gameType);
+        games.save(gameState);
+        return gameID;
+    }
+
 
     /**
      * getPlayerID returns the seat of the player.
@@ -380,7 +406,7 @@ public class GameService {
      * @param userID the long ID of the user to be removed
      * @return if it worked, boolean value
      */
-    public boolean playerLeaveGame(long gameID, long userID) {
+    public boolean removePlayer(long gameID, long userID) {
         games.findOne(gameID).removePlayer(userID);
         return true;
     }
@@ -392,7 +418,7 @@ public class GameService {
         return getGameStateTransport(gameID);
     }
 
-    public List<GameStateTransport> startGames(){
+    public List<GameStateTransport> startingGames(){
         List<GameStateTransport> gameStateTransports= new ArrayList<GameStateTransport>();
         List<GameState>gameStates=games.findWaitingToStartGames(System.currentTimeMillis());
         for (GameState g : gameStates){
@@ -400,5 +426,39 @@ public class GameService {
             gameStateTransports.add(getGameStateTransport(g));
         }
         return gameStateTransports;
+    }
+
+    public List<Long> startingGameIDs(){
+        List<Long> gameIDs = new ArrayList<>();
+        gameIDs=games.findWaitingToStartGamesIDs(System.currentTimeMillis());
+        return gameIDs;
+    }
+
+    public String getGameType(long gameID){
+        return games.findOne(gameID).getGameType().toString();
+    }
+
+    public int[] calculateRatingChanges(long gameID){
+        GameState gameState = games.findOne(gameID);
+        int[] ratingChanges=new int[gameState.getPlayerCount()];
+
+
+
+        return ratingChanges;
+    }
+
+    public long[] getUserIDsFromGame(long gameID){
+        GameState gameState = games.findOne(gameID);
+       long[] userIDs = new long[gameState.getPlayerCount()];
+       for (int i=0; i<userIDs.length;i++){
+           userIDs[0]=gameState.getPlayers().get(i).getUserID();
+       }
+
+       return userIDs;
+    }
+
+    public HandTransport getHandTransport(long gameID, long userID){
+        GameState gameState = games.findOne(gameID);
+        return new HandTransport(gameState.getPlayer(userID));
     }
 }

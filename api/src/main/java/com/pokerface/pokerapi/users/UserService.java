@@ -113,8 +113,8 @@ public class UserService implements UserDetailsService {
     /**
      * Deletes the users from the repository
      */
-    public void deleteUser() {
-        //TODO: not implemented
+    public void deleteUser(long userID) {
+        userRepository.delete(userID);
     }
 
     /**
@@ -150,5 +150,12 @@ public class UserService implements UserDetailsService {
         } else {
             return null;
         }
+    }
+
+    public int applyRatingChange( long userID,int ratingChange){
+        User user = userRepository.findOne(userID);
+        user.setRating(user.getRating()+ratingChange);
+        userRepository.save(user);
+        return user.getRating();
     }
 }

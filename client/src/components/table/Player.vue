@@ -59,8 +59,8 @@
 
     </div>
     <div>
-      <button @click="test()"> A test</button>
-       <!-- <button @click="test2()"> A test2</button> -->
+      <!-- <button @click="test()"> A test</button>
+       <button @click="test2()"> A test2</button> -->
       </div>
     <!--Display status big blind small blind  dealer etc   -->
   </div>

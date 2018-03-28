@@ -61,8 +61,8 @@ public class UserController {
      * Deletes a user mapped by the path required
      */
     @DeleteMapping()
-    public void delete() {
-        userService.deleteUser();
+    public void delete(Principal principal) {
+        userService.deleteUser(userService.getUserByUsername(principal.getName()).getId());
     }
 
     /**

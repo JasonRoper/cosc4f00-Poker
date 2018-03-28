@@ -3,10 +3,7 @@ package com.pokerface.pokerapi.game;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * Deck is an object belonging 1-1 to a gamestate, it is the deck of cards used to play. It begins with a full set of
@@ -136,5 +133,21 @@ public class Deck {
 
     public void setTen(int ten) {
         this.ten = ten;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Deck deck = (Deck) o;
+        return getTen() == deck.getTen() &&
+                getId() == deck.getId() &&
+                Objects.equals(getCards(), deck.getCards());
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(getTen(), getCards(), getId());
     }
 }

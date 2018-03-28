@@ -31,7 +31,7 @@ flex-direction: row;
 justify-content: center;
 position: relative;
 margin:auto;
-transform:scale(-0.6);
+transform:scale(0.59);
 border: 1px solid red;
 background-repeat: no-repeat;
 transition: transform 500ms cubic-bezier(.2,-0.02,.39,1.27);
@@ -62,7 +62,7 @@ perspective: 700px;
    z-index: 1;
    position: relative;
    bottom: -20%;
-   perspective: 700px;
+   /* perspective: 700px; */
    /* transform: rotatex(60deg); */
    /* left:-100%; */
    /* transform: scale(0.8); */

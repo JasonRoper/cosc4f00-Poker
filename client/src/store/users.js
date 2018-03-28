@@ -7,7 +7,7 @@
 /**
  * users uses axios in order to send http requests to the server
  */
-import axios from 'axios'
+import axios from '@/api/axios'
 
 /**
  * the path that is to be requested is defined in the config.
@@ -164,6 +164,8 @@ const actions = {
       // don't need to reconnect to the pokerclient here because if we have an
       // active session, the pokerclient will have connected with that session
       // even before this login request is called.
+    }).catch(() => {
+      context.commit('logout')
     })
   },
   /**
@@ -199,9 +201,9 @@ const actions = {
         return
       }
 
-      let error = reason.response.data.error
-      switch (error) {
-        case 'Unauthorized':
+      let error = reason.response
+      switch (error.status) {
+        case 401:
           context.commit('addLoginError', {
             error: 'AuthenticationError',
             message: 'Error Authenticating'

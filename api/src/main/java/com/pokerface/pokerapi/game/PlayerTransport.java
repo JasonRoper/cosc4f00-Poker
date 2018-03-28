@@ -2,6 +2,8 @@ package com.pokerface.pokerapi.game;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import java.util.Objects;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 /**
  * A Player representation, containing an id, their seat, the money they have, the action they last performed, if they are a player or if they are a dealer.
@@ -129,5 +131,29 @@ public class PlayerTransport {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PlayerTransport that = (PlayerTransport) o;
+        return playerID == that.playerID &&
+                getMoney() == that.getMoney() &&
+                isPlayer() == that.isPlayer() &&
+                isDealer() == that.isDealer() &&
+                isFold() == that.isFold() &&
+                currentBet == that.currentBet &&
+                Objects.equals(getName(), that.getName()) &&
+                Objects.equals(getAction(), that.getAction()) &&
+                getCardOne() == that.getCardOne() &&
+                getCardTwo() == that.getCardTwo() &&
+                Objects.equals(getWinnings(), that.getWinnings());
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(playerID, getMoney(), getName(), getAction(), isPlayer(), isDealer(), isFold(), getCardOne(), getCardTwo(), getWinnings(), currentBet);
     }
 }
