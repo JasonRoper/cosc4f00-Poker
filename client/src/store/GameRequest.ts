@@ -8,8 +8,11 @@
  * ```
  */
 import GamePaths from '@/api/gameservice'
+<<<<<<< Updated upstream
 import PokerClient from '@/api/pokerclient'
 
+=======
+>>>>>>> Stashed changes
 /**
  * Axios - Imports axios which is used to send POST and GET requests
  */

@@ -5,22 +5,22 @@ module.exports = {
   moduleFileExtensions: [
     'js',
     'json',
-    'vue'
+    'vue',
+    'ts'
   ],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1'
   },
   transform: {
-    '^.+\\.ts$': '<rootDir>/node_modules/ts-jest',
-    '^.+\\.js$': '<rootDir>/node_modules/babel-jest',
-    '.*\\.(vue)$': '<rootDir>/node_modules/vue-jest'
+    '^.*\\.ts$': '<rootDir>/node_modules/ts-jest',
+    '^.*\\.js$': '<rootDir>/node_modules/babel-jest',
+    '^.*\\.vue$': '<rootDir>/node_modules/vue-jest'
   },
   testPathIgnorePatterns: [
     '<rootDir>/test/e2e'
   ],
   snapshotSerializers: ['<rootDir>/node_modules/jest-serializer-vue'],
   setupFiles: ['<rootDir>/test/unit/setup'],
-  mapCoverage: true,
   coverageDirectory: '<rootDir>/test/unit/coverage',
   collectCoverageFrom: [
     'src/**/*.{ts,js,vue}',

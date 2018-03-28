@@ -2,13 +2,13 @@ Arguments:
   C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js test
 
 PATH: 
-  C:\ProgramData\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files\Java\jdk1.8.0_121\;C:\Program Files (x86)\GtkSharp\2.12\bin;C:\Program Files\nodejs\;C:\Program Files\Git\cmd;C:\Program Files (x86)\Yarn\bin;C:\Program Files (x86)\Brackets\command;C:\Program Files\Java\jdk1.8.0_121\bin;C:\Program Files\Microsoft VS Code\bin;C:\Users\Owner\AppData\Roaming\npm;C:\Users\Owner\AppData\Local\Yarn\bin;%USERPROFILE%\AppData\Local\Microsoft\WindowsApps;
+  C:\ProgramData\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Program Files\dotnet\;C:\Program Files\MiKTeX 2.9\miktex\bin\x64\;C:\Program Files (x86)\QuickTime\QTSystem\;C:\Program Files\Microsoft SQL Server\110\Tools\Binn\;C:\php;C:\Apache24;C:\Apache24\bin;C:\ProgramData\ComposerSetup\bin;C:\Program Files\nodejs\;C:\Program Files (x86)\Yarn\bin\;C:\Program Files\Git\cmd;C:\Users\javon\AppData\Local\Programs\Python\Python36-32\Scripts\;C:\Users\javon\AppData\Local\Programs\Python\Python36-32\;C:\Users\javon\AppData\Local\Microsoft\WindowsApps;C:\Users\javon\AppData\Roaming\Dashlane\4.6.6.23032\bin\Firefox_Extension\{442718d9-475e-452a-b3e1-fb1ee16b8e9f}\components;C:\Users\javon\AppData\Roaming\Dashlane\4.6.8.26847\bin\Firefox_Extension\{442718d9-475e-452a-b3e1-fb1ee16b8e9f}\components;C:\Users\javon\AppData\Local\atom\bin;C:\Program Files (x86)\Nmap;C:\Users\javon\AppData\Local\Microsoft\WindowsApps;C:\Users\javon\AppData\Roaming\Composer\vendor\bin;D:\Programs\Microsoft VS Code\bin;C:\Users\javon\AppData\Roaming\npm;C:\Users\javon\AppData\Local\Yarn\bin;D:\Docker\Docker Toolbox;D:\Docker\Docker Toolbox;D:\Docker\Docker Toolbox;D:\Docker\Docker Toolbox
 
 Yarn version: 
-  1.2.1
+  1.5.1
 
 Node version: 
-  8.8.0
+  8.9.0
 
 Platform: 
   win32 x64
@@ -21,7 +21,7 @@ npm manifest:
     "author": "Jason Roper <jkmroper@gmail.com>",
     "private": true,
     "scripts": {
-      "test": "npm run unit && npm run e2e",
+      "test": "npm run unit",
       "dev": "node build/dev-server.js",
       "start": "npm run dev",
       "build": "node build/build.js",
@@ -7595,6 +7595,7 @@ Lockfile:
       window-size "0.1.0"
 
 Trace: 
+<<<<<<< Updated upstream
   SyntaxError: C:\Users\Owner\Desktop\cosc4f00-Poker\client\package.json: Unexpected token / in JSON at position 3078
       at JSON.parse (<anonymous>)
       at C:\Program Files (x86)\Yarn\lib\cli.js:770:59
@@ -7602,3 +7603,19 @@ Trace:
       at step (C:\Program Files (x86)\Yarn\lib\cli.js:92:30)
       at C:\Program Files (x86)\Yarn\lib\cli.js:103:13
       at <anonymous>
+=======
+  Error: Command failed.
+  Exit code: 1
+  Command: C:\WINDOWS\system32\cmd.exe
+  Arguments: /d /s /c npm run unit
+  Directory: D:\4f00\cosc4f00-Poker\client
+  Output:
+  
+      at ProcessTermError.MessageError (C:\Program Files (x86)\Yarn\lib\cli.js:186:110)
+      at new ProcessTermError (C:\Program Files (x86)\Yarn\lib\cli.js:226:113)
+      at ChildProcess.<anonymous> (C:\Program Files (x86)\Yarn\lib\cli.js:30281:17)
+      at emitTwo (events.js:126:13)
+      at ChildProcess.emit (events.js:214:7)
+      at maybeClose (internal/child_process.js:925:16)
+      at Process.ChildProcess._handle.onexit (internal/child_process.js:209:5)
+>>>>>>> Stashed changes

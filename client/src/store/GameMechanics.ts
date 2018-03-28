@@ -349,11 +349,10 @@ export default class GameMech {
       ROUND_FINISHED = 'ROUND_FINISHED', // All players have bet - this results in a new Community cards
       USER_JOIN = 'PLAYER_JOIN',// A new player has been added to the game
       USER_LEAVE = 'PLAYER_LEAVE' //
-    */ 
+    */
     // If the player has premove staged then they will move it
     // this.sendAction()
     // this.setTableActions()
-
   }
 
   public defaultGameTransport (gameTransport: any) {
@@ -394,8 +393,8 @@ export default class GameMech {
       }
     })
     this.bigBlind = gameTransport.bigBlind
-    if(gameTransport.event !== null) {
-      switch(gameTransport.event) {
+    if (gameTransport.event !== null) {
+      switch (gameTransport.event) {
 
       }
     }
