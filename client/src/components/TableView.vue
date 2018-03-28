@@ -143,11 +143,12 @@ import GameMech from '@/store/GameMechanics.ts'
 // import Game from '@/store/game.ts'
 import Seat from '@/components/table/Seat'
 import {GameActionType} from '@/api/gameservice.ts'
+import state from '../store/users'
 export default {
   props: ['userId'],
   data () {
     return {
-      mechanics: new GameMech(1, this.userId),
+      mechanics: new GameMech(1, state.state.userId),
       // this.userId),
       numberofPlayer: 0,
       // numberofPlayers: 0,

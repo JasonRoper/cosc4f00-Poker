@@ -84,9 +84,11 @@ export default class GameMech {
     // Verifies if a user Id was passed
     if (userId) {
       // Allows user to receive cards
+      alert('This user has a UserId ' + userId)
       this.gameService.onUserCards(this.onUserCardsEvent.bind(this))
       this.lobby = false
     } else {
+      alert('NO userId')
       this.lobby = true
     }
     axios.get(API_V1 + '/games/' + this.gameId).then((responce) => {
@@ -172,6 +174,19 @@ export default class GameMech {
       }
     }
     return -1
+  }
+
+  public getUser (): Player {
+    return this.multiplePlayers[this.playerLoc()]
+  }
+
+  public getOpponent (): Player[] {
+    let opponents: Player[] = []
+
+    opponents = this.multiplePlayers.filter((player, index) => {
+      index !== this.playerLoc()
+    })
+    return opponents
   }
 
   /**
@@ -337,9 +352,9 @@ export default class GameMech {
 
   public gameStarted (gameTransport: any) {
     alert('The Game has started')
+    alert('You should be receiving your hands')
     this.multiplePlayers = []
     this.communityCards = []
-    alert('gameStarted Transport')
     console.log(gameTransport)
     // this.multiplePlayers[0].action = gameTransport.players[0].action
     gameTransport.players.forEach((item: any, index: number) => {
