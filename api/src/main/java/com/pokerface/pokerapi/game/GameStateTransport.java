@@ -53,7 +53,7 @@ public class GameStateTransport {
      * @return the gameStateTransport
      */
     public GameStateTransport reason(Reason reason, String message) {
-        this.event = event;
+        this.event = new Event(reason, message);
         return this;
     }
 
