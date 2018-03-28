@@ -99,7 +99,7 @@
     "not ie <= 8"
   ],
   "jest": {
-    "moduleNameMapper": {
+    "moduleNameMapper": {   
       "^vue$": "vue/dist/vue.common.js"
     },
     "moduleFileExtensions": [

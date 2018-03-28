@@ -136,7 +136,7 @@ class PokerHeaders {
 }
 
 /**
- * Manage multiple subscriptions to different paths in a websocket.
+ * // Manage multiple subscriptions to different paths in a websocket
  */
 class PokerClient {
   private websocketPath: string

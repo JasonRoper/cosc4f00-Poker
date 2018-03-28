@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { cssMappings } from '@/types/cards'
+import { cssMappings } from '@/types/cards.ts'
 export default {
   props: {
     card: [String]

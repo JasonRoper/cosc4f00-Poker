@@ -20,7 +20,7 @@ import {
   GameState,
   Player,
   UserCards
-} from '@/api/gameservice'
+} from '@/api/gameservice.ts'
 
 import axios from '@/api/axios'
 import { API_V1 } from '@/config'
@@ -113,6 +113,9 @@ export default class GameMech {
     })
     return this.currentValue
   }
+  /*
+  Sets Game State to give new game
+  */
   public setGame () {
     axios.get(API_V1 + '/games/' + this.gameId).then((responce) => {
       // alert('got game state')

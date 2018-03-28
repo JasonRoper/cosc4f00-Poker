@@ -1,4 +1,8 @@
- .menu-icon {
+.nameTitle {
+  color: #e2e2e2;
+  
+}
+.menu-icon {
   position: fixed;
   top: 20px;
   /* Change to 20px from the left  */

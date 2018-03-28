@@ -142,7 +142,7 @@
 import Player from '@/components/table/Player.vue'
 import CardView from '@/components/table/Card'
 import TableActions from '@/components/table/TableActions'
-import { Card } from '@/types/cards'
+import { Card } from '@/types/cards.ts'
 import { mapActions } from 'vuex' // used for maping actions of the vue store files
 // import Actions from '@/types/actions'
 // import { GameService, GameActionType } from '@/api/gameservice'
@@ -150,7 +150,7 @@ import GameMech from '@/store/GameMechanics.ts'
 // import { GameAction } from '../api/gameservice'
 // import Game from '@/store/game.ts'
 import Seat from '@/components/table/Seat'
-import {GameActionType} from '../api/gameservice'
+import {GameActionType} from '@/api/gameservice.ts'
 export default {
   props: ['userId'],
   data () {

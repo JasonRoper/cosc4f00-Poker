@@ -64,8 +64,8 @@
   <div class="form-group row">
     <label for="inputEmail3" class="col-sm-3 col-form-label">#CPU Players</label>
     <div class="col-sm-9">
-     <select class="custom-select">
-  <option selected>Number of Players</option>
+     <select v-model="this.createGame.numberofCPU" class="custom-select">
+  <option  selected>Number of Players</option>
   <option value="1">1</option>
   <option value="2">2</option>
   <option value="3">3</option>
@@ -78,14 +78,14 @@
   <div class="form-group row">
     <label for="inputPassword3" class="col-sm-3 col-form-label">$BuyIn</label>
     <div class="col-sm-9">
-      <input type="number" class="form-control" id="inputPassword3" placeholder="BigBlind Buy In ">
+      <input v-model="this.createGame.buyIn" type="number" class="form-control" id="inputPassword3" placeholder="BigBlind Buy In ">
     </div>
   </div>
 
   <div class="form-group row">
     <label for="inputPassword3" class="col-sm-3 col-form-label">$Max Balance</label>
     <div class="col-sm-9">
-      <input type="pos number" class="form-control" id="inputPassword3" placeholder=" Highest Balance per Player ">
+      <input v-model="this.createGame.maxBalance" type="pos number" class="form-control" id="inputPassword3" placeholder=" Highest Balance per Player ">
     </div>
   </div>
 </form>
@@ -217,17 +217,22 @@
 
 <script>
 import AvailbleGame from '@/components/AvailbleGame.vue'
-import Player from '@/components/table/Player.vue'
-import CardView from '@/components/table/Card'
-import TableActions from '@/components/table/TableActions'
-import { Card } from '@/types/cards'
-import Actions from '@/types/actions'
-import TableView from '@/components/TableView'
+// import Player from '@/components/table/Player.vue'
+// import CardView from '@/components/table/Card'
+// import TableActions from '@/components/table/TableActions'
+// import { Card } from '@/types/cards'
+// import Actions from '@/types/actions'
+// import TableView from '@/components/TableView'
 import router from '@/router'
 import GameRequest from '@/store/GameRequest.ts'
 export default {
   data () {
     return {
+      createGame: {
+        numberofCPU: 0,
+        buyIn: 0,
+        maxBalance: 0
+      },
       gameReq: new GameRequest(),
       cardPos: 30,
       GameMenu: true,
@@ -240,7 +245,7 @@ export default {
         id: 1,
         username: 'Jasddon',
         account: 100000,
-        cards: [Card.HEARTS_ACE, Card.SPADES_TWO],
+        // cards: [Card.HEARTS_ACE, Card.SPADES_TWO],
         bet: 110
 
       },
@@ -248,26 +253,26 @@ export default {
         id: 2,
         username: 'Lucy',
         account: 100000,
-        cards: [Card.HEARTS_ACE, Card.SPADES_TWO],
+        // cards: [Card.HEARTS_ACE, Card.SPADES_TWO],
         bet: 210
       },
       {
         id: 2,
         username: 'Javon',
         account: 1000000,
-        bet: 110,
-        cards: [Card.HEARTS_ACE, Card.SPADES_TWO],
-        nextAction: Actions.NONE
+        bet: 110
+        // cards: [Card.HEARTS_ACE, Card.SPADES_TWO],
+        // nextAction: Actions.NONE
       }],
       state: {
         active: 2,
-        communityCards: [Card.HEARTS_EIGHT, Card.SPADES_THREE, Card.SPADES_ACE],
+        // communityCards: [Card.HEARTS_EIGHT, Card.SPADES_THREE, Card.SPADES_ACE],
         lobby: true,
         pot: 0
 
       },
       empty: {
-        card: Card.HEARTS_EIGHT
+        // card: Card.HEARTS_EIGHT
       }
     }
   },
@@ -277,7 +282,7 @@ export default {
     },
     sortcards () {
       for (let i = 0; i < this.state.communityCards.length; i++) {
-        this.state.communityCards[i].css.style.color = 'blue'
+        // this.state.communityCards[i].css.style.color = 'blue'
       }
     },
     showInstructPoker () {
@@ -328,10 +333,10 @@ export default {
   watch: {
   },
   components: {
-    player: Player,
-    actions: TableActions,
-    card: CardView,
-    tableView: TableView,
+    // player: Player,
+    // actions: TableActions,
+    // card: CardView,
+    // tableView: TableView,
     availbleGame: AvailbleGame
   }
 }

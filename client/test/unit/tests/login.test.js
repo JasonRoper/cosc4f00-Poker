@@ -6,6 +6,10 @@ const localVue = createLocalVue()
 localVue.use(Vuex)
 
 describe('Login.vue', () => {
+  /* ================================================================
+    Test will check if component  function attempt login is called
+    ==================================================================
+  */
   test('Calls Attemptlogin() function', () => {
     // Inistilize test
     const listener = sinon.spy()
