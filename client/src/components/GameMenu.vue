@@ -312,7 +312,7 @@ export default {
         alert('Lets Compete Poker')
         this.instrcutionPokerMode = false
         this.showTable = true
-        this.gameReq.createGame().then(() => {
+        this.gameReq.createCompetitiveGame().then(() => {
           alert('I am pushing you to the table view')
           alert(this.gameReq.gameId)
           router.push({name: 'TableView', params: {gameId: this.gameReq.gameId}})

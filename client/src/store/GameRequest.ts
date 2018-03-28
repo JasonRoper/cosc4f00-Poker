@@ -7,17 +7,12 @@
  * let gameId = game.createGame()
  * ```
  */
-import GamePaths from '@/api/gameservice'
-<<<<<<< Updated upstream
-import PokerClient from '@/api/pokerclient'
 
-=======
->>>>>>> Stashed changes
 /**
  * Axios - Imports axios which is used to send POST and GET requests
  */
 import axios from '@/api/axios'
-
+import GamePaths from '@/api/gameservice'
 /**
  * API_V1 - Holds webpath data that will interact with client
  */
@@ -32,13 +27,30 @@ import { API_V1 } from '@/config'
  */
 
 export default class GameRequest {
-  public MATCHMAKING: string = API_V1 + '/matchmaking/basicGame'
+  public MATCHMAKING: string = API_V1 + '/matchmaking/competitiveGame'
+  public CASUAL: string = API_V1 + '/matchmaking/casualGame'
   public gameId: number = -1
 
-  public createGame (): Promise<number | void> {
+  public createCompetitiveGame (): Promise<number | void> {
     // , {})
     // , { auth: { username: 'admin', password: 'admin' } })
     const prom = axios.post(this.MATCHMAKING, {}).then((response) => {
+      alert('it is looking for a game')
+      this.gameId = response.data.gameId
+      alert(response)
+      console.log(response)
+      return Promise.resolve(response.data.gameId)
+    }).catch((error) => {
+      alert('A game couldn\'t be found')
+      console.log(error)
+      return Promise.reject(error)
+    })
+    return prom
+  }
+  public createCasualGame (): Promise<number | void> {
+    // , {})
+    // , { auth: { username: 'admin', password: 'admin' } })
+    const prom = axios.post(this.CASUAL, {}).then((response) => {
       alert('it is looking for a game')
       this.gameId = response.data.gameId
       alert(response)
