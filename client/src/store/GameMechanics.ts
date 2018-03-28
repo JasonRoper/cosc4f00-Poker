@@ -9,7 +9,7 @@
 /**
  * GameMechanics uses Game service to send and receive updates
  */
-
+import axios from '@/api/axios'
 import {
   Event,
   GameAction,
@@ -21,8 +21,8 @@ import {
   Player,
   UserCards
 } from '@/api/gameservice'
+
 import { API_V1 } from '@/config'
-import axios from 'axios'
 
 /**
  * Import Card Suite that holds all Card Varients
@@ -324,19 +324,29 @@ export default class GameMech {
    * @param GameState
    */
   public setGameTransport (gameTransport: any) {
-
-    switch (gameTransport.event) {
-      case Event.GAME_STARTED: {
-        this.gameStarted(gameTransport)
-        break
+    if (gameTransport.event) {
+      if (gameTransport.event.message) {
+        alert(gameTransport.event.message)
+      } else {
+        alert('There is no message')
       }
-      case Event.HAND_FINISHED: {
-        this.handFinished(gameTransport)
-        break
+    }
+    if (gameTransport.event) {
+      switch (gameTransport.event.action) {
+        case Event.GAME_STARTED: {
+          this.gameStarted(gameTransport)
+          break
+        }
+        case Event.HAND_FINISHED: {
+          this.handFinished(gameTransport)
+          break
+        }
+        default: {
+          this.defaultGameTransport(gameTransport)
+        }
       }
-      default: {
-        this.defaultGameTransport(gameTransport)
-      }
+    } else {
+      this.defaultGameTransport(gameTransport)
     }
     /*
       HAND_STARTED = 'HAND_STARTED', // USER Joins the GAME
