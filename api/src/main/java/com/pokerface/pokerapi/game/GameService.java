@@ -32,9 +32,8 @@ public class GameService {
      * @param gameID is the representative of the gamestate in the database
      * @return the object for communication to the frontend
      */
-    public GameStateTransport getGameState(long gameID) {
-        games.findOne(gameID);
-        return null;
+    public GameState getGameState(long gameID) {
+        return games.findOne(gameID);
     }
 
     /**

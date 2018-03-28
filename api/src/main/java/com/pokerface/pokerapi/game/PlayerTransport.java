@@ -145,7 +145,6 @@ public class PlayerTransport {
                 isFold() == that.isFold() &&
                 currentBet == that.currentBet &&
                 Objects.equals(getName(), that.getName()) &&
-                Objects.equals(getAction(), that.getAction()) &&
                 getCardOne() == that.getCardOne() &&
                 getCardTwo() == that.getCardTwo() &&
                 Objects.equals(getWinnings(), that.getWinnings());

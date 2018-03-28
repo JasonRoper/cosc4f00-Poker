@@ -62,7 +62,7 @@ public class GameController {
     public void checkEvents() {
         List<Long> startedGames = gameService.startingGameIDs();
         for (Long gameID :startedGames) {
-            GameStateTransport gameTransport = gameService.getGameState(gameID);
+            GameStateTransport gameTransport = gameService.getGameStateTransport(gameID);
             gameTransport.reason(GameStateTransport.Reason.GAME_STARTED, "the game has started");
             messenger.convertAndSend("/messages/game/"+gameID, gameTransport);
             for(long userID: gameService.getUserIDsFromGame(gameID)) {
@@ -111,7 +111,7 @@ public class GameController {
         List<Long> games = new ArrayList<>(); //gameService.findAllGamesWithUser(user.getId());
         for (Long gameID : games) {
             gameService.removePlayer(gameID, user.getId());
-            GameStateTransport newGameState = gameService.getGameState(gameID);
+            GameStateTransport newGameState = gameService.getGameStateTransport(gameID);
             messenger.convertAndSend("/messages/game/" + gameID, newGameState.reason(GameStateTransport.Reason.PLAYER_LEFT,
                     user.getUsername() + " has left the game"));
         }
@@ -211,7 +211,7 @@ public class GameController {
 
         if (gameService.isHandEnd(gameID)) {
             HandEndTransport winners = gameService.determineWinnings(gameID);
-            nextGameState = gameService.getGameState(gameID);
+            nextGameState = gameService.getGameStateTransport(gameID);
 
             messenger.convertAndSend("/messages/game/" + gameID,
                     nextGameState.reason(GameStateTransport.Reason.HAND_FINISHED, ""));

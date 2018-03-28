@@ -1,9 +1,6 @@
 package com.pokerface.pokerapi.game;
 
-import com.pokerface.pokerapi.users.RegistrationFields;
-import com.pokerface.pokerapi.users.User;
-import com.pokerface.pokerapi.users.UserInfoTransport;
-import com.pokerface.pokerapi.users.UserService;
+import com.pokerface.pokerapi.users.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -61,6 +58,12 @@ public class GameTest {
         this.URL = "ws://localhost:" + port + "/live";
     }
 
+    @After
+    public void cleanUp(){
+        cleanUpUserRepository();
+        cleanUpGameRepository();
+    }
+
     @Test
     public void testUserRepositorySetUp(){
         setUpUserRepository();
@@ -89,38 +92,78 @@ public class GameTest {
         assertEquals(gameStateResponse.getStatusCode(),HttpStatus.OK);
 
         GameState gameState = gameRepository.findOne(matchmakingResponse.getBody().getGameId());
-        assertEquals(gameStateResponse,new GameStateTransport(gameState));
-        assertNull(gameStateResponse.getBody().getCommunityCards());
-
-
-
-        System.out.println();
+        assertEquals(gameStateResponse.getBody(),new GameStateTransport(gameState));
 
     }
 
     @Test
     public void testMatchmakingWhenGameExists() throws ExecutionException, InterruptedException, TimeoutException{
-        setUpUserRepository();
-        createTestGameState(GameStage.CREATED, GameState.GameType.CASUAL);
         TestRestTemplate adminRest = restTemplate.withBasicAuth("admin", "admin");
 
         ResponseEntity<GameInfoTransport> matchmakingResponse = adminRest.postForEntity("/api/v1/matchmaking/basicGame", null, GameInfoTransport.class);
         assertEquals(matchmakingResponse.getStatusCode(), HttpStatus.OK);
 
-        WebsocketSession adminWebsocket = new WebsocketSession("admin", "admin");
+        ResponseEntity<GameStateTransport> gameStateResponse = adminRest.getForEntity("/api/v1/games/"+matchmakingResponse.getBody().getGameId(),GameStateTransport.class);
+        assertEquals(gameStateResponse.getStatusCode(),HttpStatus.OK);
 
-        CompletableFuture<GameStateTransport> future = adminWebsocket.subscribe(
-                "/messages/game/" + matchmakingResponse.getBody().getGameId(),
-                GameStateTransport.class);
-        GameStateTransport nextGameState = future.get(10, TimeUnit.SECONDS);
-        cleanUpUserRepository();
+        GameState gameState = gameRepository.findOne(matchmakingResponse.getBody().getGameId());
+        assertEquals(gameStateResponse.getBody(),new GameStateTransport(gameState)); // First join
+
+        TestRestTemplate firstJoinRest = restTemplate.withBasicAuth("adam", "password");
+
+        matchmakingResponse = firstJoinRest.postForEntity("/api/v1/matchmaking/basicGame", null, GameInfoTransport.class);
+        assertEquals(matchmakingResponse.getStatusCode(), HttpStatus.OK);
+
+        gameStateResponse = firstJoinRest.getForEntity("/api/v1/games/"+matchmakingResponse.getBody().getGameId(),GameStateTransport.class);
+        assertEquals(gameStateResponse.getStatusCode(),HttpStatus.OK);
+
+        gameState = gameRepository.findOne(matchmakingResponse.getBody().getGameId());
+        assertEquals(gameStateResponse.getBody(),new GameStateTransport(gameState));
     }
 
     @Test
-    public void testMatchmakingWhenAnotherGameIsStarted() {}
+    public void testMatchmakingWhenAnotherGameIsStarted() {
+        setUpUserRepository();
+        GameState testGameState = createTestGameState(GameStage.STARTED, GameState.GameType.CASUAL);
+        TestRestTemplate adminRest = restTemplate.withBasicAuth("admin", "admin");
+
+        ResponseEntity<GameInfoTransport> matchmakingResponse = adminRest.postForEntity("/api/v1/matchmaking/basicGame", null, GameInfoTransport.class);
+        assertEquals(matchmakingResponse.getStatusCode(), HttpStatus.OK);
+
+        ResponseEntity<GameStateTransport> gameStateResponse = adminRest.getForEntity("/api/v1/games/"+matchmakingResponse.getBody().getGameId(),GameStateTransport.class);
+        assertEquals(gameStateResponse.getStatusCode(),HttpStatus.OK);
+
+        GameState gameState = gameRepository.findOne(matchmakingResponse.getBody().getGameId());
+        assertEquals(gameStateResponse.getBody(),new GameStateTransport(gameState)); // First join
+        assertEquals(gameState,testGameState);
+        Iterable<GameState>gameStates=gameRepository.findAll();
+        cleanUpUserRepository();
+        cleanUpGameRepository();
+    }
 
     @Test
-    public void testGameStartsAfter3PlayersJoined() {}
+    public void testGameStartsAfter3PlayersJoined() {
+        setUpUserRepository();
+        GameState testGameState=createTestGameState(GameStage.WAITING, GameState.GameType.CASUAL);
+        TestRestTemplate adminRest = restTemplate.withBasicAuth("admin", "admin");
+
+        ResponseEntity<GameInfoTransport> matchmakingResponse = adminRest.postForEntity("/api/v1/matchmaking/basicGame", null, GameInfoTransport.class);
+        assertEquals(matchmakingResponse.getStatusCode(), HttpStatus.OK);
+
+        ResponseEntity<GameStateTransport> gameStateResponse = adminRest.getForEntity("/api/v1/games/"+matchmakingResponse.getBody().getGameId(),GameStateTransport.class);
+        assertEquals(gameStateResponse.getStatusCode(),HttpStatus.OK);
+
+        GameState gameState = gameRepository.findOne(matchmakingResponse.getBody().getGameId());
+        assertEquals(gameStateResponse.getBody(),new GameStateTransport(gameState)); // First join
+        Iterable<GameState>gameStates=gameRepository.findAll();
+        Iterable<Long>gameLongIDs=gameRepository.findOpenCasualGame();
+        try {
+            TimeUnit.SECONDS.sleep(60);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println();
+    }
 
     @Test
     public void testGameRefusesActionsUnlessGameStarted() {}
@@ -169,7 +212,21 @@ public class GameTest {
             userIDs.remove(0);
             result.setGameType(gameType);
             result.addPlayer(user.getId(),user.getUsername());
+        } else if (stage==GameStage.STARTED){
+            for (int i=0;i<4;i++){
+                user=userService.getUser(userIDs.get(0));
+                result.addPlayer(user.getId(),user.getUsername());
+                userIDs.remove(0);
+            }
+            result.startGame();
+        } else if (stage==GameStage.WAITING){
+            for (int i=0;i<3;i++){
+                user=userService.getUser(userIDs.get(0));
+                result.addPlayer(user.getId(),user.getUsername());
+                userIDs.remove(0);
+            }
         }
+        result.setGameType(gameType);
         gameRepository.save(result);
         return result;
     }
@@ -287,7 +344,11 @@ public class GameTest {
         for (int i=0;i<25;i++){
             String name="ab"+nameLetter;
             nameLetter++;
-            userIDs.add(userService.register(new RegistrationFields(name,"Password",nameLetter+"@gmail.com")).getId());
+            try {
+                userIDs.add(userService.register(new RegistrationFields(name, "Password", nameLetter + "@gmail.com")).getId());
+            } catch(EmailAlreadyExistsException email){
+
+            }
         }
     }
 
@@ -298,7 +359,7 @@ public class GameTest {
         userIDs=new ArrayList();
     }
 
-    private void cleanUpGameRepositiry(){
+    private void cleanUpGameRepository(){
         gameRepository.deleteAll();
     }
 
