@@ -181,10 +181,11 @@ export default class GameMech {
   }
 
   public getOpponent (): Player[] {
-    let opponents: Player[] = []
-
-    opponents = this.multiplePlayers.filter((player, index) => {
-      index !== this.playerLoc()
+    const opponents: Player[] = []
+    this.multiplePlayers.forEach((player: Player, index: number) => {
+      if (index !== this.playerLoc()) {
+        opponents.push(player)
+      }
     })
     return opponents
   }

@@ -48,6 +48,7 @@
 // import TableView from '@/components/TableView'
 import { mapActions } from 'vuex' // used for maping actions of the vue store files
 import GameMenu from '@/components/GameMenu' // ErrorMessages Components
+
 export default {
   name: 'Game',
   data () {

@@ -204,7 +204,6 @@ export default {
       this.mechanics.tableActions()
     },
     fold: function () {
-      // alert('FOLD')
       this.premove(GameActionType.FOLD, 0)
     },
     check: function () {
@@ -239,15 +238,13 @@ export default {
     },
     premove: function (action, money) {
       alert('you have stored a premove' + action + ' with ' + money)
-      this.mechanics.testSend(action, money)
-      /*
+      // this.mechanics.testSend(action, money)
       if (this.mechanics.storePremove(action, money)) {
-         alert('you have stored a premove' + action + ' with ' + money)
+        alert('you have stored a premove' + action + ' with ' + money)
       } else {
         alert('you have not stored a premove' + action + ' not with ' + money)
         this.mechanics.setTableActions()
       }
-      */
       this.$forceUpdate()
     },
     communityCards: function () {
