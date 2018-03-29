@@ -29,6 +29,7 @@ public class GameState {
     private Long startTime=null;
     private boolean hasStarted=false;
     private GameType gameType;
+    private int maxPlayers=6;
 
     private int previousTurn;
 
@@ -564,6 +565,14 @@ public class GameState {
 
     public void setGameType(GameType gameType) {
         this.gameType = gameType;
+    }
+
+    public int getMaxPlayers() {
+        return maxPlayers;
+    }
+
+    public void setMaxPlayers(int maxPlayers) {
+        this.maxPlayers = maxPlayers;
     }
 
     @Override

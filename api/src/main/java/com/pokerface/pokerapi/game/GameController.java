@@ -271,16 +271,19 @@ public class GameController {
                 gameStateTransport.reason(GameStateTransport.Reason.PLAYER_JOINED, "User has joined"));
         return new GameInfoTransport(gameID);
     }
-//
-//    @GetMapping("/api/v1/games")
-//    public void getGameListing() {
-//        gameService.getGameStateList();
-//    }
-//
-//    @PostMapping("/api/v1/games")
-//    public void createCasualGame(Principal principal) {
-//        gameService.createGame(10);
-//    }
+
+    @GetMapping("/api/v1/games")
+    public void getGameListing() {
+        gameService.getGameStateList();
+    }
+
+    @PostMapping("/api/v1/games")
+    public GameInfoTransport createCustomGame(Principal principal) {
+
+        GameInfoTransport newGame= new GameInfoTransport(gameService.createGame(3, GameState.GameType.CUSTOM));
+        gameService.getGameState(newGame.getGameId()).addPlayer(userService.getUserByUsername(principal.getName()).getId(),principal.getName());
+        return newGame;
+    }
 
     /**
      * This method getsGameInfo of a specific game and responds with the info the user needs to display it

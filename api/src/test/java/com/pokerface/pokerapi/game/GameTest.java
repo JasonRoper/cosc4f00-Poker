@@ -155,7 +155,8 @@ public class GameTest {
         long gameID=testGameState.getId();
         TestRestTemplate adminRest = restTemplate.withBasicAuth("admin", "admin");
         webSockets.add(new WebsocketSession("admin","admin"));
-        CompletableFuture<GameStateTransport> gameStartedCheck = webSockets.get(0).subscribe("/messages/game/"+testGameState.getId(),GameStateTransport.class);
+
+        CompletableFuture<HandTransport> gameStartingHandCheck = webSockets.get(0).subscribe("/user/messages/game/"+gameID,HandTransport.class);
 
         ResponseEntity<GameInfoTransport> matchmakingResponse = adminRest.postForEntity("/api/v1/matchmaking/basicGame", null, GameInfoTransport.class);
         assertEquals(matchmakingResponse.getStatusCode(), HttpStatus.OK);
@@ -168,15 +169,19 @@ public class GameTest {
         GameState gameState = gameRepository.findOne(matchmakingResponse.getBody().getGameId());
         gameState=gameRepository.findOne(matchmakingResponse.getBody().getGameId());
         GameStateTransport testGameStateResponse = new GameStateTransport((gameState));
-        assertEquals(gameStateResponse.getBody(),testGameStateResponse); // First join
+       // assertEquals(gameStateResponse.getBody(),testGameStateResponse); // First join
 
 
-
-        GameStateTransport testGameStateTransport=gameStartedCheck.get(30,TimeUnit.SECONDS);
+        CompletableFuture<GameStateTransport> gameStartedCheck = webSockets.get(0).subscribe("/messages/game/"+testGameState.getId(),GameStateTransport.class);
+        GameStateTransport testGameStateTransport=gameStartedCheck.get( 300,TimeUnit.SECONDS);
         if (testGameStateTransport.getEvent().getAction()== GameStateTransport.Reason.PLAYER_JOINED){
             gameStartedCheck = webSockets.get(0).subscribe("/messages/game/"+testGameState.getId(),GameStateTransport.class);
-            testGameStateTransport=gameStartedCheck.get(30,TimeUnit.SECONDS);
+            testGameStateTransport=gameStartedCheck.get(300,TimeUnit.SECONDS);
         }
+
+
+        HandTransport testHandTransport=gameStartingHandCheck.get(300,TimeUnit.SECONDS);
+
 
         gameState=gameRepository.findOne(gameID);
         assertTrue(gameState.isHasStarted());
@@ -184,7 +189,9 @@ public class GameTest {
     }
 
     @Test
-    public void testGameRefusesActionsUnlessGameStarted() {}
+    public void testGameRefusesActionsUnlessGameStarted() {
+
+    }
 
     @Test
     public void testGameRefusesActionsOfAllButCurrentPlayer() {}
