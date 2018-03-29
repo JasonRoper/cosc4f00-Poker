@@ -34,6 +34,11 @@ export default new Router({
       component: Lobby
     },
     {
+      path: '/Table/:gameId',
+      name: 'TableView',
+      component: TableView
+    },
+    {
       path: '/Table',
       name: 'TableView',
       component: TableView

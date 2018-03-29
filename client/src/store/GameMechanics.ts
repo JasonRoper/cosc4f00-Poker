@@ -214,10 +214,10 @@ export default class GameMech {
    * @event UserCardsEvent
    * @param userCards
    */
-  public onUserCardsEvent (userCards: UserCards) {
+  public onUserCardsEvent (userCards: any) {
 
-    this.multiplePlayers[this.playerLoc()].card1 = userCards.card1
-    this.multiplePlayers[this.playerLoc()].card2 = userCards.card2
+    this.multiplePlayers[this.playerLoc()].card1 = userCards.cardOne
+    this.multiplePlayers[this.playerLoc()].card2 = userCards.cardTwo
   }
 
   /**
@@ -364,29 +364,8 @@ export default class GameMech {
   public gameStarted (gameTransport: any) {
     alert('The Game has started')
     alert('You should be receiving your hands')
-    this.multiplePlayers = []
-    this.communityCards = []
     console.log(gameTransport)
     // this.multiplePlayers[0].action = gameTransport.players[0].action
-    gameTransport.players.forEach((item: any, index: number) => {
-      const act: GameActionType | null = (item.action.type !== null) ? item.action : null
-      const userTurn: boolean = (index === gameTransport.nextPlayer)
-      const player: Player = {
-        id: item.id,
-        money: item.money,
-        name: item.name,
-        action: act,
-        card1: gameTransport.card1,
-        card2: gameTransport.card2,
-        currentBet: 0,
-        isFold: item.fold,
-        winnings: gameTransport.winnings,
-        isPlayer: item.player,
-        isDealer: item.dealer,
-        isTurn: userTurn
-      }
-      this.multiplePlayers.push(player)
-    })
   }
 
   public handFinished (gameTransport: any) {
