@@ -51,7 +51,7 @@ public class GameService {
     public GameStateTransport handleAction(long gameID, GameAction action, int playerID) {
 
         GameState gameState = games.findOne(gameID);
-        if (gameState.getPresentTurn() == playerID&&gameState.isHasStarted()) {
+        if (gameState.getPresentTurn() == playerID && gameState.isHasStarted()) {
             Player player = gameState.getPlayer(playerID);
             if (action.getType() == GameActionType.BET||action.getType()==GameActionType.RAISE) {
                 bet(gameState, action, player);
@@ -423,7 +423,7 @@ public class GameService {
 
     public List<Long> startingGameIDs(){
         List<Long> gameIDs = new ArrayList<>();
-        gameIDs=games.findWaitingToStartGamesIDs(System.currentTimeMillis()+30000);
+        gameIDs = games.findWaitingToStartGamesIDs(System.currentTimeMillis() + 30000);
         return gameIDs;
     }
 
@@ -452,6 +452,10 @@ public class GameService {
 
     public HandTransport getHandTransport(long gameID, long userID){
         GameState gameState = games.findOne(gameID);
+        if (gameState == null) {
+            throw new GameDoesNotExistException(gameID);
+        }
+        
         Player p = gameState.getPlayer(userID);
         return p == null ? null : new HandTransport(p);
     }
@@ -460,9 +464,9 @@ public class GameService {
         return games.countActiveGames();
     }
 
-    public List<GameInfoTransport> getGameList(){
-        List<GameInfoTransport> gameList= new ArrayList<>();
-        for (long gameID:games.findOpenCustomGame()){
+    public List<GameInfoTransport> getGameList() {
+        List<GameInfoTransport> gameList = new ArrayList<>();
+        for (long gameID : games.findOpenCustomGame()) {
             gameList.add(new GameInfoTransport(games.findOne(gameID)));
         }
         return gameList;
