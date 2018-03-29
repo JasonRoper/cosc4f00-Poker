@@ -38,5 +38,11 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
 
     @Query("SELECT u FROM User u ORDER BY u.rating DESC")
-    Stream<User> findTopRated();
+    Stream<User> orderedByRating();
+
+    @Query("SELECT u FROM User u ORDER BY u.username ASC")
+    Stream<User> orderedByName();
+
+    @Query("SELECT u FROM User u ORDER BY u.money DESC")
+    Stream<User> orderedByMoney();
 }

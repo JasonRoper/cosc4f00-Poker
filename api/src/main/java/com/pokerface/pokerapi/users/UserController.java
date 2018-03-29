@@ -1,11 +1,14 @@
 package com.pokerface.pokerapi.users;
 
+import com.pokerface.pokerapi.util.InvalidSortMethod;
 import com.pokerface.pokerapi.util.ListResponse;
+import javassist.tools.web.BadHttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.socket.messaging.SessionConnectedEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
@@ -73,8 +76,21 @@ public class UserController {
      * @return a list of users
      */
     @GetMapping()
-    public ListResponse<UserInfoTransport> listing() {
-        return new ListResponse<>(userService.listUsers());
+    public ListResponse<UserInfoTransport> listing(@RequestParam(value = "sort", required = false) String sortMethod) throws BadHttpRequest {
+        if (sortMethod == null) {
+            return new ListResponse<>(userService.listUsers());
+        }
+
+        switch (sortMethod) {
+            case "name":
+                return new ListResponse<>(userService.getUsersByName());
+            case "rating":
+                return new ListResponse<>(userService.getUsersByRating());
+            case "money":
+                return new ListResponse<>(userService.getUsersByMoney());
+            default:
+                throw new InvalidSortMethod(sortMethod, "name", "rating", "money");
+        }
     }
 
     /**

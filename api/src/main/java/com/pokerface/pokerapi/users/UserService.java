@@ -1,10 +1,7 @@
 package com.pokerface.pokerapi.users;
 
-import com.pokerface.pokerapi.game.GameInfoTransport;
-import org.hibernate.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,13 +9,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.transaction.Transactional;
-import javax.validation.Valid;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -32,6 +25,7 @@ import java.util.stream.Stream;
  */
 @Service
 public class UserService implements UserDetailsService {
+
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
 
@@ -60,6 +54,12 @@ public class UserService implements UserDetailsService {
         javon.setRole("ROLE_USER,ROLE_ADMIN");
         ashley.setRole("ROLE_USER,ROLE_ADMIN");
         adam.setRole("ROLE_USER,ROLE_ADMIN");
+        adam.setRating(100);
+        javon.setRating(220);
+        ashley.setRating(300);
+        adam.setMoney(430);
+        javon.setMoney(403);
+        ashley.setMoney(339);
         this.userRepository.save(jason);
         this.userRepository.save(admin);
         this.userRepository.save(adam);
@@ -182,11 +182,43 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public List<UserInfoTransport> getUsersByRating(int numTopUsers) {
-        Stream<User> topRatedUsers = userRepository.findTopRated();
+    public List<UserInfoTransport> getUsersByRating() {
+        return getUsersByRating(-1);
+    }
 
-        return topRatedUsers
-                .limit(numTopUsers)
+    @Transactional
+    public List<UserInfoTransport> getUsersByName() {
+        return getUsersByName(-1);
+    }
+
+    @Transactional
+    public List<UserInfoTransport> getUsersByMoney() {
+        return getUsersByMoney(-1);
+    }
+
+    @Transactional
+    public List<UserInfoTransport> getUsersByRating(int limit) {
+        return mapToList(userRepository.orderedByRating(), -1, limit);
+    }
+
+    @Transactional
+    public List<UserInfoTransport> getUsersByName(int limit) {
+        return mapToList(userRepository.orderedByName(), -1, limit);
+    }
+
+    @Transactional
+    public List<UserInfoTransport> getUsersByMoney(int limit) {
+        return mapToList(userRepository.orderedByMoney(), -1, limit);
+    }
+
+    private List<UserInfoTransport> mapToList(Stream<User> userStream, int skip, int limit) {
+        if (skip >= 0) {
+            userStream = userStream.skip(skip);
+        }
+        if (limit >= 0) {
+            userStream = userStream.limit(limit);
+        }
+        return userStream
                 .map(UserInfoTransport::new)
                 .collect(Collectors.toList());
     }
