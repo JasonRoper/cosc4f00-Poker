@@ -39,11 +39,6 @@ export default new Router({
       component: TableView
     },
     {
-      path: '/Table',
-      name: 'TableView',
-      component: TableView
-    },
-    {
       path: '/game',
       name: 'Game',
       component: Game

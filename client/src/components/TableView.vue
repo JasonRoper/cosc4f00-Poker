@@ -151,7 +151,6 @@ import state from '../store/users'
 
 export default {
   data () {
-    alert('just logged route' + this.$route.params.gameId)
     return {
       mechanics: new GameMech(this.$route.params.gameId, state.state.username),
       // this.userId),
@@ -208,14 +207,14 @@ export default {
       if (money !== undefined) {
         this.premove(GameActionType.CALL, money)
       } else {
-        alert('you are trying to CALL with no money')
+        console.log('Action: CALL - you are trying to CALL with no money')
       }
     },
     raise: function (money) {
       if (money !== undefined) {
         this.premove(GameActionType.RAISE, money)
       } else {
-        alert('you are trying to raise with no money')
+        console.log('Action: RAISE - you are trying to raise with no money')
       }
     },
     bet: function (money) {
@@ -232,15 +231,18 @@ export default {
       this.mechanics.sendAction()
     },
     premove: function (action, money) {
-      alert('you have stored a premove' + action + ' with ' + money)
-      // this.mechanics.testSend(action, money)
-      if (this.mechanics.storePremove(action, money)) {
-        alert('you have stored a premove' + action + ' with ' + money)
+      if (this.mechanics.turn === this.mechanics.playerId) {
+        console.log('You are attempting to send a move to the server')
+        if (this.mechanics.storePremove(action, money)) {
+          console.log('You sent a move to there server ' + action + ' with ' + money)
+        } else {
+          console.log('The move you attempted to send failed')
+          this.mechanics.setTableActions()
+        }
       } else {
-        alert('you have not stored a premove' + action + ' not with ' + money)
-        this.mechanics.setTableActions()
+        console.log('you have stored a premove' + action + ' with ' + money)
       }
-      this.$forceUpdate()
+      // this.$forceUpdate()
     },
     communityCards: function () {
       this.mechanics.sendCommunityCards(Card.BLANK_CARD)
