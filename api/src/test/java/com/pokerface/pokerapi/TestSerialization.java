@@ -2,6 +2,7 @@ package com.pokerface.pokerapi;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pokerface.pokerapi.game.*;
+import com.pokerface.pokerapi.users.User;
 import com.pokerface.pokerapi.users.UserInfoTransport;
 import com.pokerface.pokerapi.users.UserTransport;
 import org.junit.Before;
