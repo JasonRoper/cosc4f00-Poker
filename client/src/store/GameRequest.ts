@@ -35,13 +35,9 @@ export default class GameRequest {
     // , {})
     // , { auth: { username: 'admin', password: 'admin' } })
     const prom = axios.post(this.MATCHMAKING, {}).then((response) => {
-      alert('it is looking for a game')
       this.gameId = response.data.gameId
-      alert(response)
-      console.log(response)
       return Promise.resolve(response.data.gameId)
     }).catch((error) => {
-      alert('A game couldn\'t be found')
       console.log(error)
       return Promise.reject(error)
     })

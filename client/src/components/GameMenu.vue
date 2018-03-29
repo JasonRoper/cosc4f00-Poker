@@ -312,9 +312,12 @@ export default {
         alert('Lets Compete Poker')
         this.instrcutionPokerMode = false
         this.showTable = true
-        this.gameReq.createCompetitiveGame().then(() => {
+        this.gameReq.createCompetitiveGame().then((responce) => {
           alert('I am pushing you to the table view')
           alert(this.gameReq.gameId)
+          // this.$route.params = this.gameReq.gameId
+          // router.push({path: '/Table', props: {gameId: this.gameReq.gameId}})
+          // TableView
           router.push({name: 'TableView', params: {gameId: this.gameReq.gameId}})
         }).catch(() => {
           alert('an error occured - there is no GameId returned')

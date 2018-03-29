@@ -59,13 +59,14 @@ export class GamePaths {
   constructor (gameId: number, userId?: number) {
     const messageGame = '/messages/game/'
     this.GAME_UPDATES = messageGame + gameId
-    this.GAME_FINISHED = messageGame + gameId + '/status'
+    this.GAME_FINISHED = messageGame + gameId + 'status'
 
-    this.GAME_ERROR = messageGame + gameId + '/error'
+    this.GAME_ERROR = messageGame + gameId + 'error'
 
     this.USER_ACTIONS = '/app/game/' + gameId
+    // this.destinationPrefix + user + destination
+    this.USER_CARDS = '/user' + messageGame + gameId
 
-    this.USER_CARDS = 'user' + messageGame + gameId
   }
 }
 
@@ -111,8 +112,8 @@ export interface Player {
   id: number
   name: string
   action: GameActionType | null
-  card1: Card
-  card2: Card
+  card1: string
+  card2: string
   currentBet: number
   isPlayer: boolean
   isDealer: boolean
@@ -190,15 +191,15 @@ export type GameErrorCallback = (gameError: GameError) => void
  * The GameFinishedCallback is the type of function that will be
  * called when the GameService recieves the users cards
  */
-export type UserCardsCallback = (userCards: UserCards) => void
+export type UserCardsCallback = (userCards: any) => void
 
 /**
  * The GameService manages access to a games events on the server.
  */
 export class GameService {
-  private gameId: number
-  private gamePaths: GamePaths
+  public gamePaths: GamePaths
 
+  private gameId: number
   private onGameUpdatedCallback: GameUpdatedCallback | null = null
   private onGameFinishedCallback: GameFinishedCallback | null = null
   private onGameErrorCallback: GameErrorCallback | null = null
@@ -212,6 +213,7 @@ export class GameService {
     this.gameId = gameId
     this.gamePaths = new GamePaths(gameId, userId)
     this.switchGame(gameId)
+
   }
 
   /**

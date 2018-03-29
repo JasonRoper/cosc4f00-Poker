@@ -148,11 +148,12 @@ import GameMech from '@/store/GameMechanics.ts'
 import Seat from '@/components/table/Seat'
 import {GameActionType} from '@/api/gameservice.ts'
 import state from '../store/users'
+
 export default {
-  props: ['userId'],
   data () {
+    alert('just logged route' + this.$route.params.gameId)
     return {
-      mechanics: new GameMech(1, state.state.userId),
+      mechanics: new GameMech(this.$route.params.gameId, state.state.username),
       // this.userId),
       numberofPlayer: 0,
       // numberofPlayers: 0,
@@ -167,27 +168,11 @@ export default {
   */
   watch: {
     preivousnumberofPlayers  () {
-      this.mechanics = new GameMech(1, this.userId)
-    },
-    mechanics: function (newValue, oldValue) {
-      this.user = this.getUser()
-      this.opponents = this.getOpponents()
-      // this.$forceUpdate()
+      // this.mechanics = new GameMech(1, this.userId)
     },
     numberofPlayers () {
-      console.log(this.numberofPlayers)
-      this.mechanics.setGame()
-    }
-  },
-  computed: {
-    mechanics () {
-      return new GameMech(1, this.userId)
-    },
-    numberofPlayers () {
-      return this.mechanics.getMultiplayers()
-    },
-    UserName () {
-      return this.$store.state.users.username
+      // console.log(this.numberofPlayers)
+      // this.mechanics.setGame()
     }
   },
   methods: {
@@ -195,7 +180,7 @@ export default {
       this.$router.push('Game')
     },
     force () {
-      console.log(this.mechanics.getMultiplayers())
+      // console.log(this.mechanics.getMultiplayers())
     },
     ...mapActions([
       'logout'

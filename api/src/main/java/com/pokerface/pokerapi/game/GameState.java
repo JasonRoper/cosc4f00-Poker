@@ -1,7 +1,6 @@
 package com.pokerface.pokerapi.game;
 
 import javax.persistence.*;
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -29,7 +28,7 @@ public class GameState {
     private Long startTime=null;
     private boolean hasStarted=false;
     private GameType gameType;
-    private int maxPlayers=6;
+    private int maxPlayers = 6;
 
     private int previousTurn;
 

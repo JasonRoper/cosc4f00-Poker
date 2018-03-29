@@ -6,8 +6,8 @@ public class GameInfoTransport {
     public GameInfoTransport() {
     }
 
-    public GameInfoTransport(GameState gameState){
-        this.gameId=gameState.getId();
+    public GameInfoTransport(GameState gameState) {
+        this.gameId = gameState.getId();
     }
 
     public GameInfoTransport(long gameId) {

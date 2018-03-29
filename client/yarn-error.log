@@ -1,8 +1,8 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js test
+  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js dev
 
 PATH: 
-  C:\ProgramData\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Program Files\dotnet\;C:\Program Files\MiKTeX 2.9\miktex\bin\x64\;C:\Program Files (x86)\QuickTime\QTSystem\;C:\Program Files\Microsoft SQL Server\110\Tools\Binn\;C:\php;C:\Apache24;C:\Apache24\bin;C:\ProgramData\ComposerSetup\bin;C:\Program Files\nodejs\;C:\Program Files (x86)\Yarn\bin\;C:\Program Files\Git\cmd;C:\Users\javon\AppData\Local\Programs\Python\Python36-32\Scripts\;C:\Users\javon\AppData\Local\Programs\Python\Python36-32\;C:\Users\javon\AppData\Local\Microsoft\WindowsApps;C:\Users\javon\AppData\Roaming\Dashlane\4.6.6.23032\bin\Firefox_Extension\{442718d9-475e-452a-b3e1-fb1ee16b8e9f}\components;C:\Users\javon\AppData\Roaming\Dashlane\4.6.8.26847\bin\Firefox_Extension\{442718d9-475e-452a-b3e1-fb1ee16b8e9f}\components;C:\Users\javon\AppData\Local\atom\bin;C:\Program Files (x86)\Nmap;C:\Users\javon\AppData\Local\Microsoft\WindowsApps;C:\Users\javon\AppData\Roaming\Composer\vendor\bin;D:\Programs\Microsoft VS Code\bin;C:\Users\javon\AppData\Roaming\npm;C:\Users\javon\AppData\Local\Yarn\bin;D:\Docker\Docker Toolbox;D:\Docker\Docker Toolbox;D:\Docker\Docker Toolbox;D:\Docker\Docker Toolbox
+  C:\ProgramData\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Program Files\dotnet\;C:\Program Files\MiKTeX 2.9\miktex\bin\x64\;C:\Program Files (x86)\QuickTime\QTSystem\;C:\Program Files\Microsoft SQL Server\110\Tools\Binn\;C:\php;C:\Apache24;C:\Apache24\bin;C:\ProgramData\ComposerSetup\bin;C:\Program Files\nodejs\;C:\Program Files (x86)\Yarn\bin\;C:\Program Files\Git\cmd;C:\Users\javon\AppData\Local\Programs\Python\Python36-32\Scripts\;C:\Users\javon\AppData\Local\Programs\Python\Python36-32\;C:\Users\javon\AppData\Local\Microsoft\WindowsApps;C:\Users\javon\AppData\Roaming\Dashlane\4.6.6.23032\bin\Firefox_Extension\{442718d9-475e-452a-b3e1-fb1ee16b8e9f}\components;C:\Users\javon\AppData\Roaming\Dashlane\4.6.8.26847\bin\Firefox_Extension\{442718d9-475e-452a-b3e1-fb1ee16b8e9f}\components;C:\Users\javon\AppData\Local\atom\bin;C:\Program Files (x86)\Nmap;C:\Users\javon\AppData\Local\Microsoft\WindowsApps;C:\Users\javon\AppData\Roaming\Composer\vendor\bin;D:\Programs\Microsoft VS Code\bin;C:\Users\javon\AppData\Roaming\npm;C:\Users\javon\AppData\Local\Yarn\bin
 
 Yarn version: 
   1.5.1
@@ -115,9 +115,7 @@ npm manifest:
       "not ie <= 8"
     ],
     "jest": {
-      "moduleNameMapper": {
-        "@(.*)$": "<rootDir>/src/$1",
-        // "components(.*)$": "<rootDir>/src/components/$1",
+      "moduleNameMapper": {   
         "^vue$": "vue/dist/vue.common.js"
       },
       "moduleFileExtensions": [
@@ -7595,19 +7593,10 @@ Lockfile:
       window-size "0.1.0"
 
 Trace: 
-<<<<<<< Updated upstream
-  SyntaxError: C:\Users\Owner\Desktop\cosc4f00-Poker\client\package.json: Unexpected token / in JSON at position 3078
-      at JSON.parse (<anonymous>)
-      at C:\Program Files (x86)\Yarn\lib\cli.js:770:59
-      at Generator.next (<anonymous>)
-      at step (C:\Program Files (x86)\Yarn\lib\cli.js:92:30)
-      at C:\Program Files (x86)\Yarn\lib\cli.js:103:13
-      at <anonymous>
-=======
   Error: Command failed.
   Exit code: 1
   Command: C:\WINDOWS\system32\cmd.exe
-  Arguments: /d /s /c npm run unit
+  Arguments: /d /s /c node build/dev-server.js
   Directory: D:\4f00\cosc4f00-Poker\client
   Output:
   
@@ -7618,4 +7607,3 @@ Trace:
       at ChildProcess.emit (events.js:214:7)
       at maybeClose (internal/child_process.js:925:16)
       at Process.ChildProcess._handle.onexit (internal/child_process.js:209:5)
->>>>>>> Stashed changes

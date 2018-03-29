@@ -280,8 +280,8 @@ public class GameController {
     @PostMapping("/api/v1/games")
     public GameInfoTransport createCustomGame(Principal principal) {
 
-        GameInfoTransport newGame= new GameInfoTransport(gameService.createGame(3, GameState.GameType.CUSTOM));
-        gameService.getGameState(newGame.getGameId()).addPlayer(userService.getUserByUsername(principal.getName()).getId(),principal.getName());
+        GameInfoTransport newGame = new GameInfoTransport(gameService.createGame(3, GameState.GameType.CUSTOM));
+        gameService.getGameState(newGame.getGameId()).addPlayer(userService.getUserByUsername(principal.getName()).getId(), principal.getName());
         return newGame;
     }
 
@@ -299,6 +299,7 @@ public class GameController {
     @GetMapping("/api/v1/games/{id}/cards")
     public HandTransport getUserHand(@PathVariable("id") long gameID, Principal principal) {
         UserInfoTransport user = userService.getUserByUsername(principal.getName());
+
         HandTransport hand = gameService.getHandTransport(gameID, user.getId());
 
         if (hand == null) {
