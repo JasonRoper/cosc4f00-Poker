@@ -23,7 +23,10 @@ public class User {
     private String email;
 
     private int rating;
+    private ConnectionStatus connection;
+
     private String role;
+    private int money;
 
     public User() {
     }
@@ -39,6 +42,8 @@ public class User {
         this.password = securePassword;
         this.email = email;
         this.role = "ROLE_USER";
+        this.connection = ConnectionStatus.DISCONNECTED;
+        this.money = 0;
     }
 
     /**
@@ -46,7 +51,7 @@ public class User {
      * @return a UserTransport object
      */
     public UserTransport toTransfer() {
-        return new UserTransport(id, username, email);
+        return new UserTransport(this);
     }
 
 
@@ -136,6 +141,26 @@ public class User {
      */
     public void setRating(int rating) {
         this.rating = rating;
+    }
+
+    public ConnectionStatus getConnection() {
+        return connection;
+    }
+
+    public void setConnection(ConnectionStatus connection) {
+        this.connection = connection;
+    }
+
+    public int getMoney() {
+        return money;
+    }
+
+    public void setMoney(int money) {
+        this.money = money;
+    }
+
+    public enum ConnectionStatus {
+        DISCONNECTED, CONNECTED
     }
 
 }

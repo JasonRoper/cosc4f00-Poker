@@ -138,7 +138,7 @@ class PokerHeaders {
 /**
  * // Manage multiple subscriptions to different paths in a websocket
  */
-class PokerClient {
+export class PokerClient {
   private websocketPath: string
   private socket: webstomp.Client
   private subscriberMap: Map<string, Subscription>

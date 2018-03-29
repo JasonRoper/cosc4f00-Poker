@@ -3,9 +3,12 @@ package com.pokerface.pokerapi.users;
 import com.pokerface.pokerapi.util.ListResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.socket.messaging.SessionConnectedEvent;
+import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -82,5 +85,22 @@ public class UserController {
     @GetMapping("/login")
     public UserInfoTransport login(Principal principal){
         return userService.getUserByUsername(principal.getName());
+    }
+
+
+    @EventListener
+    public void websocketConnectionEvent(SessionConnectedEvent event) {
+        Principal user = event.getUser();
+        if (user != null) {
+            userService.setUserConnected(user.getName(), true);
+        }
+    }
+
+    @EventListener
+    public void websocketDisconnectedEvent(SessionDisconnectEvent event) {
+        Principal user = event.getUser();
+        if (user != null) {
+            userService.setUserConnected(user.getName(), false);
+        }
     }
 }

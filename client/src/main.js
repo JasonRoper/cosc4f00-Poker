@@ -25,27 +25,28 @@ new Vue({
   render: h => h(App)
 })
 
-import PokerClient from '@/api/pokerclient'
+import Client, { PokerClient } from '@/api/pokerclient'
 import webstomp from 'webstomp-client'
 
 window.axios = axios
 window.commit = store.commit
 window.dispatch = store.dispatch
 window.store = store
-window.pokerclient = PokerClient
+window.pokerclient = Client
 window.webstomp = webstomp
+window.PokerClient = PokerClient
 
 function testAs (auth) {
   axios.get('/api/v1/users/login', {auth, withCredentials: true}).then(() => {
-    PokerClient.subscribeOn('/user/messages/game', function (message) {
+    Client.subscribeOn('/user/messages/game', function (message) {
       console.log('user: ', message)
     })
 
-    PokerClient.subscribeOn('/messages/game', function (message) {
+    Client.subscribeOn('/messages/game', function (message) {
       console.log('general: ', message)
     })
 
-    PokerClient.send('/app/test', 1235)
+    Client.send('/app/test', 1235)
   })
 }
 
