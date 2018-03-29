@@ -2,6 +2,8 @@ import { shallow } from 'vue-test-utils'
 import sinon from 'sinon'
 import game from '@/components/Game'
 
+jest.mock('@/components/GameMenu', () => {})
+
 describe('Game.vue', () => {
   /* ================================================================
     Test will check if component  function attempt login is called
