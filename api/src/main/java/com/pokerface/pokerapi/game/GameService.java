@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * GameService is the heart of the logic of the Back End. It communicates solely with the Controller, it handles
@@ -151,10 +150,7 @@ public class GameService {
      * @return boolean representing if the round is ended
      */
     public boolean isRoundEnd(GameState gameState) {
-        if (gameState.getPresentTurn() == gameState.getLastBet()) {
-            return true;
-        }
-        return false;
+        return gameState.getPresentTurn() == gameState.getLastBet();
     }
 
     /**
@@ -184,11 +180,8 @@ public class GameService {
 
         if (folded >= gameState.getPlayerCount() - 1) {
             return true;
-        } else if (isRoundEnd(gameState) && gameState.getRound() == 3) {
-            return true;
-        }
+        } else return isRoundEnd(gameState) && gameState.getRound() == 3;
 
-        return false;
     }
 
     /**
@@ -459,10 +452,17 @@ public class GameService {
 
     public HandTransport getHandTransport(long gameID, long userID){
         GameState gameState = games.findOne(gameID);
-        return new HandTransport(gameState.getPlayer(userID));
+        Player p = gameState.getPlayer(userID);
+        return p == null ? null : new HandTransport(p);
     }
 
     public long getNumActiveGames() {
         return games.countActiveGames();
+    }
+
+    public boolean isMember(long gameID, long userID) {
+        GameState gameState = games.findOne(gameID);
+        Player p = gameState.getPlayer(userID);
+        return p != null;
     }
 }

@@ -180,7 +180,7 @@ public class GameController {
                         "Fred"
                 )}); // jason
         gameState.setBigBlind(10);
-        gameState.setCommunityCards(Arrays.asList(new Card[]{Card.SPADES_QUEEN, Card.SPADES_SEVEN, Card.SPADES_KING}));
+        gameState.setCommunityCards(Arrays.asList(Card.SPADES_QUEEN, Card.SPADES_SEVEN, Card.SPADES_KING));
         gameState.setPotSum(30);
 
         return gameState.reason(GameStateTransport.Reason.PLAYER_ACTION, "");
@@ -291,6 +291,18 @@ public class GameController {
     @GetMapping("/api/v1/games/{id}")
     public GameStateTransport getGameInfo(@PathVariable("id") long gameID) {
         return gameService.getGameStateTransport(gameID);
+    }
+
+    @GetMapping("/api/v1/games/{id}/cards")
+    public HandTransport getUserHand(@PathVariable("id") long gameID, Principal principal) {
+        UserInfoTransport user = userService.getUserByUsername(principal.getName());
+        HandTransport hand = gameService.getHandTransport(gameID, user.getId());
+
+        if (hand == null) {
+            throw new CardAccessNotPermittedException(user.getUsername(), gameID);
+        }
+
+        return hand;
     }
 
 
