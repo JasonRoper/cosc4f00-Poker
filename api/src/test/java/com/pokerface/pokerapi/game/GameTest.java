@@ -146,10 +146,16 @@ public class GameTest {
     }
 
     @Test
-    public void testGameStartsAfter3PlayersJoined() {
+    public void testGameStartsAfter3PlayersJoined() throws Exception {
         setUpUserRepository();
+
+        List<WebsocketSession> webSockets = new ArrayList<>();
+
         GameState testGameState=createTestGameState(GameStage.WAITING, GameState.GameType.CASUAL);
+        long gameID=testGameState.getId();
         TestRestTemplate adminRest = restTemplate.withBasicAuth("admin", "admin");
+        webSockets.add(new WebsocketSession("admin","admin"));
+        CompletableFuture<GameStateTransport> gameStartedCheck = webSockets.get(0).subscribe("/messages/game"+testGameState.getId(),GameStateTransport.class);
 
         ResponseEntity<GameInfoTransport> matchmakingResponse = adminRest.postForEntity("/api/v1/matchmaking/basicGame", null, GameInfoTransport.class);
         assertEquals(matchmakingResponse.getStatusCode(), HttpStatus.OK);
@@ -163,17 +169,15 @@ public class GameTest {
         gameState=gameRepository.findOneGame(matchmakingResponse.getBody().getGameId());
         assertEquals(gameStateResponse.getBody(),new GameStateTransport(gameState)); // First join
 
-        try {
-            TimeUnit.SECONDS.sleep(60); // Gives the game enough time to start.
-        } catch (InterruptedException e) {
 
-        }
+
+        //GameStateTransport testGameStateTransport=gameStartedCheck.get(30,TimeUnit.SECONDS);
+
+        TimeUnit.SECONDS.sleep(30);
+        gameState=gameRepository.findOneGame(gameID);
         assertTrue(gameState.isHasStarted());
         assertTrue(gameState.getPlayerCount()==4);
     }
-
-    @Test
-    public void testFixingThisShit() {}
 
     @Test
     public void testGameRefusesActionsUnlessGameStarted() {}

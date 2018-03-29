@@ -126,7 +126,7 @@ public class GameState {
      * gets the Deck attached to the gameState
      * @return a Deck object
      */
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
     @JoinColumn
     public Deck getDeck() {
         return deck;
