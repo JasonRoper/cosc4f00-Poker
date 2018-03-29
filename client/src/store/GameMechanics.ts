@@ -54,7 +54,7 @@ export default class GameMech {
   public userAction: GameAction | null = null
 
   public endGame: boolean = false
-
+  public username: string = ''
   public disable: number = 1
   public enableButton: number = 0
   public foldAction: number = 0
@@ -80,7 +80,7 @@ export default class GameMech {
     this.gameService.onGameError(this.onGameError.bind(this))
 
     this.gameService.onUserCards(this.onUserCardsEvent.bind(this))
-
+    this.username = username
     axios.get(API_V1 + '/games/' + this.gameId).then((responce) => {
       console.log('Got Game State')
       responce.data.players.forEach((item: any, index: number) => {
@@ -225,13 +225,17 @@ export default class GameMech {
    */
   public storePremove (action: GameActionType, money: number): boolean {
     const move: GameAction = { type: action, bet: money }
-    if (this.validatePreMove(move) && this.userAction === null) {
-      alert('Premove was validated')
+    if (this.validatePreMove(move)) {
+      console.log(this.username + ' Premove was validated')
       this.disableButton(action)
       this.userAction = move
-      this.sendAction()
-      return true
+      if (this.sendAction()) {
+        return true
+      } else {
+        return false
+      }
     } else {
+      console.log(this.username + ' The move you attempted to send was invalid')
       this.setTableActions()
       this.userAction = null
       return false
@@ -288,18 +292,18 @@ export default class GameMech {
   public validatePreMove (move: GameAction) {
     // Confirm that you have enough money
     if (this.multiplePlayers[this.playerId].money < move.bet) {
-      alert('you do not have enough money')
+      console.log(move + 'you do not have enough money')
       return false
     }
     // Confirm that you made a valid move
     if (this.hasBet) {
       if (this.possibleAction[1].indexOf(move.type) === -1) {
-        alert('you have not made a valid move')
+        console.log('you have not made a valid move')
         return false
       }
     } else {
       if (this.possibleAction[0].indexOf(move.type) === -1) {
-        alert('you have not made a valid move')
+        console.log('you have not made a valid move')
         return false
       }
     }
@@ -406,8 +410,8 @@ export default class GameMech {
         money: item.money,
         name: item.name,
         action: act,
-        card1: Card.CLUBS_EIGHT,
-        card2: Card.CLUBS_KING,
+        card1: Card.BLANK_CARD,
+        card2: Card.BLANK_CARD,
         currentBet: 0,
         isFold: item.fold,
         winnings: 0,
@@ -451,7 +455,7 @@ export default class GameMech {
   /**
    * Validates users action and sends it to the server
    */
-  private sendAction () {
+  private sendAction (): boolean {
     // Confirms that you have an action to send
     if (this.userAction !== null) {
       // Confirms that it is your turn
@@ -459,10 +463,13 @@ export default class GameMech {
         // Confirms that this is a valid move
         if (this.validatePreMove(this.userAction)) {
           this.send(this.userAction)
+          console.log('Themove was sent')
           this.userAction = null
+          return true
         }
       }
     }
+    return false
   }
 
 }
