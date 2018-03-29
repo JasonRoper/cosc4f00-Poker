@@ -34,6 +34,7 @@ import java.util.concurrent.TimeoutException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -49,6 +50,9 @@ public class GameTest {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private GameService gameService;
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -133,7 +137,7 @@ public class GameTest {
         ResponseEntity<GameStateTransport> gameStateResponse = adminRest.getForEntity("/api/v1/games/"+matchmakingResponse.getBody().getGameId(),GameStateTransport.class);
         assertEquals(gameStateResponse.getStatusCode(),HttpStatus.OK);
 
-        GameState gameState = gameRepository.findOne(matchmakingResponse.getBody().getGameId());
+        GameState gameState = gameService.getGameState(matchmakingResponse.getBody().getGameId());
         assertEquals(gameStateResponse.getBody(),new GameStateTransport(gameState)); // First join
         assertEquals(gameState,testGameState);
         Iterable<GameState>gameStates=gameRepository.findAll();
@@ -156,16 +160,20 @@ public class GameTest {
         Iterable<GameState>gameStates=gameRepository.findAll();
 
         GameState gameState = gameRepository.findOne(matchmakingResponse.getBody().getGameId());
+        gameState=gameRepository.findOneGame(matchmakingResponse.getBody().getGameId());
         assertEquals(gameStateResponse.getBody(),new GameStateTransport(gameState)); // First join
-        gameStates=gameRepository.findAll();
-        Iterable<Long>gameLongIDs=gameRepository.findOpenCasualGame();
+
         try {
-            TimeUnit.SECONDS.sleep(60);
+            TimeUnit.SECONDS.sleep(60); // Gives the game enough time to start.
         } catch (InterruptedException e) {
 
         }
-        System.out.println();
+        assertTrue(gameState.isHasStarted());
+        assertTrue(gameState.getPlayerCount()==4);
     }
+
+    @Test
+    public void testFixingThisShit() {}
 
     @Test
     public void testGameRefusesActionsUnlessGameStarted() {}

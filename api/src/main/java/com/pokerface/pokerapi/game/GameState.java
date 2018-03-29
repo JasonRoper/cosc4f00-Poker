@@ -1,6 +1,7 @@
 package com.pokerface.pokerapi.game;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -272,14 +273,14 @@ public class GameState {
      * returns a List of the players
      * @return List of the current players in the game
      */
-    @OneToMany(mappedBy = "gameState", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "gameState", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
     @OrderColumn
     public List<Player> getPlayers() {
         return players;
     }
 
     public void setPlayers(List<Player> players) {
-        this.players = players;
+        this.players=players;
     }
 
     /**

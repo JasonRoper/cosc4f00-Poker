@@ -16,8 +16,12 @@ public class HandTransport {
   }
 
   public HandTransport(Player player){
-    this.cardOne=player.getCardOne();
-    this.cardTwo=player.getCardTwo();
+    try {
+      this.cardOne = player.getCardOne();
+      this.cardTwo = player.getCardTwo();
+    } catch (NullPointerException n) {
+      System.out.println();
+    }
   }
 
   public Card getCardOne() {
