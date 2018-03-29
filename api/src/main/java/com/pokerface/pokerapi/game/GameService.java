@@ -52,6 +52,7 @@ public class GameService {
 
         GameState gameState = games.findOne(gameID);
         if (gameState.getPresentTurn() == playerID && gameState.isHasStarted()) {
+            action.setBet(Math.abs(action.getBet()));
             Player player = gameState.getPlayer(playerID);
             if (action.getType() == GameActionType.BET||action.getType()==GameActionType.RAISE) {
                 bet(gameState, action, player);

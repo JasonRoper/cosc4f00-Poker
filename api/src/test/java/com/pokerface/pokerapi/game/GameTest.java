@@ -1,11 +1,9 @@
 package com.pokerface.pokerapi.game;
 
-import com.pokerface.pokerapi.users.EmailAlreadyExistsException;
-import com.pokerface.pokerapi.users.RegistrationFields;
-import com.pokerface.pokerapi.users.UserInfoTransport;
-import com.pokerface.pokerapi.users.UserService;
+import com.pokerface.pokerapi.users.*;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +33,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
@@ -159,7 +158,7 @@ public class GameTest {
         TestRestTemplate adminRest = restTemplate.withBasicAuth("admin", "admin");
         webSockets.add(new WebsocketSession("admin","admin"));
 
-        CompletableFuture<HandTransport> gameStartingHandCheck = webSockets.get(0).subscribe("/user/messages/game/" + gameID, HandTransport.class);
+        CompletableFuture<HandTransport> gameStartingHandCheck = webSockets.get(0).subscribe("/user/messages/game/"+gameID,HandTransport.class);
 
         ResponseEntity<GameInfoTransport> matchmakingResponse = adminRest.postForEntity("/api/v1/matchmaking/basicGame", null, GameInfoTransport.class);
         assertEquals(matchmakingResponse.getStatusCode(), HttpStatus.OK);
@@ -170,23 +169,23 @@ public class GameTest {
         Iterable<GameState>gameStates=gameRepository.findAll();
 
         GameState gameState = gameRepository.findOne(matchmakingResponse.getBody().getGameId());
-        gameState = gameRepository.findOne(matchmakingResponse.getBody().getGameId());
+        gameState=gameRepository.findOne(matchmakingResponse.getBody().getGameId());
         GameStateTransport testGameStateResponse = new GameStateTransport((gameState));
-        // assertEquals(gameStateResponse.getBody(),testGameStateResponse); // First join
+       // assertEquals(gameStateResponse.getBody(),testGameStateResponse); // First join
 
 
-        CompletableFuture<GameStateTransport> gameStartedCheck = webSockets.get(0).subscribe("/messages/game/" + testGameState.getId(), GameStateTransport.class);
-        GameStateTransport testGameStateTransport = gameStartedCheck.get(300, TimeUnit.SECONDS);
-        if (testGameStateTransport.getEvent().getAction() == GameStateTransport.Reason.PLAYER_JOINED) {
-            gameStartedCheck = webSockets.get(0).subscribe("/messages/game/" + testGameState.getId(), GameStateTransport.class);
-            testGameStateTransport = gameStartedCheck.get(300, TimeUnit.SECONDS);
+        CompletableFuture<GameStateTransport> gameStartedCheck = webSockets.get(0).subscribe("/messages/game/"+testGameState.getId(),GameStateTransport.class);
+        GameStateTransport testGameStateTransport=gameStartedCheck.get( 300,TimeUnit.SECONDS);
+        if (testGameStateTransport.getEvent().getAction()== GameStateTransport.Reason.PLAYER_JOINED){
+            gameStartedCheck = webSockets.get(0).subscribe("/messages/game/"+testGameState.getId(),GameStateTransport.class);
+            testGameStateTransport=gameStartedCheck.get(300,TimeUnit.SECONDS);
         }
 
 
-        HandTransport testHandTransport = gameStartingHandCheck.get(300, TimeUnit.SECONDS);
+        HandTransport testHandTransport=gameStartingHandCheck.get(300,TimeUnit.SECONDS);
 
 
-        gameState = gameRepository.findOne(gameID);
+        gameState=gameRepository.findOne(gameID);
         assertTrue(gameState.isHasStarted());
         assertTrue(gameState.getPlayerCount()==4);
         cleanUpUserRepository();
@@ -232,32 +231,46 @@ public class GameTest {
         for (Player p: testGameState.getPlayers()){
             webSockets.add(new WebsocketSession(p.getName(),"Password"));
         }
-        List<CompletableFuture<GameStateTransport>> testGameStateTransport = new ArrayList<>();
+        CompletableFuture<GameStateTransport> testGameStateTransport;
+        GameStateTransport testTransport;
         for(WebsocketSession webSocket: webSockets){
-            testGameStateTransport.add(webSocket.subscribe(gameStateMessagePath+testGameState.getId(),GameStateTransport.class));
+            testGameStateTransport=webSockets.get(0).subscribe(gameStateMessagePath+testGameState.getId(),GameStateTransport.class);
 
             webSocket.send("/app/game/"+testGameState.getId(),new GameAction(GameActionType.FOLD,10));
+            testTransport=testGameStateTransport.get(20,TimeUnit.SECONDS);
         }
 
+        //TimeUnit.SECONDS.sleep(20);
         testGameState=gameRepository.findOne(testGameState.getId());
-        int counter=0;
-        for(CompletableFuture<GameStateTransport> testTransport: testGameStateTransport){
-            GameStateTransport test=testTransport.get(10,TimeUnit.SECONDS);
-            if (counter!=3) {
-                assertTrue(!test.getPlayers()[counter].isFold());
-            } else {
-                assertTrue(test.getPlayers()[counter].isFold());
-            }
-            counter++;
-        }
+        assertTrue(testGameState.getPresentTurn()==0);
 
         cleanUpUserRepository();
         cleanUpGameRepository();
     }
 
     @Test
-    public void testGameFold() {
+    public void testGameFold() throws Exception {
         setUpUserRepository();
+
+        GameState testGameState = createTestGameState(GameStage.STARTED, GameState.GameType.CASUAL);
+
+        List<WebsocketSession> webSockets = new ArrayList<>();
+
+        for (Player p: testGameState.getPlayers()){
+            webSockets.add(new WebsocketSession(p.getName(),"Password"));
+        }
+        CompletableFuture<GameStateTransport> testGameStateTransport;
+        GameStateTransport testTransport;
+        for(WebsocketSession webSocket: webSockets){
+            testGameStateTransport=webSockets.get(0).subscribe(gameStateMessagePath+testGameState.getId(),GameStateTransport.class);
+
+            webSocket.send("/app/game/"+testGameState.getId(),new GameAction(GameActionType.FOLD,10));
+            testTransport=testGameStateTransport.get(20,TimeUnit.SECONDS);
+        }
+
+        //TimeUnit.SECONDS.sleep(20);
+        testGameState=gameRepository.findOne(testGameState.getId());
+        assertTrue(testGameState.getPresentTurn()==0);
 
         cleanUpUserRepository();
         cleanUpGameRepository();
@@ -272,7 +285,12 @@ public class GameTest {
     }
 
     @Test
-    public void testGameCheck() {}
+    public void testGameCheck() {
+        setUpUserRepository();
+
+        cleanUpUserRepository();
+        cleanUpGameRepository();
+    }
 
     @Test
     public void testInvalidAction() {}
