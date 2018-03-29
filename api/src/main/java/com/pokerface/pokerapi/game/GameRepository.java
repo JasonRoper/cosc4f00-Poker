@@ -34,14 +34,8 @@ public interface GameRepository extends CrudRepository<GameState, Long> {
     @Query("SELECT g.id FROM GameState g inner join g.players p where p.userID=?1")
     List<Long> findAllGamesWithUser(long userID);
 
-    @Query("SELECT g FROM GameState g where g.id=?1")
-    GameState findOneGame(long gameID);
-
-
-
-
-
-
+    @Query("SELECT COUNT(g) FROM GameState g WHERE g.hasStarted = true")
+    long countActiveGames();
 }
 
 

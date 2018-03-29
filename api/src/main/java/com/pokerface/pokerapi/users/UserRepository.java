@@ -1,7 +1,12 @@
 package com.pokerface.pokerapi.users;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.Iterator;
+import java.util.stream.Stream;
 
 /**
  * This is the database repository of the User objects, each method written is a JPQL database wired up to MySQL. \
@@ -27,4 +32,11 @@ public interface UserRepository extends CrudRepository<User, Long> {
      * @return boolean indicating if email ws found in the database.
      */
     boolean existsByEmailIgnoreCase(String email);
+
+    @Query("SELECT COUNT(u) FROM User u WHERE u.connection = com.pokerface.pokerapi.users.User$ConnectionStatus.CONNECTED")
+    long countConnected();
+
+
+    @Query("SELECT u FROM User u ORDER BY u.rating DESC")
+    Stream<User> findTopRated();
 }

@@ -461,4 +461,8 @@ public class GameService {
         GameState gameState = games.findOne(gameID);
         return new HandTransport(gameState.getPlayer(userID));
     }
+
+    public long getNumActiveGames() {
+        return games.countActiveGames();
+    }
 }

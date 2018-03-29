@@ -1,7 +1,10 @@
 package com.pokerface.pokerapi.users;
 
+import com.pokerface.pokerapi.game.GameInfoTransport;
+import org.hibernate.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,9 +14,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * {@link UserService} operates with the {@link UserController}. {@link UserController} receives messages from users and maps
@@ -157,5 +165,29 @@ public class UserService implements UserDetailsService {
         user.setRating(user.getRating()+ratingChange);
         userRepository.save(user);
         return user.getRating();
+    }
+
+    public void setUserConnected(String name, boolean connection) {
+        User user = userRepository.findByUsername(name);
+        user.setConnection(connection ? User.ConnectionStatus.CONNECTED : User.ConnectionStatus.DISCONNECTED);
+        userRepository.save(user);
+    }
+
+    public long getNumUsers() {
+        return userRepository.count();
+    }
+
+    public long getNumUsersOnline() {
+        return userRepository.countConnected();
+    }
+
+    @Transactional
+    public List<UserInfoTransport> getUsersByRating(int numTopUsers) {
+        Stream<User> topRatedUsers = userRepository.findTopRated();
+
+        return topRatedUsers
+                .limit(numTopUsers)
+                .map(UserInfoTransport::new)
+                .collect(Collectors.toList());
     }
 }
