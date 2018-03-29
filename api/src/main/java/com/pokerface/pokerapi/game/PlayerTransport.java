@@ -153,6 +153,6 @@ public class PlayerTransport {
     @Override
     public int hashCode() {
 
-        return Objects.hash(playerID, getMoney(), getName(), getAction(), isPlayer(), isDealer(), isFold(), getCardOne(), getCardTwo(), getWinnings(), currentBet);
+        return Objects.hash(playerID, getMoney(), getName(), isPlayer(), isDealer(), isFold(), getCardOne(), getCardTwo(), getWinnings(), currentBet);
     }
 }

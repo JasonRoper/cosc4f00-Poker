@@ -430,7 +430,7 @@ public class GameService {
 
     public List<Long> startingGameIDs(){
         List<Long> gameIDs = new ArrayList<>();
-        gameIDs=games.findWaitingToStartGamesIDs(System.currentTimeMillis());
+        gameIDs=games.findWaitingToStartGamesIDs(System.currentTimeMillis()+10000);
         return gameIDs;
     }
 

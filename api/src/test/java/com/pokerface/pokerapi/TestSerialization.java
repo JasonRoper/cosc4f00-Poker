@@ -3,6 +3,7 @@ package com.pokerface.pokerapi;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pokerface.pokerapi.game.*;
+import com.pokerface.pokerapi.users.User;
 import com.pokerface.pokerapi.users.UserInfoTransport;
 import com.pokerface.pokerapi.users.UserTransport;
 import org.junit.Before;
@@ -99,7 +100,7 @@ public class TestSerialization {
     public void testUserTransportSerialization() throws IOException {
         assertTrue("can not serialize", mapper.canSerialize(UserTransport.class));
         assertTrue("can not deserialize", mapper.canDeserialize(mapper.constructType(UserTransport.class)));
-        String serialized = mapper.writer().writeValueAsString(new UserTransport(1, "Jason", "testing@test.ca"));
+        String serialized = mapper.writer().writeValueAsString(new UserTransport(new User()));
         UserTransport res = mapper.readValue(serialized, mapper.constructType(UserTransport.class));
     }
 

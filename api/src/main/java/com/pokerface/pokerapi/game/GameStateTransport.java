@@ -106,7 +106,7 @@ public class GameStateTransport {
     /**
      * A class that contains an action, why the event is being sent, and an optional message for extra communication if necessary
      */
-    private class Event {
+    public static class Event {
         private Reason action;
         private String message;
 
@@ -134,6 +134,8 @@ public class GameStateTransport {
         public void setMessage(String message) {
             this.message = message;
         }
+
+
     }
 
     /**
