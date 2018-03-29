@@ -151,6 +151,7 @@ import state from '../store/users'
 
 export default {
   data () {
+    alert('just logged route' + this.$route.params.gameId)
     return {
       mechanics: new GameMech(this.$route.params.gameId, state.state.username),
       // this.userId),

@@ -64,6 +64,8 @@ export default class GameMech {
   public checkAction: number = 0
   public possibleAction: GameActionType [][] = [[GameActionType.BET, GameActionType.FOLD, GameActionType.CHECK],
     [GameActionType.CALL, GameActionType.RAISE, GameActionType.FOLD], [GameActionType.FOLD]]
+  public userName: string = ''
+
   private gameService: GameService
 
   /**
@@ -79,8 +81,15 @@ export default class GameMech {
     this.gameService.onGameFinished(this.onGameFinishedEvent.bind(this))
     this.gameService.onGameError(this.onGameError.bind(this))
 
-    this.gameService.onUserCards(this.onUserCardsEvent.bind(this))
+    // Verifies if a user Id was passed
+    // if (userId) {
+    // Allows user to receive cards
     this.username = username
+    this.gameService.onUserCards(this.onUserCardsEvent.bind(this))
+    // } else {
+    //   alert('NO userId')
+    //   this.lobby = true
+    // }
     axios.get(API_V1 + '/games/' + this.gameId).then((responce) => {
       console.log('Got Game State')
       responce.data.players.forEach((item: any, index: number) => {
@@ -201,8 +210,9 @@ export default class GameMech {
    * @param userCards
    */
   public onUserCardsEvent (userCards: any) {
-    alert('CardEvent was called')
-    // Vue.set(vm.userProfile, 'age', 27)
+    alert('User CardsEvent was called')
+    alert(userCards)
+    console.log(userCards)
     this.multiplePlayers[this.playerId].card1 = userCards.cardOne
     this.multiplePlayers[this.playerId].card2 = userCards.cardTwo
   }
@@ -325,6 +335,8 @@ export default class GameMech {
     if (gameTransport.event) {
       switch (gameTransport.event.action) {
         case Event.GAME_STARTED: {
+          alert('GameStartedTransport USER CARDS PATH')
+          alert(this.gameService.gamePaths.USER_CARDS)
           this.gameStarted(gameTransport)
           break
         }
@@ -333,10 +345,12 @@ export default class GameMech {
           break
         }
         default: {
+          alert('still running default transport')
           this.defaultGameTransport(gameTransport)
         }
       }
     } else {
+      alert('Using the deafult')
       this.defaultGameTransport(gameTransport)
     }
     /*
@@ -353,7 +367,7 @@ export default class GameMech {
   }
 
   public gameStarted (gameTransport: any) {
-    alert('The Game has started')
+    alert('The Gamestarted method has bee invoked')
     alert('You should be receiving your hands')
     console.log(gameTransport)
     // this.multiplePlayers[0].action = gameTransport.players[0].action
