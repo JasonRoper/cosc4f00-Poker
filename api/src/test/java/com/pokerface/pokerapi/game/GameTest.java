@@ -44,6 +44,8 @@ public class GameTest {
     private int port;
     private String URL;
     private List<Long> userIDs=new ArrayList();
+    private final String gameStateMessagePath = "/messages/game/"; // Gamestates+gameID
+    private final String handMessagePath = "/user/messages/game/"; // This is for hands+gameID
 
     @Autowired
     private GameRepository gameRepository;
@@ -186,21 +188,87 @@ public class GameTest {
         gameState=gameRepository.findOne(gameID);
         assertTrue(gameState.isHasStarted());
         assertTrue(gameState.getPlayerCount()==4);
+        cleanUpUserRepository();
+        cleanUpGameRepository();
     }
 
     @Test
-    public void testGameRefusesActionsUnlessGameStarted() {
+    public void testGameRefusesActionsUnlessGameStarted() throws Exception {
+        setUpUserRepository();
+        GameState testGameState = createTestGameState(GameStage.WAITING, GameState.GameType.CASUAL);
 
+        List<WebsocketSession> webSockets = new ArrayList<>();
+
+        for (Player p: testGameState.getPlayers()){
+            webSockets.add(new WebsocketSession(p.getName(),"Password"));
+        }
+        List<CompletableFuture<GameStateTransport>> testGameStateTransport = new ArrayList<>();
+        for(WebsocketSession webSocket: webSockets){
+            testGameStateTransport.add(webSocket.subscribe(gameStateMessagePath+testGameState.getId(),GameStateTransport.class));
+
+            webSocket.send("/app/game/"+testGameState.getId(),new GameAction(GameActionType.FOLD,10));
+        }
+
+        testGameState=gameRepository.findOne(testGameState.getId());
+        int counter=0;
+        for(CompletableFuture<GameStateTransport> testTransport: testGameStateTransport){
+            GameStateTransport test=testTransport.get(10,TimeUnit.SECONDS);
+            assertTrue(!test.getPlayers()[counter].isFold());
+            counter++;
+        }
+        cleanUpUserRepository();
+        cleanUpGameRepository();
     }
 
     @Test
-    public void testGameRefusesActionsOfAllButCurrentPlayer() {}
+    public void testGameRefusesActionsOfAllButCurrentPlayer() throws Exception {
+        setUpUserRepository();
+
+        GameState testGameState = createTestGameState(GameStage.STARTED, GameState.GameType.CASUAL);
+
+        List<WebsocketSession> webSockets = new ArrayList<>();
+
+        for (Player p: testGameState.getPlayers()){
+            webSockets.add(new WebsocketSession(p.getName(),"Password"));
+        }
+        List<CompletableFuture<GameStateTransport>> testGameStateTransport = new ArrayList<>();
+        for(WebsocketSession webSocket: webSockets){
+            testGameStateTransport.add(webSocket.subscribe(gameStateMessagePath+testGameState.getId(),GameStateTransport.class));
+
+            webSocket.send("/app/game/"+testGameState.getId(),new GameAction(GameActionType.FOLD,10));
+        }
+
+        testGameState=gameRepository.findOne(testGameState.getId());
+        int counter=0;
+        for(CompletableFuture<GameStateTransport> testTransport: testGameStateTransport){
+            GameStateTransport test=testTransport.get(10,TimeUnit.SECONDS);
+            if (counter!=3) {
+                assertTrue(!test.getPlayers()[counter].isFold());
+            } else {
+                assertTrue(test.getPlayers()[counter].isFold());
+            }
+            counter++;
+        }
+
+        cleanUpUserRepository();
+        cleanUpGameRepository();
+    }
 
     @Test
-    public void testGameFold() {}
+    public void testGameFold() {
+        setUpUserRepository();
+
+        cleanUpUserRepository();
+        cleanUpGameRepository();
+    }
 
     @Test
-    public void testGameBet() {}
+    public void testGameBet() {
+        setUpUserRepository();
+
+        cleanUpUserRepository();
+        cleanUpGameRepository();
+    }
 
     @Test
     public void testGameCheck() {}
