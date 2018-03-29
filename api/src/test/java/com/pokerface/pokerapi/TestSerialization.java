@@ -1,6 +1,5 @@
 package com.pokerface.pokerapi;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pokerface.pokerapi.game.*;
 import com.pokerface.pokerapi.users.UserInfoTransport;
@@ -11,7 +10,6 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.Arrays;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class TestSerialization {
@@ -99,7 +97,7 @@ public class TestSerialization {
     public void testUserTransportSerialization() throws IOException {
         assertTrue("can not serialize", mapper.canSerialize(UserTransport.class));
         assertTrue("can not deserialize", mapper.canDeserialize(mapper.constructType(UserTransport.class)));
-        String serialized = mapper.writer().writeValueAsString(new UserTransport(1, "Jason", "testing@test.ca"));
+        String serialized = mapper.writer().writeValueAsString(new UserTransport());
         UserTransport res = mapper.readValue(serialized, mapper.constructType(UserTransport.class));
     }
 

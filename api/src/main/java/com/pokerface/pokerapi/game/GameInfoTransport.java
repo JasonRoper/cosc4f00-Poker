@@ -4,7 +4,10 @@ public class GameInfoTransport {
     private long gameId;
 
     public GameInfoTransport() {
+    }
 
+    public GameInfoTransport(GameState gameState) {
+        this.gameId = gameState.getId();
     }
 
     public GameInfoTransport(long gameId) {

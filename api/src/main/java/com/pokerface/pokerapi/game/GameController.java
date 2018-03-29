@@ -180,7 +180,7 @@ public class GameController {
                         "Fred"
                 )}); // jason
         gameState.setBigBlind(10);
-        gameState.setCommunityCards(Arrays.asList(new Card[]{Card.SPADES_QUEEN, Card.SPADES_SEVEN, Card.SPADES_KING}));
+        gameState.setCommunityCards(Arrays.asList(Card.SPADES_QUEEN, Card.SPADES_SEVEN, Card.SPADES_KING));
         gameState.setPotSum(30);
 
         return gameState.reason(GameStateTransport.Reason.PLAYER_ACTION, "");
@@ -271,16 +271,19 @@ public class GameController {
                 gameStateTransport.reason(GameStateTransport.Reason.PLAYER_JOINED, "User has joined"));
         return new GameInfoTransport(gameID);
     }
-//
-//    @GetMapping("/api/v1/games")
-//    public void getGameListing() {
-//        gameService.getGameStateList();
-//    }
-//
-//    @PostMapping("/api/v1/games")
-//    public void createCasualGame(Principal principal) {
-//        gameService.createGame(10);
-//    }
+
+    @GetMapping("/api/v1/games")
+    public void getGameListing() {
+        gameService.getGameStateList();
+    }
+
+    @PostMapping("/api/v1/games")
+    public GameInfoTransport createCustomGame(Principal principal) {
+
+        GameInfoTransport newGame = new GameInfoTransport(gameService.createGame(3, GameState.GameType.CUSTOM));
+        gameService.getGameState(newGame.getGameId()).addPlayer(userService.getUserByUsername(principal.getName()).getId(), principal.getName());
+        return newGame;
+    }
 
     /**
      * This method getsGameInfo of a specific game and responds with the info the user needs to display it
@@ -291,6 +294,19 @@ public class GameController {
     @GetMapping("/api/v1/games/{id}")
     public GameStateTransport getGameInfo(@PathVariable("id") long gameID) {
         return gameService.getGameStateTransport(gameID);
+    }
+
+    @GetMapping("/api/v1/games/{id}/cards")
+    public HandTransport getUserHand(@PathVariable("id") long gameID, Principal principal) {
+        UserInfoTransport user = userService.getUserByUsername(principal.getName());
+
+        HandTransport hand = gameService.getHandTransport(gameID, user.getId());
+
+        if (hand == null) {
+            throw new CardAccessNotPermittedException(user.getUsername(), gameID);
+        }
+
+        return hand;
     }
 
 
