@@ -50,7 +50,7 @@ export default class GameMech {
   public multiplePlayers: Player[] = []
   public potSum: number = 0
   public communityCards: string[] = []
-  public userId: number | null
+  public playerId: number = -1
   public userAction: GameAction | null = null
 
   public endGame: boolean = false
@@ -64,36 +64,30 @@ export default class GameMech {
   public checkAction: number = 0
   public possibleAction: GameActionType [][] = [[GameActionType.BET, GameActionType.FOLD, GameActionType.CHECK],
     [GameActionType.CALL, GameActionType.RAISE, GameActionType.FOLD], [GameActionType.FOLD]]
-  private lobby: boolean
   private gameService: GameService
 
   /**
    * Creates a Game Mechanics that the user uses to play the game
    * @class Creates Game Mechanics class
    * @param gameId attaches user to listen to gameId
-   * @param userId Creates table for user or for a lobby
+   * @param playerId Creates table for user or for a lobby
    */
-  constructor (gameId: number, userId?: number) {
-    this.gameService = new GameService(gameId, userId)
+  constructor (gameId: number, username: string) {
+    this.gameService = new GameService(gameId)
     this.gameId = gameId
-    this.userId = userId ? userId : null
     this.gameService.onGameUpdated(this.setGameTransport.bind(this))
     this.gameService.onGameFinished(this.onGameFinishedEvent.bind(this))
     this.gameService.onGameError(this.onGameError.bind(this))
 
-    // Verifies if a user Id was passed
-    if (userId) {
-      // Allows user to receive cards
-      alert('This user has a UserId ' + userId)
-      this.gameService.onUserCards(this.onUserCardsEvent.bind(this))
-      this.lobby = false
-    } else {
-      alert('NO userId')
-      this.lobby = true
-    }
+    this.gameService.onUserCards(this.onUserCardsEvent.bind(this))
+
     axios.get(API_V1 + '/games/' + this.gameId).then((responce) => {
-      alert('got game state')
-      alert(responce)
+      console.log('Got Game State')
+      responce.data.players.forEach((item: any, index: number) => {
+        if (username === item.name) {
+          this.playerId = index
+        }
+      })
       this.setGameTransport(responce.data)
     }).catch((error) => {
       alert('having an error')
@@ -167,23 +161,15 @@ export default class GameMech {
    * Gets Player location within array
    * @returns player location in the Multiplayer Array
    */
-  public playerLoc (): number {
-    for (const play of this.multiplePlayers) {
-      if (play.id === this.userId) {
-        return play.id
-      }
-    }
-    return -1
-  }
 
   public getUser (): Player {
-    return this.multiplePlayers[this.playerLoc()]
+    return this.multiplePlayers[this.playerId]
   }
 
   public getOpponent (): Player[] {
     const opponents: Player[] = []
     this.multiplePlayers.forEach((player: Player, index: number) => {
-      if (index !== this.playerLoc()) {
+      if (index !== this.playerId) {
         opponents.push(player)
       }
     })
@@ -215,9 +201,10 @@ export default class GameMech {
    * @param userCards
    */
   public onUserCardsEvent (userCards: any) {
-
-    this.multiplePlayers[this.playerLoc()].card1 = userCards.cardOne
-    this.multiplePlayers[this.playerLoc()].card2 = userCards.cardTwo
+    alert('CardEvent was called')
+    // Vue.set(vm.userProfile, 'age', 27)
+    this.multiplePlayers[this.playerId].card1 = userCards.cardOne
+    this.multiplePlayers[this.playerId].card2 = userCards.cardTwo
   }
 
   /**
@@ -300,7 +287,7 @@ export default class GameMech {
    */
   public validatePreMove (move: GameAction) {
     // Confirm that you have enough money
-    if (this.multiplePlayers[this.playerLoc()].money < move.bet) {
+    if (this.multiplePlayers[this.playerId].money < move.bet) {
       alert('you do not have enough money')
       return false
     }
@@ -382,8 +369,8 @@ export default class GameMech {
         money: item.money,
         name: item.name,
         action: act,
-        card1: gameTransport.card1,
-        card2: gameTransport.card2,
+        card1: gameTransport.cardOne,
+        card2: gameTransport.cardTwo,
         currentBet: 0,
         isFold: item.fold,
         winnings: gameTransport.winnings,
@@ -468,7 +455,7 @@ export default class GameMech {
     // Confirms that you have an action to send
     if (this.userAction !== null) {
       // Confirms that it is your turn
-      if (this.playerLoc() === this.turn) {
+      if (this.playerId === this.turn) {
         // Confirms that this is a valid move
         if (this.validatePreMove(this.userAction)) {
           this.send(this.userAction)

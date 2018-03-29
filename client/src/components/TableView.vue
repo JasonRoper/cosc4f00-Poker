@@ -153,7 +153,7 @@ export default {
   data () {
     alert('just logged route' + this.$route.params.gameId)
     return {
-      mechanics: new GameMech(this.$route.params.gameId, state.state.userId),
+      mechanics: new GameMech(this.$route.params.gameId, state.state.username),
       // this.userId),
       numberofPlayer: 0,
       // numberofPlayers: 0,
@@ -169,11 +169,6 @@ export default {
   watch: {
     preivousnumberofPlayers  () {
       // this.mechanics = new GameMech(1, this.userId)
-    },
-    mechanics: function (newValue, oldValue) {
-      this.user = this.getUser()
-      this.opponents = this.getOpponents()
-      this.$forceUpdate()
     },
     numberofPlayers () {
       // console.log(this.numberofPlayers)
