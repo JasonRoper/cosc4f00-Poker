@@ -11,6 +11,7 @@
     <div class="row">
             <div id="sidebar"  class="col">
   <div class="SideBarContent" >
+    <div class="nameTitle">{{this.UserName}}</div> <br>
     <a href="" ><img src="../assets/Webgraphics/Opponent.svg" class=" border border-white rounded-circle" width="70" height="70"></a>
     <ul class="menu">
       <li><a>Poker Pals</a></li>
@@ -30,9 +31,10 @@
 </nav>
 <div class="tab-content" id="nav-tabContent">
   <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+        <button type="button" class="btn btn-default btn-circle backButton  inner-blue BackButton" @click="backButton()"><i class="fa fa-arrow-left  fa-2x"></i></button><br>
     <div class="pt-5 mt-3" >
   <div class="col-sm-center text-center" >
-    <div class="CompleteTable">
+
       <div v-if="this.userId === null">
         <seat  class="player" v-for="player in this.getOpponents()" :key="player.id" :data="player"></seat>
 
@@ -40,8 +42,10 @@
               <div class="inner-tableBorder">
           <player  class="player" v-for="player in this.mechanics.multiplePlayers" :key="player.id" :data="player">
         </player>
-        <div>
+            <div class="CompleteTable">
+        <div class= 'tableContent'>
          <h2 class="display-4 pr-4 pb-0  text-white">PokerPals!!<img src="../assets/Webgraphics/poker.png" width="70" height="70"></h2>
+         <div class= "tableHead"></div>
          <h5 class=" mr-5  pt-0 text-info">Pot:{{this.mechanics.pot}}</h5>
       <p class='Communitycards  ml-4  '>
         <card class='size' v-for="card in this.mechanics.communityCards" :key="card" :card="card"></card>
@@ -181,9 +185,15 @@ export default {
     },
     numberofPlayers () {
       return this.mechanics.getMultiplayers()
+    },
+    UserName () {
+      return this.$store.state.users.username
     }
   },
   methods: {
+    backButton () {
+      this.$router.push('Game')
+    },
     force () {
       console.log(this.mechanics.getMultiplayers())
     },
@@ -287,7 +297,7 @@ export default {
     let players = document.getElementsByClassName('player')
     let numberofPoints = players.length
     let degreeIncrument = 360 / numberofPoints
-    var radius = 238 // 280
+    var radius = 240 // 280
     var x = 0
     var y = 0
     let theta = 0
