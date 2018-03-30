@@ -208,6 +208,7 @@ public class GameController {
      */
     private GameStateTransport handleAction(long gameID, GameAction action, int playerID) {
         GameStateTransport nextGameState = gameService.handleAction(gameID, action, playerID);
+        nextGameState.reason(GameStateTransport.Reason.PLAYER_ACTION,playerID+" played an action.");
         messenger.convertAndSend("/messages/game/" + gameID, nextGameState);
 
         if (gameService.isHandEnd(gameID)) {

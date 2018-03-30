@@ -150,8 +150,7 @@ public class GameService {
      * @param gameState of the game being checked
      * @return boolean representing if the round is ended
      */
-    public boolean isRoundEnd(GameState gameState) {
-        return gameState.getPresentTurn() == gameState.getLastBet();
+    public boolean isRoundEnd(GameState gameState) {return gameState.getPreviousTurn() == gameState.getLastBet();
     }
 
     /**
@@ -337,6 +336,7 @@ public class GameService {
      */
     public GameStateTransport handleRound(long gameID) {
         GameState gameState = games.findOne(gameID);
+        gameState.advanceRound();
         games.save(gameState);
         return getGameStateTransport(gameState);
     }

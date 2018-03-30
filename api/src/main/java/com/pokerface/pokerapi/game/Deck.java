@@ -1,6 +1,7 @@
 package com.pokerface.pokerapi.game;
 
 import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.Fetch;
 
 import javax.persistence.*;
 import java.util.*;
@@ -25,7 +26,6 @@ public class Deck {
      */
 
     @ElementCollection
-
     public List<Card> getCards() {
         return cards;
     }
@@ -105,7 +105,7 @@ public class Deck {
      * A one to one relationship, each deck belongs to a GameState, and each GameState belongs to a Deck.
      * @return GameState the deck belongs to.
      */
-    @OneToOne
+    @OneToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="gameState")
     public GameState getGameState() {
         return gameState;

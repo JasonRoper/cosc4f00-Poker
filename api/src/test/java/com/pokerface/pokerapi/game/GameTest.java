@@ -277,16 +277,58 @@ public class GameTest {
     }
 
     @Test
-    public void testGameBet() {
+    public void testGameBet() throws Exception{
         setUpUserRepository();
 
+        GameState testGameState = createTestGameState(GameStage.STARTED, GameState.GameType.CASUAL);
+
+        List<WebsocketSession> webSockets = new ArrayList<>();
+
+        for (Player p: testGameState.getPlayers()){
+            webSockets.add(new WebsocketSession(p.getName(),"Password"));
+        }
+        CompletableFuture<GameStateTransport> testGameStateTransport;
+        GameStateTransport testTransport;
+        for(WebsocketSession webSocket: webSockets){
+            testGameStateTransport=webSockets.get(0).subscribe(gameStateMessagePath+testGameState.getId(),GameStateTransport.class);
+
+            webSocket.send("/app/game/"+testGameState.getId(),new GameAction(GameActionType.BET,50));
+            testTransport=testGameStateTransport.get(20,TimeUnit.SECONDS);
+        }
+
+        //TimeUnit.SECONDS.sleep(20);
+        testGameState=gameRepository.findOne(testGameState.getId());
+        assertTrue(testGameState.getPresentTurn()==0);
+        assertEquals(testGameState.getPlayers().get(3).getBet(),62);
+        assertEquals(testGameState.getMinimumBet(),62);
         cleanUpUserRepository();
         cleanUpGameRepository();
     }
 
     @Test
-    public void testGameCheck() {
+    public void testGameCheck() throws Exception {
         setUpUserRepository();
+        GameState testGameState = createTestGameState(GameStage.STARTED, GameState.GameType.CASUAL);
+
+        List<WebsocketSession> webSockets = new ArrayList<>();
+
+        for (Player p: testGameState.getPlayers()){
+            webSockets.add(new WebsocketSession(p.getName(),"Password"));
+        }
+        CompletableFuture<GameStateTransport> testGameStateTransport;
+        GameStateTransport testTransport;
+        for(WebsocketSession webSocket: webSockets){
+            testGameStateTransport=webSockets.get(0).subscribe(gameStateMessagePath+testGameState.getId(),GameStateTransport.class);
+
+            webSocket.send("/app/game/"+testGameState.getId(),new GameAction(GameActionType.CHECK,47283974));
+            testTransport=testGameStateTransport.get(20,TimeUnit.SECONDS);
+        }
+
+        //TimeUnit.SECONDS.sleep(20);
+        testGameState=gameRepository.findOne(testGameState.getId());
+        assertTrue(testGameState.getPresentTurn()==0);
+        assertEquals(testGameState.getPlayers().get(3).getBet(),12);
+        assertEquals(testGameState.getMinimumBet(),12);
 
         cleanUpUserRepository();
         cleanUpGameRepository();
@@ -296,7 +338,38 @@ public class GameTest {
     public void testInvalidAction() {}
 
     @Test
-    public void testRoundEnd() {}
+    public void testRoundEnd() throws Exception {
+
+        setUpUserRepository();
+        GameState testGameState = createTestGameState(GameStage.STARTED, GameState.GameType.CASUAL);
+
+        List<WebsocketSession> webSockets = new ArrayList<>();
+
+        for (Player p: testGameState.getPlayers()){
+            webSockets.add(new WebsocketSession(p.getName(),"Password"));
+        }
+        CompletableFuture<GameStateTransport> testGameStateTransport;
+        GameStateTransport testTransport;
+
+        while (testGameState.getRound()==1) {
+            for (WebsocketSession webSocket : webSockets) {
+                testGameStateTransport = webSockets.get(0).subscribe(gameStateMessagePath + testGameState.getId(), GameStateTransport.class);
+
+                webSocket.send("/app/game/" + testGameState.getId(), new GameAction(GameActionType.CHECK, 47283974));
+                testTransport = testGameStateTransport.get(20, TimeUnit.SECONDS);
+                testGameState = gameRepository.findOne(testGameState.getId());
+            }
+        }
+
+        //TimeUnit.SECONDS.sleep(20);
+        testGameState=gameRepository.findOne(testGameState.getId());
+        assertTrue(testGameState.getRound()==2);
+        assertEquals(testGameState.getPlayers().get(3).getBet(),12);
+        assertEquals(testGameState.getMinimumBet(),12);
+
+        cleanUpUserRepository();
+        cleanUpGameRepository();
+    }
 
     @Test
     public void testAllButOneFold() {}
