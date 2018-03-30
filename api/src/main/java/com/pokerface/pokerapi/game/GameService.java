@@ -52,6 +52,7 @@ public class GameService {
 
         GameState gameState = games.findOne(gameID);
         if (gameState.getPresentTurn() == playerID && gameState.isHasStarted()) {
+            action.setBet(Math.abs(action.getBet()));
             Player player = gameState.getPlayer(playerID);
             if (action.getType() == GameActionType.BET||action.getType()==GameActionType.RAISE) {
                 bet(gameState, action, player);
@@ -149,8 +150,7 @@ public class GameService {
      * @param gameState of the game being checked
      * @return boolean representing if the round is ended
      */
-    public boolean isRoundEnd(GameState gameState) {
-        return gameState.getPresentTurn() == gameState.getLastBet();
+    public boolean isRoundEnd(GameState gameState) {return gameState.getPreviousTurn() == gameState.getLastBet();
     }
 
     /**
@@ -340,6 +340,7 @@ public class GameService {
      */
     public GameStateTransport handleRound(long gameID) {
         GameState gameState = games.findOne(gameID);
+        gameState.advanceRound();
         games.save(gameState);
         return getGameStateTransport(gameState);
     }

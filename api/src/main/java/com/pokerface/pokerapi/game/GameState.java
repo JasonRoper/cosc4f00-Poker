@@ -29,7 +29,6 @@ public class GameState {
     private boolean hasStarted=false;
     private GameType gameType;
     private int maxPlayers = 6;
-
     private int previousTurn;
 
     /**
@@ -126,7 +125,7 @@ public class GameState {
      * gets the Deck attached to the gameState
      * @return a Deck object
      */
-    @OneToOne(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+    @OneToOne(mappedBy = "gameState", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
     @JoinColumn
     public Deck getDeck() {
         return deck;
@@ -572,6 +571,15 @@ public class GameState {
 
     public void setMaxPlayers(int maxPlayers) {
         this.maxPlayers = maxPlayers;
+    }
+
+    public void advanceRound(){
+        round++;
+        if (round==2){
+            communityCardFour=deck.dealCard();
+        } else if (round==3){
+            communityCardFive=deck.dealCard();
+        }
     }
 
     @Override
