@@ -4,11 +4,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.FORBIDDEN)
-public class CardAccessNotPermittedException extends RuntimeException {
+public class UserAccessNotPermittedException extends RuntimeException {
     private final long gameID;
 
-    public CardAccessNotPermittedException(String username, long gameID) {
-        super("user " + username + " is not permitted to access cards for game " + gameID);
+    public UserAccessNotPermittedException(String username, long gameID, String resource) {
+        super("user " + username + " is not permitted to access to " + resource + " for game " + gameID);
         this.gameID = gameID;
     }
 

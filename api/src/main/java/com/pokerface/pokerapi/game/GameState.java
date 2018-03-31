@@ -477,6 +477,7 @@ public class GameState {
             nextTurn();
         }
         players.remove(player);
+        playerCount--;
         return true;
     }
 
