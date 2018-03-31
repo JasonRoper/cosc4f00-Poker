@@ -342,6 +342,10 @@ export default class GameMech {
           this.handFinished(gameTransport)
           break
         }
+        case Event.USER_ACTION: {
+          this.playerAction(gameTransport)
+          break
+        }
         default: {
           alert('still running default transport')
           this.defaultGameTransport(gameTransport)
@@ -364,6 +368,25 @@ export default class GameMech {
     // If the player has premove staged then they will move it
     // this.sendAction()
     // this.setTableActions()
+  }
+
+  public playerAction (gameTransport: any) {
+    console.log('Start of Object.assign')
+    console.log(this.multiplePlayers)
+    this.multiplePlayers = Object.assign(this.multiplePlayers, gameTransport.players)
+    console.log(this.multiplePlayers)
+    console.log('End of object.assign')
+    this.communityCards = []
+    Array.from(gameTransport.communityCards).forEach((card: any) => {
+      if (card === null) {
+        this.communityCards.push(Card.BLANK_CARD)
+      } else {
+        this.communityCards.push(card)
+      }
+    })
+    this.bigBlind = gameTransport.bigBlind
+    this.turn = gameTransport.nextPlayer
+    this.potSum = gameTransport.potSum
   }
 
   public gameStarted (gameTransport: any) {
@@ -424,7 +447,7 @@ export default class GameMech {
       this.multiplePlayers = []
       gameTransport.players.forEach((item: any, index: number) => {
         const act: GameActionType | null = (item.action.type !== null) ? item.action : null
-        console.log('This is for the is it your turn' + index + ' ' + gameTransport.nextPlayer)
+        // console.log('This is for the is it your turn' + index + ' ' + gameTransport.nextPlayer)
         const userTurn: boolean = (index === gameTransport.nextPlayer)
         const player: Player = {
           id: item.id,

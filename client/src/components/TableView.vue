@@ -35,7 +35,7 @@
     <div class="pt-5 mt-3" >
   <div class="col-sm-center text-center" >
 
-      <div v-if="this.userId === null">
+      <div v-if="this.mechanics.playerId === null">
         <seat  class="player" v-for="player in this.getOpponents()" :key="player.id" :data="player"></seat>
 
       </div>
@@ -76,17 +76,18 @@
 
 
      <div class="Action text-center lead text-muted">
+       <input v-model="this.money" placeholder="0">
         <div class="ActionTitle">
           Fold
         </div>
-        <button type="button" class="btn btn-lg fold" v-on:click="fold(money)" :disabled="this.mechanics.foldAction == 1"><strong><i class="fa fa-remove fa-lg "></i></strong></button>
+        <button type="button" class="btn btn-lg fold" v-on:click="fold(this.money)" :disabled="this.mechanics.foldAction == 1"><strong><i class="fa fa-remove fa-lg "></i></strong></button>
         </div>
 
               <div class="Action text-center lead text-muted">
         <div class="ActionTitle">
           Call
         </div>
-        <button type="button" class="btn  btn-lg CALL "  v-on:click="call(money)" :disabled="this.mechanics.callAction == 1"><i class="fa fa-dollar  fa-lg"></i>{{BigBlindCurrentBet}}</button>
+        <button type="button" class="btn  btn-lg CALL "  v-on:click="call(this.money)" :disabled="this.mechanics.callAction == 1"><i class="fa fa-dollar  fa-lg"></i>{{BigBlindCurrentBet}}</button>
         </div>
 
 
@@ -94,14 +95,14 @@
         <div class="ActionTitle">
         Bet/Raise
         </div>
-        <button type="button" class="btn  btn-lg Bet "  v-on:click="bet(money)" :disabled="this.mechanics.betAction == 1"><i class="fa fa-chevron-up  fa-lg"></i></button>
+        <button type="button" class="btn  btn-lg Bet "  v-on:click="bet(this.money)" :disabled="this.mechanics.betAction == 1"><i class="fa fa-chevron-up  fa-lg"></i></button>
         </div>
 
          <div class="Action text-center lead text-muted">
         <div class="ActionTitle">
         Raise
         </div>
-        <button type="button" class="btn  btn-lg Bet " v-on:click="raise(money)" :disabled="this.mechanics.raiseAction == 1"><i class="fa fa-chevron-up  fa-lg"></i></button>
+        <button type="button" class="btn  btn-lg Bet " v-on:click="raise(this.money)" :disabled="this.mechanics.raiseAction == 1"><i class="fa fa-chevron-up  fa-lg"></i></button>
         </div>
 
       </div>
@@ -155,10 +156,8 @@ export default {
     return {
       UserName: state.state.username,
       mechanics: new GameMech(this.$route.params.gameId, state.state.username),
-      // this.userId),
-      userId: this.mechanics.playerId,
       numberofPlayer: 0,
-      // numberofPlayers: 0,
+      money: '0',
       preivousnumberofPlayers: 0,
       BigBlindCurrentBet: 0,
       user: 0,
@@ -170,8 +169,8 @@ export default {
   */
   watch: {
     mechanics: function (newValue, oldValue) {
-      this.user = this.mechanics.getUser()
-      this.opponents = this.mechanics.getOpponents()
+      this.user = this.getUser()
+      this.opponents = this.getOpponents()
     },
     preivousnumberofPlayers  () {
       // this.mechanics = new GameMech(1, this.userId)
