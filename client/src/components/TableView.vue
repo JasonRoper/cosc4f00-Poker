@@ -156,6 +156,7 @@ export default {
       UserName: state.state.username,
       mechanics: new GameMech(this.$route.params.gameId, state.state.username),
       // this.userId),
+      userId: this.mechanics.playerId,
       numberofPlayer: 0,
       // numberofPlayers: 0,
       preivousnumberofPlayers: 0,
@@ -168,9 +169,9 @@ export default {
   Below Should really be updated to avoid visual issues
   */
   watch: {
-    mechanics: function () {
-      user: this.mechanics.getUser()
-      opponents: this.mechanics.getOpponents()
+    mechanics: function (newValue, oldValue) {
+      this.user = this.mechanics.getUser()
+      this.opponents = this.mechanics.getOpponents()
     },
     preivousnumberofPlayers  () {
       // this.mechanics = new GameMech(1, this.userId)
@@ -316,7 +317,7 @@ export default {
       x = radius * Math.cos(theta * Math.PI / 180.0).toFixed(3) // Convert to radians
       y = radius * Math.sin(theta * Math.PI / 180.0).toFixed(3)
       players[i].style.transform = 'translateX(' + x + 'pt) translateY(' + y + 'pt)'
-      console.log('heres you x: ' + x + 'here your y:' + y + 'at ' + theta)
+      // console.log('heres you x: ' + x + 'here your y:' + y + 'at ' + theta)
     }
   },
   destroyed () {
