@@ -239,10 +239,20 @@ public class GameController {
      * @param gameID    the long gameID to remove
      * @param principal the user identification
      */
-    @DeleteMapping("api/v1/game/{gameID}/")
-    public void playerLeaveGame(@DestinationVariable("game_id") long gameID, Principal principal) {
+    @DeleteMapping("/api/v1/games/{gameID}/{userID}")
+    public ResponseEntity playerLeaveGame(@PathVariable("gameID") long gameID,
+                                @PathVariable("userID") long userID,
+                                Principal principal) {
+
         UserInfoTransport user = userService.getUserByUsername(principal.getName());
+
+        if (user.getId() != userID) {
+            throw new UserAccessNotPermittedException(user.getUsername(), gameID, "deletion of user " + userID);
+        }
+
         gameService.removePlayer(gameID, user.getId());
+
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
 
@@ -294,7 +304,11 @@ public class GameController {
      */
     @GetMapping("/api/v1/games/{id}")
     public GameStateTransport getGameInfo(@PathVariable("id") long gameID) {
-        return gameService.getGameStateTransport(gameID);
+        GameStateTransport game = gameService.getGameStateTransport(gameID);
+
+        if (game == null) throw new GameDoesNotExistException(gameID);
+
+        return game;
     }
 
     @GetMapping("/api/v1/games/{id}/cards")
@@ -304,7 +318,7 @@ public class GameController {
         HandTransport hand = gameService.getHandTransport(gameID, user.getId());
 
         if (hand == null) {
-            throw new CardAccessNotPermittedException(user.getUsername(), gameID);
+            throw new UserAccessNotPermittedException(user.getUsername(), gameID, "cards");
         }
 
         return hand;
