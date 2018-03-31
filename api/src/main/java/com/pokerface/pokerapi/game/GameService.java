@@ -400,9 +400,15 @@ public class GameService {
      * @param userID the long ID of the user to be removed
      * @return if it worked, boolean value
      */
-    public boolean removePlayer(long gameID, long userID) {
-        games.findOne(gameID).removePlayer(userID);
-        return true;
+    public int removePlayer(long gameID, long userID) {
+        GameState gameState=games.findOne(gameID);
+        gameState.removePlayer(userID);
+        games.save(gameState);
+        return gameState.getPlayerCount();
+    }
+
+    public void removeGame(long gameID){
+games.delete(gameID);
     }
 
     public GameStateTransport gameStart(long gameID) {

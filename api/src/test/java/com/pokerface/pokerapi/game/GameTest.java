@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
@@ -388,6 +389,23 @@ public class GameTest {
 
     @Test
     public void testPlayerDisconnectAndTimeOutDuringGame() {}
+
+    @Test
+    public void testPlayerQuit() throws Exception{
+        setUpUserRepository();
+        GameState testGameState = createTestGameState(GameStage.STARTED, GameState.GameType.CASUAL);
+        long gameID=testGameState.getId();
+        TestRestTemplate adminRest = restTemplate.withBasicAuth("aba", "Password");
+        ResponseEntity<Map> matchmakingResponse = adminRest.exchange("/api/v1/games/"+testGameState.getId(), HttpMethod.DELETE,null,Map.class);
+        assertEquals(matchmakingResponse.getStatusCode(), HttpStatus.NO_CONTENT);
+
+        testGameState=gameRepository.findOne(gameID);
+
+        assertEquals(testGameState.getPlayerCount(),testGameState.getPlayers().size(),3);
+
+        cleanUpUserRepository();
+        cleanUpGameRepository();
+    }
 
     public GameState createTestGameState(GameStage stage,GameState.GameType gameType) {
         GameState result = new GameState();

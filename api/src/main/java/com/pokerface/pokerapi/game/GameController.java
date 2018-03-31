@@ -338,11 +338,17 @@ public class GameController {
 
     @DeleteMapping("/api/v1/games/{id}")
     public ResponseEntity leaveGame(@PathVariable("id") long gameID, Principal principal) {
-        gameService.removePlayer(gameID, userService.getUserByUsername(principal.getName()).getId());
+        if (gameService.removePlayer(gameID, userService.getUserByUsername(principal.getName()).getId())==1){
+          closeGame(gameID);
+        }
         GameStateTransport gameStateTransport = gameService.getGameStateTransport(gameID);
         gameStateTransport.reason(GameStateTransport.Reason.PLAYER_LEFT, principal.getName() + " has left.");
         messenger.convertAndSend("/messages/games/" + gameID, gameStateTransport);
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+    }
+
+    public void closeGame(long gameID){
+        gameService.removeGame(gameID);
     }
 
 

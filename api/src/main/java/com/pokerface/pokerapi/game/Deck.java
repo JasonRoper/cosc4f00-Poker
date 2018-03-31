@@ -25,7 +25,7 @@ public class Deck {
      * id is the identifier of the deck, used as a primary key to identify which game it belongs to.
      */
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     public List<Card> getCards() {
         return cards;
     }
