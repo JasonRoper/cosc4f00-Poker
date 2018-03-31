@@ -52,7 +52,7 @@ export default class GameMech {
   public communityCards: string[] = []
   public playerId: number = -1
   public userAction: GameAction | null = null
-
+  public hasGameStarted: boolean = false
   public endGame: boolean = false
   public username: string = ''
   public disable: number = 1
@@ -64,7 +64,6 @@ export default class GameMech {
   public checkAction: number = 0
   public possibleAction: GameActionType [][] = [[GameActionType.BET, GameActionType.FOLD, GameActionType.CHECK],
     [GameActionType.CALL, GameActionType.RAISE, GameActionType.FOLD], [GameActionType.FOLD]]
-  public userName: string = ''
 
   private gameService: GameService
 
@@ -91,7 +90,7 @@ export default class GameMech {
     //   this.lobby = true
     // }
     axios.get(API_V1 + '/games/' + this.gameId).then((responce) => {
-      console.log('Got Game State')
+      console.log('Asking for gamestate to join game')
       responce.data.players.forEach((item: any, index: number) => {
         if (username === item.name) {
           this.playerId = index
@@ -211,8 +210,7 @@ export default class GameMech {
    */
   public onUserCardsEvent (userCards: any) {
     alert('User CardsEvent was called')
-    alert(userCards)
-    console.log(userCards)
+    console.log('The users cards are: ' + userCards.cardOne + ' and ' + userCards.cardTwo)
     this.multiplePlayers[this.playerId].card1 = userCards.cardOne
     this.multiplePlayers[this.playerId].card2 = userCards.cardTwo
   }
@@ -236,7 +234,7 @@ export default class GameMech {
   public storePremove (action: GameActionType, money: number): boolean {
     const move: GameAction = { type: action, bet: money }
     if (this.validatePreMove(move)) {
-      console.log(this.username + ' Premove was validated')
+      console.log(this.username + ' Premove was valid')
       this.disableButton(action)
       this.userAction = move
       if (this.sendAction()) {
@@ -302,18 +300,18 @@ export default class GameMech {
   public validatePreMove (move: GameAction) {
     // Confirm that you have enough money
     if (this.multiplePlayers[this.playerId].money < move.bet) {
-      console.log(move + 'you do not have enough money')
+      console.log(this.username + ' ' + move + 'you do not have enough money')
       return false
     }
     // Confirm that you made a valid move
     if (this.hasBet) {
       if (this.possibleAction[1].indexOf(move.type) === -1) {
-        console.log('you have not made a valid move')
+        console.log(this.username + ' ' + move + 'you have not made a valid move possibleAction[1]')
         return false
       }
     } else {
       if (this.possibleAction[0].indexOf(move.type) === -1) {
-        console.log('you have not made a valid move')
+        console.log(this.username + ' ' + move + 'you have not made a valid move possibleAction[0]')
         return false
       }
     }
@@ -349,6 +347,8 @@ export default class GameMech {
           this.defaultGameTransport(gameTransport)
         }
       }
+      console.log('User: ' + this.multiplePlayers[this.playerId].name)
+      console.log('Turn: ' + this.multiplePlayers[this.turn].name)
     } else {
       alert('Using the deafult')
       this.defaultGameTransport(gameTransport)
@@ -368,8 +368,9 @@ export default class GameMech {
 
   public gameStarted (gameTransport: any) {
     alert('The Gamestarted method has bee invoked')
-    alert('You should be receiving your hands')
-    console.log(gameTransport)
+    console.log(this.username + ' should be receiving your hand soon')
+    console.log(this.username + ' The game has started')
+    this.hasGameStarted = true
     // this.multiplePlayers[0].action = gameTransport.players[0].action
   }
 
@@ -411,49 +412,51 @@ export default class GameMech {
   }
 
   public defaultGameTransport (gameTransport: any) {
-    this.multiplePlayers = []
-    this.communityCards = []
     alert('GameTransport')
     console.log(gameTransport)
-    // this.multiplePlayers[0].action = gameTransport.players[0].action
-    gameTransport.players.forEach((item: any, index: number) => {
-      const act: GameActionType | null = (item.action.type !== null) ? item.action : null
-      const userTurn: boolean = (index === gameTransport.nextPlayer)
-      const player: Player = {
-        id: item.id,
-        money: item.money,
-        name: item.name,
-        action: act,
-        card1: Card.BLANK_CARD,
-        card2: Card.BLANK_CARD,
-        currentBet: 0,
-        isFold: item.fold,
-        winnings: 0,
-        isPlayer: item.player,
-        isDealer: item.dealer,
-        isTurn: userTurn
-      }
-      this.multiplePlayers.push(player)
-    })
-    Array.from(gameTransport.communityCards).forEach((card: any) => {
-      if (card === null) {
-        this.communityCards.push(Card.CLUBS_ACE)
-      } else {
-        this.communityCards.push(card)
-      }
-    })
+    if (this.hasGameStarted) {
+      console.log('Start of Object.assign')
+      console.log(this.multiplePlayers)
+      this.multiplePlayers = Object.assign(this.multiplePlayers, gameTransport.players)
+      console.log(this.multiplePlayers)
+      console.log('End of object.assign')
+    } else {
+      this.multiplePlayers = []
+      gameTransport.players.forEach((item: any, index: number) => {
+        const act: GameActionType | null = (item.action.type !== null) ? item.action : null
+        console.log('This is for the is it your turn' + index + ' ' + gameTransport.nextPlayer)
+        const userTurn: boolean = (index === gameTransport.nextPlayer)
+        const player: Player = {
+          id: item.id,
+          money: item.money,
+          name: item.name,
+          action: act,
+          card1: Card.BLANK_CARD,
+          card2: Card.BLANK_CARD,
+          currentBet: 0,
+          isFold: item.fold,
+          winnings: 0,
+          isPlayer: item.player,
+          isDealer: item.dealer,
+          isTurn: userTurn
+        }
+        this.multiplePlayers.push(player)
+      })
+
+      this.communityCards = []
+      Array.from(gameTransport.communityCards).forEach((card: any) => {
+        if (card === null) {
+          this.communityCards.push(Card.BLANK_CARD)
+        } else {
+          this.communityCards.push(card)
+        }
+      })
+    }
     this.bigBlind = gameTransport.bigBlind
     this.turn = gameTransport.nextPlayer
     this.potSum = gameTransport.potSum
   }
 
-  /**
-   * Confirms that the GameService connection is still running
-   * @returns Boolean
-   */
-  public isGameRunning () {
-    return this.gameService.connected()
-  }
   public testSend (action: GameActionType, money: number) {
     const move: GameAction = { type: action, bet: money }
     this.gameService.userSendAction(move)
@@ -477,7 +480,7 @@ export default class GameMech {
         // Confirms that this is a valid move
         if (this.validatePreMove(this.userAction)) {
           this.send(this.userAction)
-          console.log('Themove was sent')
+          console.log(this.username + ' sent the move')
           this.userAction = null
           return true
         }

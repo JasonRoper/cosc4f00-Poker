@@ -153,6 +153,7 @@ export default {
   data () {
     alert('just logged route' + this.$route.params.gameId)
     return {
+      UserName: state.state.username,
       mechanics: new GameMech(this.$route.params.gameId, state.state.username),
       // this.userId),
       numberofPlayer: 0,
@@ -167,6 +168,10 @@ export default {
   Below Should really be updated to avoid visual issues
   */
   watch: {
+    mechanics: function () {
+      user: this.mechanics.getUser()
+      opponents: this.mechanics.getOpponents()
+    },
     preivousnumberofPlayers  () {
       // this.mechanics = new GameMech(1, this.userId)
     },
@@ -294,7 +299,7 @@ export default {
       x = radius * Math.cos(theta * Math.PI / 180.0).toFixed(3) // Convert to radians
       y = radius * Math.sin(theta * Math.PI / 180.0).toFixed(3)
       players[i].style.transform = 'translateX(' + x + 'pt) translateY(' + y + 'pt)'
-      console.log('heres you x: ' + x + 'here your y:' + y + 'at ' + theta)
+      // console.log('heres you x: ' + x + 'here your y:' + y + 'at ' + theta)
     }
     setInterval(this.force, 3000) // checking if player ammount has changed to update board
   },
