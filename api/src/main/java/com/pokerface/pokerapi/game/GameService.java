@@ -351,6 +351,7 @@ public class GameService {
         winnings=gameState.getPot().resolveWinnings(winners);
         gameState.applyWinnings(winnings);
         HandEndTransport handEndTransport = new HandEndTransport(winnings, gameState.getPlayers());
+        gameState.setHasStarted(false);
         games.save(gameState);
         return handEndTransport;
     }
@@ -510,5 +511,10 @@ games.delete(gameID);
         GameState gameState = games.findOne(gameID);
         Player p = gameState.getPlayer(userID);
         return p != null;
+    }
+
+    public void setUpNextHand(long gameID){
+        GameState gameState=games.findOne(gameID);
+        gameState.startGame();
     }
 }

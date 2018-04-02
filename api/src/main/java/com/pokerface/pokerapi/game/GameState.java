@@ -18,7 +18,7 @@ public class GameState {
     private Pot pot= new Pot(); // Each represents how much each player has put in.
     //First round, the flop/ the turn/the river
     private int lastBet; //PlayerTableID
-    private int dealer; //PlayerTableID
+    private int dealer=-1; //PlayerTableID
     private int minimumBet; // the minimum bet required to stay in the round
     private int presentTurn;//Whose action is it?
     private int round;//What round are we on, enum? from 0-4, 0 transition value? 1 pre-bet, 2/3/4 is flop turn river respectively.
@@ -381,7 +381,9 @@ public class GameState {
      * advances to the dealer to the next player
      */
     public void advanceDealer(){
-        players.get(dealer).setDealer(false);
+        if (dealer!=-1) {
+            players.get(dealer).setDealer(false);
+        }
         dealer++;
         if (dealer>=players.size()){
             dealer=0;
@@ -482,7 +484,7 @@ public class GameState {
     }
 
     public void startGame(){
-        dealer=0;
+        advanceDealer();
         deck=new Deck(this);
         pot = new Pot(playerCount,this);
 
@@ -616,6 +618,15 @@ public class GameState {
         for (int i=0;i<winnings.length;i++){
             players.get(i).setCashOnHand(players.get(i).getCashOnHand()+winnings[i]);
         }
+    }
+
+
+    public void clearCommunityCards(){
+        communityCardOne=null;
+        communityCardTwo=null;
+        communityCardThree=null;
+        communityCardFour=null;
+        communityCardFive=null;
     }
 
     @Override
