@@ -28,7 +28,7 @@ public class GameStateTransport {
     public GameStateTransport(GameState gameState){
         this.communityCards=gameState.receiveCommunityCards();
 
-        this.potSum = gameState.getPotSum();
+        this.potSum = gameState.calculatePotSum();
         this.bigBlind = gameState.getBigBlind();
         this.multiplePlayers = new PlayerTransport[gameState.getPlayerCount()];
 

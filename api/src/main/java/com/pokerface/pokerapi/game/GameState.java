@@ -629,7 +629,7 @@ public class GameState {
         communityCardFive=null;
     }
 
-    public int getPotSum(){
+    public int calculatePotSum(){
         int sum=0;
         for (Player p: players){
             sum+=p.getBet();
