@@ -413,9 +413,12 @@ export default {
         return // Must add CSS for this action
       } else {
         this.LoginisBlank = false
-        this.login(this.Player) // Servery queries for login
+        this.login(this.Player).then((responce) => {
+          this.checkLoginErrors()
+        })
+        // Servery queries for login
         // add animation
-        setTimeout(this.checkLoginErrors, 3000) // Chec Login Errors after 900 ms
+        // setTimeout(this.checkLoginErrors, 3000) // Chec Login Errors after 900 ms
       }
       this.ResetVariables()
     },
@@ -437,8 +440,10 @@ export default {
         return // Must add CSS for this action
       } else {
         this.RegisterisBlank = false
-        this.register(this.RegisterPlayer)
-        setTimeout(this.checkRegisterErrors, 4000) // Check Registratio Errors after 900 ms
+        this.register(this.RegisterPlayer).then(() => {
+          this.checkRegisterErrors()
+        })
+        // setTimeout(this.checkRegisterErrors, 4000) // Check Registratio Errors after 900 ms
       }
       this.ResetVariables()
     },
