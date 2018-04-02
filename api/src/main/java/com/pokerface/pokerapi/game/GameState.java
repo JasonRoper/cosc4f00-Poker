@@ -320,7 +320,7 @@ public class GameState {
         player.setPlayerID(playerCount-1);
         player.setName(name);
         if (playerCount>=minPlayerCount&&hasStarted==false){
-            startTime=System.currentTimeMillis()+10000;
+            startTime=System.currentTimeMillis()+30000;
         }
         return players.size();
     }
@@ -627,6 +627,14 @@ public class GameState {
         communityCardThree=null;
         communityCardFour=null;
         communityCardFive=null;
+    }
+
+    public int getPotSum(){
+        int sum=0;
+        for (Player p: players){
+            sum+=p.getBet();
+        }
+        return sum;
     }
 
     @Override

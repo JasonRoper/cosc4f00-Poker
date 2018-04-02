@@ -458,7 +458,7 @@ games.delete(gameID);
 
     public List<Long> startingGameIDs(){
         List<Long> gameIDs = new ArrayList<>();
-        gameIDs = games.findWaitingToStartGamesIDs(System.currentTimeMillis() + 30000);
+        gameIDs = games.findWaitingToStartGamesIDs(System.currentTimeMillis());
         return gameIDs;
     }
 
