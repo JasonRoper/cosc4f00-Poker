@@ -46,7 +46,7 @@
         <div class= 'tableContent'>
          <h2 class="display-4 pr-4 pb-0  text-white">PokerPals!!<img src="../assets/Webgraphics/poker.png" width="70" height="70"></h2>
          <div class= "tableHead"></div>
-         <h5 class=" mr-5  pt-0 text-info">Pot:{{this.mechanics.pot}}</h5>
+         <h5 class=" mr-5  pt-0 text-info">Pot:{{this.mechanics.potSum}}</h5>
       <p class='Communitycards  ml-4  '>
         <card class='size' v-for="card in this.mechanics.communityCards" :key="card" :card="card"></card>
       </p>
@@ -58,7 +58,7 @@
     </div>
   </div>
       <div class="TableActions row">
-
+      <input v-model="money" placeholder="How much would you like to bet">
          <div class="Action text-center lead text-muted">
         <div class="ActionTitle">
         Chat
@@ -71,23 +71,23 @@
         <div class="ActionTitle">
         Check
         </div>
-        <button type="button" class="btn  btn-lg check"  v-on:click="check(money)" :disabled="this.mechanics.checkAction == 1"><i class="fa fa-check  fa-lg"></i></button>
+        <button type="button" class="btn  btn-lg check"  v-on:click="check()" :disabled="this.mechanics.checkAction == 1"><i class="fa fa-check  fa-lg"></i></button>
         </div>
 
 
      <div class="Action text-center lead text-muted">
-       <input v-model="this.money" placeholder="0">
+      
         <div class="ActionTitle">
           Fold
         </div>
-        <button type="button" class="btn btn-lg fold" v-on:click="fold(this.money)" :disabled="this.mechanics.foldAction == 1"><strong><i class="fa fa-remove fa-lg "></i></strong></button>
+        <button type="button" class="btn btn-lg fold" v-on:click="fold()" :disabled="this.mechanics.foldAction == 1"><strong><i class="fa fa-remove fa-lg "></i></strong></button>
         </div>
 
               <div class="Action text-center lead text-muted">
         <div class="ActionTitle">
           Call
         </div>
-        <button type="button" class="btn  btn-lg CALL "  v-on:click="call(this.money)" :disabled="this.mechanics.callAction == 1"><i class="fa fa-dollar  fa-lg"></i>{{BigBlindCurrentBet}}</button>
+        <button type="button" class="btn  btn-lg CALL "  v-on:click="call()" :disabled="this.mechanics.callAction == 1"><i class="fa fa-dollar  fa-lg"></i>{{BigBlindCurrentBet}}</button>
         </div>
 
 
@@ -95,26 +95,17 @@
         <div class="ActionTitle">
         Bet/Raise
         </div>
-        <button type="button" class="btn  btn-lg Bet "  v-on:click="bet(this.money)" :disabled="this.mechanics.betAction == 1"><i class="fa fa-chevron-up  fa-lg"></i></button>
+        <button type="button" class="btn  btn-lg Bet "  v-on:click="bet()" :disabled="this.mechanics.betAction == 1"><i class="fa fa-chevron-up  fa-lg"></i></button>
         </div>
 
          <div class="Action text-center lead text-muted">
         <div class="ActionTitle">
         Raise
         </div>
-        <button type="button" class="btn  btn-lg Bet " v-on:click="raise(this.money)" :disabled="this.mechanics.raiseAction == 1"><i class="fa fa-chevron-up  fa-lg"></i></button>
+        <button type="button" class="btn  btn-lg Bet " v-on:click="raise()" :disabled="this.mechanics.raiseAction == 1"><i class="fa fa-chevron-up  fa-lg"></i></button>
         </div>
 
       </div>
-      <div>Action: {{this.mechanics.userAction}}</div>
-        <!--<input v-model="money" placeholder="How much would you like to bet">-->
-        <button  v-on:click="fold(money)" :disabled="this.mechanics.foldAction == 1">FOLD</button>
-        <button v-on:click="check(money)" :disabled="this.mechanics.checkAction == 1">CHECK</button>
-        <button v-on:click="raise(money)" :disabled="this.mechanics.raiseAction == 1">RAISE</button>
-        <button v-on:click="call(money)" :disabled="this.mechanics.callAction == 1">CALL</button>
-        <button v-on:click="bet(money)" :disabled="this.mechanics.betAction == 1">BET</button>
-        <button v-on:click="sendAction()">Send Action To Server</button>
-              
  </div>
 </div>
 
@@ -168,10 +159,6 @@ export default {
   Below Should really be updated to avoid visual issues
   */
   watch: {
-    mechanics: function (newValue, oldValue) {
-      this.user = this.getUser()
-      this.opponents = this.getOpponents()
-    },
     preivousnumberofPlayers  () {
       // this.mechanics = new GameMech(1, this.userId)
     },
@@ -209,23 +196,23 @@ export default {
     check: function () {
       this.premove(GameActionType.CHECK, 0)
     },
-    call: function (money) {
-      if (money !== undefined) {
-        this.premove(GameActionType.CALL, money)
+    call: function () {
+      if (this.money !== undefined) {
+        this.premove(GameActionType.CALL, this.money)
       } else {
         console.log('Action: CALL - you are trying to CALL with no money')
       }
     },
-    raise: function (money) {
-      if (money !== undefined) {
-        this.premove(GameActionType.RAISE, money)
+    raise: function () {
+      if (this.money !== undefined) {
+        this.premove(GameActionType.RAISE, this.money)
       } else {
         console.log('Action: RAISE - you are trying to raise with no money')
       }
     },
-    bet: function (money) {
-      if (money !== undefined) {
-        this.premove(GameActionType.BET, money)
+    bet: function () {
+      if (this.money !== undefined) {
+        this.premove(GameActionType.BET, this.money)
       } else {
         alert('you are trying to Bet with no money')
       }
@@ -237,7 +224,10 @@ export default {
       this.mechanics.sendAction()
     },
     premove: function (action, money) {
-      if (this.mechanics.turn === this.mechanics.playerId) {
+      alert('Tried to make tableAction ' + money)
+      money = parseInt(money)
+      alert('money is still ' + money)
+      if (this.mechanics.turn === this.mechanics.playerId && typeof money === 'number' && money >= 0) {
         console.log('You are attempting to send a move to the server')
         if (this.mechanics.storePremove(action, money)) {
           console.log('You sent a move to there server ' + action + ' with ' + money)
