@@ -10,6 +10,18 @@
   border-radius: 50%;
  
 }
+.around-words2.inner-green {
+
+  align-content: center;
+  text-align: center;
+  background: rgba(11, 211, 4, 0.925);}
+
+  .around-words2.inner-gold {
+
+    align-content: center;
+    text-align: center;
+    color:black;
+    background: rgb(238, 255, 0);}
 
 .around-words.inner-blue,.around-words2.inner-blue{
 

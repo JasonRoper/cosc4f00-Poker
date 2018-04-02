@@ -1,11 +1,75 @@
 <template>
 
 <div id="page-bg"    class="container-fluid text-sm-center mycontent ">
+                 <!-- <h2 class="display-1 completeTop text-white  mt-2 fixed-top ">PokerPals!!  <img src="../assets/Webgraphics/poker.png" width="100" height="100">
+                         <form  class=" gameeventBar form-control bg-warning   ">
+
+              <div class="input-group input-group-lg ">
+
+  <input v-model="mechanics.gameStatus" id="Events"  type="number" class="form-control mx-5 text-center bg-secondary lead text-light  " placeholder="Event Bar" aria-label="Event Bar" aria-describedby="basic-addon1" >
+            </div>
+           </form>
+                 </h2> -->
+  
+<div class="page-Nav">    
     <div class="menu-icon" @click="toggleSidebar()" >
       <span></span>
       <span></span>
       <span></span>
     </div>
+    
+    
+        <div class="tabAction-icon" @click="toggleTableAction()" >
+      <span></span>
+      <span> <button type="button" class="btn btn-default btn-circle   tabAction-chip  inner-orange">TA</button><br>
+      </span>
+    </div>
+
+    <form  class=" statsBar form-control bg-light-transparent   ">
+
+         <div class="input-group input-group ">
+
+
+<label> User: </label>
+             </div>
+
+              <div class="input-group input-group">
+                
+
+  <input v-model="mechanics.gameStatus" id="Events"  type="number" class="form-control mx-2 text-center bg-secondary lead text-light  " placeholder="Event Bar" aria-label="Event Bar" aria-describedby="basic-addon1" disabled>
+            </div>
+
+         <div class="input-group input-group ">
+
+
+<label> Chips: </label>
+             </div>
+
+              <div class="input-group input-group ">
+                
+
+  <input v-model="mechanics.gameStatus" id="Events"  type="number" class="form-control mx-2 text-center bg-secondary lead text-light  " placeholder="Event Bar" aria-label="Event Bar" aria-describedby="basic-addon1" disabled >
+            </div>
+            
+           </form>
+    <form  class=" eventgameBar form-control bg-warning   ">
+
+              <div class="input-group input-group-lg ">
+
+  <input v-model="mechanics.gameStatus" id="Events"  type="number" class="form-control mx-3 text-center bg-secondary lead text-light  " placeholder="Event Bar" aria-label="Event Bar" aria-describedby="basic-addon1" >
+            </div>
+           </form>
+ <div class="tabAction-icon" >
+      <span>
+ <button type="button" class="btn btn-default btn-circle    tabAction-chip navigate  inner-blue" @click="backButton()"><i  style="font-size:28px" class="fa fa-arrow-left"></i></button><br>
+      </span>
+    </div>
+                    <!-- <h2 class="display-2  text-white  mt-2  ">PokerPals!!  <img src="../assets/Webgraphics/poker.png" width="0" height="50"> </h2> -->
+
+
+</div>
+
+
   <div class="container text-sm-center mycontent "  >
     <!-- <div  class=" container text-lg-center"> -->
     <div class="row">
@@ -21,43 +85,119 @@
     </ul>
   </div>
 </div>
-      <div id="page-content">
-        <nav class="text-center">
-  <div class="nav nav-tabs" id="nav-tab" role="tablist">
-    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Game</a>
-    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Profile</a>
-    <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Community</a>
-  </div>
-</nav>
-<div class="tab-content" id="nav-tabContent">
-  <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-        <button type="button" class="btn btn-default btn-circle backButton  inner-blue BackButton" @click="backButton()"><i class="fa fa-arrow-left  fa-2x"></i></button><br>
-    <div class="pt-5 mt-3" >
-  <div class="col-sm-center text-center" >
+            <div id="TableActions"  class="col">
+  <div class="TA-SideBarContent" >
+     <div class="TableActions row">
 
-      <div v-if="this.mechanics.playerId === null">
-        <seat  class="player" v-for="player in this.getOpponents()" :key="player.id" :data="player"></seat>
+         <!-- <div class="Action text-center lead text-muted">
+        <div class="ActionTitle">
+        Chat
+        </div>
+        <button type="button" class="btn  btn-lg chat "><i class="fa fa-comments  fa-lg"></i></button>
+        </div> -->
+
+        
+         <div class="Action text-center lead text-muted">
+        <div class="ActionTitle">
+        Check
+        </div>
+        <button type="button" class="btn  btn-lg check"  v-on:click="check(money)" :disabled="this.mechanics.checkAction == 1"><i class="fa fa-check  fa-lg"></i></button>
+        </div>
+
+
+     <div class="Action text-center lead text-muted">
+        <div class="ActionTitle">
+          Fold
+        </div>
+        <button type="button" class="btn btn-lg fold" v-on:click="fold(money)" :disabled="this.mechanics.foldAction == 1"><strong><i class="fa fa-remove fa-lg "></i></strong></button>
+        </div>
+
+              <div class="Action text-center lead text-muted">
+        <div class="ActionTitle">
+          Call
+        </div>
+        <button type="button" class="btn  btn-lg CALL "  v-on:click="call(money)" :disabled="this.mechanics.callAction == 1"><i class="fa fa-dollar  fa-lg"></i>{{BigBlindCurrentBet}}</button>
+        </div>
+
+
+         <div class="Action text-center lead text-muted">
+        <div class="ActionTitle">
+        Bet/Raise
+        </div>
+        <button type="button" class="btn  btn-lg Bet "  v-on:click="bet(money)" :disabled="this.mechanics.betAction == 1"><i class="fa fa-chevron-up  fa-lg"></i></button>
+        </div>
+
+         <!-- <div class="Action text-center lead text-muted">
+        <div class="ActionTitle">
+        Raise
+        </div>
+        <button type="button" class="btn  btn-lg Bet " v-on:click="raise(money)" :disabled="this.mechanics.raiseAction == 1"><i class="fa fa-chevron-up  fa-lg"></i></button>
+        </div> -->
+
+   <form  class="form-control bg-warning mt-5 mx-4 ">
+
+              <div class="input-group input-group-lg ">
+
+  <input v-model="money"  type="number" class="form-control mx-5 text-center bg-secondary lead text-light  " placeholder="Event Bar" aria-label="Event Bar" aria-describedby="basic-addon1" >
+            </div>
+           </form>
 
       </div>
-              <div class="inner-tableBorder">
+  </div>
+</div>
+      <div id="page-content">
+               <!-- <h2 class="display-1 text-white  mt-2 ">PokerPals!!  <img src="../assets/Webgraphics/poker.png" width="100" height="100"></h2> -->
+
+
+         <!-- <form  class="form-control mx-0 bg-warning mt-2 "> -->
+              <!-- <div class="input-group input-group-lg "> -->
+
+                    <!-- <card width="40" height="40" class=" singleCard"  :key="BLANK_CARD" :card="BLANK_CARD"></card> -->
+         <!-- <button type="button" class="btn btn-default btn-circle backButton  inner-blue BackButton" @click="backButton()"><i class="fa fa-arrow-left  fa-2x"></i></button><br> -->
+
+  <!-- <input id="Events"  v-model="mechanics.gameStatus" type="text" class="form-control mx-5 text-center bg-secondary lead text-light  " placeholder="Event Bar" aria-label="Event Bar" aria-describedby="basic-addon1" disabled> -->
+        <!-- <button type="button" class="btn btn-default btn-circle backButton  inner-blue BackButton" @click="backButton()"><i class="fa fa-arrow-left  fa-2x"></i></button><br> -->
+
+            <!-- </div>  -->
+            
+           <!-- </form> -->
+    <div >
+  <div class="col-sm-center text-center " >
+      <!-- <div v-if="this.userId === null">
+        <seat  class="player" v-for="player in this.getOpponents()" :key="player.id" :data="player"></seat>
+
+      </div> -->
+              <div class="inner-tableBorder my-5">
           <player  class="player" v-for="player in this.mechanics.multiplePlayers" :key="player.id" :data="player">
         </player>
             <div class="CompleteTable">
         <div class= 'tableContent'>
          <h2 class="display-4 pr-4 pb-0  text-white">PokerPals!!<img src="../assets/Webgraphics/poker.png" width="70" height="70"></h2>
          <div class= "tableHead"></div>
-         <h5 class=" mr-5  pt-0 text-info">Pot:{{this.mechanics.pot}}</h5>
+   
+         <h2 class=" mr-5  pt-0 text-info">Pot:<span class="text-warning"> {{this.mechanics.pot}}</span><img src="../assets/Webgraphics/chipPile.png" style="decoration:none" width="55" height="55"></h2>
       <p class='Communitycards  ml-4  '>
         <card class='size' v-for="card in this.mechanics.communityCards" :key="card" :card="card"></card>
       </p>
-      DECK
-        <p class='DECK  mt-4 pt-4 '>
-        <card  class= "DECKsize mt-4" v-for="card in this.mechanics.communityCards" :key="card" :card="card"></card>
+        <p id="theDeck"class='DECK mt-4 pt-4 '>
+                    <transition-group name="deckCard">
+
+        <card  class= "deckCard DECKsize mt-4" v-for="card in this.mechanics.communityCards" :key="card" :card="card"></card>
+                    </transition-group>
       </p>
       </div>
     </div>
   </div>
-      <div class="TableActions row">
+              <button v-on:click="layCommunity()">Second Round of Betting </button>
+
+        <button type="button" class="btn btn-default btn-circle backButton  inner-blue BackButton" @click="doCountDown()">quit</button><br>
+
+      <div class="row">
+              <div class="col">
+        <button type="button" class="btn btn-default btn-circle backButton  inner-blue BackButton" @click="backButton()"><i class="fa fa-arrow-left  fa-2x"></i></button><br>
+        </div>
+                </div>
+      <!-- <div class="TableActions row">
 
          <div class="Action text-center lead text-muted">
         <div class="ActionTitle">
@@ -105,23 +245,23 @@
         <button type="button" class="btn  btn-lg Bet " v-on:click="raise(this.money)" :disabled="this.mechanics.raiseAction == 1"><i class="fa fa-chevron-up  fa-lg"></i></button>
         </div>
 
-      </div>
-      <div>Action: {{this.mechanics.userAction}}</div>
+      </div> -->
+      <!-- <div>Action: {{this.mechanics.userAction}}</div> -->
         <!--<input v-model="money" placeholder="How much would you like to bet">-->
-        <button  v-on:click="fold(money)" :disabled="this.mechanics.foldAction == 1">FOLD</button>
+        <!-- <button  v-on:click="fold(money)" :disabled="this.mechanics.foldAction == 1">FOLD</button>
         <button v-on:click="check(money)" :disabled="this.mechanics.checkAction == 1">CHECK</button>
         <button v-on:click="raise(money)" :disabled="this.mechanics.raiseAction == 1">RAISE</button>
         <button v-on:click="call(money)" :disabled="this.mechanics.callAction == 1">CALL</button>
         <button v-on:click="bet(money)" :disabled="this.mechanics.betAction == 1">BET</button>
-        <button v-on:click="sendAction()">Send Action To Server</button>
-              
+        <button v-on:click="sendAction()">Send Action To Server</button> -->
  </div>
 </div>
 
-  </div>
+  <!-- </div> -->
   <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">...</div>
   <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">...</div>
-</div>
+<!-- </div> -->
+
         </div>
       </div>
     <!-- </div> -->
@@ -154,7 +294,7 @@ export default {
   data () {
     alert('just logged route' + this.$route.params.gameId)
     return {
-      UserName: state.state.username,
+      // UserName: state.state.username,
       mechanics: new GameMech(this.$route.params.gameId, state.state.username),
       numberofPlayer: 0,
       money: '0',
@@ -172,17 +312,56 @@ export default {
       this.user = this.getUser()
       this.opponents = this.getOpponents()
     },
-    preivousnumberofPlayers  () {
-      // this.mechanics = new GameMech(1, this.userId)
-    },
     numberofPlayers () {
-      // console.log(this.numberofPlayers)
-      // this.mechanics.setGame()
+      console.log(this.numberofPlayers)
+      this.mechanics.setGame()
+    },
+    EventBarMessage () {
+      alert('Change change change')
+    }
+  },
+  computed: {
+    numberofPlayers () {
+      return this.mechanics.getMultiplayers()
+    },
+    UserName () {
+      return this.$store.state.users.username
+    },
+    EventBarMessage () {
+      return this.mechanics.gameStatus
     }
   },
   methods: {
+    layCommunity () {
+      var card = document.getElementsByClassName('deckCard')
+      for (let i = 0; i < card.length; i++) {
+        card[0].style.transform = 'translateX(' + 60 + 'pt) translateY(' + -60 + 'pt) rotateY(-180deg)'
+        //  alert('card', i)
+      }
+    },
+    doCountDown () {
+      var countDown = new Date()
+      countDown.setMinutes(countDown.getMinutes() + 1) // countDown.getMinutes() + numberofMins
+      var x = setInterval(function () {
+        var now = new Date()
+        var distance = countDown - now
+        var days = Math.floor(distance / (1000 * 60 * 60 * 24))
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000)
+        this.EventBarMessage = days + 'd' + hours + 'h' + minutes + 'm' + seconds + 's '
+        console.log('checking')
+        document.getElementById('Events').value = this.EventBarMessage
+        if (distance < 0) {
+          clearInterval(x)
+          alert('Done')
+          document.getElementById('Events').value = ''
+        }
+      }, 1000)
+      document.getElementById('Events').value = ''
+    },
     backButton () {
-      this.$router.push('Game')
+      this.$router.push('/Game')
     },
     force () {
       // console.log(this.mechanics.getMultiplayers())
@@ -260,6 +439,14 @@ export default {
     adjustsideBar: function () {
       document.getElementById('page-content').classList.remove('active')
       document.getElementById('sidebar').classList.remove('active')
+    },
+    toggleTableAction: function () {
+      document.getElementById('TableActions').classList.toggle('active')
+      document.getElementById('page-content').classList.toggle('active')
+    },
+    adjustsideActionBar: function () {
+      document.getElementById('page-content').classList.remove('active')
+      document.getElementById('TableActions').classList.remove('active')
     }
   },
   components: {
@@ -284,6 +471,7 @@ export default {
   mounted () {
     this.$nextTick(function () {
       window.addEventListener('resize', this.adjustsideBar)
+      // window.addEventListener('resize2', this.adjustsideActionBar)
     })
     // Circle equation for displaying player corectly  in a circle
     // Put Get Opponents in the players
@@ -301,7 +489,7 @@ export default {
       players[i].style.transform = 'translateX(' + x + 'pt) translateY(' + y + 'pt)'
       // console.log('heres you x: ' + x + 'here your y:' + y + 'at ' + theta)
     }
-    setInterval(this.force, 3000) // checking if player ammount has changed to update board
+    // setInterval(this.force, 3000) // checking if player ammount has changed to update board
   },
   updated: function () {
     let players = document.getElementsByClassName('player')

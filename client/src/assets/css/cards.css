@@ -1,13 +1,33 @@
-.Playingcard:hover{
-  transform: rotatey(180deg);
+.pokerCard{
   transition: transform 500ms cubic-bezier(.2,-0.02,.39,1.27);
-
-  /* border: white 23px solid; */
+  transform-style: preserve-3d;
 }
+.pokerCard:hover {
+  transform: rotateY(-180deg)
+  
+}
+.topCard,.bottomCard{
+  backface-visibility: hidden;
+}
+.topCard{
+  position: absolute;
+  /* z-index: 1; */
+  
+}
+.bottomCard{
+  /* position: absolute; */
+  transform: rotatey(-180deg);
+
+  /* z-index: 0; */
+}
+
+
 .Playingcard{
-  width:107px;
+  width:104px;
   height:142px;
   background-repeat: no-repeat;
+  /* transform: rotatey(-140deg); */
+
 }
 .blank.card{
     background: url("../cards/Back Blue 1.png");

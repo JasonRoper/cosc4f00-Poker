@@ -1,22 +1,37 @@
 <template>
 <div >
-       <h2 class="display-1 text-white pb-2 mt-2 pb-2">PokerPals!!  <img src="../assets/Webgraphics/poker.png" width="100" height="100"></h2>
+       <h2 class="display-1 text-white">PokerPals!!  <img src="../assets/Webgraphics/poker.png" width="100" height="100"></h2>
+      <audio id="AudioSource" src="../assets/Audio/chipsHandle3.wav" >
+          <!-- <source src="Cowboy.mp3" type="audio/mpeg"> -->
+      </audio>
+         <audio id="AudioSource2" src="../assets/Audio/chipLay1.wav" >
+          <!-- <source src="Cowboy.mp3" type="audio/mpeg"> -->
+      </audio>
         <div v-show="GameMenu">
         <h2 class="display-4 text-white pb-3 text-left ml-5 pl-5 mr-0 mt-5 pt-5"><u>MAIN MENU</u> </h2>
-        <div class="text-center mx-4 ">
-        <div class="chip-holder"><button class="around-words inner-yellow btn btn-lg" @click="showInstructPoker()"><hr><div class="inner-button  btn btn-lg">Instructional Poker</div><hr></button></div>
-      <div class="chip-holder"><button class="around-words inner-green btn btn-lg" @click="showCasualPoker()"><hr><div >Casual Poker</div><hr></button></div>
-        <div class="chip-holder"><button class="around-words inner-blue btn btn-lg" @click="chipChoice('CompetitivePoker')"><hr><div class="btn btn-lg">Competitive Poker</div><hr></button></div>
+        <div class="text-center mx-4 my-2 ">
+        <div  class="chip-holder"><button  @mouseleave="chiprelaseSound()" @mouseover="chipSound()" class="around-words inner-yellow btn btn-lg" @click="showInstructPoker()"><hr><div class="inner-button  btn btn-lg">Instructional Poker</div><hr></button></div>
+      <div  class="chip-holder"><button  @mouseleave="chiprelaseSound()" @mouseover="chipSound()" class="around-words inner-green btn btn-lg" @click="showCasualPoker()"><hr><div >Casual Poker</div><hr></button></div>
+        <div  class="chip-holder"><button @mouseleave="chiprelaseSound()" @mouseover="chipSound()"  class="around-words inner-blue btn btn-lg" @click="chipChoice('CompetitivePoker')"><hr><div class="btn btn-lg">Competitive Poker</div><hr></button></div>
       </div>
       </div>
           <div  v-show="instrcutionPokerMode">
-      <div >
+      <div   >
       <h2 class="display-4 text-white  text-left ml-5 pl-5 mr-0 mt-3 pt-3 "> 
         <button type="button" class="btn btn-default btn-circle backButton  inner-blue" @click="backButton()"><i class="fa fa-arrow-left  fa-2x"></i></button><br>
-        <u>Instructional(CPU) Poker</u> </h2>
-       <div class="pt-5 mt-5">
-       <div class="chip-holder "><button class="around-words inner-grey btn btn-lg" @click="chipChoice('PokerTutorial')"><hr><div class="button-title">Poker Tutorial</div><hr></button></div>
-        <div class="chip-holder "><button data-toggle="modal" data-target="#Register2" class="around-words inner-orange btn btn-lg"><hr> CPU Challenge<hr></button></div>
+        <u>Instructional Poker</u> </h2>
+        <div v-show="instructionalSelection" class="instructionalButtons">
+       <div  v-show="!instrcutionSubMenu" class="pt-5 mt-5">
+       <div class="chip-holder "><button  @mouseleave="chiprelaseSound()" @mouseover="chipSound()" class="around-words inner-grey btn btn-lg" @click="chipChoice('PokerTutorial')"><hr><div class="button-title">Poker Tutorial</div><hr></button></div>
+        <div class="chip-holder "><button  @mouseleave="chiprelaseSound()" @mouseover="chipSound()" data-toggle="modal" data-target="#Register2" class="around-words inner-orange btn btn-lg"><hr> CPU Challenge<hr></button></div>
+            </div>
+        <div  v-show="instrcutionSubMenu" class="pt-5 mt-5">
+       <div class="chip-holder "><button  @mouseleave="chiprelaseSound()" @mouseover="chipSound()" class="around-words2 inner-green btn btn-lg" @click="chipChoice('InteractiveTutorial')"><hr><div class="button-title">Interactive Tutorial</div><hr></button></div>
+       <div class="chip-holder "><button  @mouseleave="chiprelaseSound()" @mouseover="chipSound()" class="around-words2 inner-gold btn btn-lg" @click="chipChoice('PokerVideo')"><hr><div class="button-title">Video Tutorial</div><hr></button></div>
+            </div>
+            </div>
+            <div  v-show="videoSelect" class='instructional Video'>
+            <instructVideo></instructVideo>
               </div>
               </div>
       </div>
@@ -29,22 +44,13 @@
       <div>
       <h2 class="display-4 text-white text-left ml-3 pl-3 mt-3 pt-3"> <button type="button" class="btn btn-default btn-circle backButton  inner-green" @click="backButton()"><i class="fa fa-arrow-left  fa-2x"></i></button><br><u>Casual Poker</u> </h2>
               <div class="pt-0">
-         <div class="chip-holder pt-5 mt-5"><button class="around-words2 inner-grey btn btn-lg" data-toggle="modal" data-target="#CreateCasualPoker"><hr><div class="button-title">Create Game</div><hr></button></div>
-        <div class="chip-holder pt-5 mt-5"><button class="around-words2 inner-blue btn btn-lg" data-toggle="modal" data-target="#JoinCasualPoker"><hr><button class="btn btn-lg">Join Game</button><hr></button></div>
+         <div class="chip-holder pt-5 mt-5"><button  @mouseleave="chiprelaseSound()" @mouseover="chipSound()" class="around-words2 inner-grey btn btn-lg" data-toggle="modal" data-target="#CreateCasualPoker"><hr><div class="button-title">Create Game</div><hr></button></div>
+        <div class="chip-holder pt-5 mt-5"><button   @mouseleave="chiprelaseSound()" @mouseover="chipSound()" class="around-words2 inner-blue btn btn-lg" data-toggle="modal" data-target="#JoinCasualPoker"><hr><button class="btn btn-lg">Join Game</button><hr></button></div>
               </div>
               </div>
       </div>
 
 
-        <div  v-show="showTable">
-      <div>
-      <h2 class="display-4 text-white text-left ml-5 pl-5 mr-0 "> <button type="button" class="btn btn-default btn-circle" @click="backButton()">back</button><u>Casual</u> </h2>
-              <div class="pt-0">
-                <table-view :userId="1" >
-              </table-view>
-              </div>
-              </div>
-      </div>
 <!--==================*
      CPU CHALLENG MODAL !! 
 *==================-->
@@ -209,6 +215,7 @@
   /Casual Poker  Join Game MODAL !! 
 *==================-->
 
+
 </div>
    <!-- <table-view :userId="1" ></table-view>  -->
 
@@ -217,14 +224,9 @@
 
 <script>
 import AvailbleGame from '@/components/AvailbleGame.vue'
-// import Player from '@/components/table/Player.vue'
-// import CardView from '@/components/table/Card'
-// import TableActions from '@/components/table/TableActions'
-// import { Card } from '@/types/cards'
-// import Actions from '@/types/actions'
-// import TableView from '@/components/TableView'
 import router from '@/router'
 import GameRequest from '@/store/GameRequest.ts'
+import InstrucVid from '@/components/InstrucVid'
 export default {
   data () {
     return {
@@ -240,14 +242,16 @@ export default {
       casualPokerMode: false,
       competitivePokerMode: false,
       showTable: false,
-      // mechanics: new GameMech(0, this.userId),
+      instrcutionSubMenu: false,
+      videoSelect: false,
+      instructionalSelection: true,
+      playHover: false,
       opponents: [{
         id: 1,
         username: 'Jasddon',
         account: 100000,
         // cards: [Card.HEARTS_ACE, Card.SPADES_TWO],
         bet: 110
-
       },
       {
         id: 2,
@@ -277,6 +281,18 @@ export default {
     }
   },
   methods: {
+    chiprelaseSound () {
+      if (this.playHover === true) {
+        document.getElementById('AudioSource2').play()
+        this.playHover = false
+      }
+    },
+    chipSound () {
+      if (this.playHover === false) {
+        document.getElementById('AudioSource').play()
+        this.playHover = true
+      }
+    },
     setAction (event) {
       this.user.nextAction = event
     },
@@ -298,15 +314,27 @@ export default {
       this.showTable = true
     },
     backButton () {
-      this.GameMenu = true
-      this.instrcutionPokerMode = false
-      this.casualPokerMode = false
-      this.competitivePokerMode = false
-      this.showTable = false
+      if (this.videoSelect === true) {
+        this.videoSelect = false
+        this.instructionalSelection = true
+      } else
+      if (this.instrcutionSubMenu === true) {
+        this.instrcutionSubMenu = false
+      } else {
+        this.GameMenu = true
+        this.instrcutionPokerMode = false
+        this.casualPokerMode = false
+        this.competitivePokerMode = false
+        this.showTable = false
+      }
     },
     chipChoice: function (choice) {
+      if (choice === 'PokerVideo') {
+        this.videoSelect = true
+        this.instructionalSelection = false
+      }
       if (choice === 'PokerTutorial') {
-        this.$router.push('Table')
+        this.instrcutionSubMenu = true
       }
       if (choice === 'CompetitivePoker') {
         alert('Lets Compete Poker')
@@ -340,7 +368,8 @@ export default {
     // actions: TableActions,
     // card: CardView,
     // tableView: TableView,
-    availbleGame: AvailbleGame
+    availbleGame: AvailbleGame,
+    instructVideo: InstrucVid
   }
 }
 </script>

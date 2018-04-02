@@ -1,9 +1,12 @@
 <template>
+  <div class=" Playingcard pokerCard">
+<div class=" Playingcard  blank card topCard">   </div>
 
-  <div  class="Playingcard" :class="cssMappings[this.card]">
+  <div  class="Playingcard bottomCard" :class="cssMappings[this.card]">
     <div  class='Pcard'>
-    {{this.card}}
+    <!-- {{this.card}} -->
     </div>
+  </div>
 
   </div>
 </template>
