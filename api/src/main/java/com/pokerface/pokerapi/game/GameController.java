@@ -233,27 +233,7 @@ public class GameController {
         return nextGameState;
     }
 
-    /**
-     * playerLeaveGame takes requests from a player to leave a game, or if they are idle for too long and removes them
-     *
-     * @param gameID    the long gameID to remove
-     * @param principal the user identification
-     */
-    @DeleteMapping("/api/v1/games/{gameID}/{userID}")
-    public ResponseEntity playerLeaveGame(@PathVariable("gameID") long gameID,
-                                @PathVariable("userID") long userID,
-                                Principal principal) {
 
-        UserInfoTransport user = userService.getUserByUsername(principal.getName());
-
-        if (user.getId() != userID) {
-            throw new UserAccessNotPermittedException(user.getUsername(), gameID, "deletion of user " + userID);
-        }
-
-        gameService.removePlayer(gameID, user.getId());
-
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
-    }
 
 
     /**
@@ -336,15 +316,30 @@ public class GameController {
 //        gameService.deleteGame(gameID)
 //    }
 
-    @DeleteMapping("/api/v1/games/{id}")
-    public ResponseEntity leaveGame(@PathVariable("id") long gameID, Principal principal) {
+    /**
+     * playerLeaveGame takes requests from a player to leave a game, or if they are idle for too long and removes them
+     *
+     * @param gameID    the long gameID to remove
+     * @param principal the user identification
+     */
+    @DeleteMapping("/api/v1/games/{gameID}/{userID}")
+    public ResponseEntity leaveGame(@PathVariable("gameID") long gameID,
+                                          @PathVariable("userID") long userID,
+                                          Principal principal) {
+
+        UserInfoTransport user = userService.getUserByUsername(principal.getName());
+
+        if (user.getId() != userID) {
+            throw new UserAccessNotPermittedException(user.getUsername(), gameID, "deletion of user " + userID);
+        }
+
         if (gameService.removePlayer(gameID, userService.getUserByUsername(principal.getName()).getId())==1){
-          closeGame(gameID);
+            closeGame(gameID);
         }
         GameStateTransport gameStateTransport = gameService.getGameStateTransport(gameID);
         gameStateTransport.reason(GameStateTransport.Reason.PLAYER_LEFT, principal.getName() + " has left.");
         messenger.convertAndSend("/messages/games/" + gameID, gameStateTransport);
-        return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
     public void closeGame(long gameID){

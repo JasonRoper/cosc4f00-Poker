@@ -443,7 +443,7 @@ public class GameTest {
         GameState testGameState = createTestGameState(GameStage.STARTED, GameState.GameType.CASUAL);
         long gameID=testGameState.getId();
         TestRestTemplate adminRest = restTemplate.withBasicAuth("aba", "Password");
-        ResponseEntity<Map> matchmakingResponse = adminRest.exchange("/api/v1/games/"+testGameState.getId(), HttpMethod.DELETE,null,Map.class);
+        ResponseEntity<Map> matchmakingResponse = adminRest.exchange("/api/v1/games/"+testGameState.getId()+"/"+userService.getUserByUsername("aba").getId(), HttpMethod.DELETE,null,Map.class);
         assertEquals(matchmakingResponse.getStatusCode(), HttpStatus.NO_CONTENT);
 
         testGameState=gameRepository.findOne(gameID);
