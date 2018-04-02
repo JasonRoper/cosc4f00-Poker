@@ -76,18 +76,29 @@
 
 
      <div class="Action text-center lead text-muted">
+<<<<<<< Updated upstream
       
         <div class="ActionTitle">
           Fold
         </div>
         <button type="button" class="btn btn-lg fold" v-on:click="fold()" :disabled="this.mechanics.foldAction == 1"><strong><i class="fa fa-remove fa-lg "></i></strong></button>
+=======
+        <div class="ActionTitle">
+          Fold
+        </div>
+        <button type="button" class="btn btn-lg fold" v-on:click="fold()" v-bind:disabled="this.mechanics.foldAction == 1"><strong><i class="fa fa-remove fa-lg "></i></strong></button>
+>>>>>>> Stashed changes
         </div>
 
               <div class="Action text-center lead text-muted">
         <div class="ActionTitle">
           Call
         </div>
+<<<<<<< Updated upstream
         <button type="button" class="btn  btn-lg CALL "  v-on:click="call()" :disabled="this.mechanics.callAction == 1"><i class="fa fa-dollar  fa-lg"></i>{{BigBlindCurrentBet}}</button>
+=======
+        <button type="button" class="btn  btn-lg CALL "  v-on:click="call()" v-bind:disabled="this.mechanics.callAction == 1"><i class="fa fa-dollar  fa-lg"></i>{{BigBlindCurrentBet}}</button>
+>>>>>>> Stashed changes
         </div>
 
 
@@ -95,17 +106,37 @@
         <div class="ActionTitle">
         Bet/Raise
         </div>
+<<<<<<< Updated upstream
         <button type="button" class="btn  btn-lg Bet "  v-on:click="bet()" :disabled="this.mechanics.betAction == 1"><i class="fa fa-chevron-up  fa-lg"></i></button>
+=======
+        <button type="button" class="btn  btn-lg Bet "  v-on:click="bet()" v-bind:disabled="this.mechanics.betAction == 1"><i class="fa fa-chevron-up  fa-lg"></i></button>
+>>>>>>> Stashed changes
         </div>
 
          <div class="Action text-center lead text-muted">
         <div class="ActionTitle">
         Raise
         </div>
+<<<<<<< Updated upstream
         <button type="button" class="btn  btn-lg Bet " v-on:click="raise()" :disabled="this.mechanics.raiseAction == 1"><i class="fa fa-chevron-up  fa-lg"></i></button>
         </div>
 
       </div>
+=======
+        <button type="button" class="btn  btn-lg Bet " v-on:click="raise()" v-bind:disabled="this.mechanics.raiseAction == 1"><i class="fa fa-chevron-up  fa-lg"></i></button>
+        </div>
+
+      </div>
+      <div>Action: {{this.mechanics.userAction}}</div>
+        <input v-model="money" placeholder="How much would you like to bet">
+        <button  v-on:click="fold()" :disabled="this.mechanics.foldAction == 1">FOLD</button>
+        <button v-on:click="check()" :disabled="this.mechanics.checkAction == 1">CHECK</button>
+        <button v-on:click="raise()" :disabled="this.mechanics.raiseAction == 1">RAISE</button>
+        <button v-on:click="call()" :disabled="this.mechanics.callAction == 1">CALL</button>
+        <button v-on:click="bet()" :disabled="this.mechanics.betAction == 1">BET</button>
+        <button v-on:click="sendAction()">Send Action To Server</button>
+              
+>>>>>>> Stashed changes
  </div>
 </div>
 
@@ -135,8 +166,10 @@ import { mapActions } from 'vuex' // used for maping actions of the vue store fi
 // import Actions from '@/types/actions'
 // import { GameService, GameActionType } from '@/api/gameservice'
 import GameMech from '@/store/GameMechanics.ts'
+import GameRequest from '@/store/GameRequest.ts'
 // import { GameAction } from '../api/gameservice'
 // import Game from '@/store/game.ts'
+import router from '@/router'
 import Seat from '@/components/table/Seat'
 import {GameActionType} from '@/api/gameservice.ts'
 import state from '../store/users'
@@ -148,8 +181,8 @@ export default {
       UserName: state.state.username,
       mechanics: new GameMech(this.$route.params.gameId, state.state.username),
       numberofPlayer: 0,
-      money: '0',
       preivousnumberofPlayers: 0,
+      money: '0',
       BigBlindCurrentBet: 0,
       user: 0,
       opponents: 0
@@ -178,8 +211,11 @@ export default {
       'logout'
     ]),
     logOut: function () {
-      this.logout()
-      this.$router.push('Home')
+      const logoutRequest = new GameRequest()
+      logoutRequest.removeCompetitiveGame(this.mechanics.gameId, state.state.userId).then((responce) => {
+        router.push({ name: 'Home' })
+        console.log(responce + 'success in delete request')
+      }).catch((error) => { console.log('Failed delete request' + error) })
     },
     getUser: function () {
       return this.mechanics.getUser()
