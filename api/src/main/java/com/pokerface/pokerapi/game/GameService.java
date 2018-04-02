@@ -343,6 +343,11 @@ public class GameService {
         }
 
         }
+        for (int i=0;i<winners.length;i++){
+            if (gameState.getPlayers().get(i).getHasFolded()){
+                winners[i]=1000;
+            }
+        }
         winnings=gameState.getPot().resolveWinnings(winners);
         gameState.applyWinnings(winnings);
         HandEndTransport handEndTransport = new HandEndTransport(winnings, gameState.getPlayers());
