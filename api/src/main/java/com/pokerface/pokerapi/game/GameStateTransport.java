@@ -19,6 +19,8 @@ public class GameStateTransport {
     private int nextPlayer;
     private Event event;
     private PlayerTransport[] multiplePlayers;
+    private boolean started;
+    private Long startTime;
 
     public GameStateTransport() {
 
@@ -28,7 +30,7 @@ public class GameStateTransport {
     public GameStateTransport(GameState gameState){
         this.communityCards=gameState.receiveCommunityCards();
 
-        this.potSum = gameState.getPot().getSum();
+        this.potSum = gameState.calculatePotSum();
         this.bigBlind = gameState.getBigBlind();
         this.multiplePlayers = new PlayerTransport[gameState.getPlayerCount()];
 
@@ -37,6 +39,8 @@ public class GameStateTransport {
             this.multiplePlayers[i] = new PlayerTransport(i, player.getCashOnHand(), player.getLastGameAction(), player.isAI(), player.getIsDealer(), player.getHasFolded(),player.getBet(),player.getName());
         }
         this.nextPlayer = gameState.getPresentTurn();
+        this.startTime = gameState.getStartTime();
+        this.started = gameState.isHasStarted();
     }
 
 
@@ -103,6 +107,22 @@ public class GameStateTransport {
         this.multiplePlayers = players;
     }
 
+    public boolean isStarted() {
+        return started;
+    }
+
+    public void setStarted(boolean started) {
+        this.started = started;
+    }
+
+    public Long getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Long startTime) {
+        this.startTime = startTime;
+    }
+
     /**
      * A class that contains an action, why the event is being sent, and an optional message for extra communication if necessary
      */
@@ -158,17 +178,21 @@ public class GameStateTransport {
         if (o == null || getClass() != o.getClass()) return false;
         GameStateTransport that = (GameStateTransport) o;
         return getPotSum() == that.getPotSum() &&
+                isStarted() == that.isStarted() &&
                 getBigBlind() == that.getBigBlind() &&
                 getNextPlayer() == that.getNextPlayer() &&
                 Objects.equals(getCommunityCards(), that.getCommunityCards()) &&
                 Objects.equals(getEvent(), that.getEvent()) &&
+                Objects.equals(getStartTime(), that.getStartTime()) &&
                 Arrays.equals(multiplePlayers, that.multiplePlayers);
     }
 
     @Override
     public int hashCode() {
 
-        int result = Objects.hash(getCommunityCards(), getPotSum(), getBigBlind(), getNextPlayer(), getEvent());
+        int result = Objects.hash(
+                getCommunityCards(), getPotSum(), getBigBlind(),
+                getNextPlayer(), getEvent(), isStarted(), startTime);
         result = 31 * result + Arrays.hashCode(multiplePlayers);
         return result;
     }

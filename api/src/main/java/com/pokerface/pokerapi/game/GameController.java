@@ -66,7 +66,7 @@ public class GameController {
             gameTransport.reason(GameStateTransport.Reason.GAME_STARTED, "the game has started");
             messenger.convertAndSend("/messages/game/"+gameID, gameTransport);
             long[] userIDs=gameService.getUserIDsFromGame(gameID);
-            for(long userID: gameService.getUserIDsFromGame(gameID)) {
+            for(long userID: userIDs) {
                 UserInfoTransport user = userService.getUser(userID);
                 HandTransport userHand = gameService.getHandTransport(gameID, userID);
                 messenger.convertAndSendToUser(user.getUsername(), "/messages/game/"+gameID, userHand);
