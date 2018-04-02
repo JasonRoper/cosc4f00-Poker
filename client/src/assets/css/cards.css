@@ -63,45 +63,43 @@
   background: url("../cards/Clubs 13.png");
 }
 
-
-
-.diamond.ace {
+.diamonds.ace {
   background: url("../cards/Diamond 1.png");
 }
-.diamond.two {
+.diamonds.two {
   background: url("../cards/Diamond 2.png");
 }
-.diamond.three {
+.diamonds.three {
   background: url("../cards/Diamond 3.png");
 }
-.diamond.four {
+.diamonds.four {
   background: url("../cards/Diamond 4.png");
 }
-.diamond.five {
+.diamonds.five {
   background: url("../cards/Diamond 5.png");
 }
-.diamond.six {
+.diamonds.six {
   background: url("../cards/Diamond 6.png");
 }
-.diamond.seven {
+.diamonds.seven {
   background: url("../cards/Diamond 7.png");
 }
-.diamond.eight {
+.diamonds.eight {
   background: url("../cards/Diamond 8.png");
 }
-.diamond.nine {
+.diamonds.nine {
   background: url("../cards/Diamond 9.png");
 }
-.diamond.ten {
+.diamonds.ten {
   background: url("../cards/Diamond 10.png");
 }
-.diamond.jack {
+.diamonds.jack {
   background: url("../cards/Diamond 11.png");
 }
-.diamond.queen {
+.diamonds.queen {
   background: url("../cards/Diamond 12.png");
 }
-.diamond.king {
+.diamonds.king {
   background: url("../cards/Diamond 13.png");
 }
 
