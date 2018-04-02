@@ -135,3 +135,9 @@
 =======
 >>>>>>> Stashed changes
 [0321/225124.451:ERROR:crash_report_database_win.cc(427)] unexpected header
+[0402/150244.107:ERROR:process_info.cc(329)] VirtualQueryEx: Access is denied. (0x5)
+[0402/150244.163:ERROR:process_info.cc(550)] ReadMemoryInfo failed
+[0402/150244.175:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0402/150244.176:ERROR:exception_snapshot_win.cc(88)] thread ID 8740 not found in process
+[0402/150244.176:WARNING:crash_report_exception_handler.cc(62)] ProcessSnapshotWin::Initialize failed
+[0402/150244.176:ERROR:scoped_process_suspend.cc(40)] NtResumeProcess: An attempt was made to access an exiting process. (0xc000010a)
