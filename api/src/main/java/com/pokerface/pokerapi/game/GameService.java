@@ -436,7 +436,7 @@ public class GameService {
     }
 
     public void removeGame(long gameID){
-games.delete(gameID);
+        games.delete(gameID);
     }
 
     public GameStateTransport gameStart(long gameID) {

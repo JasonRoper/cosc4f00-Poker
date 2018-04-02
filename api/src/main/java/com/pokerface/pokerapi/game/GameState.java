@@ -272,7 +272,7 @@ public class GameState {
      * returns a List of the players
      * @return List of the current players in the game
      */
-    @OneToMany(mappedBy = "gameState", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+    @OneToMany(mappedBy = "gameState", cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
     @OrderColumn
     public List<Player> getPlayers() {
         return players;
