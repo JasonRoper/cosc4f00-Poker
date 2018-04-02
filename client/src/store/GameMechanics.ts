@@ -110,6 +110,52 @@ export default class GameMech {
       })
     } else {
       console.log('The user is attempting to request a new game but is already in a game')
+<<<<<<< Updated upstream
+=======
+
+    }
+  }
+
+  /**
+   * Sets a default table for the player
+   * @returns Default Player Object
+   */
+  public setDefaultTransport () {
+    this.hasBet = false
+    this.turn = 0
+    this.multiplePlayers = [{
+      id: 0,
+      money: 500,
+      name: '3333333',
+      action: GameActionType.CALL,
+      card1: Card.BLANK_CARD,
+      card2: Card.BLANK_CARD,
+      currentBet: 600,
+      isPlayer: true,
+      isDealer: true,
+      isTurn: false,
+      isFold: true,
+      winnings: 0
+    }, {
+      id: 1,
+      money: 888,
+      name: 'test',
+      action: null,
+      card1: Card.CLUBS_ACE,
+      card2: Card.CLUBS_TWO,
+      currentBet: 0,
+      isFold: false,
+      winnings: 0,
+      isPlayer: false,
+      isTurn: false,
+      isDealer: false
+    }, this.defaultPlayer(), this.defaultPlayer() ,this.defaultPlayer(),this.defaultPlayer()]
+    this.gameId = 0
+    this.potSum = 0
+    this.communityCards = [Card.CLUBS_ACE, Card.CLUBS_EIGHT, 'three', 'four', 'five']
+    this.userAction = null
+  }
+>>>>>>> Stashed changes
 
     }
   }
@@ -165,6 +211,19 @@ export default class GameMech {
     this.multiplePlayers[this.playerId].card2 = userCards.cardTwo
     this.cardOne = userCards.cardOne
     this.cardTwo = userCards.cardTwo
+<<<<<<< Updated upstream
+=======
+  }
+
+  /**
+   * Adds cards to the Comminity Cards
+   * @param card
+   */
+  public onGameComminityCardsEvent (card: string) {
+    // if (this.communityCards.length <= 5) {
+    //  this.communityCards.push(card)
+    // }
+>>>>>>> Stashed changes
   }
 
   /**
@@ -295,8 +354,12 @@ export default class GameMech {
           break
         }
         default: {
+<<<<<<< Updated upstream
           alert('GAMETRANSPORT EVENT is ' + gameTransport.event.action + ' there is not proper case for this')
           console.log('GAMETRANSPORT EVENT is ' + gameTransport.event.action + ' there is not proper case for this')
+=======
+          alert('GAMETRANSPORT EVENT is ' + gameTransport.event.action)
+>>>>>>> Stashed changes
           this.defaultGameTransport(gameTransport)
         }
       }
@@ -305,6 +368,10 @@ export default class GameMech {
     } else {
       alert('GAMETRANSPORT EVENT is NULL')
       this.defaultGameTransport(gameTransport)
+    }
+    if (this.cardOne !== '' && this.cardTwo !== '') {
+      this.multiplePlayers[this.playerId].card1 = this.cardOne
+      this.multiplePlayers[this.playerId].card2 = this.cardTwo
     }
     /*
       HAND_STARTED = 'HAND_STARTED', // USER Joins the GAME
@@ -318,11 +385,14 @@ export default class GameMech {
     // this.sendAction()
     // this.setTableActions()
     console.log('Username: ' + state.state.username + ' UserId: ' + state.state.userId)
+<<<<<<< Updated upstream
   }
 
   public playerJoined (gameTransport: any) {
     this.multiplePlayers = Object.assign(this.multiplePlayers, gameTransport.players)
     this.setGameCards()
+=======
+>>>>>>> Stashed changes
   }
 
   public playerAction (gameTransport: any) {
@@ -340,6 +410,7 @@ export default class GameMech {
   }
 
   public gameStarted (gameTransport: any) {
+<<<<<<< Updated upstream
     console.log(this.username + ' The game has started GAME_STARTED TRIGGERED')
     this.multiplePlayers = Object.assign(this.multiplePlayers, gameTransport.players)
     this.setGameCards()
@@ -371,6 +442,17 @@ export default class GameMech {
   }
   public setPlayers (gameTransport: any) {
     this.multiplePlayers = []
+=======
+    console.log(this.username + ' The game has started')
+    this.hasGameStarted = true
+    // this.multiplePlayers[0].action = gameTransport.players[0].action
+  }
+
+  public handFinished (gameTransport: any) {
+    this.multiplePlayers = []
+    this.communityCards = []
+    // this.multiplePlayers[0].action = gameTransport.players[0].action
+>>>>>>> Stashed changes
     gameTransport.players.forEach((item: any, index: number) => {
       const act: GameActionType | null = (item.action.type !== null) ? item.action : null
       // console.log('This is for the is it your turn' + index + ' ' + gameTransport.nextPlayer)
@@ -404,6 +486,7 @@ export default class GameMech {
     })
   }
 
+<<<<<<< Updated upstream
   public setGameCards () {
     this.multiplePlayers.forEach((value: Player, index: number) => {
       if (index === this.playerId) {
@@ -417,6 +500,54 @@ export default class GameMech {
       }
     })
   }
+=======
+  public defaultGameTransport (gameTransport: any) {
+    console.log('DEFAULT GAMETRANSPORT')
+    console.log(gameTransport)
+    if (this.hasGameStarted) {
+      console.log('Start of Object.assign')
+      console.log(this.multiplePlayers)
+      this.multiplePlayers = Object.assign(this.multiplePlayers, gameTransport.players)
+      console.log(this.multiplePlayers)
+      console.log('End of object.assign')
+    } else {
+      this.multiplePlayers = []
+      gameTransport.players.forEach((item: any, index: number) => {
+        const act: GameActionType | null = (item.action.type !== null) ? item.action : null
+        // console.log('This is for the is it your turn' + index + ' ' + gameTransport.nextPlayer)
+        const userTurn: boolean = (index === gameTransport.nextPlayer)
+        const player: Player = {
+          id: item.id,
+          money: item.money,
+          name: item.name,
+          action: act,
+          card1: Card.BLANK_CARD,
+          card2: Card.BLANK_CARD,
+          currentBet: 0,
+          isFold: item.fold,
+          winnings: 0,
+          isPlayer: item.player,
+          isDealer: item.dealer,
+          isTurn: userTurn
+        }
+        this.multiplePlayers.push(player)
+      })
+
+      this.communityCards = []
+      Array.from(gameTransport.communityCards).forEach((card: any) => {
+        if (card === null) {
+          this.communityCards.push(Card.BLANK_CARD)
+        } else {
+          this.communityCards.push(card)
+        }
+      })
+    }
+    this.bigBlind = gameTransport.bigBlind
+    this.turn = gameTransport.nextPlayer
+    this.potSum = gameTransport.potSum
+  }
+
+>>>>>>> Stashed changes
   /**
    * Sends action to the server
    * @param gameAction - Action to sent to the server

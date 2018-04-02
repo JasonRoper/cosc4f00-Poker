@@ -59,4 +59,19 @@ export default class GameRequest {
     })
     return prom
   }
+
+  public removeCompetitiveGame (gameId: number, userId: number): Promise<any> {
+    const removeMATCHMAKING = API_V1 + '/game/' + gameId + '/' + userId
+    const remove = axios.delete(removeMATCHMAKING, {
+    }).then((responce) => {
+      console.log(responce)
+      console.log('successfully deleted the player ' + userId + ' in game ' + gameId)
+      return Promise.resolve(responce)
+    }).catch((error) => {
+      console.log(error)
+      console.log('failed to delete the player ' + userId + ' in game ' + gameId)
+      return Promise.reject(error)
+    })
+    return remove
+  }
 }

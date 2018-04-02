@@ -309,12 +309,11 @@ export default {
         this.$router.push('Table')
       }
       if (choice === 'CompetitivePoker') {
-        alert('Lets Compete Poker')
+        // alert('Lets Compete Poker')
         this.instrcutionPokerMode = false
         this.showTable = true
         this.gameReq.createCompetitiveGame().then((responce) => {
-          alert('I am pushing you to the table view')
-          alert(this.gameReq.gameId)
+          alert('I am pushing you to the table view' + this.gameReq.gameId)
           // this.$route.params = this.gameReq.gameId
           // router.push({path: '/Table', props: {gameId: this.gameReq.gameId}})
           // TableView
