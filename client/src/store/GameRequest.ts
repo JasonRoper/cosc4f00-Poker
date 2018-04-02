@@ -61,7 +61,7 @@ export default class GameRequest {
   }
 
   public removeCompetitiveGame (gameId: number, userId: number): Promise<any> {
-    const removeMATCHMAKING = API_V1 + '/game/' + gameId + '/' + userId
+    const removeMATCHMAKING = API_V1 + '/games/' + gameId + '/' + userId
     const remove = axios.delete(removeMATCHMAKING, {
     }).then((responce) => {
       console.log(responce)
