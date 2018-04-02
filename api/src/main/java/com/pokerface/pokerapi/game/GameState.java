@@ -488,9 +488,9 @@ public class GameState {
 
         minimumBet=0;
         presentTurn=advanceCounter(dealer);
-        placeBet(players.get(presentTurn),bigBlind);
-        presentTurn=advanceCounter(presentTurn);
         placeBet(players.get(presentTurn),bigBlind/2);
+        presentTurn=advanceCounter(presentTurn);
+        placeBet(players.get(presentTurn),bigBlind);
         presentTurn=advanceCounter(presentTurn);
         round=1;
         lastBet=presentTurn; // This would represent the small blind last payer. If nobody raises, the round ends when small blind is reached
@@ -507,9 +507,9 @@ public class GameState {
             communityCardOne=deck.dealCard();
             communityCardTwo=deck.dealCard();
             communityCardThree=deck.dealCard();
-        } else if (round==2){
+        } else if (communityCardFour==null){
             communityCardFour=deck.dealCard();
-        } else if (round==3){
+        } else if (communityCardFive==null){
             communityCardFive=deck.dealCard();
         }
     }
@@ -610,6 +610,12 @@ public class GameState {
                 getCommunityCardFive() == gameState.getCommunityCardFive() &&
                 Objects.equals(getStartTime(), gameState.getStartTime()) &&
                 getGameType() == gameState.getGameType();
+    }
+
+    public void applyWinnings(int[] winnings){
+        for (int i=0;i<winnings.length;i++){
+            players.get(i).setCashOnHand(players.get(i).getCashOnHand()+winnings[i]);
+        }
     }
 
     @Override

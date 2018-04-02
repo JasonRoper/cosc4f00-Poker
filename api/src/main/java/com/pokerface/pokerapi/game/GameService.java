@@ -170,6 +170,12 @@ public class GameService {
      * @return boolean value representing if the game hand has ended
      */
     public boolean isHandEnd(GameState gameState) {
+
+        return (isRoundEnd(gameState) && gameState.getRound() == 3) || allFolded(gameState);
+
+    }
+
+    public boolean allFolded(GameState gameState){
         int folded = 0;
 
         for (Player p : gameState.getPlayers()) {
@@ -180,8 +186,8 @@ public class GameService {
 
         if (folded >= gameState.getPlayerCount() - 1) {
             return true;
-        } else return isRoundEnd(gameState) && gameState.getRound() == 3;
-
+        }
+        return false;
     }
 
     /**
@@ -302,6 +308,17 @@ public class GameService {
     public HandEndTransport determineWinnings(long gameID) {
         GameState gameState = games.findOne(gameID);
         int[] winners = new int[gameState.getPlayerCount()];
+        int[] winnings = new int[gameState.getPlayerCount()];
+        if (allFolded(gameState)) {
+            for (int i=0; i<winners.length;i++){
+                if (gameState.getPlayers().get(i).getHasFolded()){
+                    winners[i]=10;
+                } else {
+                    winners[i]=1;
+                }
+            }
+        } else {
+
         List<Card> communityCards = gameState.receiveCommunityCards();
         List<Pair<Integer, HandRanking>> handRanks = new ArrayList<>();
 
@@ -316,7 +333,7 @@ public class GameService {
         handRanks.sort((a, b) -> a.getSecond().compareTo(b.getSecond()));
         int counter = 1;
 
-        for (int i = 0; i < winners.length; i++) {
+        for (int i = 0; i < winners.length-1; i++) {
             winners[handRanks.get(i).getFirst()] = counter;
             if (handRanks.get(i).getSecond().compareTo(handRanks.get(i + 1).getSecond()) == 0) {
                 winners[handRanks.get(i + 1).getFirst()] = counter;
@@ -324,7 +341,12 @@ public class GameService {
                 counter++;
             }
         }
-        HandEndTransport handEndTransport = new HandEndTransport(winners, gameState.getPlayers());
+
+        }
+        winnings=gameState.getPot().resolveWinnings(winners);
+        gameState.applyWinnings(winnings);
+        HandEndTransport handEndTransport = new HandEndTransport(winnings, gameState.getPlayers());
+        games.save(gameState);
         return handEndTransport;
     }
 

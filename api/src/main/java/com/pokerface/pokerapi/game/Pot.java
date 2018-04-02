@@ -80,6 +80,7 @@ public class Pot {
     int[] pot = new int[gameState.getPlayerCount()];
     for (int i=0;i<pot.length;i++){
         pot[i]=gameState.getPlayers().get(i).getBet();
+        sum+=pot[i];
     }
         int[] totalWinnings= new int[pot.length];
         int players=pot.length;

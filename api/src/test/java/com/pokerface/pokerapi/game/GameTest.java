@@ -271,6 +271,7 @@ public class GameTest {
 
         //TimeUnit.SECONDS.sleep(20);
         testGameState=gameRepository.findOne(testGameState.getId());
+        assertTrue(testGameState.getPlayers().get(3).getHasFolded());
         assertTrue(testGameState.getPresentTurn()==0);
 
         cleanUpUserRepository();
@@ -373,13 +374,59 @@ public class GameTest {
     }
 
     @Test
-    public void testAllButOneFold() {}
+    public void testAllButOneFold() throws Exception {
+
+        setUpUserRepository();
+        GameState testGameState = createTestGameState(GameStage.STARTED, GameState.GameType.CASUAL);
+
+        List<WebsocketSession> webSockets = new ArrayList<>();
+
+        for (Player p: testGameState.getPlayers()){
+            webSockets.add(new WebsocketSession(p.getName(),"Password"));
+        }
+        CompletableFuture<GameStateTransport> testGameStateTransport;
+        GameStateTransport testTransport;
+
+            for (int i=0;i<3;i++){
+                testGameStateTransport = webSockets.get(0).subscribe(gameStateMessagePath + testGameState.getId(), GameStateTransport.class);
+
+                webSockets.get(testGameState.getPresentTurn()).send("/app/game/" + testGameState.getId(), new GameAction(GameActionType.FOLD, 47283974));
+                testTransport = testGameStateTransport.get(20, TimeUnit.SECONDS);
+                testGameState = gameRepository.findOne(testGameState.getId());
+
+            }
+        TimeUnit.SECONDS.sleep(10);
+        testGameState=gameRepository.findOne(testGameState.getId());
+        assertTrue(testGameState.getPlayers().get(2).getCashOnHand()==106);
+
+        cleanUpUserRepository();
+        cleanUpGameRepository();
+
+    }
 
     @Test
-    public void testShowdownTie() {}
+    public void testShowdown() throws Exception {
+        setUpUserRepository();
+        GameState testGameState = createTestGameState(GameStage.NEAREND, GameState.GameType.CASUAL);
 
-    @Test
-    public void testShowdownWinner() {}
+        List<WebsocketSession> webSockets = new ArrayList<>();
+
+        for (Player p: testGameState.getPlayers()){
+            webSockets.add(new WebsocketSession(p.getName(),"Password"));
+        }
+        CompletableFuture<GameStateTransport> testGameStateTransport;
+        GameStateTransport testTransport;
+
+            testGameStateTransport = webSockets.get(0).subscribe(gameStateMessagePath + testGameState.getId(), GameStateTransport.class);
+
+            webSockets.get(testGameState.getPresentTurn()).send("/app/game/" + testGameState.getId(), new GameAction(GameActionType.CHECK, 47283974));
+            testTransport = testGameStateTransport.get(20, TimeUnit.SECONDS);
+            testGameState = gameRepository.findOne(testGameState.getId());
+
+        cleanUpUserRepository();
+        cleanUpGameRepository();
+
+    }
 
     @Test
     public void testPlayerDisconnectWhenGameShouldStart() {}
@@ -428,6 +475,19 @@ public class GameTest {
                 result.addPlayer(user.getId(),user.getUsername());
                 userIDs.remove(0);
             }
+        } else if (stage==GameStage.NEAREND){
+            result.setHasStarted(true);
+            for (int i=0;i<4;i++){
+                user=userService.getUser(userIDs.get(0));
+                result.addPlayer(user.getId(),user.getUsername());
+                userIDs.remove(0);
+            }
+            result.startGame();
+            result.setRound(3);
+            result.dealCommunityCards();
+            result.dealCommunityCards();
+            result.setPresentTurn(0);
+            result.setLastBet(0);
         }
         result.setGameType(gameType);
         gameRepository.save(result);
@@ -435,7 +495,7 @@ public class GameTest {
     }
 
     public enum GameStage {
-        CREATED, WAITING, STARTING, STARTED, OVER
+        CREATED, WAITING, STARTED, NEAREND, OVER
     }
 
 
