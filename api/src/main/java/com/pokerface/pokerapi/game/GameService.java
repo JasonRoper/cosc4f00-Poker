@@ -217,7 +217,7 @@ public class GameService {
         long gameID = -1; // -1 is never a legitimate gameID, this allows error checking for unfound game.
         gameID = firstAvailableGame(GameState.GameType.CASUAL);
         if (gameID == -1) {
-            gameID = createGame(3,GameState.GameType.CASUAL);
+            gameID = createGame(4,GameState.GameType.CASUAL);
         }
         addPlayer(userID, gameID, userName);
 
@@ -228,7 +228,7 @@ public class GameService {
         long gameID = -1; // -1 is never a legitimate gameID, this allows error checking for unfound game.
         gameID = firstAvailableGame(GameState.GameType.COMPETETIVE);
         if (gameID == -1) {
-            gameID = createGame(3,GameState.GameType.COMPETETIVE);
+            gameID = createGame(4,GameState.GameType.COMPETETIVE);
         }
         addPlayer(userID, gameID, userName);
 
