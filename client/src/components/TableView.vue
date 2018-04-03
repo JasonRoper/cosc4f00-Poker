@@ -167,7 +167,7 @@
         <seat  class="player" v-for="player in this.getOpponents()" :key="player.id" :data="player"></seat>
 
       </div> -->
-              <div class="inner-tableBorder my-5">
+              <div class="inner-tableBorder ">
           <player  class="player" v-for="player in this.mechanics.multiplePlayers" :key="player.id" :data="player">
         </player>
             <div class="CompleteTable">
@@ -176,10 +176,12 @@
          <div class= "tableHead"></div>
    
          <h2 class=" mr-5  pt-0 text-info">Pot:<span class="text-warning"> {{this.mechanics.pot}}</span><img src="../assets/Webgraphics/chipPile.png" style="decoration:none" width="55" height="55"></h2>
+      <div class="Communitycards-holder">
       <p class='Communitycards  ml-4  '>
-        <card class='size' v-for="card in this.mechanics.communityCards" :key="card" :card="card"></card>
+        <card class='size' v-for="card in this.mechanics.communityCards" :key="card" :card="BLANK_CARD"></card>
       </p>
-        <p id="theDeck"class='DECK mt-4 pt-4 '>
+      </div>
+        <p id="theDeck"class='DECK mt-2 '>
                     <transition-group name="deckCard">
 
         <card  class= "deckCard DECKsize mt-4" v-for="card in this.mechanics.communityCards" :key="card" :card="card"></card>
@@ -188,7 +190,6 @@
       </div>
     </div>
   </div>
-              <button v-on:click="layCommunity()">Second Round of Betting </button>
 
         <button type="button" class="btn btn-default btn-circle backButton  inner-blue BackButton" @click="doCountDown()">quit</button><br>
 
@@ -254,6 +255,7 @@
         <button v-on:click="call(money)" :disabled="this.mechanics.callAction == 1">CALL</button>
         <button v-on:click="bet(money)" :disabled="this.mechanics.betAction == 1">BET</button>
         <button v-on:click="sendAction()">Send Action To Server</button> -->
+
  </div>
 </div>
 
@@ -261,6 +263,7 @@
   <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">...</div>
   <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">...</div>
 <!-- </div> -->
+                      <button v-on:click="layCommunity()">Second Round of Betting </button>
 
         </div>
       </div>
@@ -301,7 +304,11 @@ export default {
       preivousnumberofPlayers: 0,
       BigBlindCurrentBet: 0,
       user: 0,
-      opponents: 0
+      opponents: 0,
+      incrument:0,
+      posX:-191,
+      posY:-141,
+      posZ:200,
     }
   },
   /*
@@ -329,15 +336,24 @@ export default {
     },
     EventBarMessage () {
       return this.mechanics.gameStatus
+    },
+    deckLength () {
+
     }
   },
   methods: {
     layCommunity () {
-      var card = document.getElementsByClassName('deckCard')
-      for (let i = 0; i < card.length; i++) {
-        card[0].style.transform = 'translateX(' + 60 + 'pt) translateY(' + -60 + 'pt) rotateY(-180deg)'
-        //  alert('card', i)
-      }
+   
+      // for (let i = 0; i < card.length; i++) {
+              var card = document.getElementsByClassName('deckCard')
+var max =card.length
+        card[max-1].style.transform = 'translateX(' + this.posX + 'pt) translateY(' + this.posY + 'pt) rotateX(-180deg) translatez(' + this.posZ + 'pt)'
+   card[max-1].classList.remove('deckCard')
+console.log(max)
+this.posX = this.posX + 90
+      // this.deckLength = this.deckLength - 1 
+      // //  alert('card', i)
+      // }
     },
     doCountDown () {
       var countDown = new Date()
@@ -371,7 +387,7 @@ export default {
     ]),
     logOut: function () {
       this.logout()
-      this.$router.push('Home')
+      this.$router.push('/Home')
     },
     getUser: function () {
       return this.mechanics.getUser()

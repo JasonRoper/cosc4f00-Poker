@@ -85,7 +85,7 @@ justify-content: center;
 position: relative;
 margin:auto;
 transform:scale(0.59);
-border: 1px solid red;
+/* border: 1px solid red; */
 background-repeat: no-repeat;
 /* transition: transform 500ms cubic-bezier(.2,-0.02,.39,1.27); */
 /* perspective: 700px; */
@@ -341,7 +341,7 @@ FOR small screens
 
 }
 #hand:hover {
-  background: violet;
+  /* background:s violet; */
   transform: rotateY(-180deg)
 
 }
