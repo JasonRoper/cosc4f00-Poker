@@ -175,10 +175,10 @@
          <h2 class="display-4 pr-4 pb-0  text-white">PokerPals!!<img src="../assets/Webgraphics/poker.png" width="70" height="70"></h2>
          <div class= "tableHead"></div>
          <h5 class=" mr-5  pt-0 text-info">Pot:{{this.mechanics.potSum}}</h5>
-      <p class='Communitycards  ml-4  '>
+      <p class = 'Communitycards ml-4 '>
         <card class='size' v-for="card in this.mechanics.communityCards" :key="card" :card="card"></card>
       </p>
-        <p id="theDeck"class='DECK mt-4 pt-4 '>
+        <p id="theDeck" class='DECK mt-4 pt-4 '>
                     <transition-group name="deckCard">
 
         <card  class= "deckCard DECKsize mt-4" v-for="card in this.mechanics.communityCards" :key="card" :card="card"></card>
@@ -274,7 +274,6 @@
         <button v-on:click="call(money)" :disabled="this.mechanics.callAction == 1">CALL</button>
         <button v-on:click="bet(money)" :disabled="this.mechanics.betAction == 1">BET</button>
         <button v-on:click="sendAction()">Send Action To Server</button> -->
->>>>>>> f55f2a894f31f66fd56b57cebd475a455619f2f1
  </div>
 </div>
 
@@ -289,7 +288,7 @@
     </div>
 
 
-
+  </div>
 
 </div>
 </template>

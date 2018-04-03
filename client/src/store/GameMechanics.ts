@@ -79,7 +79,7 @@ export default class GameMech {
    * @param playerId Creates table for user or for a lobby
    */
   constructor (gameId: number, username: string) {
-    console.log("creating a new game mechanics")
+    console.log('creating a new game mechanics')
     this.gameService = new GameService(gameId)
     this.gameId = gameId
     this.gameService.onUserCards(this.onUserCardsEvent.bind(this))
