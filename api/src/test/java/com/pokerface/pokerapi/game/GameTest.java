@@ -353,15 +353,16 @@ public class GameTest {
         CompletableFuture<GameStateTransport> testGameStateTransport;
         GameStateTransport testTransport;
 
-        while (testGameState.getRound()==1) {
-            for (WebsocketSession webSocket : webSockets) {
+
+            for (int i=0;i<4;i++) {
+                assertTrue(testGameState.getRound()==1);
                 testGameStateTransport = webSockets.get(0).subscribe(gameStateMessagePath + testGameState.getId(), GameStateTransport.class);
 
-                webSocket.send("/app/game/" + testGameState.getId(), new GameAction(GameActionType.CHECK, 47283974));
+                webSockets.get(testGameState.getPresentTurn()).send("/app/game/" + testGameState.getId(), new GameAction(GameActionType.CHECK, 47283974));
                 testTransport = testGameStateTransport.get(20, TimeUnit.SECONDS);
                 testGameState = gameRepository.findOne(testGameState.getId());
             }
-        }
+
 
         //TimeUnit.SECONDS.sleep(20);
         testGameState=gameRepository.findOne(testGameState.getId());
