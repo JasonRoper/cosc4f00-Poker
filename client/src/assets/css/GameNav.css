@@ -26,6 +26,7 @@
   position:fixed;
   width: 50%;
   margin-left:-20px;
+  z-index:2;
 
 }
 .completeTop {

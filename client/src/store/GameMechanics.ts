@@ -55,8 +55,9 @@ export default class GameMech {
   public communityCards: string[] = []
   public playerId: number = 0
   public userAction: GameAction | null = null
-  public hasGameStarted: boolean = false
+  public gameStatus: string = ''
   public endGame: boolean = false
+  public hasGameStarted: boolean = false
   public username: string = ''
   public disable: number = 1
   public enableButton: number = 0
@@ -109,7 +110,6 @@ export default class GameMech {
 
     }
   }
-
   /**
    * Gets Player location within array
    * @returns player location in the Multiplayer Array

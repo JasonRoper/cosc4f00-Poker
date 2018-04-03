@@ -167,18 +167,21 @@
         <seat  class="player" v-for="player in this.getOpponents()" :key="player.id" :data="player"></seat>
 
       </div> -->
-              <div class="inner-tableBorder my-5">
+              <div class="inner-tableBorder ">
           <player  class="player" v-for="player in this.mechanics.multiplePlayers" :key="player.id" :data="player">
         </player>
             <div class="CompleteTable">
         <div class= 'tableContent'>
          <h2 class="display-4 pr-4 pb-0  text-white">PokerPals!!<img src="../assets/Webgraphics/poker.png" width="70" height="70"></h2>
          <div class= "tableHead"></div>
-         <h5 class=" mr-5  pt-0 text-info">Pot:{{this.mechanics.potSum}}</h5>
-      <p class = 'Communitycards ml-4 '>
-        <card class='size' v-for="card in this.mechanics.communityCards" :key="card" :card="card"></card>
+   
+         <h2 class=" mr-5  pt-0 text-info">Pot:<span class="text-warning"> {{this.mechanics.pot}}</span><img src="../assets/Webgraphics/chipPile.png" style="decoration:none" width="55" height="55"></h2>
+      <div class="Communitycards-holder">
+      <p class='Communitycards  ml-4  '>
+        <card class='size' v-for="card in this.mechanics.communityCards" :key="card" :card="BLANK_CARD"></card>
       </p>
-        <p id="theDeck" class='DECK mt-4 pt-4 '>
+      </div>
+        <p id="theDeck" class='DECK mt-2 '>
                     <transition-group name="deckCard">
 
         <card  class= "deckCard DECKsize mt-4" v-for="card in this.mechanics.communityCards" :key="card" :card="card"></card>
@@ -187,9 +190,6 @@
       </div>
     </div>
   </div>
-      <div class="TableActions row">
-      <input v-model="money" placeholder="How much would you like to bet">
-              <button v-on:click="layCommunity()">Second Round of Betting </button>
 
         <button type="button" class="btn btn-default btn-circle backButton  inner-blue BackButton" @click="doCountDown()">quit</button><br>
 
@@ -247,6 +247,7 @@
         <button type="button" class="btn  btn-lg Bet " v-on:click="raise()" :disabled="this.mechanics.raiseAction == 1"><i class="fa fa-chevron-up  fa-lg"></i></button>
         </div>
 
+<<<<<<< HEAD
       </div>
 =======
         <button type="button" class="btn  btn-lg Bet " v-on:click="raise()" v-bind:disabled="this.mechanics.raiseAction == 1"><i class="fa fa-chevron-up  fa-lg"></i></button>
@@ -265,6 +266,8 @@
               
 >>>>>>> Stashed changes
 =======
+=======
+>>>>>>> 7aae5580c7bd9b1f0aacc5ce160158be4aaa4cab
       </div> -->
       <!-- <div>Action: {{this.mechanics.userAction}}</div> -->
         <!--<input v-model="money" placeholder="How much would you like to bet">-->
@@ -274,6 +277,7 @@
         <button v-on:click="call(money)" :disabled="this.mechanics.callAction == 1">CALL</button>
         <button v-on:click="bet(money)" :disabled="this.mechanics.betAction == 1">BET</button>
         <button v-on:click="sendAction()">Send Action To Server</button> -->
+
  </div>
 </div>
 
@@ -282,13 +286,13 @@
   <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">...</div>
 <!-- </div> -->
 
+                      <button v-on:click="layCommunity()">Second Round of Betting </button>
+
         </div>
       </div>
     <!-- </div> -->
     </div>
 
-
-  </div>
 
 </div>
 </template>
@@ -323,7 +327,11 @@ export default {
       money: '0',
       BigBlindCurrentBet: 0,
       user: 0,
-      opponents: 0
+      opponents: 0,
+      incrument:0,
+      posX:-191,
+      posY:-141,
+      posZ:200,
     }
   },
   /*
@@ -354,6 +362,9 @@ export default {
     },
     EventBarMessage () {
       return this.mechanics.gameStatus
+
+    },
+    deckLength () {
     }
   },
   methods: {
@@ -363,6 +374,18 @@ export default {
         card[0].style.transform = 'translateX(' + 60 + 'pt) translateY(' + -60 + 'pt) rotateY(-180deg)'
         //  alert('card', i)
       }
+   
+      // for (let i = 0; i < card.length; i++) {
+              var card = document.getElementsByClassName('deckCard')
+var max =card.length
+        card[max-1].style.transform = 'translateX(' + this.posX + 'pt) translateY(' + this.posY + 'pt) rotateX(-180deg) translatez(' + this.posZ + 'pt)'
+   card[max-1].classList.remove('deckCard')
+console.log(max)
+this.posX = this.posX + 90
+      // this.deckLength = this.deckLength - 1 
+      // //  alert('card', i)
+      // }
+
     },
     doCountDown () {
       var countDown = new Date()
@@ -395,11 +418,16 @@ export default {
       'logout'
     ]),
     logOut: function () {
+
       const logoutRequest = new GameRequest()
       logoutRequest.removeCompetitiveGame(this.mechanics.gameId, state.state.userId).then((responce) => {
         router.push({ name: 'Home' })
         console.log(responce + 'success in delete request')
       }).catch((error) => { console.log('Failed delete request' + error) })
+
+      this.logout()
+      this.$router.push('/Home')
+
     },
     getUser: function () {
       return this.mechanics.getUser()
