@@ -328,10 +328,10 @@ export default {
       BigBlindCurrentBet: 0,
       user: 0,
       opponents: 0,
-      incrument:0,
-      posX:-191,
-      posY:-141,
-      posZ:200,
+      incrument: 0,
+      posX: -191,
+      posY: -141,
+      posZ: 200
     }
   },
   /*
@@ -362,7 +362,6 @@ export default {
     },
     EventBarMessage () {
       return this.mechanics.gameStatus
-
     },
     deckLength () {
     }
@@ -374,18 +373,16 @@ export default {
         card[0].style.transform = 'translateX(' + 60 + 'pt) translateY(' + -60 + 'pt) rotateY(-180deg)'
         //  alert('card', i)
       }
-   
       // for (let i = 0; i < card.length; i++) {
-              var card = document.getElementsByClassName('deckCard')
-var max =card.length
-        card[max-1].style.transform = 'translateX(' + this.posX + 'pt) translateY(' + this.posY + 'pt) rotateX(-180deg) translatez(' + this.posZ + 'pt)'
-   card[max-1].classList.remove('deckCard')
-console.log(max)
-this.posX = this.posX + 90
-      // this.deckLength = this.deckLength - 1 
+      card = document.getElementsByClassName('deckCard')
+      var max = card.length
+      card[max - 1].style.transform = 'translateX(' + this.posX + 'pt) translateY(' + this.posY + 'pt) rotateX(-180deg) translatez(' + this.posZ + 'pt)'
+      card[max - 1].classList.remove('deckCard')
+      console.log(max)
+      this.posX = this.posX + 90
+      // this.deckLength = this.deckLength - 1
       // //  alert('card', i)
       // }
-
     },
     doCountDown () {
       var countDown = new Date()
@@ -418,16 +415,12 @@ this.posX = this.posX + 90
       'logout'
     ]),
     logOut: function () {
-
       const logoutRequest = new GameRequest()
       logoutRequest.removeCompetitiveGame(this.mechanics.gameId, state.state.userId).then((responce) => {
         router.push({ name: 'Home' })
+        this.logout()
         console.log(responce + 'success in delete request')
       }).catch((error) => { console.log('Failed delete request' + error) })
-
-      this.logout()
-      this.$router.push('/Home')
-
     },
     getUser: function () {
       return this.mechanics.getUser()
