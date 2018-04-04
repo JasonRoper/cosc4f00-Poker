@@ -153,7 +153,7 @@ public class GameService {
      * @param gameState of the game being checked
      * @return boolean representing if the round is ended
      */
-    public boolean isRoundEnd(GameState gameState) {return gameState.getPreviousTurn() == gameState.getLastBet();
+    public boolean isRoundEnd(GameState gameState) {return !gameState.lastActionBet()&&gameState.getPreviousTurn() == gameState.getLastBet();
     }
 
     /**
@@ -230,6 +230,8 @@ public class GameService {
         gameID = firstAvailableGame(GameState.GameType.CASUAL);
         if (gameID == -1) {
             gameID = createGame(4,GameState.GameType.CASUAL);
+            addAIPlayer(gameID);
+            addAIPlayer(gameID);
         }
         addPlayer(userID, gameID, userName);
 

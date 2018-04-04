@@ -33,9 +33,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -358,6 +356,13 @@ public class GameTest {
         CompletableFuture<GameStateTransport> testGameStateTransport;
         GameStateTransport testTransport;
 
+        for (int i=0;i<4;i++) {
+            assertTrue(testGameState.getRound()==1);
+            testGameStateTransport = webSockets.get(0).subscribe(gameStateMessagePath + testGameState.getId(), GameStateTransport.class);
+
+            webSockets.get(testGameState.getPresentTurn()).send("/app/game/" + testGameState.getId(), new GameAction(GameActionType.BET,1));
+            testTransport = testGameStateTransport.get(20, TimeUnit.SECONDS);
+        }
 
             for (int i=0;i<4;i++) {
                 assertTrue(testGameState.getRound()==1);
@@ -365,9 +370,10 @@ public class GameTest {
 
                 webSockets.get(testGameState.getPresentTurn()).send("/app/game/" + testGameState.getId(), new GameAction(GameActionType.CHECK, 47283974));
                 testTransport = testGameStateTransport.get(20, TimeUnit.SECONDS);
-                testGameState = gameRepository.findOne(testGameState.getId());
                 TimeUnit.SECONDS.sleep(10);
+                testGameState = gameRepository.findOne(testGameState.getId());
                 assertTrue(testGameState.getRound()==1||i==3);
+                //assertFalse(testGameState.lastActionBet());
             }
 
 

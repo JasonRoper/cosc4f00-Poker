@@ -296,6 +296,10 @@ public class GameState {
         return true;
     }
 
+    public boolean lastActionBet(){
+        return (players.get(previousTurn).getLastGameAction().getType()==GameActionType.BET||players.get(previousTurn).getLastGameAction().getType()==GameActionType.RAISE);
+    }
+
     /**
      * Checks, sets the players bet up to the minimum bet.
      * @param player
@@ -403,14 +407,15 @@ public class GameState {
      */
     public List<Card> receiveCommunityCards() {
         List<Card> cards = new ArrayList<>();
-
-        cards.add(getCommunityCardOne());
-        cards.add(getCommunityCardTwo());
-        cards.add(getCommunityCardThree());
-        if (round >= 2) {
-            cards.add(getCommunityCardFour());
+        if (round>=2) {
+            cards.add(getCommunityCardOne());
+            cards.add(getCommunityCardTwo());
+            cards.add(getCommunityCardThree());
         }
         if (round >= 3) {
+            cards.add(getCommunityCardFour());
+        }
+        if (round >= 4) {
             cards.add(getCommunityCardFive());
         }
         return cards;
@@ -561,9 +566,9 @@ public class GameState {
 
     public enum GameType{
         CUSTOM,
-        AI,
         CASUAL,
-        COMPETETIVE
+        COMPETETIVE,
+        AI
     }
 
     public GameType getGameType() {
