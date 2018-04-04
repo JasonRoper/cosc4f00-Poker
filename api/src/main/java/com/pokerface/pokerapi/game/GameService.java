@@ -174,7 +174,7 @@ public class GameService {
      */
     public boolean isHandEnd(GameState gameState) {
 
-        return (isRoundEnd(gameState) && gameState.getRound() == 3) || allFolded(gameState);
+        return (isRoundEnd(gameState) && gameState.getRound() == 4) || allFolded(gameState);
 
     }
 

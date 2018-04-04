@@ -21,6 +21,7 @@ public class GameStateTransport {
     private PlayerTransport[] multiplePlayers;
     private boolean started;
     private Long startTime;
+    private int minimumBet;
 
     public GameStateTransport() {
 
@@ -41,6 +42,7 @@ public class GameStateTransport {
         this.nextPlayer = gameState.getPresentTurn();
         this.startTime = gameState.getStartTime();
         this.started = gameState.isHasStarted();
+        this.minimumBet=gameState.getMinimumBet();
     }
 
 
@@ -123,6 +125,14 @@ public class GameStateTransport {
         this.startTime = startTime;
     }
 
+    public int getMinimumBet() {
+        return minimumBet;
+    }
+
+    public void setMinimumBet(int minimumBet) {
+        this.minimumBet = minimumBet;
+    }
+
     /**
      * A class that contains an action, why the event is being sent, and an optional message for extra communication if necessary
      */
@@ -154,6 +164,8 @@ public class GameStateTransport {
         public void setMessage(String message) {
             this.message = message;
         }
+
+
 
 
     }

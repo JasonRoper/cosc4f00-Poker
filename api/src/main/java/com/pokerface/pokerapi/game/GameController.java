@@ -242,7 +242,7 @@ public class GameController {
      * @param principal the user requesting a game
      * @return a GameInfoTransport containing the game info
      */
-    @PostMapping("/api/v1/matchmaking/basicGame")
+    @PostMapping("/api/v1/matchmaking/casualGame")
     public GameInfoTransport casualGameMatchmaking(Principal principal) {
         UserInfoTransport user = userService.getUserByUsername(principal.getName());
         long gameID = gameService.casualMatchmake(user.getId(), user.getUsername());
@@ -262,6 +262,14 @@ public class GameController {
                 gameStateTransport.reason(GameStateTransport.Reason.PLAYER_JOINED, "User has joined"));
         return new GameInfoTransport(gameID);
     }
+
+//    @PostMapping("/api/v1/matchmaking/aiGame")
+//    public GameInfoTransport aiGameCreate(Principal principal) {
+//        UserInfoTransport user = userService.getUserByUsername(principal.getName());
+//        long gameID = gameService.createAIGame(user.getId(), user.getUsername());
+//        GameStateTransport gameStateTransport = gameService.getGameStateTransport(gameID);
+//        return new GameInfoTransport(gameID);
+//    }
 
     @GetMapping("/api/v1/games")
     public void getGameListing() {

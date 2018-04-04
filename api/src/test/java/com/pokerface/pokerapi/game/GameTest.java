@@ -366,10 +366,12 @@ public class GameTest {
                 webSockets.get(testGameState.getPresentTurn()).send("/app/game/" + testGameState.getId(), new GameAction(GameActionType.CHECK, 47283974));
                 testTransport = testGameStateTransport.get(20, TimeUnit.SECONDS);
                 testGameState = gameRepository.findOne(testGameState.getId());
+                TimeUnit.SECONDS.sleep(10);
+                assertTrue(testGameState.getRound()==1||i==3);
             }
 
 
-        //TimeUnit.SECONDS.sleep(20);
+        TimeUnit.SECONDS.sleep(10);
         testGameState=gameRepository.findOne(testGameState.getId());
         assertTrue(testGameState.getRound()==2);
         assertEquals(testGameState.getPlayers().get(3).getBet(),12);

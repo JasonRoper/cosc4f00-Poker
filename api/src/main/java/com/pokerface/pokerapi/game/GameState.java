@@ -502,7 +502,6 @@ public class GameState {
         presentTurn=advanceCounter(presentTurn);
         round=1;
         // This would represent the small blind last payer. If nobody raises, the round ends when small blind is reached
-        dealCommunityCards();
         for (Player p: players){
             p.setCardOne(deck.dealCard());
             p.setCardTwo(deck.dealCard());
@@ -511,13 +510,13 @@ public class GameState {
     }
 
     public void dealCommunityCards(){
-        if (round==1){
+        if (round==2){
             communityCardOne=deck.dealCard();
             communityCardTwo=deck.dealCard();
             communityCardThree=deck.dealCard();
-        } else if (communityCardFour==null){
+        } else if (round==3){
             communityCardFour=deck.dealCard();
-        } else if (communityCardFive==null){
+        } else if (round==4){
             communityCardFive=deck.dealCard();
         }
     }
@@ -562,6 +561,7 @@ public class GameState {
 
     public enum GameType{
         CUSTOM,
+        AI,
         CASUAL,
         COMPETETIVE
     }
@@ -585,8 +585,12 @@ public class GameState {
     public void advanceRound(){
         round++;
         if (round==2){
-            communityCardFour=deck.dealCard();
+            communityCardOne=deck.dealCard();
+            communityCardTwo=deck.dealCard();
+            communityCardThree=deck.dealCard();
         } else if (round==3){
+            communityCardFour=deck.dealCard();
+        } else if (round==4){
             communityCardFive=deck.dealCard();
         }
     }
