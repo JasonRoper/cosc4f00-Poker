@@ -52,6 +52,21 @@
     
     
   }
+
+  .Usercards{
+    width:  600px;
+    margin: 0px auto;
+    display: -webkit-flex; /* Safari */
+    -webkit-align-items: center; /* Safari 7.0+ */
+    display: flex;
+    align-items: center;
+    align-content: center;
+    position: relative;
+    left:-35px;
+    transform: scale(0.85);
+    perspective: 700px;
+  }
+
   .userCards{
     width:  480px;
     margin-left: 400px;
@@ -379,7 +394,7 @@ top:120px;
 .deckCard {
   /* z-index: 1; */
   /* transform: (32); */
-  transition: transform 100ms cubic-bezier(.2,-0.02,.39,1.27);
+  transition: transform 5s cubic-bezier(.2,-0.02,.39,1.27);
 
 }
 .deckCard-enter-active {

@@ -126,6 +126,8 @@ public class GameTest {
 
         gameState = gameRepository.findOne(matchmakingResponse.getBody().getGameId());
         assertEquals(gameStateResponse.getBody(),new GameStateTransport(gameState));
+
+
     }
 
     @Test
@@ -144,6 +146,7 @@ public class GameTest {
         assertEquals(gameStateResponse.getBody(),new GameStateTransport(gameState)); // First join
         assertEquals(gameState,testGameState);
         Iterable<GameState>gameStates=gameRepository.findAll();
+
         cleanUpUserRepository();
         cleanUpGameRepository();
     }
@@ -189,6 +192,7 @@ public class GameTest {
         gameState=gameRepository.findOne(gameID);
         assertTrue(gameState.isHasStarted());
         assertTrue(gameState.getPlayerCount()==4);
+
         cleanUpUserRepository();
         cleanUpGameRepository();
     }
@@ -303,6 +307,7 @@ public class GameTest {
         assertTrue(testGameState.getPresentTurn()==0);
         assertEquals(testGameState.getPlayers().get(3).getBet(),62);
         assertEquals(testGameState.getMinimumBet(),62);
+
         cleanUpUserRepository();
         cleanUpGameRepository();
     }
@@ -424,9 +429,36 @@ public class GameTest {
             testTransport = testGameStateTransport.get(20, TimeUnit.SECONDS);
             testGameState = gameRepository.findOne(testGameState.getId());
 
+        TimeUnit.SECONDS.sleep(200);
+
         cleanUpUserRepository();
         cleanUpGameRepository();
 
+    }
+
+    @Test
+    public void testAIPlayerActions() throws Exception{
+        setUpUserRepository();
+        GameState testGameState = createTestGameState(GameStage.AISTARTED, GameState.GameType.CASUAL);
+
+        List<WebsocketSession> webSockets = new ArrayList<>();
+
+        for (int i=0;i<4;i++){
+            webSockets.add(new WebsocketSession(testGameState.getPlayers().get(i).getName(),"Password"));
+        }
+        CompletableFuture<GameStateTransport> testGameStateTransport;
+        GameStateTransport testTransport;
+
+        testGameStateTransport = webSockets.get(0).subscribe(gameStateMessagePath + testGameState.getId(), GameStateTransport.class);
+
+        webSockets.get(testGameState.getPresentTurn()).send("/app/game/" + testGameState.getId(), new GameAction(GameActionType.CHECK, 47283974));
+        testTransport = testGameStateTransport.get(20, TimeUnit.SECONDS);
+
+        TimeUnit.SECONDS.sleep(10);
+
+        testGameState = gameRepository.findOne(testGameState.getId());
+        cleanUpUserRepository();
+        cleanUpGameRepository();
     }
 
     @Test
@@ -489,6 +521,17 @@ public class GameTest {
             result.dealCommunityCards();
             result.setPresentTurn(0);
             result.setLastBet(0);
+        } else if (stage==GameStage.AISTARTED){
+            for (int i=0;i<4;i++){
+                user=userService.getUser(userIDs.get(0));
+                result.addPlayer(user.getId(),user.getUsername());
+                userIDs.remove(0);
+            }
+            gameRepository.save(result);
+            gameService.addAIPlayer(result.getId());
+            gameService.addAIPlayer(result.getId());
+            result=gameRepository.findOne(result.getId());
+            result.startGame();
         }
         result.setGameType(gameType);
         gameRepository.save(result);
@@ -496,7 +539,7 @@ public class GameTest {
     }
 
     public enum GameStage {
-        CREATED, WAITING, STARTED, NEAREND, OVER
+        CREATED, WAITING, STARTED, NEAREND, AISTARTED
     }
 
 

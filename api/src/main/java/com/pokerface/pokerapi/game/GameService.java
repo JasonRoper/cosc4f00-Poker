@@ -1,5 +1,6 @@
 package com.pokerface.pokerapi.game;
 
+import org.hibernate.Session;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ import java.util.List;
 @Service
 public class GameService {
     private GameRepository games;
+    private long AIID=100000000;
 
     /**
      * This constructor grabs the repository for access to the database
@@ -33,6 +35,7 @@ public class GameService {
      * @return the object for communication to the frontend
      */
     public GameState getGameState(long gameID) {
+
         return games.findOne(gameID);
     }
 
@@ -203,6 +206,15 @@ public class GameService {
         }
         game = games.save(game);
 
+    }
+
+    public void addAIPlayer(long gameID){
+        GameState game = games.findOne(gameID);
+        if (!game.hasPlayer(AIID)){
+            game.addAIPlayer(AIID,"AIPlayer"+(AIID-100000000));
+        }
+        game = games.save(game);
+        AIID++;
     }
 
 
@@ -516,5 +528,10 @@ public class GameService {
     public void setUpNextHand(long gameID){
         GameState gameState=games.findOne(gameID);
         gameState.startGame();
+    }
+
+    public boolean isAITurn(long gameID){
+        GameState gameState=games.findOne(gameID);
+        return gameState.getPlayers().get(gameState.getPresentTurn()).isAI();
     }
 }

@@ -121,10 +121,10 @@ export default class GameMech {
     return this.multiplePlayers[this.playerId]
   }
 
-  public getOpponent (): Player[] {
+  public getOpponent (username: string): Player[] {
     const opponents: Player[] = []
     this.multiplePlayers.forEach((player: Player, index: number) => {
-      if (index !== this.playerId) {
+      if (player.name !== username) {
         opponents.push(player)
       }
     })
@@ -276,6 +276,8 @@ export default class GameMech {
       switch (gameTransport.event.action) {
         case Event.GAME_STARTED: {
           alert('GAME_STARTED event triggered')
+          this.gameStatus = 'Game Start!'
+          this.hasGameStarted = true
           console.log('GAME_STARTED event triggered')
           this.gameStarted(gameTransport)
           break
@@ -339,7 +341,6 @@ export default class GameMech {
   public playerAction (gameTransport: any) {
     this.multiplePlayers = Object.assign(this.multiplePlayers, gameTransport.players)
     this.setCommunityCards(gameTransport)
-
   }
 
   public roundFinished (gameTransport: any) {
