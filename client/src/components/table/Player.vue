@@ -117,12 +117,12 @@ export default {
     card: Card
   },
   updated: function () {
-    this.seeAction()
+   // this.seeAction()
   },
   methods: {
     addBar: function () {
       this.progressBar = this.progressBar + 0.35
-      console.log(this.progressBar)
+     // console.log(this.progressBar)
       if (this.progressBar >= 45) {
         this.timerDone = true
         this.data.isTurn = false
@@ -205,17 +205,6 @@ export default {
       if (this.showHand === true) {
         document.getElementById('hand').classList.toggle('active')
         document.getElementById('hand2').classList.toggle('active')
-      }
-    },
-    playerAction (query) {
-      alert('changed')
-      if (query === 'BET') {
-        alert('change')
-        console.log('hi')
-        this.playerAction = ''
-      }
-    }
-  },
   computed: {
     isTurn () {
       return this.data.isTurn
