@@ -495,7 +495,7 @@ public class GameState {
         placeBet(players.get(presentTurn),bigBlind);
         presentTurn=advanceCounter(presentTurn);
         round=1;
-        lastBet=presentTurn; // This would represent the small blind last payer. If nobody raises, the round ends when small blind is reached
+        // This would represent the small blind last payer. If nobody raises, the round ends when small blind is reached
         dealCommunityCards();
         for (Player p: players){
             p.setCardOne(deck.dealCard());

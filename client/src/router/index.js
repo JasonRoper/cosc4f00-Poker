@@ -12,6 +12,7 @@ import Router from 'vue-router'
 import Lobby from '@/components/Lobby'
 import NavBar from '@/components/NavBar'
 import Game from '@/components/Game'
+import InstructionalVideo from '@/components/InstructionalVideo'
 import TableView from '@/components/TableView'
 Vue.use(Router)
 
@@ -42,6 +43,11 @@ export default new Router({
       path: '/game',
       name: 'Game',
       component: Game
+    },
+    {
+      path: '/VideoTutor',
+      name: 'VideoTutor',
+      component: InstructionalVideo
     },
     {
       path: '/matchMakeing',

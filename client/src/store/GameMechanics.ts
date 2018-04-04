@@ -53,15 +53,18 @@ export default class GameMech {
   public multiplePlayers: Player[] = []
   public potSum: number = 0
   public communityCards: string[] = []
-  public playerId: number = -1
+  public playerId: number = 0
   public userAction: GameAction | null = null
+  public gameStatus: string = ''
+
+  public isHandFinsihed: boolean = false
   public hasGameStarted: boolean = false
-  public endGame: boolean = false
   public username: string = ''
   public disable: number = 1
   public enableButton: number = 0
   public foldAction: number = 0
   public callAction: number = 0
+  public gotHand: boolean = false
   public betAction: number = 0
   public raiseAction: number = 0
   public checkAction: number = 0
@@ -79,6 +82,7 @@ export default class GameMech {
    * @param playerId Creates table for user or for a lobby
    */
   constructor (gameId: number, username: string) {
+    console.log('creating a new game mechanics')
     this.gameService = new GameService(gameId)
     this.gameId = gameId
     this.gameService.onUserCards(this.onUserCardsEvent.bind(this))
@@ -97,11 +101,6 @@ export default class GameMech {
     if (!state.currentlyInGame) {
       axios.get(API_V1 + '/games/' + this.gameId).then((responce) => {
         console.log('GAME MECHANICS CONSTRUCTOR - ASKING TO JOIN GAME')
-        responce.data.players.forEach((item: any, index: number) => {
-          if (username === item.name) {
-            this.playerId = index
-          }
-        })
         this.setGameTransport(responce.data)
         state.currentlyInGame = true
       }).catch((error) => {
@@ -113,7 +112,6 @@ export default class GameMech {
 
     }
   }
-
   /**
    * Gets Player location within array
    * @returns player location in the Multiplayer Array
@@ -165,6 +163,7 @@ export default class GameMech {
     this.multiplePlayers[this.playerId].card2 = userCards.cardTwo
     this.cardOne = userCards.cardOne
     this.cardTwo = userCards.cardTwo
+    this.gotHand = true
   }
 
   /**
@@ -265,9 +264,12 @@ export default class GameMech {
    * @param GameState
    */
   public setGameTransport (gameTransport: any) {
+    console.log('CurrentGameTransport')
+    console.log(gameTransport)
     if (gameTransport.event) {
       if (gameTransport.event.message) {
         console.log('The GameTransport message: ' + gameTransport.event.message)
+        this.gameStatus = gameTransport.event.message
       }
     }
     if (gameTransport.event) {
@@ -306,16 +308,16 @@ export default class GameMech {
           this.defaultGameTransport(gameTransport)
         }
       }
-      console.log('User: ' + this.multiplePlayers[this.playerId].name)
-      console.log('Turn: ' + this.multiplePlayers[this.turn].name)
     } else {
       alert('GAMETRANSPORT EVENT is NULL')
       this.defaultGameTransport(gameTransport)
     }
-    if (this.cardOne !== '' && this.cardTwo !== '') {
-      this.multiplePlayers[this.playerId].card1 = this.cardOne
-      this.multiplePlayers[this.playerId].card2 = this.cardTwo
-    }
+    this.setGameCards()
+    this.bigBlind = gameTransport.bigBlind
+    this.turn = gameTransport.nextPlayer
+    this.potSum = gameTransport.potSum
+    console.log('User: ' + this.multiplePlayers[this.playerId].name)
+    console.log('Turn: ' + this.multiplePlayers[this.turn].name)
     /*
       HAND_STARTED = 'HAND_STARTED', // USER Joins the GAME
       USER_ACTION = 'PLAYER_ACTION', // This is sent after a player makes an action
@@ -331,54 +333,46 @@ export default class GameMech {
   }
 
   public playerJoined (gameTransport: any) {
-    this.multiplePlayers = Object.assign(this.multiplePlayers, gameTransport.players)
-    this.setGameCards()
+    this.setPlayers(gameTransport)
   }
 
   public playerAction (gameTransport: any) {
     this.multiplePlayers = Object.assign(this.multiplePlayers, gameTransport.players)
-    this.setGameCards()
     this.setCommunityCards(gameTransport)
 
-    this.bigBlind = gameTransport.bigBlind
-    this.turn = gameTransport.nextPlayer
-    this.potSum = gameTransport.potSum
   }
 
   public roundFinished (gameTransport: any) {
     this.setCommunityCards(gameTransport)
+
   }
 
   public gameStarted (gameTransport: any) {
     console.log(this.username + ' The game has started GAME_STARTED TRIGGERED')
-    this.multiplePlayers = Object.assign(this.multiplePlayers, gameTransport.players)
-    this.setGameCards()
+    this.setPlayers(gameTransport)
+    this.multiplePlayers.forEach((player: Player, index: number) => {
+      if (player.name === this.username) {
+        this.playerId = index
+      }
+    })
     this.setCommunityCards(gameTransport)
   }
 
   public handFinished (gameTransport: any) {
-    this.multiplePlayers = Object.assign(this.multiplePlayers, gameTransport.players)
-    this.setGameCards()
-
+    console.log(this.username + ' The HAND_FINISHED  was called')
+    this.setPlayers(gameTransport)
+    // this.multiplePlayers = Object.assign(this.multiplePlayers, gameTransport.players)
+    this.isHandFinsihed = true
     this.setCommunityCards(gameTransport)
-
-    this.bigBlind = gameTransport.bigBlind
-    this.turn = gameTransport.nextPlayer
-    this.potSum = gameTransport.potSum
   }
 
   public defaultGameTransport (gameTransport: any) {
     console.log('DEFAULT GAMETRANSPORT')
-    console.log(gameTransport)
 
     this.setPlayers(gameTransport)
-    this.setGameCards()
     this.setCommunityCards(gameTransport)
-
-    this.bigBlind = gameTransport.bigBlind
-    this.turn = gameTransport.nextPlayer
-    this.potSum = gameTransport.potSum
   }
+
   public setPlayers (gameTransport: any) {
     this.multiplePlayers = []
     gameTransport.players.forEach((item: any, index: number) => {
@@ -417,10 +411,12 @@ export default class GameMech {
   public setGameCards () {
     this.multiplePlayers.forEach((value: Player, index: number) => {
       if (index === this.playerId) {
-        if (this.cardOne === '' && this.cardTwo === '') {
+        if (this.cardOne !== '' && this.cardTwo !== '') {
+          console.log('set cards worked')
           value.card1 = this.cardOne
           value.card2 = this.cardTwo
         } else {
+          console.log('set cards DIDN"T work')
           value.card1 = Card.BLANK_CARD
           value.card2 = Card.BLANK_CARD
         }

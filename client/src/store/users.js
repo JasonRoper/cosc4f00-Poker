@@ -297,9 +297,12 @@ const actions = {
   }
 }
 
+const currentlyInGame = false
+
 export default {
   state,
   getters,
   mutations,
-  actions
+  actions,
+  currentlyInGame
 }

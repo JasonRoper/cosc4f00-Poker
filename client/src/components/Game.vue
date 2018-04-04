@@ -23,22 +23,15 @@
         </div>
       </div>
       <div id="page-content" class="col">
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <gameMenu></gameMenu>
+        <!-- <ul class="nav nav-tabs" id="myTab" role="tablist">
           <li class="nav-item">
             <a class="nav-link active" id="game-tab" data-toggle="tab" href="#game" role="tab" aria-controls="game" aria-selected="true">Game</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Profile</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Contact</a>
           </li>
         </ul>
         <div class="tab-content" id="myTabContent">
           <div class="tab-pane fade show active" id="game" role="tabpanel" aria-labelledby="home-tab"><gameMenu></gameMenu></div>
-          <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">somthine 2</div>
-          <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
