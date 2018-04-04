@@ -136,8 +136,8 @@ public class GameController {
 
         GameStateTransport nextGameState = handleAction(gameID, action, playerId);
 
-        while (aiService.isAIPlayer(gameID, nextGameState.getNextPlayer())) {
-            GameAction aiAction = aiService.playAction(gameID);
+        while (gameService.isAITurn(gameID)) {
+            GameAction aiAction = aiService.playAction(gameService,gameID);
             nextGameState = handleAction(gameID, aiAction, nextGameState.getNextPlayer());
         }
     }

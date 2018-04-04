@@ -325,6 +325,12 @@ public class GameState {
         return players.size();
     }
 
+    public void addAIPlayer(long userID,String name){
+        players.get(addPlayer(userID,name)-1).setAI(true);
+
+
+    }
+
     /**
      * returns the amount of players in the game
      * @return int player Count
@@ -401,10 +407,10 @@ public class GameState {
         cards.add(getCommunityCardOne());
         cards.add(getCommunityCardTwo());
         cards.add(getCommunityCardThree());
-        if (round <= 2) {
+        if (round >= 2) {
             cards.add(getCommunityCardFour());
         }
-        if (round <= 3) {
+        if (round >= 3) {
             cards.add(getCommunityCardFive());
         }
         return cards;
