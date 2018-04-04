@@ -380,6 +380,7 @@ export default class GameMech {
       const act: GameActionType | null = (item.action.type !== null) ? item.action : null
       // console.log('This is for the is it your turn' + index + ' ' + gameTransport.nextPlayer)
       const userTurn: boolean = (index === gameTransport.nextPlayer)
+      const user: boolean = (item.name === this.username)
       const player: Player = {
         id: item.id,
         money: item.money,
@@ -392,7 +393,8 @@ export default class GameMech {
         winnings: 0,
         isPlayer: item.player,
         isDealer: item.dealer,
-        isTurn: userTurn
+        isTurn: userTurn,
+        isUser: user
       }
       this.multiplePlayers.push(player)
     })

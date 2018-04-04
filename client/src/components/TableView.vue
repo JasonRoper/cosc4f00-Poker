@@ -168,7 +168,7 @@
 
       </div> -->
               <div class="inner-tableBorder ">
-          <player  class="player" v-for="player in this.mechanics.getOpponent(UserName)" :key="player.id" :data="player">
+          <player  class="player" v-for="player in this.mechanics.multiplePlayers" :key="player.id" :data="player">
         </player>
             <div class="CompleteTable">
         <div class= 'tableContent'>

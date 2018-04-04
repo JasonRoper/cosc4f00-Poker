@@ -24,6 +24,7 @@
         </div>
           <div v-else class="text-dark oppName lead"> 
          <strong> {{this.data.name}} </strong>
+         <div v-if="this.data.isUser">This is the user</div>
         </div>
 
         <p>{{this.data.id}}</p> 
@@ -108,8 +109,8 @@ export default {
       BetAction: false,
       progressBar: 0,
       timerDone: false,
-      showHand: false
-
+      showHand: false,
+      isUser: this.data.isUser
     }
   },
   props: ['data'],
