@@ -297,7 +297,9 @@ public class GameState {
     }
 
     public boolean lastActionBet(){
-        return (players.get(previousTurn).getLastGameAction().getType()==GameActionType.BET||players.get(previousTurn).getLastGameAction().getType()==GameActionType.RAISE);
+        boolean test1=players.get(previousTurn).getLastGameAction().getType()==GameActionType.BET;
+        boolean test2=players.get(previousTurn).getLastGameAction().getType()==GameActionType.RAISE;
+        return test1||test2;
     }
 
     /**

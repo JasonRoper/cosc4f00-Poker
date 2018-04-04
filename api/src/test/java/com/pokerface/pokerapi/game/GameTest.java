@@ -162,7 +162,7 @@ public class GameTest {
 
         CompletableFuture<HandTransport> gameStartingHandCheck = webSockets.get(0).subscribe("/user/messages/game/"+gameID,HandTransport.class);
 
-        ResponseEntity<GameInfoTransport> matchmakingResponse = adminRest.postForEntity("/api/v1/matchmaking/basicGame", null, GameInfoTransport.class);
+        ResponseEntity<GameInfoTransport> matchmakingResponse = adminRest.postForEntity("/api/v1/matchmaking/casualGame", null, GameInfoTransport.class);
         assertEquals(matchmakingResponse.getStatusCode(), HttpStatus.OK);
 
         ResponseEntity<GameStateTransport> gameStateResponse = adminRest.getForEntity("/api/v1/games/"+matchmakingResponse.getBody().getGameId(),GameStateTransport.class);
@@ -362,6 +362,7 @@ public class GameTest {
 
             webSockets.get(testGameState.getPresentTurn()).send("/app/game/" + testGameState.getId(), new GameAction(GameActionType.BET,1));
             testTransport = testGameStateTransport.get(20, TimeUnit.SECONDS);
+            testGameState = gameRepository.findOne(testGameState.getId());
         }
 
             for (int i=0;i<4;i++) {
@@ -373,15 +374,15 @@ public class GameTest {
                 TimeUnit.SECONDS.sleep(10);
                 testGameState = gameRepository.findOne(testGameState.getId());
                 assertTrue(testGameState.getRound()==1||i==3);
-                //assertFalse(testGameState.lastActionBet());
+                assertFalse(testGameState.lastActionBet());
             }
 
 
         TimeUnit.SECONDS.sleep(10);
         testGameState=gameRepository.findOne(testGameState.getId());
         assertTrue(testGameState.getRound()==2);
-        assertEquals(testGameState.getPlayers().get(3).getBet(),12);
-        assertEquals(testGameState.getMinimumBet(),12);
+        assertEquals(testGameState.getPlayers().get(3).getBet(),16);
+        assertEquals(testGameState.getMinimumBet(),16);
 
         cleanUpUserRepository();
         cleanUpGameRepository();
