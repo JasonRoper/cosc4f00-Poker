@@ -365,7 +365,7 @@ public class GameService {
         winnings=gameState.getPot().resolveWinnings(winners);
         gameState.applyWinnings(winnings);
         HandEndTransport handEndTransport = new HandEndTransport(winnings, gameState.getPlayers());
-        gameState.setHasStarted(false);
+        gameState.endHand();
         games.save(gameState);
         return handEndTransport;
     }
@@ -493,7 +493,7 @@ public class GameService {
         GameState gameState = games.findOne(gameID);
        long[] userIDs = new long[gameState.getPlayerCount()];
        for (int i=0; i<userIDs.length;i++){
-           userIDs[i]=gameState.getPlayers().get(i).getUserID();
+               userIDs[i] = gameState.getPlayers().get(i).getUserID();
        }
 
        return userIDs;

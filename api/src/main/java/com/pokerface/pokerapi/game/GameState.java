@@ -654,6 +654,16 @@ public class GameState {
         return sum;
     }
 
+    public void endHand(){
+        hasStarted=false;
+        startTime=System.currentTimeMillis();
+                for (Player p:players){
+            p.setBet(0);
+            p.setDealer(false);
+            p.setLastGameAction(null);
+                }
+    }
+
     @Override
     public int hashCode() {
 

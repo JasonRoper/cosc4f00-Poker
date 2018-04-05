@@ -67,9 +67,11 @@ public class GameController {
             messenger.convertAndSend("/messages/game/"+gameID, gameTransport);
             long[] userIDs=gameService.getUserIDsFromGame(gameID);
             for(long userID: userIDs) {
-                UserInfoTransport user = userService.getUser(userID);
-                HandTransport userHand = gameService.getHandTransport(gameID, userID);
-                messenger.convertAndSendToUser(user.getUsername(), "/messages/game/"+gameID, userHand);
+                if (userID<1000000) {
+                    UserInfoTransport user = userService.getUser(userID);
+                    HandTransport userHand = gameService.getHandTransport(gameID, userID);
+                    messenger.convertAndSendToUser(user.getUsername(), "/messages/game/" + gameID, userHand);
+                }
             }
         }
     }
@@ -215,8 +217,7 @@ public class GameController {
             HandEndTransport winners = gameService.determineWinnings(gameID);
             nextGameState = gameService.getGameStateTransport(gameID);
 
-            messenger.convertAndSend("/messages/game/" + gameID,
-                    nextGameState.reason(GameStateTransport.Reason.HAND_FINISHED, ""));
+            messenger.convertAndSend("/messages/game/" + gameID, nextGameState.reason(GameStateTransport.Reason.HAND_FINISHED, ""));
             if (gameService.getGameType(gameID).equals("COMPETITIVE")){
                 int[] ratingChanges=gameService.calculateRatingChanges(gameID);
                 long[] userIDs=gameService.getUserIDsFromGame(gameID);
@@ -224,6 +225,7 @@ public class GameController {
                     userService.applyRatingChange(userIDs[i],ratingChanges[i]);
                 }
             }
+            messenger.convertAndSend("/messages/game/" + gameID,winners);
         } else if (gameService.isRoundEnd(gameID)) {
             nextGameState = gameService.handleRound(gameID);
             messenger.convertAndSend("/messages/game/" + gameID,
