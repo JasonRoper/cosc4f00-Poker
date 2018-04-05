@@ -16,11 +16,8 @@
     <a class=" nav-item  nav-link active bg-transparent active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Home</a>
     <a class="nav-item nav-link bg-transparent" id="pills-features-tab" data-toggle="pill" href="#pills-features" role="tab" aria-controls="pills-features" aria-selected="false">Features</a>
     <a class=" nav-item nav-link bg-transparent" id="pills-about-tab" data-toggle="pill" href="#pills-about" role="tab" aria-controls="pills-about" aria-selected="false">About</a>
-    <a class="nav-item nav-link" href="#Watch">Watch</a>
     <a class="nav-item nav-link" href="#Support">Support</a>
-    <a class="nav-item nav-link " href="#"><i class="fa fa-search"></i></a>
     <a class="nav-item nav-link"  data-toggle="modal" data-target="#Register2"> Login</a>
-    <a class="nav-item nav-link" href="#"><i class="fa fa-cog" style="font-size:24px"></i></a>
       </div>
     </div>
   </div>
@@ -35,12 +32,6 @@
 <!-- <button @click="Showhome = !Showhome">Change Now</button> -->
 
 <!-- <login v-show="Showhome"></login> -->
-<transition  enter-active-class="custom-enter-active">
-<modal  effect="bounce" name="hello-world">
-  hello, world!
-</modal>
-<!-- Modal -->
-</transition>
 <!--==================*
     MODAL Login!!!
 *==================-->

@@ -88,7 +88,7 @@ transform:scale(0.59);
 /* border: 1px solid red; */
 background-repeat: no-repeat;
 /* transition: transform 500ms cubic-bezier(.2,-0.02,.39,1.27); */
-/* perspective: 700px; */
+perspective: 700px;
 
 }
 

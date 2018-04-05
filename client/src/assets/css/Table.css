@@ -52,19 +52,26 @@
     
     
   }
-
-  .Usercards{
-    width:  600px;
+   .userCards-wrapper {
+     perspective: 700px;
+     z-index: 0;
+   }
+  .TheUsercards{
+    width:  480px;
+    position: relative;
+    left:120px;
+    top:-60px;
+    /* margin-left: 400px; */
     margin: 0px auto;
     display: -webkit-flex; /* Safari */
     -webkit-align-items: center; /* Safari 7.0+ */
     display: flex;
     align-items: center;
     align-content: center;
-    position: relative;
-    left:-35px;
-    transform: scale(0.85);
+    transform: scale(0.75);
     perspective: 700px;
+
+    
   }
 
   .userCards{
@@ -102,6 +109,7 @@
     position:absolute;
     border:1px solid aqua; 
     background: transparent;
+    /* transform: rotateZ(180deg) */
   }
 
 
@@ -139,7 +147,7 @@
      /* transform: scale(1); */
      perspective: 700px;
     
-      transform: scale(0.88);
+      transform: scale(0.9);
   
      } 
 
@@ -379,7 +387,7 @@
 }
 .tableContent {
 position:relative;
-top:120px;
+top:100px;
 }
 
 .tableHead{
@@ -393,7 +401,7 @@ top:120px;
 
 .deckCard {
   /* z-index: 1; */
-  /* transform: (32); */
+  /* transform: rotateZ(360deg); */
   transition: transform 5s cubic-bezier(.2,-0.02,.39,1.27);
 
 }

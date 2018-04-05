@@ -122,11 +122,11 @@ export default {
   },
   methods: {
     addBar: function () {
-      this.progressBar = this.progressBar + 0.35
-     // console.log(this.progressBar)
+      // this.progressBar = this.progressBar + 0.35
+      // console.log(this.progressBar)
       if (this.progressBar >= 45) {
         this.timerDone = true
-        this.data.isTurn = false
+        // this.data.isTurn = false
         this.progressBar = 0
       }
     },

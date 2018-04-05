@@ -1,0 +1,53 @@
+.jumboTron-image{
+    background-image: url('../Webgraphics/pokerJumbo2.jpg');
+    background-size: cover;
+    overflow:hidden;
+    /* height:700px; */
+    position: relative;
+}
+.landingChip{
+    /* transform: translatezrotatex(60deg); */
+/* transform: translatez(300px) rotateX(10deg); */
+
+
+    border: 22pt dashed rgb(246, 248, 246); 
+    height: 13em;
+    width:13em;
+    text-decoration: none;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);  
+    border-radius: 50%;
+    transition: transform 500ms cubic-bezier(.2,-0.02,.39,1.27);
+    margin:0px auto;
+    /* transform: rotatex(25deg); */
+  
+}
+
+.chip-holder {
+    padding: 20px;
+    display: inline-block;
+    perspective: 790px;
+  }
+  .landingChip-wprapper{
+      border:10px solid  black;
+      background:#ceae1e;
+      border-radius: 20%;
+      width:80%;
+      margin:auto;
+      
+  }
+.tagLine{
+    font-size: 29px;
+    
+}
+  .theregister {
+   /* opacity: 0.5; */
+   transition: all 500ms cubic-bezier(.2,-0.02,.39,1.27);
+
+  }
+  
+  .theregister:hover {
+    /* opacity: 1; */
+    /* transition: transform 500ms cubic-bezier(.2,-0.02,.39,1.27); */
+ 
+   }
+  
