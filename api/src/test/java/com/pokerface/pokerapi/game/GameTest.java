@@ -300,7 +300,7 @@ private UserRepository userRepository;
             testGameStateTransport=webSockets.get(0).subscribe(gameStateMessagePath+testGameState.getId(),GameStateTransport.class);
 
             webSocket.send("/app/game/"+testGameState.getId(),new GameAction(GameActionType.BET,50));
-            testTransport=testGameStateTransport.get(20,TimeUnit.SECONDS);
+            //testTransport=testGameStateTransport.get(20,TimeUnit.SECONDS);
         }
 
         //TimeUnit.SECONDS.sleep(20);
@@ -410,7 +410,7 @@ private UserRepository userRepository;
             }
         TimeUnit.SECONDS.sleep(10);
         testGameState=gameRepository.findOne(testGameState.getId());
-        assertTrue(testGameState.getPlayers().get(2).getCashOnHand()==106);
+        assertEquals(testGameState.getPlayers().get(2).getCashOnHand(),106);
 
         cleanUpUserRepository();
         cleanUpGameRepository();
@@ -681,6 +681,7 @@ private UserRepository userRepository;
     }
 
     private void cleanUpGameRepository(){
+        Iterable games=gameRepository.findAll();
         gameRepository.deleteAll();
     }
 

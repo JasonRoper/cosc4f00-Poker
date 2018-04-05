@@ -655,13 +655,12 @@ public class GameState {
     }
 
     public void endHand(){
+//        startTime=System.currentTimeMillis();
+//        for (Player p: players){
+//            p.setBet(0);
+//            p.setLastGameAction(new GameAction(null,0,p));
+//        }
         hasStarted=false;
-        startTime=System.currentTimeMillis();
-                for (Player p:players){
-            p.setBet(0);
-            p.setDealer(false);
-            p.setLastGameAction(null);
-                }
     }
 
     @Override
