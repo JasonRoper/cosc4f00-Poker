@@ -190,21 +190,24 @@ export default {
       if (this.data.action !== '') {
         this.data.action = ''
         let interval = 2200
-        window.setInterval(900)
+        // window.setInterval(900)
         setTimeout(this.resetActions, interval)
       }
     }
   },
   watch: {
     isTurn () {
-      window.setInterval(() => {
+     /*  window.setInterval(() => {
         this.addBar()
-      }, 100)
+      }, 100) */
     },
     showHand () {
       if (this.showHand === true) {
         document.getElementById('hand').classList.toggle('active')
         document.getElementById('hand2').classList.toggle('active')
+      }
+    }
+  },
   computed: {
     isTurn () {
       return this.data.isTurn
