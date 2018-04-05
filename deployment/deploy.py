@@ -62,7 +62,7 @@ def copy_aws_config_to_packaging():
 
 
 def package(filename):
-    print("packaging into ", filename, "...")
+    print("packaging into", filename, "...")
     with cd("deployment"):
         shutil.make_archive(filename, "zip", "package")
 
@@ -81,13 +81,12 @@ def find_latest_version():
 
 
 def build(name):
-    print("Creating aws package ", name+".zip...")
+    print("Creating aws package", name+".zip...")
 
     build_frontend()
     copy_frontend_to_backend()
     build_backend()
     copy_backend_to_packaging()
-    copy_aws_config_to_packaging()
 
     package(name)
 
