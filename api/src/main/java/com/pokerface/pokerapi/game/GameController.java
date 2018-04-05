@@ -225,7 +225,7 @@ public class GameController {
                     userService.applyRatingChange(userIDs[i],ratingChanges[i]);
                 }
             }
-            messenger.convertAndSend("/messages/game/" + gameID,winners);
+            messenger.convertAndSend("/messages/game/" + gameID+"/gamefinished",winners);
         } else if (gameService.isRoundEnd(gameID)) {
             nextGameState = gameService.handleRound(gameID);
             messenger.convertAndSend("/messages/game/" + gameID,

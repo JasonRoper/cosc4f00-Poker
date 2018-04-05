@@ -18,14 +18,18 @@ public class Player {
     private Card cardTwo;
     private int cashOnHand;//User available money in game
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "player_ID")
+    private long ID;
     private long userID; // id to the database
     private int playerID; // id to the game
-    private GameState gameState;
     private boolean hasFolded;
     private boolean isAI;
     private boolean isDealer;
     private boolean isAllIn;
     private int bet;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn
     private GameAction lastGameAction=null;
     private String name="Default";
 
@@ -46,8 +50,7 @@ public class Player {
     public Player(Long userID, GameState gameState){
         lastGameAction=new GameAction(null,0,this);
         this.userID=userID;
-        this.gameState=gameState;
-        cashOnHand=getGameState().defaultCashOnHand;
+        cashOnHand=gameState.getDefaultCashOnHand();
         hasFolded=false;
         isDealer=false;
         isAI=false;
@@ -118,11 +121,22 @@ public class Player {
      */
     public void setPlayerID(int playerID) { this.playerID =playerID; }
 
+
+    public long getID() {
+        return ID;
+    }
+
+    public void setID(long ID) {
+        this.ID = ID;
+    }
+
     /**
      * The ID of where this object exists in the database
      * @return the long userID of the Player
      */
-    @Id
+
+
+
     public long getUserID() {
         return userID;
     }
@@ -133,24 +147,6 @@ public class Player {
      */
     public void setUserID(long userID) {
         this.userID = userID;
-    }
-
-    /**
-     * returns the gameState where they exist
-     * @return the GameState of the Player
-     */
-    @ManyToOne
-    @JoinColumn(name="gameState")
-    public GameState getGameState() {
-        return gameState;
-    }
-
-    /**
-     * Sets the GameState where they exist
-     * @param gameState the GameState to set
-     */
-    public void setGameState(GameState gameState) {
-        this.gameState = gameState;
     }
 
     /**
@@ -225,8 +221,6 @@ public class Player {
         isDealer = dealer;
     }
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn
     public GameAction getLastGameAction() {
         return lastGameAction;
     }
