@@ -55,9 +55,8 @@ export default class GameMech {
   public communityCards: string[] = []
   public playerId: number = 0
   public userAction: GameAction | null = null
-  public gameStatus: string = ''
   public roundNumber: number = -1
-
+  public gameStatus: string = 'Game Pending....'
   public isHandFinsihed: boolean = false
   public hasGameStarted: boolean = false
   public username: string = ''

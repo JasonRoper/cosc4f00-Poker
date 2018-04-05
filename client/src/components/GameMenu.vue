@@ -46,6 +46,7 @@
               <div class="pt-0">
          <div class="chip-holder pt-5 mt-5"><button  @mouseleave="chiprelaseSound()" @mouseover="chipSound()" class="around-words2 inner-grey btn btn-lg" data-toggle="modal" data-target="#CreateCasualPoker"><hr><div class="button-title">Create Game</div><hr></button></div>
         <div class="chip-holder pt-5 mt-5"><button   @mouseleave="chiprelaseSound()" @mouseover="chipSound()" class="around-words2 inner-blue btn btn-lg" data-toggle="modal" data-target="#JoinCasualPoker"><hr><button class="btn btn-lg">Join Game</button><hr></button></div>
+        <div class="chip-holder pt-5 mt-5"><button   @mouseleave="chiprelaseSound()" @mouseover="chipSound()" class="around-words bg-transparent btn btn-lg" data-toggle="modal" data-target="#JoinCasualPoker"><hr><button class="btn btn-lg">Match Make</button><hr></button></div>
               </div>
               </div>
       </div>
@@ -77,11 +78,10 @@
   <option value="3">3</option>
   <option value="1">4</option>
   <option value="2">5</option>
-  <option value="3">6</option>
 </select>
       </div>
   </div>
-  <div class="form-group row">
+  <!-- <div class="form-group row">
     <label for="inputPassword3" class="col-sm-3 col-form-label">$BuyIn</label>
     <div class="col-sm-9">
       <input v-model="this.createGame.buyIn" type="number" class="form-control" id="inputPassword3" placeholder="BigBlind Buy In ">
@@ -93,7 +93,7 @@
     <div class="col-sm-9">
       <input v-model="this.createGame.maxBalance" type="pos number" class="form-control" id="inputPassword3" placeholder=" Highest Balance per Player ">
     </div>
-  </div>
+  </div> -->
 </form>
       </div>
       <div class="modal-footer">

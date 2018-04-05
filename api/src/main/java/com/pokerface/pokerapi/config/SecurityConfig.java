@@ -83,8 +83,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().httpBasic()
                 // need to use cookie csrf protection without HttpOnly flag in order for it to work with
                 // axios and new Websocket()
-                .and().csrf().disable() //csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .cors().disable()
+                .and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                .and().cors().disable()
                 // enable logging out to invalidate the JSESSION cookie
                 .logout().permitAll().logoutUrl("/api/v1/users/logout");
 

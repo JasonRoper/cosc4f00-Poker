@@ -2,6 +2,7 @@ package com.pokerface.pokerapi.game;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.*;
@@ -19,13 +20,13 @@ public class Deck {
     /**
      * cards is the deck of cards in a Deck object. It is a stack, of Card type.
      */
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     @Enumerated
     private List<Card> cards;
     /**
      * id is the identifier of the deck, used as a primary key to identify which game it belongs to.
      */
-
-    @ElementCollection(fetch = FetchType.EAGER)
     public List<Card> getCards() {
         return cards;
     }
@@ -34,11 +35,10 @@ public class Deck {
         this.cards = cards;
     }
 
-    private long id;
-    /**
-     * this is a reference object to the game it belongs to
-     */
-    private GameState gameState;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "deck_ID")
+    private long deckID;
 
     /**
      * This is the default constructor, when created it generates a new randomly shuffled deck by randomly pulling
@@ -50,7 +50,7 @@ public class Deck {
     public Deck(GameState gameState){
         int cards=0;
         this.cards=new ArrayList<>();
-        this.gameState=gameState;
+        deckID=gameState.getId();
         boolean[] taken = new boolean[52];
         Random rand = new Random(System.currentTimeMillis());
         while (cards!=52){
@@ -87,28 +87,17 @@ public class Deck {
      * getID returns to the ID of the deck
      * @return a long representing the ID of the deck
      */
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    public long getId() {
-        return id;
+
+    public long getDeckID() {
+        return deckID;
     }
 
     /**
      * setId adds the ID parameter to the deck
-     * @param id of the deck
+     * @param deckID of the deck
      */
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    /**
-     * A one to one relationship, each deck belongs to a GameState, and each GameState belongs to a Deck.
-     * @return GameState the deck belongs to.
-     */
-    @OneToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="gameState")
-    public GameState getGameState() {
-        return gameState;
+    public void setDeckID(long deckID) {
+        this.deckID = deckID;
     }
 
     /**
@@ -119,13 +108,6 @@ public class Deck {
         return cards.remove(cards.size()-1);
     }
 
-    /**
-     * setGameState sets what game the deck belongs to, likely unused.
-     * @param gameState the gamestate being set
-     */
-    public void setGameState(GameState gameState) {
-        this.gameState = gameState;
-    }
 
     public int getTen() {
         return ten;
@@ -141,13 +123,13 @@ public class Deck {
         if (o == null || getClass() != o.getClass()) return false;
         Deck deck = (Deck) o;
         return getTen() == deck.getTen() &&
-                getId() == deck.getId() &&
+                getDeckID() == deck.getDeckID() &&
                 Objects.equals(getCards(), deck.getCards());
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(getTen(), getCards(), getId());
+        return Objects.hash(getTen(), getCards(), getDeckID());
     }
 }

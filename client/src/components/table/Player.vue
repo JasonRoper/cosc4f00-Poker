@@ -124,16 +124,16 @@ export default {
     card: Card
   },
   updated: function () {
-    this.seeAction()
+   // this.seeAction()
   },
   methods: {
     addBar: function () {
-      this.progressBar = this.progressBar + 0.35
-      console.log(this.progressBar)
+      // this.progressBar = this.progressBar + 0.35
+      // console.log(this.progressBar)
       if (this.progressBar >= 45) {
         this.timerDone = true
-        this.data.isTurn = false
-       this.progressBar = 0
+        // this.data.isTurn = false
+        this.progressBar = 0
       }
     },
     // checkTimmer () {
@@ -205,6 +205,12 @@ export default {
             alert('There was no suitable action sent')
           }
         }
+        if (this.data.action !== '') {
+          this.data.action = ''
+          let interval = 2200
+          // window.setInterval(900)
+          setTimeout(this.resetActions, interval)
+        }
       }
     }
   },
@@ -215,9 +221,9 @@ export default {
   },
   watch: {
     isTurn () {
-      // window.setInterval(() => {
-      // this.addBar()
-      // }, 100)
+     /*  window.setInterval(() => {
+        this.addBar()
+      }, 100) */
     },
     showHand () {
       if (this.showHand === true) {
@@ -226,14 +232,6 @@ export default {
         var playerCards = document.getElementsByClassName('singleCard')
         playerCards[playerCards.length - 1].classList.toggle('active')
         playerCards[playerCards.length - 2].classList.toggle('active')
-      }
-    },
-    playerAction (query) {
-      alert('changed')
-      if (query === 'BET') {
-        alert('change')
-        console.log('hi')
-        this.playerAction = ''
       }
     }
   },

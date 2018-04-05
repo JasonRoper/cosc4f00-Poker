@@ -39,7 +39,7 @@ public class UserService implements UserDetailsService {
     public UserService(final UserRepository userRepository, final PasswordEncoder encoder) {
         this.userRepository = userRepository;
         this.encoder = encoder;
-        User admin = new User("admin",
+       /*  User admin = new User("admin",
                 encoder.encode("admin"),
                 "admin@pokerpals.org");
         admin.setRole("ROLE_USER,ROLE_ADMIN");
@@ -64,7 +64,7 @@ public class UserService implements UserDetailsService {
         this.userRepository.save(admin);
         this.userRepository.save(adam);
         this.userRepository.save(javon);
-        this.userRepository.save(ashley);
+        this.userRepository.save(ashley); */
     }
 
     /**
