@@ -29,6 +29,7 @@ import { API_V1 } from '@/config'
 export default class GameRequest {
   public MATCHMAKING: string = API_V1 + '/matchmaking/competitiveGame'
   public CASUAL: string = API_V1 + '/matchmaking/casualGame'
+  public AIGAME: string = API_V1 + '/matchmaking/aiGame'
   public gameId: number = -1
 
   public createCompetitiveGame (): Promise<number | void> {

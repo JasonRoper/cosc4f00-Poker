@@ -56,6 +56,7 @@ export default class GameMech {
   public playerId: number = 0
   public userAction: GameAction | null = null
   public gameStatus: string = ''
+  public roundNumber: number = -1
 
   public isHandFinsihed: boolean = false
   public hasGameStarted: boolean = false
@@ -72,7 +73,6 @@ export default class GameMech {
     [GameActionType.CALL, GameActionType.RAISE, GameActionType.FOLD], [GameActionType.FOLD]]
   public cardOne: string = ''
   public cardTwo: string = ''
-
   private gameService: GameService
 
   /**
@@ -89,15 +89,8 @@ export default class GameMech {
     this.gameService.onGameUpdated(this.setGameTransport.bind(this))
     this.gameService.onGameFinished(this.onGameFinishedEvent.bind(this))
     this.gameService.onGameError(this.onGameError.bind(this))
-
-    // Verifies if a user Id was passed
-    // if (userId) {
-    // Allows user to receive cards
     this.username = username
-    // } else {
-    //   alert('NO userId')
-    //   this.lobby = true
-    // }
+
     if (!state.currentlyInGame) {
       axios.get(API_V1 + '/games/' + this.gameId).then((responce) => {
         console.log('GAME MECHANICS CONSTRUCTOR - ASKING TO JOIN GAME')
@@ -136,9 +129,12 @@ export default class GameMech {
    * @event GameFinishedEvent
    * @param gameFinished The inforamtion that you need to finish a game
    */
-  public onGameFinishedEvent (gameFinished: GameFinished) {
-    this.multiplePlayers = Object.assign(this.multiplePlayers, gameFinished.multiplePlayers)
-    this.setGameCards()
+  public onGameFinishedEvent (gameFinished: any) {
+    alert('GAME FINISHED')
+    console.log('The finished Event has been called')
+    console.log(gameFinished)
+    this.setFinishedPlayer(gameFinished)
+    console.log('This game finished event does nothing')
   }
 
   /**
@@ -157,7 +153,6 @@ export default class GameMech {
    * @param userCards
    */
   public onUserCardsEvent (userCards: any) {
-    alert('User CardsEvent was called')
     console.log('The users cards are: ' + userCards.cardOne + ' and ' + userCards.cardTwo)
     this.multiplePlayers[this.playerId].card1 = userCards.cardOne
     this.multiplePlayers[this.playerId].card2 = userCards.cardTwo
@@ -268,39 +263,39 @@ export default class GameMech {
     console.log(gameTransport)
     if (gameTransport.event) {
       if (gameTransport.event.message) {
-        console.log('The GameTransport message: ' + gameTransport.event.message)
         this.gameStatus = gameTransport.event.message
+        // alert(gameTransport.event.message + ' The gamestatus is')
       }
-    }
-    if (gameTransport.event) {
       switch (gameTransport.event.action) {
         case Event.GAME_STARTED: {
           alert('GAME_STARTED event triggered')
           this.gameStatus = 'Game Start!'
           this.hasGameStarted = true
-          console.log('GAME_STARTED event triggered')
+          this.roundNumber = 0
           this.gameStarted(gameTransport)
+          this.setGameCards()
           break
         }
         case Event.HAND_FINISHED: {
           alert('HAND_FINISHED event triggered')
           console.log('HAND_FINISHED event triggered')
+          this.roundNumber++
           this.handFinished(gameTransport)
+          this.setGameCards()
           break
         }
         case Event.ROUND_FINISHED: {
+          alert('ROUND FINISHED event triggered')
           this.roundFinished(gameTransport)
+          this.setGameCards()
           break
         }
         case Event.USER_ACTION: {
-          alert('USER_ACTION/PLAYER_ACTION event triggered')
-          console.log('USER_ACTION/PLAYER_ACTION event triggered')
           this.playerAction(gameTransport)
+          this.setGameCards()
           break
         }
         case Event.USER_JOIN: {
-          alert('USER_JOINED event triggered')
-          console.log('USER_JOINED event triggered')
           this.playerJoined(gameTransport)
           break
         }
@@ -308,13 +303,13 @@ export default class GameMech {
           alert('GAMETRANSPORT EVENT is ' + gameTransport.event.action + ' there is not proper case for this')
           console.log('GAMETRANSPORT EVENT is ' + gameTransport.event.action + ' there is not proper case for this')
           this.defaultGameTransport(gameTransport)
+          this.setGameCards()
         }
       }
     } else {
       alert('GAMETRANSPORT EVENT is NULL')
       this.defaultGameTransport(gameTransport)
     }
-    this.setGameCards()
     this.bigBlind = gameTransport.bigBlind
     this.turn = gameTransport.nextPlayer
     this.potSum = gameTransport.potSum
@@ -339,13 +334,15 @@ export default class GameMech {
   }
 
   public playerAction (gameTransport: any) {
+    // this.setPlayers(gameTransport)
     this.multiplePlayers = Object.assign(this.multiplePlayers, gameTransport.players)
     this.setCommunityCards(gameTransport)
+    this.setTableActions()
   }
 
   public roundFinished (gameTransport: any) {
     this.setCommunityCards(gameTransport)
-
+    this.roundNumber++
   }
 
   public gameStarted (gameTransport: any) {
@@ -360,11 +357,8 @@ export default class GameMech {
   }
 
   public handFinished (gameTransport: any) {
-    console.log(this.username + ' The HAND_FINISHED  was called')
+    alert(this.username + ' The HAND_FINISHED  was called')
     this.setPlayers(gameTransport)
-    // this.multiplePlayers = Object.assign(this.multiplePlayers, gameTransport.players)
-    this.isHandFinsihed = true
-    this.setCommunityCards(gameTransport)
   }
 
   public defaultGameTransport (gameTransport: any) {
@@ -377,7 +371,12 @@ export default class GameMech {
   public setPlayers (gameTransport: any) {
     this.multiplePlayers = []
     gameTransport.players.forEach((item: any, index: number) => {
-      const act: GameActionType | null = (item.action.type !== null) ? item.action : null
+      let act: GameAction | null = null
+      if (item.action !== null) {
+        if (item.action.type !== null) {
+          act = { type: item.action.type, bet: item.action.bet }
+        }
+      }
       // console.log('This is for the is it your turn' + index + ' ' + gameTransport.nextPlayer)
       const userTurn: boolean = (index === gameTransport.nextPlayer)
       const user: boolean = (item.name === this.username)
@@ -388,7 +387,6 @@ export default class GameMech {
         action: act,
         card1: Card.BLANK_CARD,
         card2: Card.BLANK_CARD,
-        currentBet: 0,
         isFold: item.fold,
         winnings: 0,
         isPlayer: item.player,
@@ -398,6 +396,44 @@ export default class GameMech {
       }
       this.multiplePlayers.push(player)
     })
+  }
+
+  public setFinishedPlayer (gameTransport: any) {
+    this.multiplePlayers = []
+    gameTransport.players.forEach((item: any, index: number) => {
+      let act: GameAction | null = null
+      if (item.action !== null) {
+        if (item.action.type !== null) {
+          act = { type: item.action.type, bet: item.action.bet }
+        }
+      }
+      // console.log('This is for the is it your turn' + index + ' ' + gameTransport.nextPlayer)
+      const userTurn: boolean = (index === gameTransport.nextPlayer)
+      const user: boolean = (item.name === this.username)
+      const player: Player = {
+        id: item.id,
+        money: item.money,
+        name: item.name,
+        action: act,
+        card1: item.cardOne,
+        card2: item.cardTwo,
+        isFold: item.fold,
+        winnings: item.winnings,
+        isPlayer: item.player,
+        isDealer: item.dealer,
+        isTurn: userTurn,
+        isUser: user
+      }
+      this.multiplePlayers.push(player)
+    })
+
+    // :0,"id":0,"player":true,"fold":true,"dealer":true},{"money":136,"name":"AIPlayer1",
+    // "action":{"type":"CHECK","bet":0},"cardOne":"SPADES_THREE","cardTwo":"HEARTS_FOUR",
+    // "winnings":72,"id":1,"player":true,"fold":false,"dealer":false},{"money":64,"name":
+    // "javon","action":{"type":"CHECK","bet":0},"cardOne":"CLUBS_SEVEN","cardTwo":"CLUBS_A
+    // CE","winnings":0,"id":2,"player":false,"fold":false,"dealer":false},{"money":100,"name":
+    // "jason","action":{"type":"FOLD","bet":0},"cardOne":"CLUBS_KING","cardTwo":"HEARTS_NINE",
+    // "winnings":0,"id":3,"player":false,"fold":true,"dealer":false}]}
   }
 
   public setCommunityCards (gameTransport: any) {
@@ -415,11 +451,11 @@ export default class GameMech {
     this.multiplePlayers.forEach((value: Player, index: number) => {
       if (index === this.playerId) {
         if (this.cardOne !== '' && this.cardTwo !== '') {
-          console.log('set cards worked')
+          // console.log('set cards worked')
           value.card1 = this.cardOne
           value.card2 = this.cardTwo
         } else {
-          console.log('set cards DIDN"T work')
+          // console.log('set cards DIDN"T work')
           value.card1 = Card.BLANK_CARD
           value.card2 = Card.BLANK_CARD
         }
