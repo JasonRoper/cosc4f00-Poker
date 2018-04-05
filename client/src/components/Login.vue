@@ -1,48 +1,22 @@
 <template>
 <div>
   <!--======================================================jumbotron=============================================-->
-    <div id="Home" class="jumbotron jumbotron-fluid bg-dark text-white mb-4 ">
+   <div class ="jumboTron-image">
+    <div id="Home" class="jumbotron jumboTron-image jumbotron-fluid  text-white mb-4 ">
   <div class="container text-sm-center pt-5">
     <h1 class="display-1">PokerPals</h1>
-    <p class="lead"> We came to Play.</p>
+    <h1 class=" tagLine text-dark lead "><strong>We came to Play.</strong></h1>
 <!--   button group-->
-    <div class="btn-group" role="group" aria-label="Basic example">
-  <button type="button" data-toggle="modal" data-target="#Register" class="btn btn-info btn-lg">Register Now</button>
-  <a href="#Developers" type="button" class="btn btn-light btn-lg">See Developers</a>
+      <img src="../assets/Webgraphics/poker.png" width="40" height="40">
+    <div class="btn-group px-3 py-4" role="group" aria-label="Basic example">
+  <button type="button" data-toggle="modal" data-target="#Register" class=" lead theregister btn-outline-primary btn btn-info btn-lg">Register Now</button>
+  <button href="#Developers" type="button" class="theregister btn btn-outline-light btn-lg lead ">See Developers</button>
 </div>
+<img src="../assets/Webgraphics/poker.png" width="40" height="40"> <hr style="height:2px;color:#e2e2e2; background-color:#e2e2e2;">
 <!-- =========================================================Carrosal================================================================================================-->
-<div id="carouselExampleIndicators" class="carousel slide z-index-0" data-ride="carousel">
-  <ol class="carousel-indicators">
-    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-  </ol>
-  <div class="carousel-inner">
-    <div class="carousel-item active">
-      <img class="d-block w-100" src="../assets/Webgraphics/Gon13.png" alt="First slide" height="42" width="100">
-    </div>
-    <div class="carousel-item">
-      <img class="d-block w-100" src="../assets/Webgraphics/log.svg" alt="Second slide" height="42" width="100">
-    </div>
-    <div class="carousel-item">
-      <img class="d-block w-100" src="../assets/Webgraphics/Opponent.svg" alt="Third slide" height="42" width="100">
-    </div>
+
   </div>
-  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="sr-only">Previous</span>
-  </a>
-  <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="sr-only">Next</span>
-  </a>
-
-<!-- =========================================================/Carrosal================================================================================================-->
-
-
 </div>
-<!-- button group-->
-  </div>
 </div>
 <!-- Modal -->
 <div>
@@ -109,8 +83,18 @@
     <!--====================================================================Column 1 ========================================================================= -->
     <div class="col-lg-7">
       <h4 class="display-3  text-left"><u>Latest News</u></h4>
-      <p class="lead text-left"><img class="img-thumbnail d-flex px-4" src="../assets/Webgraphics/Undercon.jpg" >Poker Pals is now curreently Withinin
-      development phase following the generic phases set  by Brock University's COSC 4f00 team poker face. Within our venture we have now moved into the development phase of the Product, While our site is still currently under construction we hope to get things up and running as soon as possible. Until then please observe our structure and lay out of our up comming websitste and all the possible features we look for ward to possible providing in the meant time enjoy.<br> - Team Poker Face. </p>
+      <p class="lead text-left">
+        <!-- <img class="img-thumbnail d-flex px-4" src="../assets/Webgraphics/Undercon.jpg" > -->
+        <div class="landingChip-wprapper">
+        <div class="  d-flex px-2 chip-holder "><button  class="landingChip  bg-success btn btn-lg" ><hr><div class="button-title">POKER PALS</div><hr></button></div>
+         </div>
+         <p class="lead">
+
+        Poker Pals is now curreently Withinin
+      development phase following the generic phases set  by Brock University's COSC 4f00 team poker face. Within our venture we have now moved into the development phase of the Product, While our site is still currently under construction we hope to get things up and running as soon as possible. Until then please observe our structure and lay out of our up comming websitste and all the possible features we look for ward to possible providing in the meant time enjoy.<br> - Team Poker Face.
+             </p>
+
+       </p>
     </div>
     <!--====================================================================/Column 1 =========================================================================-->
      <!--====================================================================Column 2=========================================================================-->
@@ -182,15 +166,20 @@
 <!--====================================================================/Column 2 =========================================================================-->
     </div>
 
-
-
-<div class="row">
-  <div class="col-lg">
-    <!--====================================================LeaderBoard=================-->
-    <div class="card border-dark mb-3 mx-auto">
-            <div class="card-header text-center text-white bg-secondary"><i class="fa fa-clipboard"></i>LeaderBoard</div>
-            <div class="card-body text-dark">
-            <table class="table table-hover table-dark justify-content-center">
+<!--===================================================Row 3================-->
+  <div class="row">
+    <div class="col-lg">
+      <!--====================================================Developers=================-->
+        <div >
+          <hr style="height:2px;color:#333; background-color:#333;">
+        </div>
+        <h1 id="Developers" class="display-4 text-center  text-muted ">LeaderBoard</h1>
+          <!--====================================================Listdevelopers=================-->
+        <div class="pb-4">
+          <hr style="height:2px;color:#333; background-color:#333;">
+        </div>
+      <!--====================================================/Developers=================-->
+         <table class="table table-hover table-dark justify-content-center">
               <thead>
                 <tr>
                   <th scope="col">Username</th>
@@ -216,11 +205,9 @@
                 </tr>
               </tbody>
           </table>
-      </div>
     </div>
-  </div>
-  <!--====================================================LeaderBoard=================-->
 </div>
+
 
 
 <!--====================================================================Features row=========================================================================-->
@@ -473,5 +460,6 @@ export default {
   }
 }
 </script>
-<style>
-</style>
+<style src="@/assets/css/Login.css"></style>
+
+  

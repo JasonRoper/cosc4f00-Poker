@@ -5,7 +5,13 @@
  /**
   * BASE_PATH is the base path of the api.
   */
-export const BASE_PATH = 'localhost:8443'
+export let BASE_PATH
+
+if (window.location.host !== 'localhost:8081') {
+  BASE_PATH = window.location.host
+} else {
+  BASE_PATH = 'localhost:8443'
+}
 
 /**
  * API_V1 defines the root path that all api v1 queries will be based
