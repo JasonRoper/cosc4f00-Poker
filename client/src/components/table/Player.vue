@@ -24,6 +24,7 @@
         </div>
           <div v-else class="text-dark oppName lead"> 
          <strong> {{this.data.name}} </strong>
+         <div v-if="this.data.isUser">This is the user</div>
         </div>
 
         <p>{{this.data.id}}</p> 
@@ -33,8 +34,8 @@
         </div>
       </div>
       <div class="oppentCards">
-        <card id="hand" class="singleCard" :card="this.data.card1"></card>
-        <card id="hand2" class="singleCard" :card="this.data.card2"></card>
+        <card v-ref='card1' ref='card1' id="hand" class="singleCard" :card="this.data.card1"></card>
+        <card v-ref="card2" ref='card2' id="hand2" class="singleCard" :card="this.data.card2"></card>
       </div>
         <div v-show ="this.data.isDealer" id="isDealerContainer">
           
@@ -108,8 +109,8 @@ export default {
       BetAction: false,
       progressBar: 0,
       timerDone: false,
-      showHand: false
-
+      showHand: false,
+      isUser: this.data.isUser
     }
   },
   props: ['data'],
@@ -195,6 +196,11 @@ export default {
       }
     }
   },
+  mounted () {
+    var playerCards = document.getElementsByClassName('singleCard')
+    playerCards[playerCards.length - 1].classList.toggle('active')
+    playerCards[playerCards.length - 2].classList.toggle('active')
+  },
   watch: {
     isTurn () {
      /*  window.setInterval(() => {
@@ -203,8 +209,11 @@ export default {
     },
     showHand () {
       if (this.showHand === true) {
-        document.getElementById('hand').classList.toggle('active')
-        document.getElementById('hand2').classList.toggle('active')
+        // document.getElementById('hand').classList.toggle('active')
+        // document.getElementById('hand2').classList.toggle('active')
+        var playerCards = document.getElementsByClassName('singleCard')
+        playerCards[playerCards.length - 1].classList.toggle('active')
+        playerCards[playerCards.length - 2].classList.toggle('active')
       }
     }
   },

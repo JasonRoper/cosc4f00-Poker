@@ -67,9 +67,11 @@ public class GameController {
             messenger.convertAndSend("/messages/game/"+gameID, gameTransport);
             long[] userIDs=gameService.getUserIDsFromGame(gameID);
             for(long userID: userIDs) {
-                UserInfoTransport user = userService.getUser(userID);
-                HandTransport userHand = gameService.getHandTransport(gameID, userID);
-                messenger.convertAndSendToUser(user.getUsername(), "/messages/game/"+gameID, userHand);
+                if (userID<1000000) {
+                    UserInfoTransport user = userService.getUser(userID);
+                    HandTransport userHand = gameService.getHandTransport(gameID, userID);
+                    messenger.convertAndSendToUser(user.getUsername(), "/messages/game/" + gameID, userHand);
+                }
             }
         }
     }
@@ -136,8 +138,8 @@ public class GameController {
 
         GameStateTransport nextGameState = handleAction(gameID, action, playerId);
 
-        while (aiService.isAIPlayer(gameID, nextGameState.getNextPlayer())) {
-            GameAction aiAction = aiService.playAction(gameID);
+        while (gameService.isAITurn(gameID)) {
+            GameAction aiAction = aiService.playAction(gameService,gameID);
             nextGameState = handleAction(gameID, aiAction, nextGameState.getNextPlayer());
         }
     }
@@ -215,8 +217,7 @@ public class GameController {
             HandEndTransport winners = gameService.determineWinnings(gameID);
             nextGameState = gameService.getGameStateTransport(gameID);
 
-            messenger.convertAndSend("/messages/game/" + gameID,
-                    nextGameState.reason(GameStateTransport.Reason.HAND_FINISHED, ""));
+            messenger.convertAndSend("/messages/game/" + gameID, nextGameState.reason(GameStateTransport.Reason.HAND_FINISHED, ""));
             if (gameService.getGameType(gameID).equals("COMPETITIVE")){
                 int[] ratingChanges=gameService.calculateRatingChanges(gameID);
                 long[] userIDs=gameService.getUserIDsFromGame(gameID);
@@ -224,6 +225,7 @@ public class GameController {
                     userService.applyRatingChange(userIDs[i],ratingChanges[i]);
                 }
             }
+            messenger.convertAndSend("/messages/game/" + gameID,winners);
         } else if (gameService.isRoundEnd(gameID)) {
             nextGameState = gameService.handleRound(gameID);
             messenger.convertAndSend("/messages/game/" + gameID,
@@ -242,7 +244,7 @@ public class GameController {
      * @param principal the user requesting a game
      * @return a GameInfoTransport containing the game info
      */
-    @PostMapping("/api/v1/matchmaking/basicGame")
+    @PostMapping("/api/v1/matchmaking/casualGame")
     public GameInfoTransport casualGameMatchmaking(Principal principal) {
         UserInfoTransport user = userService.getUserByUsername(principal.getName());
         long gameID = gameService.casualMatchmake(user.getId(), user.getUsername());
@@ -262,6 +264,14 @@ public class GameController {
                 gameStateTransport.reason(GameStateTransport.Reason.PLAYER_JOINED, "User has joined"));
         return new GameInfoTransport(gameID);
     }
+
+//    @PostMapping("/api/v1/matchmaking/aiGame")
+//    public GameInfoTransport aiGameCreate(Principal principal) {
+//        UserInfoTransport user = userService.getUserByUsername(principal.getName());
+//        long gameID = gameService.createAIGame(user.getId(), user.getUsername());
+//        GameStateTransport gameStateTransport = gameService.getGameStateTransport(gameID);
+//        return new GameInfoTransport(gameID);
+//    }
 
     @GetMapping("/api/v1/games")
     public void getGameListing() {

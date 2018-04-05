@@ -4,3 +4,5 @@ dist
 tsout
 client/test/unit/coverage
 client/debug.log
+yarn_error.log
+client/yarn_error.log

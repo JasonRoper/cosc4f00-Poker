@@ -57,11 +57,10 @@ public class AIService {
      * @param gameID the gameID needing an action on
      * @return the GameAction the ai has decided to perform
      */
-    public GameAction playAction(long gameID){
+    public GameAction playAction(GameService gameService,long gameID){
+        GameState gameState=gameService.getGameState(gameID);
         lowPair=createLowPair();
         List<Card> cards = new ArrayList<>();
-        GameState gameState;
-        gameState=games.findOne(gameID);
         cards.addAll(gameState.getPlayers().get(gameState.getPresentTurn()).receiveCards());
         cards.addAll(gameState.receiveCommunityCards());
         handRanking=new HandRanking(cards);

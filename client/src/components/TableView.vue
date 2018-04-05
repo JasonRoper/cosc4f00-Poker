@@ -168,7 +168,7 @@
 
       </div> -->
               <div class="inner-tableBorder ">
-          <player  class="player" v-for="player in this.mechanics.multiplePlayers" :key="player.id" :data="player">
+          <player  class="player" v-for="player in this.mechanics.multiplePlayers" v-if="!player.isUser" :key="player.id" :data="player">
         </player>
             <div class="CompleteTable">
         <div class= 'tableContent'>
@@ -285,6 +285,13 @@
   <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">...</div>
   <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">...</div>
 <!-- </div> -->
+<div>
+  <p class='Communitycards'>
+        <card class='size' card="BLANK_CARD"></card>
+        <card class='size' card="BLANK_CARD"></card>
+      </p>
+</div>
+                      <button v-on:click="findPlayer()">FindPlayer TEST </button>
 
                       <button v-on:click="layCommunity()">Second Round of Betting </button>
 
@@ -331,7 +338,8 @@ export default {
       incrument: 0,
       posX: -191,
       posY: -141,
-      posZ: 200
+      posZ: 200,
+      cardDown: false
     }
   },
   /*
@@ -351,6 +359,11 @@ export default {
     },
     EventBarMessage () {
       alert('Change change change')
+    },
+    gameStarted () {
+      if (this.gameStarted === true) {
+        // this.layCommunity()
+      }
     }
   },
   computed: {
@@ -363,16 +376,26 @@ export default {
     EventBarMessage () {
       return this.mechanics.gameStatus
     },
-    deckLength () {
+    gameStarted () {
+      return this.mechanic.hasGameStarted
+    },
+    opponents () {
+      return this.mechanics.getOpponent()
     }
   },
   methods: {
+    findPlayer () {
+      var player = this.mechanics.getOpponent()
+      console.log(player)
+      var user = this.mechanics.getUser()
+      console.log(user)
+    },
     layCommunity () {
       var card = document.getElementsByClassName('deckCard')
-      for (let i = 0; i < card.length; i++) {
-        card[0].style.transform = 'translateX(' + 60 + 'pt) translateY(' + -60 + 'pt) rotateY(-180deg)'
-        //  alert('card', i)
-      }
+      // for (let i = 0; i < card.length; i++) {
+      // card[0].style.transform = 'translateX(' + 60 + 'pt) translateY(' + -60 + 'pt) rotateY(-180deg)'
+      //  alert('card', i)
+      // }
       // for (let i = 0; i < card.length; i++) {
       card = document.getElementsByClassName('deckCard')
       var max = card.length
@@ -380,6 +403,7 @@ export default {
       card[max - 1].classList.remove('deckCard')
       console.log(max)
       this.posX = this.posX + 90
+
       // this.deckLength = this.deckLength - 1
       // //  alert('card', i)
       // }

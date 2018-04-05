@@ -1,5 +1,6 @@
 package com.pokerface.pokerapi.game;
 
+import org.hibernate.Session;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ import java.util.List;
 @Service
 public class GameService {
     private GameRepository games;
+    private long AIID=100000000;
 
     /**
      * This constructor grabs the repository for access to the database
@@ -33,6 +35,7 @@ public class GameService {
      * @return the object for communication to the frontend
      */
     public GameState getGameState(long gameID) {
+
         return games.findOne(gameID);
     }
 
@@ -150,7 +153,7 @@ public class GameService {
      * @param gameState of the game being checked
      * @return boolean representing if the round is ended
      */
-    public boolean isRoundEnd(GameState gameState) {return gameState.getPreviousTurn() == gameState.getLastBet();
+    public boolean isRoundEnd(GameState gameState) {return !gameState.lastActionBet()&&gameState.getPreviousTurn() == gameState.getLastBet();
     }
 
     /**
@@ -171,7 +174,7 @@ public class GameService {
      */
     public boolean isHandEnd(GameState gameState) {
 
-        return (isRoundEnd(gameState) && gameState.getRound() == 3) || allFolded(gameState);
+        return (isRoundEnd(gameState) && gameState.getRound() == 4) || allFolded(gameState);
 
     }
 
@@ -205,6 +208,15 @@ public class GameService {
 
     }
 
+    public void addAIPlayer(long gameID){
+        GameState game = games.findOne(gameID);
+        if (!game.hasPlayer(AIID)){
+            game.addAIPlayer(AIID,"AIPlayer"+(AIID-100000000));
+        }
+        game = games.save(game);
+        AIID++;
+    }
+
 
     /**
      * This method takes a player's ID and finds a game for them. THe logic for this can be improved
@@ -218,6 +230,8 @@ public class GameService {
         gameID = firstAvailableGame(GameState.GameType.CASUAL);
         if (gameID == -1) {
             gameID = createGame(4,GameState.GameType.CASUAL);
+            addAIPlayer(gameID);
+            addAIPlayer(gameID);
         }
         addPlayer(userID, gameID, userName);
 
@@ -351,7 +365,7 @@ public class GameService {
         winnings=gameState.getPot().resolveWinnings(winners);
         gameState.applyWinnings(winnings);
         HandEndTransport handEndTransport = new HandEndTransport(winnings, gameState.getPlayers());
-        gameState.setHasStarted(false);
+        gameState.endHand();
         games.save(gameState);
         return handEndTransport;
     }
@@ -479,7 +493,7 @@ public class GameService {
         GameState gameState = games.findOne(gameID);
        long[] userIDs = new long[gameState.getPlayerCount()];
        for (int i=0; i<userIDs.length;i++){
-           userIDs[i]=gameState.getPlayers().get(i).getUserID();
+               userIDs[i] = gameState.getPlayers().get(i).getUserID();
        }
 
        return userIDs;
@@ -516,5 +530,10 @@ public class GameService {
     public void setUpNextHand(long gameID){
         GameState gameState=games.findOne(gameID);
         gameState.startGame();
+    }
+
+    public boolean isAITurn(long gameID){
+        GameState gameState=games.findOne(gameID);
+        return gameState.getPlayers().get(gameState.getPresentTurn()).isAI();
     }
 }

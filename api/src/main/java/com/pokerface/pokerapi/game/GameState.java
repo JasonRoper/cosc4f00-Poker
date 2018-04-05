@@ -296,6 +296,12 @@ public class GameState {
         return true;
     }
 
+    public boolean lastActionBet(){
+        boolean test1=players.get(previousTurn).getLastGameAction().getType()==GameActionType.BET;
+        boolean test2=players.get(previousTurn).getLastGameAction().getType()==GameActionType.RAISE;
+        return test1||test2;
+    }
+
     /**
      * Checks, sets the players bet up to the minimum bet.
      * @param player
@@ -323,6 +329,12 @@ public class GameState {
             startTime=System.currentTimeMillis()+30000;
         }
         return players.size();
+    }
+
+    public void addAIPlayer(long userID,String name){
+        players.get(addPlayer(userID,name)-1).setAI(true);
+
+
     }
 
     /**
@@ -397,14 +409,15 @@ public class GameState {
      */
     public List<Card> receiveCommunityCards() {
         List<Card> cards = new ArrayList<>();
-
-        cards.add(getCommunityCardOne());
-        cards.add(getCommunityCardTwo());
-        cards.add(getCommunityCardThree());
-        if (round <= 2) {
+        if (round>=2) {
+            cards.add(getCommunityCardOne());
+            cards.add(getCommunityCardTwo());
+            cards.add(getCommunityCardThree());
+        }
+        if (round >= 3) {
             cards.add(getCommunityCardFour());
         }
-        if (round <= 3) {
+        if (round >= 4) {
             cards.add(getCommunityCardFive());
         }
         return cards;
@@ -496,7 +509,6 @@ public class GameState {
         presentTurn=advanceCounter(presentTurn);
         round=1;
         // This would represent the small blind last payer. If nobody raises, the round ends when small blind is reached
-        dealCommunityCards();
         for (Player p: players){
             p.setCardOne(deck.dealCard());
             p.setCardTwo(deck.dealCard());
@@ -505,13 +517,13 @@ public class GameState {
     }
 
     public void dealCommunityCards(){
-        if (round==1){
+        if (round==2){
             communityCardOne=deck.dealCard();
             communityCardTwo=deck.dealCard();
             communityCardThree=deck.dealCard();
-        } else if (communityCardFour==null){
+        } else if (round==3){
             communityCardFour=deck.dealCard();
-        } else if (communityCardFive==null){
+        } else if (round==4){
             communityCardFive=deck.dealCard();
         }
     }
@@ -557,7 +569,8 @@ public class GameState {
     public enum GameType{
         CUSTOM,
         CASUAL,
-        COMPETETIVE
+        COMPETETIVE,
+        AI
     }
 
     public GameType getGameType() {
@@ -579,8 +592,12 @@ public class GameState {
     public void advanceRound(){
         round++;
         if (round==2){
-            communityCardFour=deck.dealCard();
+            communityCardOne=deck.dealCard();
+            communityCardTwo=deck.dealCard();
+            communityCardThree=deck.dealCard();
         } else if (round==3){
+            communityCardFour=deck.dealCard();
+        } else if (round==4){
             communityCardFive=deck.dealCard();
         }
     }
@@ -635,6 +652,15 @@ public class GameState {
             sum+=p.getBet();
         }
         return sum;
+    }
+
+    public void endHand(){
+//        startTime=System.currentTimeMillis();
+//        for (Player p: players){
+//            p.setBet(0);
+//            p.setLastGameAction(new GameAction(null,0,p));
+//        }
+        hasStarted=false;
     }
 
     @Override

@@ -56,13 +56,15 @@ export default class GameMech {
   public playerId: number = 0
   public userAction: GameAction | null = null
   public gameStatus: string = ''
-  public endGame: boolean = false
+
+  public isHandFinsihed: boolean = false
   public hasGameStarted: boolean = false
   public username: string = ''
   public disable: number = 1
   public enableButton: number = 0
   public foldAction: number = 0
   public callAction: number = 0
+  public gotHand: boolean = false
   public betAction: number = 0
   public raiseAction: number = 0
   public checkAction: number = 0
@@ -119,10 +121,10 @@ export default class GameMech {
     return this.multiplePlayers[this.playerId]
   }
 
-  public getOpponent (): Player[] {
+  public getOpponent (username: string): Player[] {
     const opponents: Player[] = []
     this.multiplePlayers.forEach((player: Player, index: number) => {
-      if (index !== this.playerId) {
+      if (player.name !== username) {
         opponents.push(player)
       }
     })
@@ -161,6 +163,7 @@ export default class GameMech {
     this.multiplePlayers[this.playerId].card2 = userCards.cardTwo
     this.cardOne = userCards.cardOne
     this.cardTwo = userCards.cardTwo
+    this.gotHand = true
   }
 
   /**
@@ -266,12 +269,15 @@ export default class GameMech {
     if (gameTransport.event) {
       if (gameTransport.event.message) {
         console.log('The GameTransport message: ' + gameTransport.event.message)
+        this.gameStatus = gameTransport.event.message
       }
     }
     if (gameTransport.event) {
       switch (gameTransport.event.action) {
         case Event.GAME_STARTED: {
           alert('GAME_STARTED event triggered')
+          this.gameStatus = 'Game Start!'
+          this.hasGameStarted = true
           console.log('GAME_STARTED event triggered')
           this.gameStarted(gameTransport)
           break
@@ -339,6 +345,7 @@ export default class GameMech {
 
   public roundFinished (gameTransport: any) {
     this.setCommunityCards(gameTransport)
+
   }
 
   public gameStarted (gameTransport: any) {
@@ -356,6 +363,7 @@ export default class GameMech {
     console.log(this.username + ' The HAND_FINISHED  was called')
     this.setPlayers(gameTransport)
     // this.multiplePlayers = Object.assign(this.multiplePlayers, gameTransport.players)
+    this.isHandFinsihed = true
     this.setCommunityCards(gameTransport)
   }
 
@@ -372,6 +380,7 @@ export default class GameMech {
       const act: GameActionType | null = (item.action.type !== null) ? item.action : null
       // console.log('This is for the is it your turn' + index + ' ' + gameTransport.nextPlayer)
       const userTurn: boolean = (index === gameTransport.nextPlayer)
+      const user: boolean = (item.name === this.username)
       const player: Player = {
         id: item.id,
         money: item.money,
@@ -384,7 +393,8 @@ export default class GameMech {
         winnings: 0,
         isPlayer: item.player,
         isDealer: item.dealer,
-        isTurn: userTurn
+        isTurn: userTurn,
+        isUser: user
       }
       this.multiplePlayers.push(player)
     })

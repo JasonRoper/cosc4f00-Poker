@@ -119,6 +119,7 @@ export interface Player {
   isDealer: boolean
   isFold: boolean
   isTurn: boolean
+  isUser: boolean
   winnings: number
 }
 
@@ -134,6 +135,7 @@ export interface PlayerWithoutCards {
   isPlayer: boolean
   isDealer: boolean
   isFold: boolean
+  isUser: boolean
 }
 
 /**
