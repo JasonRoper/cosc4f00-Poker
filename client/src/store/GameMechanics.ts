@@ -170,19 +170,10 @@ export default class GameMech {
    */
   public storePremove (action: GameActionType, money: number): boolean {
     const move: GameAction = { type: action, bet: money }
-    if (this.validatePreMove(move)) {
-      console.log(this.username + ' Premove was valid')
-      // this.disableButton(action)
-      this.userAction = move
-      if (this.sendAction()) {
-        return true
-      } else {
-        return false
-      }
+    this.userAction = move
+    if (this.sendAction()) {
+      return true
     } else {
-      console.log(this.username + ' The move you attempted to send was invalid')
-      // this.setTableActions()
-      this.userAction = null
       return false
     }
   }
@@ -238,26 +229,23 @@ export default class GameMech {
   /**
    * ValidatePreMove
    */
-  public validatePreMove (move: GameAction) {
-    // Confirm that you have enough money
-    if (this.multiplePlayers[this.playerId].money < move.bet) {
-      console.log(this.username + ' ' + move + 'you do not have enough money')
-      return false
-    }
-    // Confirm that you made a valid move
-    if (this.hasBet) {
-      if (this.possibleAction[1].indexOf(move.type) === -1) {
-        console.log(this.username + ' ' + move + 'you have not made a valid move possibleAction[1]')
-        return false
+  /*
+    public validatePreMove (move: GameAction) {
+      // Confirm that you made a valid move
+      if (this.hasBet) {
+        if (this.possibleAction[1].indexOf(move.type) === -1) {
+          console.log(this.username + ' ' + move + 'you have not made a valid move possibleAction[1]')
+          return false
+        }
+      } else {
+        if (this.possibleAction[0].indexOf(move.type) === -1) {
+          console.log(this.username + ' ' + move + 'you have not made a valid move possibleAction[0]')
+          return false
+        }
       }
-    } else {
-      if (this.possibleAction[0].indexOf(move.type) === -1) {
-        console.log(this.username + ' ' + move + 'you have not made a valid move possibleAction[0]')
-        return false
-      }
+      return true
     }
-    return true
-  }
+  */
 
   /**
    *  Sets the Game Transport in the Game Mechanics
@@ -509,12 +497,10 @@ export default class GameMech {
       // Confirms that it is your turn
       if (this.playerId === this.turn) {
         // Confirms that this is a valid move
-        if (this.validatePreMove(this.userAction)) {
-          this.send(this.userAction)
-          console.log(this.username + ' sent the move')
-          this.userAction = null
-          return true
-        }
+        this.send(this.userAction)
+        console.log(this.username + ' sent the move')
+        this.userAction = null
+        return true
       }
     }
     return false
