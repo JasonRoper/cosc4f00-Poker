@@ -29,12 +29,26 @@ import { API_V1 } from '@/config'
 export default class GameRequest {
   public MATCHMAKING: string = API_V1 + '/matchmaking/competitiveGame'
   public CASUAL: string = API_V1 + '/matchmaking/casualGame'
-  public AIGAME: string = API_V1 + '/matchmaking/aiGame'
+  // public AIGAME: string = API_V1 + '/matchmaking/aiGame'
+  public AIGAME: string = API_V1 + '/games/'
+  public CUSTOM: string = API_V1 + '/games'
   public gameId: number = -1
 
+  public createCustomeGame (): Promise<number | void> {
+    const prom = axios.post(this.CUSTOM, {}).then((response) => {
+      this.gameId = response.data.gameId
+      alert(response)
+      console.log(response)
+      return Promise.resolve(response.data.gameId)
+    }).catch((error) => {
+      alert('A game couldn\'t be found')
+      console.log(error)
+      return Promise.reject(error)
+    })
+    return prom
+  }
+
   public createCompetitiveGame (): Promise<number | void> {
-    // , {})
-    // , { auth: { username: 'admin', password: 'admin' } })
     const prom = axios.post(this.MATCHMAKING, {}).then((response) => {
       this.gameId = response.data.gameId
       return Promise.resolve(response.data.gameId)
@@ -44,11 +58,37 @@ export default class GameRequest {
     })
     return prom
   }
+
   public createCasualGame (): Promise<number | void> {
     // , {})
     // , { auth: { username: 'admin', password: 'admin' } })
     const prom = axios.post(this.CASUAL, {}).then((response) => {
       alert('it is looking for casualGame a game')
+      this.gameId = response.data.gameId
+      alert(response)
+      console.log(response)
+      return Promise.resolve(response.data.gameId)
+    }).catch((error) => {
+      alert('A game couldn\'t be found')
+      console.log(error)
+      return Promise.reject(error)
+    })
+    return prom
+  }
+
+  public createAiGame (aiGame: [number]) {
+    console.log(aiGame)
+    const prom = axios.post(this.AIGAME, {
+      gameSettings: {
+        aiPlayers: aiGame[0],
+        bigBlind: aiGame[1],
+        cashOnHand: aiGame[2],
+        gameType: 'AI',
+        maxPlayer: aiGame[3], // max six
+        minimumPlayer: aiGame[4]// minimum player count, minimum is 4? prolly 3, to start the game
+         // count of AI players
+      }
+    }).then((response) => {
       this.gameId = response.data.gameId
       alert(response)
       console.log(response)
