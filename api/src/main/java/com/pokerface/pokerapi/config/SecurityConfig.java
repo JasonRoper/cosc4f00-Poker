@@ -1,25 +1,18 @@
 package com.pokerface.pokerapi.config;
 
 import com.pokerface.pokerapi.users.UserService;
-import org.springframework.boot.autoconfigure.security.Http401AuthenticationEntryPoint;
-import org.springframework.context.annotation.Bean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.security.web.csrf.CsrfFilter;
-import org.springframework.security.web.csrf.CsrfTokenRepository;
-import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
-import org.springframework.security.web.savedrequest.NullRequestCache;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 /**
  * The {@link SecurityConfig} handles which paths are accessible with any given authentication
@@ -32,8 +25,10 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private UserService users;
-    private PasswordEncoder encoder;
+    private final UserService users;
+    private final PasswordEncoder encoder;
+    private final Environment env;
+    private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 
     /**
      * The {@link SecurityConfig} depends on the {@link UserService} and
@@ -43,9 +38,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      * @param encoder the encoder that will be used to encode passwords to check if a user
      *                is authenticated
      */
-    public SecurityConfig(UserService users, PasswordEncoder encoder) {
+    public SecurityConfig(final UserService users, final PasswordEncoder encoder, final Environment env) {
         this.users = users;
         this.encoder = encoder;
+        this.env = env;
     }
 
     /**
@@ -83,12 +79,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().httpBasic()
                 // need to use cookie csrf protection without HttpOnly flag in order for it to work with
                 // axios and new Websocket()
-                .and().csrf().disable() //csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .cors().disable()
+                .and().cors().disable()
                 // enable logging out to invalidate the JSESSION cookie
                 .logout().permitAll().logoutUrl("/api/v1/users/logout");
 
-
+        if (env.getActiveProfiles().length == 0) {
+            logger.info("profile is default, disabling csrf");
+            http.csrf().disable();
+        } else {
+            http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+        }
     }
 
     /**

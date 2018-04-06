@@ -25,7 +25,12 @@
       </span>
     </div>
 
+       <div v-if="this.mechanics.getUser().isDealer" class="input-group input-group ">
+                  <button type="button" class="btn btn-default btn-circle bg-warning  tabAction-chip-dealer inner-orange mx-4 ml-5"><strong> D</strong></button>
+
+             </div>
     <form  class=" statsBar form-control bg-light-transparent   ">
+<div class="lead"><label> User Status: </label> </div>
 
          <div class="input-group input-group ">
 
@@ -36,7 +41,10 @@
               <div class="input-group input-group">
                 
 
-  <input v-model="mechanics.gameStatus" id="Events"  type="number" class="form-control mx-2 text-center bg-secondary lead text-light  " placeholder="Event Bar" aria-label="Event Bar" aria-describedby="basic-addon1" disabled>
+  <!-- <input v-model="this.UserName()" id="Events"  type="number" class="form-control mx-2 text-center bg-secondary lead text-light  " placeholder="Event Bar" aria-label="Event Bar" aria-describedby="basic-addon1" disabled> -->
+           <div class="form-control mx-2 text-center bg-secondary lead text-light">
+             {{this.UserName}}
+              </div>
             </div>
 
          <div class="input-group input-group ">
@@ -48,22 +56,38 @@
               <div class="input-group input-group ">
                 
 
-  <input v-model="mechanics.gameStatus" id="Events"  type="number" class="form-control mx-2 text-center bg-secondary lead text-light  " placeholder="Event Bar" aria-label="Event Bar" aria-describedby="basic-addon1" disabled >
+  <!-- <input v-model="mechanics.gameStatus" id="Events"  type="number" class="form-control mx-2 text-center bg-secondary lead text-light  " placeholder="Event Bar" aria-label="Event Bar" aria-describedby="basic-addon1" disabled > -->
+            <div class="form-control mx-2 text-center bg-secondary lead text-light ">
+            {{this.mechanics.getUser().money}}
+            </div>
             </div>
             
+
+
            </form>
+
     <form  class=" eventgameBar form-control bg-warning   ">
+     <div class="input-group input-group ">
+     <!-- <label class="text-white lead"><strong><em> Event Bar:</em></strong> </label> -->
+             </div>
 
               <div class="input-group input-group-lg ">
 
-  <input v-model="mechanics.gameStatus" id="Events"  type="number" class="form-control mx-3 text-center bg-secondary lead text-light  " placeholder="Event Bar" aria-label="Event Bar" aria-describedby="basic-addon1" >
-            </div>
+  <!-- <input v-model="this.EventBarMessage" id="Events"  type="text" class="form-control mx-3 mt-0 text-center bg-secondary lead text-light  " placeholder="Event Bar" aria-label="Event Bar" aria-describedby="basic-addon1"  disabled> -->
+         <div class="form-control mx-2 mt-0 text-center bg-secondary lead text-light  "> 
+           <!-- transitions with vue hooks  -->
+           {{this.EventBarMessage}} 
+           </div>
+       </div>
            </form>
+           
  <div class="tabAction-icon" >
       <span>
  <button type="button" class="btn btn-default btn-circle    tabAction-chip navigate  inner-blue" @click="backButton()"><i  style="font-size:28px" class="fa fa-arrow-left"></i></button><br>
       </span>
+    
     </div>
+
                     <!-- <h2 class="display-2  text-white  mt-2  ">PokerPals!!  <img src="../assets/Webgraphics/poker.png" width="0" height="50"> </h2> -->
 
 
@@ -79,8 +103,8 @@
     <a href="" ><img src="../assets/Webgraphics/Opponent.svg" class=" border border-white rounded-circle" width="70" height="70"></a>
     <ul class="menu">
       <li><a>Poker Pals</a></li>
-       <li><a href="#">Pals</a></li>
-      <li><a href="#">Options</a></li>
+       <!-- <li><a href="#">Pals</a></li>
+      <li><a href="#">Options</a></li> -->
       <li><a @click="logOut()">Sign Out</a></li>
     </ul>
   </div>
@@ -168,28 +192,39 @@
 
       </div> -->
               <div class="inner-tableBorder ">
-          <player  class="player" v-for="player in this.mechanics.multiplePlayers" v-if="!player.isUser" :key="player.id" :data="player">
+          <player  class="player" v-for="player in this.mechanics.getOpponent(UserName)" :key="player.id" :data="player">
         </player>
             <div class="CompleteTable">
         <div class= 'tableContent'>
-         <h2 class="display-4 pr-4 pb-0  text-white">PokerPals!!<img src="../assets/Webgraphics/poker.png" width="70" height="70"></h2>
+         <h2 class="display-4 pr-4 pb-0  text-white"><img src="../assets/Webgraphics/poker.png" width="70" height="70">PokerPals!!<img src="../assets/Webgraphics/poker.png" width="70" height="70"></h2>
          <div class= "tableHead"></div>
    
-         <h2 class=" mr-5  pt-0 text-info">Pot:<span class="text-warning"> {{this.mechanics.pot}}</span><img src="../assets/Webgraphics/chipPile.png" style="decoration:none" width="55" height="55"></h2>
+         <h2 class=" mr-5  pt-0 text-info">Pot:<span class="text-warning"> {{this.mechanics.potSum}}</span><img src="../assets/Webgraphics/chipPile.png" style="decoration:none" width="55" height="55"></h2>
       <div class="Communitycards-holder">
       <p class='Communitycards  ml-4  '>
         <card class='size' v-for="card in this.mechanics.communityCards" :key="card" :card="BLANK_CARD"></card>
       </p>
       </div>
-        <p id="theDeck" class='DECK mt-2 '>
+        <p id="theDeck" class='DECK mt-2  '>
                     <transition-group name="deckCard">
 
         <card  class= "deckCard DECKsize mt-4" v-for="card in this.mechanics.communityCards" :key="card" :card="card"></card>
+                 <card  class= " DECKsize mt-4" v-for="card in this.mechanics.communityCards" :key="card" :card="card.BLANK_CARD"></card>
+
                     </transition-group>
       </p>
+
+
       </div>
+      
     </div>
   </div>
+                 <div class="userCards-wrapper">            
+  <p class='TheUsercards'>
+        <card class='size' :card= this.mechanics.getUser().card1></card>
+        <card class='size' :card= this.mechanics.getUser().card1></card>
+      </p>
+</div>
 
         <button type="button" class="btn btn-default btn-circle backButton  inner-blue BackButton" @click="doCountDown()">quit</button><br>
 
@@ -198,102 +233,16 @@
         <button type="button" class="btn btn-default btn-circle backButton  inner-blue BackButton" @click="backButton()"><i class="fa fa-arrow-left  fa-2x"></i></button><br>
         </div>
                 </div>
-      <!-- <div class="TableActions row">
-
-         <div class="Action text-center lead text-muted">
-        <div class="ActionTitle">
-        Chat
-        </div>
-        <button type="button" class="btn  btn-lg chat "><i class="fa fa-comments  fa-lg"></i></button>
-        </div>
-
-
-         <div class="Action text-center lead text-muted">
-        <div class="ActionTitle">
-        Check
-        </div>
-        <button type="button" class="btn  btn-lg check"  v-on:click="check()" :disabled="this.mechanics.checkAction == 1"><i class="fa fa-check  fa-lg"></i></button>
-        </div>
-
-
-     <div class="Action text-center lead text-muted">
-      
-        <div class="ActionTitle">
-          Fold
-        </div>
-        <button type="button" class="btn btn-lg fold" v-on:click="fold()" :disabled="this.mechanics.foldAction == 1"><strong><i class="fa fa-remove fa-lg "></i></strong></button>
-        </div>
-
-              <div class="Action text-center lead text-muted">
-        <div class="ActionTitle">
-          Call
-        </div>
-        <button type="button" class="btn  btn-lg CALL "  v-on:click="call()" :disabled="this.mechanics.callAction == 1"><i class="fa fa-dollar  fa-lg"></i>{{BigBlindCurrentBet}}</button>
-        </div>
-
-
-         <div class="Action text-center lead text-muted">
-        <div class="ActionTitle">
-        Bet/Raise
-        </div>
-        <button type="button" class="btn  btn-lg Bet "  v-on:click="bet()" :disabled="this.mechanics.betAction == 1"><i class="fa fa-chevron-up  fa-lg"></i></button>
-        </div>
-
-         <div class="Action text-center lead text-muted">
-        <div class="ActionTitle">
-        Raise
-        </div>
-<<<<<<< Updated upstream
-        <button type="button" class="btn  btn-lg Bet " v-on:click="raise()" :disabled="this.mechanics.raiseAction == 1"><i class="fa fa-chevron-up  fa-lg"></i></button>
-        </div>
-
-<<<<<<< HEAD
-      </div>
-=======
-        <button type="button" class="btn  btn-lg Bet " v-on:click="raise()" v-bind:disabled="this.mechanics.raiseAction == 1"><i class="fa fa-chevron-up  fa-lg"></i></button>
-        </div>
-
-<<<<<<< HEAD
-      </div>
-      <div>Action: {{this.mechanics.userAction}}</div>
-        <input v-model="money" placeholder="How much would you like to bet">
-        <button  v-on:click="fold()" :disabled="this.mechanics.foldAction == 1">FOLD</button>
-        <button v-on:click="check()" :disabled="this.mechanics.checkAction == 1">CHECK</button>
-        <button v-on:click="raise()" :disabled="this.mechanics.raiseAction == 1">RAISE</button>
-        <button v-on:click="call()" :disabled="this.mechanics.callAction == 1">CALL</button>
-        <button v-on:click="bet()" :disabled="this.mechanics.betAction == 1">BET</button>
-        <button v-on:click="sendAction()">Send Action To Server</button>
-              
->>>>>>> Stashed changes
-=======
-=======
->>>>>>> 7aae5580c7bd9b1f0aacc5ce160158be4aaa4cab
-      </div> -->
-      <!-- <div>Action: {{this.mechanics.userAction}}</div> -->
-        <!--<input v-model="money" placeholder="How much would you like to bet">-->
-        <!-- <button  v-on:click="fold(money)" :disabled="this.mechanics.foldAction == 1">FOLD</button>
-        <button v-on:click="check(money)" :disabled="this.mechanics.checkAction == 1">CHECK</button>
-        <button v-on:click="raise(money)" :disabled="this.mechanics.raiseAction == 1">RAISE</button>
-        <button v-on:click="call(money)" :disabled="this.mechanics.callAction == 1">CALL</button>
-        <button v-on:click="bet(money)" :disabled="this.mechanics.betAction == 1">BET</button>
-        <button v-on:click="sendAction()">Send Action To Server</button> -->
-
  </div>
 </div>
 
-  <!-- </div> -->
-  <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">...</div>
-  <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">...</div>
-<!-- </div> -->
-<div>
-  <p class='Communitycards'>
-        <card class='size' card="BLANK_CARD"></card>
-        <card class='size' card="BLANK_CARD"></card>
-      </p>
-</div>
+
                       <button v-on:click="findPlayer()">FindPlayer TEST </button>
 
-                      <button v-on:click="layCommunity()">Second Round of Betting </button>
+                      <button v-on:click="testGameStarted()">Second Round of Betting </button>
+              <button v-on:click="layCommunity()">LayCommunity</button>
+                            <button v-on:click="showDown()">DoShowDown</button>
+
 
         </div>
       </div>
@@ -325,7 +274,7 @@ import state from '../store/users'
 
 export default {
   data () {
-    alert('just logged route' + this.$route.params.gameId)
+    // alert('just logged route' + this.$route.params.gameId)
     return {
       // UserName: state.state.username,
       mechanics: new GameMech(this.$route.params.gameId, state.state.username),
@@ -333,13 +282,12 @@ export default {
       preivousnumberofPlayers: 0,
       money: '0',
       BigBlindCurrentBet: 0,
-      user: 0,
-      opponents: 0,
       incrument: 0,
       posX: -191,
       posY: -141,
       posZ: 200,
       cardDown: false
+      // gameStarted: false
     }
   },
   /*
@@ -349,26 +297,24 @@ export default {
     preivousnumberofPlayers  () {
       // this.mechanics = new GameMech(1, this.userId)
     },
-    mechanics: function (newValue, oldValue) {
-      this.user = this.getUser()
-      this.opponents = this.getOpponents()
-    },
     numberofPlayers () {
-      console.log(this.numberofPlayers)
-      this.mechanics.setGame()
+      // console.log(this.numberofPlayers)
+      this.mechanics.setGame() // I left this for asnley
     },
     EventBarMessage () {
-      alert('Change change change')
+      // alert('Change change change')
     },
-    gameStarted () {
-      if (this.gameStarted === true) {
-        // this.layCommunity()
+    roundTwo () {
+      // Show your hand Animation
+      alert('Lets start the show')
+      if (this.roundTwo === true) {
+        this.layCommunity()
       }
     }
   },
   computed: {
     numberofPlayers () {
-      return this.mechanics.getMultiplayers()
+      return this.mechanics.getMultiplayers() // Kept this for ashley
     },
     UserName () {
       return this.$store.state.users.username
@@ -376,34 +322,61 @@ export default {
     EventBarMessage () {
       return this.mechanics.gameStatus
     },
-    gameStarted () {
-      return this.mechanic.hasGameStarted
+    roundTwo () {
+      return this.mechanics.hasGameStarted
     },
     opponents () {
       return this.mechanics.getOpponent()
     }
   },
   methods: {
+    testGameStarted () {
+      console.log(this.gameStarted)
+      // this.gameStarted = !this.gameStarted
+      // this.mechanics.gameStatus = 'hellow world'
+      // this.EventBarMessage = 'Hello World'
+      console.log(this.mechanics.getUser().card1)
+    },
     findPlayer () {
       var player = this.mechanics.getOpponent()
       console.log(player)
       var user = this.mechanics.getUser()
       console.log(user)
     },
+    showDown () {
+      var playerCards = document.getElementsByClassName('singleCard')
+      for (let i = 0; i < playerCards.length; i++) {
+        playerCards[i].classList.toggle('active')
+      }
+    },
     layCommunity () {
       var card = document.getElementsByClassName('deckCard')
-      // for (let i = 0; i < card.length; i++) {
-      // card[0].style.transform = 'translateX(' + 60 + 'pt) translateY(' + -60 + 'pt) rotateY(-180deg)'
-      //  alert('card', i)
-      // }
-      // for (let i = 0; i < card.length; i++) {
-      card = document.getElementsByClassName('deckCard')
       var max = card.length
-      card[max - 1].style.transform = 'translateX(' + this.posX + 'pt) translateY(' + this.posY + 'pt) rotateX(-180deg) translatez(' + this.posZ + 'pt)'
-      card[max - 1].classList.remove('deckCard')
+      card[0].style = 'z-index:3'
+      card[0].style.transform = 'translateX(' + this.posX + 'pt) translateY(' + this.posY + 'pt) rotateX(-180deg) translatez(' + this.posZ + 'pt) rotatez(-180deg)'
+      card[0].classList.remove('deckCard')
       console.log(max)
       this.posX = this.posX + 90
-
+      window.setTimeout(this.pumpCard2, 750)
+    },
+    pumpCard2 () {
+      var card = document.getElementsByClassName('deckCard')
+      var max = card.length
+      card[0].style = 'z-index:3'
+      card[0].style.transform = 'translateX(' + this.posX + 'pt) translateY(' + this.posY + 'pt) rotateX(-180deg) translatez(' + this.posZ + 'pt)  rotatez(-180deg)'
+      card[0].classList.remove('deckCard')
+      console.log(max)
+      this.posX = this.posX + 90
+      window.setTimeout(this.pumpCard3, 750)
+    },
+    pumpCard3 () {
+      var card = document.getElementsByClassName('deckCard')
+      var max = card.length
+      card[0].style = 'z-index:3'
+      card[0].style.transform = 'translateX(' + this.posX + 'pt) translateY(' + this.posY + 'pt) rotateX(-180deg) translatez(' + this.posZ + 'pt) rotatez(-180deg)'
+      card[0].classList.remove('deckCard')
+      console.log(max)
+      this.posX = this.posX + 90
       // this.deckLength = this.deckLength - 1
       // //  alert('card', i)
       // }
@@ -441,7 +414,7 @@ export default {
     logOut: function () {
       const logoutRequest = new GameRequest()
       logoutRequest.removeCompetitiveGame(this.mechanics.gameId, state.state.userId).then((responce) => {
-        router.push({ name: 'Home' })
+        router.push({ name: '/Home' })
         this.logout()
         console.log(responce + 'success in delete request')
       }).catch((error) => { console.log('Failed delete request' + error) })
@@ -462,11 +435,7 @@ export default {
       this.premove(GameActionType.CHECK, 0)
     },
     call: function () {
-      if (this.money !== undefined) {
-        this.premove(GameActionType.CALL, this.money)
-      } else {
-        console.log('Action: CALL - you are trying to CALL with no money')
-      }
+      this.premove(GameActionType.CALL, this.mechanics.minimumBet)
     },
     raise: function () {
       if (this.money !== undefined) {
@@ -489,9 +458,7 @@ export default {
       this.mechanics.sendAction()
     },
     premove: function (action, money) {
-      alert('Tried to make tableAction ' + money)
       money = parseInt(money)
-      alert('money is still ' + money)
       if (this.mechanics.turn === this.mechanics.playerId && typeof money === 'number' && money >= 0) {
         console.log('You are attempting to send a move to the server')
         if (this.mechanics.storePremove(action, money)) {
@@ -553,7 +520,7 @@ export default {
     // Put Get Opponents in the players
     let players = document.getElementsByClassName('player')
     let numberofPoints = players.length
-    let degreeIncrument = 360 / numberofPoints
+    let degreeIncrument = 180 / numberofPoints
     var radius = 240 // 280
     var x = 0
     var y = 0
@@ -570,16 +537,16 @@ export default {
   updated: function () {
     let players = document.getElementsByClassName('player')
     let numberofPoints = players.length
-    let degreeIncrument = 360 / numberofPoints
+    let degreeIncrument = (260 / numberofPoints)
     var radius = 238 // 280
     var x = 0
     var y = 0
-    let theta = 0
+    let theta = 140 + degreeIncrument / 2
     for (let i = 0; i < numberofPoints; i++) {
-      theta = theta + degreeIncrument
       x = radius * Math.cos(theta * Math.PI / 180.0).toFixed(3) // Convert to radians
       y = radius * Math.sin(theta * Math.PI / 180.0).toFixed(3)
       players[i].style.transform = 'translateX(' + x + 'pt) translateY(' + y + 'pt)'
+      theta = theta + degreeIncrument
       // console.log('heres you x: ' + x + 'here your y:' + y + 'at ' + theta)
     }
   },

@@ -1,5 +1,8 @@
 package com.pokerface.pokerapi.game;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +54,13 @@ public class GameState {
     public GameState(long id) {
         this(id,12,4,200);
         setId(id);
+    }
+
+    public GameState(GameSettingTransport gameSettings) {
+        maxPlayers = gameSettings.maxPlayer;
+        minPlayerCount = gameSettings.minimumPlayer;
+        defaultCashOnHand = gameSettings.cashOnHand;
+        bigBlind = gameSettings.bigBlind;
     }
 
     /**
@@ -125,8 +135,8 @@ public class GameState {
      * gets the Deck attached to the gameState
      * @return a Deck object
      */
-    @OneToOne(mappedBy = "gameState", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
-    @JoinColumn
+    @PrimaryKeyJoinColumn
+    @OneToOne(cascade = CascadeType.ALL, optional = true)
     public Deck getDeck() {
         return deck;
     }
@@ -272,8 +282,9 @@ public class GameState {
      * returns a List of the players
      * @return List of the current players in the game
      */
-    @OneToMany(mappedBy = "gameState", cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
-    @OrderColumn
+    @OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
+    @Fetch(value = FetchMode.SUBSELECT)
+    @JoinTable(name = "players", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "player_ID"))
     public List<Player> getPlayers() {
         return players;
     }
@@ -510,9 +521,12 @@ public class GameState {
         round=1;
         // This would represent the small blind last payer. If nobody raises, the round ends when small blind is reached
         for (Player p: players){
+
             p.setCardOne(deck.dealCard());
             p.setCardTwo(deck.dealCard());
+
         }
+
         hasStarted=true;
     }
 
@@ -592,6 +606,9 @@ public class GameState {
     public void advanceRound(){
         round++;
         if (round==2){
+            if (communityCardOne == null) {
+                System.out.println();
+            }
             communityCardOne=deck.dealCard();
             communityCardTwo=deck.dealCard();
             communityCardThree=deck.dealCard();
@@ -655,11 +672,11 @@ public class GameState {
     }
 
     public void endHand(){
-//        startTime=System.currentTimeMillis();
-//        for (Player p: players){
-//            p.setBet(0);
-//            p.setLastGameAction(new GameAction(null,0,p));
-//        }
+        startTime=System.currentTimeMillis();
+        for (Player p: players){
+            p.setBet(0);
+            p.updateLastGameAction(new GameAction(null,0));
+        }
         hasStarted=false;
     }
 

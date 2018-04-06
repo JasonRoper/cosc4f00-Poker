@@ -39,7 +39,7 @@ public class UserService implements UserDetailsService {
     public UserService(final UserRepository userRepository, final PasswordEncoder encoder) {
         this.userRepository = userRepository;
         this.encoder = encoder;
-        User admin = new User("admin",
+       /*  User admin = new User("admin",
                 encoder.encode("admin"),
                 "admin@pokerpals.org");
         admin.setRole("ROLE_USER,ROLE_ADMIN");
@@ -64,7 +64,7 @@ public class UserService implements UserDetailsService {
         this.userRepository.save(admin);
         this.userRepository.save(adam);
         this.userRepository.save(javon);
-        this.userRepository.save(ashley);
+        this.userRepository.save(ashley); */
     }
 
     /**
@@ -221,5 +221,21 @@ public class UserService implements UserDetailsService {
         return userStream
                 .map(UserInfoTransport::new)
                 .collect(Collectors.toList());
+    }
+
+    UserTransport registerAdministrator(RegistrationFields fields) {
+        if (userRepository.existsByEmailIgnoreCase(fields.getEmail())) {
+            throw new EmailAlreadyExistsException();
+        }
+
+        if (userRepository.existsByUsernameIgnoreCase(fields.getUsername())) {
+            throw new UsernameAlreadyExistsException();
+        }
+
+        User newUser = new User(fields.getUsername(),
+                encoder.encode(fields.getPassword()),
+                fields.getEmail());
+        newUser.setRole("ROLE_USER,ROLE_ADMIN");
+        return userRepository.save(newUser).toTransfer();
     }
 }

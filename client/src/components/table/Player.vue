@@ -24,7 +24,7 @@
         </div>
           <div v-else class="text-dark oppName lead"> 
          <strong> {{this.data.name}} </strong>
-         <div v-if="this.data.isUser">This is the user</div>
+         
         </div>
 
         <p>{{this.data.id}}</p> 
@@ -34,8 +34,10 @@
         </div>
       </div>
       <div class="oppentCards">
-        <card v-ref='card1' ref='card1' id="hand" class="singleCard" :card="this.data.card1"></card>
-        <card v-ref="card2" ref='card2' id="hand2" class="singleCard" :card="this.data.card2"></card>
+        <!--<card v-ref='card1' ref='card1' id="hand" class="singleCard" :card="this.data.card1"></card>
+        <card v-ref="card2" ref='card2' id="hand2" class="singleCard" :card="this.data.card2"></card>-->
+        <card id="hand" class="singleCard" :card="this.data.card1"></card>
+        <card id="hand2" class="singleCard" :card="this.data.card2"></card>
       </div>
         <div v-show ="this.data.isDealer" id="isDealerContainer">
           
@@ -43,44 +45,48 @@
       </div>
 
 
+      <div v-if="this.data.action !== null">
+       <div v-if="this.data.action.type !== null">
+        <div v-if ="this.data.action.type === 'FOLD'" id="isChipContainer">
+        <strong id="chipAction" ><i class="fa fa-remove"></i></strong>
+        </div>
+              <transition name="Action">
+        <div v-show = this.FoldAction id="isChipContainer">
+        <strong id="chipAction" ><i  style = "padding-left:2px;padding-right:2px;" class="fa fa-remove"></i></strong>
+        </div>
+        </transition>
 
-       <div  v-if ="this.data.action === 'FOLD'" id="isChipContainer">
-      <strong id="chipAction" ><i class="fa fa-remove"></i></strong>
+              <transition name="Action">
+        <div v-show = this.CallAction id="isChipContainer">
+        <strong id="chipAction" ><i  style = "padding-left:2px;padding-right:2px;" class="fa fa-dollar"></i></strong>
+        <div id="chipMessage">${{this.data.action.bet}}</div>
+        </div></transition>
+
+        <transition name="Action">
+        <div v-show = this.BetAction id="isChipContainer">
+        <strong id="chipAction" ><i class="fa fa-chevron-up"></i></strong>
+        <div id="chipMessage">${{this.data.action.bet}}</div>
+        </div></transition>
+
+        <transition name="Action">
+        <div v-show = this.RasieAction id="isChipContainer">
+        <strong id="chipAction" ><i class="fa fa-chevron-up"></i></strong>
+        <div id="chipMessage">${{this.data.action.bet}}</div>
+        </div></transition>
+
+        <!-- <strong id="chipAction" ><i class="fa fa-chevron-up"></i></strong>
+        <div id="chipMessage">${{this.data.action.bet}}</div> -->
+        <!-- <div v-show="this.RasieAction" id="isChipContainer">
+        <strong id="chipAction" ><i class="fa fa-chevron-up"></i></strong><div id="chipMessage">${{this.data.action.bet}}</div>
+        </div> -->
+            <transition name="Action">
+        <div v-show = this.CheckAction id="isChipContainer">
+        <strong id="chipAction" ><i class="fa fa-check"></i></strong>
+        <div id="chipMessage">${{this.data.action.bet}}</div>
+        </div>
+        </transition>
       </div>
-               <transition name="Action">
-      <div v-show = this.FoldAction id="isChipContainer">
-      <strong id="chipAction" ><i  style = "padding-left:2px;padding-right:2px;" class="fa fa-remove"></i></strong>
       </div>
-      </transition>
-
-             <transition name="Action">
-      <div v-show = this.CallAction id="isChipContainer">
-      <strong id="chipAction" ><i  style = "padding-left:2px;padding-right:2px;" class="fa fa-dollar"></i></strong>
-      <div id="chipMessage">${{this.data.currentBet}}</div>
-      </div></transition>
-
-       <transition name="Action">
-      <div v-show = this.BetAction id="isChipContainer">
-      <strong id="chipAction" ><i class="fa fa-chevron-up"></i></strong>
-      <div id="chipMessage">${{this.data.currentBet}}</div>
-      </div></transition>
-      <transition name="Action">
-      <div v-show = this.RasieAction id="isChipContainer">
-      <strong id="chipAction" ><i class="fa fa-chevron-up"></i></strong>
-      <div id="chipMessage">${{this.data.currentBet}}</div>
-      </div></transition>
-
-       <!-- <strong id="chipAction" ><i class="fa fa-chevron-up"></i></strong>
-      <div id="chipMessage">${{this.data.currentBet}}</div> -->
-      <!-- <div v-show="this.RasieAction" id="isChipContainer">
-      <strong id="chipAction" ><i class="fa fa-chevron-up"></i></strong><div id="chipMessage">${{this.data.currentBet}}</div>
-      </div> -->
-          <transition name="Action">
-      <div v-show = this.CheckAction id="isChipContainer">
-      <strong id="chipAction" ><i class="fa fa-check"></i></strong>
-      <div id="chipMessage">${{this.data.currentBet}}</div>
-      </div>
-      </transition>
 
     </div>
     <div>
@@ -118,15 +124,15 @@ export default {
     card: Card
   },
   updated: function () {
-    this.seeAction()
+   // this.seeAction()
   },
   methods: {
     addBar: function () {
-      this.progressBar = this.progressBar + 0.35
-      console.log(this.progressBar)
+      // this.progressBar = this.progressBar + 0.35
+      // console.log(this.progressBar)
       if (this.progressBar >= 45) {
         this.timerDone = true
-        this.data.isTurn = false
+        // this.data.isTurn = false
         this.progressBar = 0
       }
     },
@@ -168,31 +174,43 @@ export default {
       this.CheckAction = false
     },
     seeAction () {
-      if (this.data.action === 'BET') {
-        alert('YO GON BETS EVERYONE')
-        this.BetAction = true
-      }
-      if (this.data.action === 'RAISE') {
-        alert('YO GON RAISE EVERYONE')
-        this.RasieAction = true
-      }
-      if (this.data.action === 'CALL') {
-        alert('Yo GON CALL EVERYONE')
-        this.CallAction = true
-      }
-      if (this.data.action === 'CHECK') {
-        alert('Yo GON CHECK EVERYONE')
-        this.CheckAction = true
-      }
-      if (this.data.action === 'FOLD') {
-        alert('Yo GON FOLD EVERYONE')
-        this.FoldAction = true
-      }
-      if (this.data.action !== '') {
-        this.data.action = ''
-        let interval = 2200
-        window.setInterval(900)
-        setTimeout(this.resetActions, interval)
+      if (this.data.action !== null) {
+        switch (this.data.action.type) {
+          case 'BET': {
+            alert('YO GON BETS EVERYONE')
+            this.BetAction = true
+            break
+          }
+          case 'RAISE': {
+            alert('YO GON RAISE EVERYONE')
+            this.RasieAction = true
+            break
+          }
+          case 'CALL': {
+            alert('Yo GON CALL EVERYONE')
+            this.CallAction = true
+            break
+          }
+          case 'CHECK': {
+            alert('Yo GON CHECK EVERYONE')
+            this.CheckAction = true
+            break
+          }
+          case 'FOLD': {
+            alert('Yo GON FOLD EVERYONE')
+            this.FoldAction = true
+            break
+          }
+          default: {
+            alert('There was no suitable action sent')
+          }
+        }
+        if (this.data.action !== '') {
+          this.data.action = ''
+          let interval = 2200
+          // window.setInterval(900)
+          setTimeout(this.resetActions, interval)
+        }
       }
     }
   },
@@ -203,9 +221,9 @@ export default {
   },
   watch: {
     isTurn () {
-      window.setInterval(() => {
+     /*  window.setInterval(() => {
         this.addBar()
-      }, 100)
+      }, 100) */
     },
     showHand () {
       if (this.showHand === true) {
@@ -214,14 +232,6 @@ export default {
         var playerCards = document.getElementsByClassName('singleCard')
         playerCards[playerCards.length - 1].classList.toggle('active')
         playerCards[playerCards.length - 2].classList.toggle('active')
-      }
-    },
-    playerAction (query) {
-      alert('changed')
-      if (query === 'BET') {
-        alert('change')
-        console.log('hi')
-        this.playerAction = ''
       }
     }
   },

@@ -1,11 +1,12 @@
 package com.pokerface.pokerapi.game;
 
 public class GameSettingTransport {
-    int maxPlayer; // max six
-    int minimumPlayer; // minimum player count, minimum is 4? prolly 3, to start the game
-    int cashOnHand;
-    int bigBlind;
-    int aiPlayers; //count of AI players
+    int maxPlayer = 6; // max six
+    int minimumPlayer = 4; // minimum player count, minimum is 4? prolly 3, to start the game
+    int cashOnHand = 100;
+    int bigBlind = 12;
+    int aiPlayers = 0; //count of AI players
+    GameState.GameType gameType;
 
     public GameSettingTransport(){
 
@@ -49,5 +50,13 @@ public class GameSettingTransport {
 
     public void setAiPlayers(int aiPlayers) {
         this.aiPlayers = aiPlayers;
+    }
+
+    public GameState.GameType getGameType() {
+        return gameType;
+    }
+
+    public void setGameType(GameState.GameType gameType) {
+        this.gameType = gameType;
     }
 }

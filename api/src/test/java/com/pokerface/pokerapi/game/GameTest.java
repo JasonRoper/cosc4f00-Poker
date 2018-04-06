@@ -1,7 +1,10 @@
 package com.pokerface.pokerapi.game;
 
 import com.pokerface.pokerapi.users.*;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,24 +78,6 @@ private UserRepository userRepository;
     public void cleanUp(){
         cleanUpGameRepository();
         cleanUpUserRepository();
-    }
-
-    @Test
-    public void testUserRepositorySetUp(){
-        userIDCount=0;
-        setUpUserRepository();
-        List<UserInfoTransport>listOfUsers=userService.listUsers();
-        cleanUpUserRepository();
-        System.out.println();
-    }
-
-    @Test
-    public void testTestEndpoint() throws Exception {
-        WebsocketSession socket = new WebsocketSession("admin", "admin");
-        CompletableFuture<GameInfoTransport> future = socket.subscribe("/messages/game", GameInfoTransport.class);
-        socket.send("/app/test", 1);
-
-        assertEquals(1, (future.get()).getGameId());
     }
 
     @Test
@@ -303,7 +288,7 @@ private UserRepository userRepository;
             //testTransport=testGameStateTransport.get(20,TimeUnit.SECONDS);
         }
 
-        //TimeUnit.SECONDS.sleep(20);
+        TimeUnit.SECONDS.sleep(5);
         testGameState=gameRepository.findOne(testGameState.getId());
         assertTrue(testGameState.getPresentTurn()==0);
         assertEquals(testGameState.getPlayers().get(3).getBet(),62);
@@ -378,11 +363,9 @@ private UserRepository userRepository;
             }
 
 
-        TimeUnit.SECONDS.sleep(10);
+        TimeUnit.SECONDS.sleep(20);
         testGameState=gameRepository.findOne(testGameState.getId());
-        assertTrue(testGameState.getRound()==2);
-        assertEquals(testGameState.getPlayers().get(3).getBet(),16);
-        assertEquals(testGameState.getMinimumBet(),16);
+        assertTrue(testGameState.isHasStarted() == false);
 
         cleanUpUserRepository();
         cleanUpGameRepository();
@@ -410,7 +393,7 @@ private UserRepository userRepository;
             }
         TimeUnit.SECONDS.sleep(10);
         testGameState=gameRepository.findOne(testGameState.getId());
-        assertEquals(testGameState.getPlayers().get(2).getCashOnHand(),106);
+        assertEquals(testGameState.getPlayers().get(2).getCashOnHand(), 100);
 
         cleanUpUserRepository();
         cleanUpGameRepository();

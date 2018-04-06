@@ -1,6 +1,5 @@
 package com.pokerface.pokerapi.game;
 
-import org.hibernate.Session;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
@@ -280,6 +279,31 @@ public class GameService {
         return createGame(4);
     }
 
+    public long createGame(GameSettingTransport gameSettings, long userID, String userName) {
+        GameState gameState = new GameState(gameSettings);
+        gameState.setGameType(GameState.GameType.CUSTOM);
+        gameState = games.save(gameState);
+        for (int i = 0; i < gameSettings.aiPlayers; i++) {
+            addAIPlayer(gameState.getId());
+
+        }
+        addPlayer(userID, gameState.getId(), userName);
+        return gameState.getId();
+    }
+
+    public long createAIGame(GameSettingTransport gameSettings, long userID, String userName) {
+        GameState gameState = new GameState(gameSettings);
+        gameState.setGameType(GameState.GameType.AI);
+        gameState = games.save(gameState);
+        for (int i = 0; i < gameSettings.aiPlayers; i++) {
+            addAIPlayer(gameState.getId());
+
+        }
+        addPlayer(userID, gameState.getId(), userName);
+        gameState.setStartTime(System.currentTimeMillis());
+        return gameState.getId();
+    }
+
     /**
      * Create game takes settings and creates a game with those settings, returning the ID of that game
      *
@@ -480,10 +504,17 @@ public class GameService {
         return games.findOne(gameID).getGameType().toString();
     }
 
-    public int[] calculateRatingChanges(long gameID){
+    public int[] calculateRatingChanges(long gameID,HandEndTransport winners){
         GameState gameState = games.findOne(gameID);
         int[] ratingChanges=new int[gameState.getPlayerCount()];
-
+        int biggestWinner;
+        for (int i=0;i<ratingChanges.length;i++){
+            if (winners.getPlayers()[i].getWinnings()>0){
+                ratingChanges[i]=gameState.getPlayerCount()-1;
+            } else {
+                ratingChanges[i]=-1;
+            }
+        }
 
 
         return ratingChanges;
@@ -535,5 +566,16 @@ public class GameService {
     public boolean isAITurn(long gameID){
         GameState gameState=games.findOne(gameID);
         return gameState.getPlayers().get(gameState.getPresentTurn()).isAI();
+    }
+
+    public boolean isGameEnd(long gameID){
+        GameState gameState=games.findOne(gameID);
+        int inGameCount=0;
+        for (Player p:gameState.getPlayers()){
+            if (p.getCashOnHand()>0){
+                inGameCount++;
+            }
+        }
+        return (inGameCount==1);
     }
 }

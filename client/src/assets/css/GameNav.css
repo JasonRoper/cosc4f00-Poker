@@ -24,7 +24,7 @@
 }
 .eventgameBar{
   position:fixed;
-  width: 50%;
+  width: 38%;
   margin-left:-20px;
   z-index:2;
 
@@ -66,6 +66,8 @@
   display:flex;
 }
 
+
+
 /* Media quries */
 .BackButton{ 
 position: relative;
@@ -91,6 +93,43 @@ display:inline-flex;
   /* color: black; */
 }
 
+.tabAction-chip-dealer {
+  position: fixed;
+  display: inline-block;
+  border: 10.5pt dashed #000000;
+  /* height: 63px;
+  width:63px; */
+
+  
+  text-decoration: none;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);  
+  border-radius: 50%;
+  transition: transform 500ms cubic-bezier(.2,-0.02,.39,1.27);
+  /* transform: rotatex(25deg); */
+  color: #e2e2e2;
+  color: black;
+  
+
+  position: fixed;
+  top: 150px;
+  /* Change to 20px from the left  */
+  right: -5px; 
+  /* width: 50px;
+  height: 44px; */
+  /* padding: 4px 8px; */
+  background: #262626;
+  box-sizing : border-box;
+  cursor:pointer;
+  z-index: 2;
+}
+
+/* .tabAction-chip.inner-orange{
+
+  align-content: center;
+  text-align: center;
+  background: #a58c00;} */
+
+
 
 /* ------Back Button------ */
 .backButton {
@@ -113,7 +152,7 @@ display:inline-flex;
 
   align-content: center;
   text-align: center;
-  background: #a58c00;}
+  background: #02b98b;}
   
 .backButton.inner-blue, .tabAction-chip.inner-blue{
 
@@ -141,7 +180,9 @@ display:inline-flex;
 
     .navigate{
       position: relative;
-      left:30px;
+      left:5px;
+      margin-top: 30px;
+      /* top:-4px; */
     }
     .tabAction-chip.navigate{
      position: fixed;
