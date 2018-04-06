@@ -154,17 +154,20 @@
                 <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
                   <div class="justify-content-left">
                     <img src="../assets/Webgraphics/Pokerchip.png" style="decoration:none" width="35" height="35"> Ranking1#:</div>
-                  <span class="badge badge-light badge-pill">{{Level1Members}}</span>
+                  <span v-if="Level1Members" class="badge badge-light badge-pill">{{Level1Members.username}}</span>
+                  <span v-else class="badge badge-light badge-pill">...</span>
                 </li>
                 <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
                   <div class="justify-content-left">
                     <img src="../assets/Webgraphics/PokerL2.png" style="decoration:none" width="35" height="35"> Ranking2#:</div>
-                  <span class="badge badge-light badge-pill">{{Level2Members}}</span>
+                  <span v-if="Level1Members" class="badge badge-light badge-pill">{{Level2Members.username}}</span>
+                  <span v-else class="badge badge-light badge-pill">...</span>
                 </li>
                 <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
                   <div class="justify-content-left">
                     <img src="../assets/Webgraphics/chipPile.png" style="decoration:none" width="35" height="35">Ranking3#:</div>
-                  <span class="badge badge-light badge-pill">{{Level3Members}}</span>
+                  <span v-if="Level1Members" class="badge badge-light badge-pill">{{Level3Members.username}}</span>
+                  <span v-else class="badge badge-light badge-pill">...</span>
                 </li>
               </ul>
             </div>
@@ -244,20 +247,10 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <th scope="row">Mark</th>
-                <td>6000</td>
-                <td>6</td>
-              </tr>
-              <tr>
-                <th scope="row">Jacob</th>
-                <td>5000</td>
-                <td>5</td>
-              </tr>
-              <tr>
-                <th scope="row">Tomas</th>
-                <td>5</td>
-                <td>5</td>
+              <tr v-for="player in leaderboard" :key="player.id">
+                <th scope="row">{{player.username}}</th>
+                <td>{{player.money}}</td>
+                <td>0</td>
               </tr>
             </tbody>
           </table>
@@ -355,6 +348,8 @@
 import { mapActions } from 'vuex' // used for maping actions of the vue store files
 import ErrorMessages from '@/components/WebComponents/ErrorMessages' // ErrorMessages Components
 import GameMenu from '@/components/GameMenu'
+import { API_V1 } from '@/config'
+import axios from '@/api/axios'
 // import router from '@/router'
 export default {
   name: 'Login',
@@ -376,9 +371,9 @@ export default {
       Members: 23000,
       gamesToday: 21000,
       onlineMembers: 2300,
-      Level1Members: 3000,
-      Level2Members: 6000,
-      Level3Members: 1300,
+      Level1Members: null,
+      Level2Members: null,
+      Level3Members: null,
       registModal: false,
       after: false,
       clickedLogin: false,
@@ -386,11 +381,12 @@ export default {
       checked: false,
       checkedRegisterErrors: false,
       iszero: false,
-      errorMessage: ''
+      errorMessage: '',
+      leaderboard: []
     }
   },
   watch: {
-    registModal(val) {
+    registModal (val) {
       if (val) {
         $('#Register').modal({show: true, backdrop: true})
         this.errorMessage = ''
@@ -479,12 +475,32 @@ export default {
         // setTimeout(this.checkRegisterErrors, 4000) // Check Registratio Errors after 900 ms
       }
     },
-    closeRegisterModal() {
+    closeRegisterModal () {
       this.registModal = false
       this.RegisterPlayer.username = ''
       this.RegisterPlayer.email = ''
       this.RegisterPlayer.password = ''
+    },
+    updateGeneralInfo () {
+      axios.get(API_V1 + '/info').then((response) => {
+        let data = response.data
+        this.Members = data.registeredUsers
+        this.onlineMembers = data.usersOnline + 1
+        this.gamesToday = data.activeGames
+        this.Level1Members = data.highestRated[0]
+        this.Level2Members = data.highestRated[1]
+        this.Level3Members = data.highestRated[2]
+      })
+    },
+    updateLeaderBoard() {
+      axios.get(API_V1 + '/users?sort=money').then((response) => {
+        this.leaderboard = response.data.data.slice(0,5)
+      })
     }
+  },
+  created () {
+    this.updateGeneralInfo()
+    this.updateLeaderBoard()
   },
   components: {
     errorMessages: ErrorMessages,
