@@ -159,23 +159,27 @@ public class GameController {
 
         messenger.convertAndSend("/messages/game/" + gameID, nextGameState);
 
+
         if (gameService.isHandEnd(gameID)) {
             HandEndTransport winners = gameService.determineWinnings(gameID);
             nextGameState = gameService.getGameStateTransport(gameID);
 
             messenger.convertAndSend("/messages/game/" + gameID, nextGameState.reason(GameStateTransport.Reason.HAND_FINISHED, ""));
             if (gameService.getGameType(gameID).equals("COMPETITIVE")){
-                int[] ratingChanges=gameService.calculateRatingChanges(gameID);
+                int[] ratingChanges=gameService.calculateRatingChanges(gameID,winners);
                 long[] userIDs=gameService.getUserIDsFromGame(gameID);
                 for (int i=0;i<userIDs.length;i++){
                     userService.applyRatingChange(userIDs[i],ratingChanges[i]);
                 }
             }
             messenger.convertAndSend("/messages/game/" + gameID+"/gamefinished",winners);
+            if (gameService.isGameEnd(gameID)){
+                messenger.convertAndSend("/messages/game/" + gameID, nextGameState.reason(GameStateTransport.Reason.GAME_FINISHED, ""));
+            }
         } else if (gameService.isRoundEnd(gameID)) {
             nextGameState = gameService.handleRound(gameID);
             messenger.convertAndSend("/messages/game/" + gameID,
-                    nextGameState.reason(GameStateTransport.Reason.ROUND_FINSHED, ""));
+                    nextGameState.reason(GameStateTransport.Reason.ROUND_FINISHED, ""));
         }
 
         return nextGameState;

@@ -505,10 +505,17 @@ public class GameService {
         return games.findOne(gameID).getGameType().toString();
     }
 
-    public int[] calculateRatingChanges(long gameID){
+    public int[] calculateRatingChanges(long gameID,HandEndTransport winners){
         GameState gameState = games.findOne(gameID);
         int[] ratingChanges=new int[gameState.getPlayerCount()];
-
+        int biggestWinner;
+        for (int i=0;i<ratingChanges.length;i++){
+            if (winners.getPlayers()[i].getWinnings()>0){
+                ratingChanges[i]=gameState.getPlayerCount()-1;
+            } else {
+                ratingChanges[i]=-1;
+            }
+        }
 
 
         return ratingChanges;
@@ -560,5 +567,16 @@ public class GameService {
     public boolean isAITurn(long gameID){
         GameState gameState=games.findOne(gameID);
         return gameState.getPlayers().get(gameState.getPresentTurn()).isAI();
+    }
+
+    public boolean isGameEnd(long gameID){
+        GameState gameState=games.findOne(gameID);
+        int inGameCount=0;
+        for (Player p:gameState.getPlayers()){
+            if (p.getCashOnHand()>0){
+                inGameCount++;
+            }
+        }
+        return (inGameCount==1);
     }
 }
