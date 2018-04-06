@@ -492,15 +492,20 @@ export default {
         this.Level3Members = data.highestRated[2]
       })
     },
-    updateLeaderBoard() {
+    updateLeaderBoard () {
       axios.get(API_V1 + '/users?sort=money').then((response) => {
-        this.leaderboard = response.data.data.slice(0,5)
+        this.leaderboard = response.data.data.slice(0, 5)
       })
     }
   },
   created () {
-    this.updateGeneralInfo()
-    this.updateLeaderBoard()
+    this.intervalTicker = window.setInterval(5000, () => {
+      this.updateGeneralInfo()
+      this.updateLeaderBoard()
+    })
+  },
+  destroyed () {
+    window.clearInterval(this.intervalTicker)
   },
   components: {
     errorMessages: ErrorMessages,

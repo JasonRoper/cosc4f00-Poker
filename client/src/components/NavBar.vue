@@ -21,7 +21,7 @@
             <a class=" nav-item nav-link bg-transparent" id="pills-about-tab" data-toggle="pill" href="#pills-about" role="tab" aria-controls="pills-about"
               aria-selected="false">About</a>
             <a class="nav-item nav-link" href="#Support">Support</a>
-            <a class="nav-item nav-link" data-toggle="modal" data-target="#Register2"> Login</a>
+            <!-- <a class="nav-item nav-link" data-toggle="modal" data-target="#Register2"> Login</a> -->
           </div>
         </div>
       </div>
@@ -99,7 +99,7 @@ import Features from '@/components/Features'
 import About from '@/components/About'
 import ErrorMessages from '@/components/WebComponents/ErrorMessages' // ErrorMessages Components
 import { mapActions } from 'vuex' // used for maping actions of the vue store files
-export default{
+export default {
   data: function () {
     return {
       Showhome: true,

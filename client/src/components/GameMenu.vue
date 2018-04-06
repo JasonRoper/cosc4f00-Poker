@@ -244,16 +244,16 @@
               </div>
 
               <div class="form-group row">
-                <label for="inputPassword3" class="col-sm-3 col-form-label">$Max Balance</label>
+                <label for="inputPassword4" class="col-sm-3 col-form-label">$Max Balance</label>
                 <div class="col-sm-9">
-                  <input type="pos number" class="form-control" id="inputPassword3" placeholder=" Highest Balance per Player">
+                  <input type="pos number" class="form-control" id="inputPassword4" placeholder=" Highest Balance per Player">
                 </div>
               </div>
             </form>
           </div>
           <div class="modal-footer">
             <button type="button" @click="chipChoice('CPUChallenge')" data-dismiss="modal" class="btn btn-success ">Create Game</button>
-            <button type="button" class="btn btn-info " data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
           </div>
         </div>
       </div>
