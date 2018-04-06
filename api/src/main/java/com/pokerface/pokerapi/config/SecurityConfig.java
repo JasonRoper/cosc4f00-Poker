@@ -72,6 +72,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // allow anyone to register
                 .antMatchers(HttpMethod.POST,"/api/v1/users").permitAll()
                 // if a user is accessing the api, they must be authenticated
+                .antMatchers(HttpMethod.GET, "/api/v1/*").permitAll()
                 .antMatchers("/api/v1/**").hasRole("USER")
                 // allow anyone to access the front end
                 .antMatchers("/**").permitAll()

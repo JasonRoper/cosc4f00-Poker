@@ -67,12 +67,12 @@ public class AIService {
         int playerNumber=gameState.getPresentTurn();
         int roll;
         Random rand = new Random(System.currentTimeMillis());
-        roll=6;
+        roll=9;
             roll=rand.nextInt(10);
 
             if (roll==0){
                 return fold(gameState,playerNumber);
-            } else if (roll>0&&roll<7) {
+            } else if (roll>0&&roll<8) {
                 return check(gameState,playerNumber);
             } else if (roll==7||roll==8) {
                 return raise(gameState,playerNumber);
@@ -127,6 +127,10 @@ public class AIService {
      * @return the action being performed
      */
     private GameAction raise(GameState gameState,int playerNumber){
+        if (gameState.getPlayers().get(playerNumber).getBet()>gameState.getBigBlind()*2){
+            return check(gameState,playerNumber);
+        }
+
     GameAction gameAction = new GameAction(GameActionType.RAISE, gameState.getBigBlind() / 2);
 
         return gameAction;
