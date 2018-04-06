@@ -90,19 +90,19 @@ export default class GameMech {
     this.gameService.onGameError(this.onGameError.bind(this))
     this.username = username
 
-    if (!state.currentlyInGame) {
-      axios.get(API_V1 + '/games/' + this.gameId).then((responce) => {
-        console.log('GAME MECHANICS CONSTRUCTOR - ASKING TO JOIN GAME')
-        this.setGameTransport(responce.data)
-        state.currentlyInGame = true
-      }).catch((error) => {
-        alert('having an error IN JOINING GAME')
-        console.log(error)
+    axios.get(API_V1 + '/games/' + this.gameId).then((responce) => {
+      console.log('GAME MECHANICS CONSTRUCTOR - ASKING TO JOIN GAME')
+      this.setGameTransport(responce.data)
+      this.multiplePlayers.forEach((player: Player, index: number) => {
+        if (player.name === this.username) {
+          this.playerId = index
+        }
       })
-    } else {
-      console.log('The user is attempting to request a new game but is already in a game')
-
-    }
+      this.setGameCards()
+    }).catch((error) => {
+      alert('having an error IN JOINING GAME')
+      console.log(error)
+    })
   }
   /**
    * Gets Player location within array
@@ -340,8 +340,7 @@ export default class GameMech {
   }
 
   public playerAction (gameTransport: any) {
-    // this.setPlayers(gameTransport)
-    this.multiplePlayers = Object.assign(this.multiplePlayers, gameTransport.players)
+    this.setPlayers(gameTransport)
     this.setCommunityCards(gameTransport)
     this.setTableActions()
   }
