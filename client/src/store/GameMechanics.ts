@@ -125,14 +125,15 @@ export default class GameMech {
     return opponents
   }
   public winner (): Player {
-    let winn: Player | null = null
-    this.multiplePlayers.forEach((player: Player) => {
-      if (player.winnings > 0) {
-        winn = player
+    let idx: number = 0
+    let maxWin: number = -1
+    this.multiplePlayers.forEach((player: Player, index: number) => {
+      if (player.winnings > maxWin) {
+        idx = index
+        maxWin = player.winnings
       }
     })
-    if (winn === null) return this.multiplePlayers[0]
-    return winn
+    return this.multiplePlayers[idx]
   }
 
   /**

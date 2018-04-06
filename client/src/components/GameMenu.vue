@@ -351,8 +351,20 @@ export default {
         })
       }
       if (choice === 'CPUChallenge') {
-        alert('Bot Plays Poker')
-        this.$router.push('Table')
+        alert('looking for AI game')
+        const aiGame = []
+        aiGame.push(3)// AI players
+        aiGame.push(2)// Big blind
+        aiGame.push(500)// Cash on hand
+        aiGame.push(6)// max player
+        aiGame.push(4)// min player
+        this.gameReq.createAiGame(aiGame).then((responce) => {
+          console.log('found AI game')
+          router.push({name: 'TableView', params: {gameId: this.gameReq.gameId}})
+        }).catch((error) => {
+          console.log(error)
+          console.log('Couldnt find the AI game')
+        })
       }
       if (choice === 'CasualPoker') {
         this.instrcutionPokerMode = false

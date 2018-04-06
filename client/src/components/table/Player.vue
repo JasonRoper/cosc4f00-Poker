@@ -130,7 +130,7 @@ export default {
     card: Card
   },
   updated: function () {
-   // this.seeAction()
+    this.seeAction()
   },
   methods: {
     addBar: function () {
