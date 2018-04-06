@@ -1,296 +1,346 @@
 <template>
-<div>
-  <!--======================================================jumbotron=============================================-->
-   <div class ="jumboTron-image">
-    <div id="Home" class="jumbotron jumboTron-image jumbotron-fluid  text-white mb-4 ">
-  <div class="container text-sm-center pt-5">
-    <h1 class="display-1">PokerPals</h1>
-    <h1 class=" tagLine text-dark lead "><strong>We came to Play.</strong></h1>
-<!--   button group-->
-      <img src="../assets/Webgraphics/poker.png" width="40" height="40">
-    <div class="btn-group px-3 py-4" role="group" aria-label="Basic example">
-  <button type="button" data-toggle="modal" data-target="#Register" class=" lead theregister btn-outline-primary btn btn-info btn-lg">Register Now</button>
-  <button href="#Developers" type="button" class="theregister btn btn-outline-light btn-lg lead ">See Developers</button>
-</div>
-<img src="../assets/Webgraphics/poker.png" width="40" height="40"> <hr style="height:2px;color:#e2e2e2; background-color:#e2e2e2;">
-<!-- =========================================================Carrosal================================================================================================-->
-
-  </div>
-</div>
-</div>
-<!-- Modal -->
-<div>
-<div  v-show="this.registModal" class="modal fade " id="Register" data-backdrop="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header bg-success text-white">
-        <h5 class="modal-title " id="exampleModalLongTitle">PokerPals Registration
-        <img src="../assets/Webgraphics/poker.png" width="40" height="40"></h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <h5 class="text-left pb-4">Create Account</h5>
-        <form>
-            <div v-show="this.isRegistrationError" >
-            <error-messages class=".error-messages" :Error="this.ErrorMessage "></error-messages>
-            </div>
-          <!--Username input   -->
-          <div class="form-group mb-3">
-             <div class="input-group mb-3">
-             <label>Please enter the following.</label></div>
+  <div>
+    <!--======================================================jumbotron=============================================-->
+    <div class="jumboTron-image">
+      <div id="Home" class="jumbotron jumboTron-image jumbotron-fluid  text-white mb-4 ">
+        <div class="container text-sm-center pt-5">
+          <h1 class="display-1">PokerPals</h1>
+          <h1 class=" tagLine text-dark lead ">
+            <strong>We came to Play.</strong>
+          </h1>
+          <!--   button group-->
+          <img src="../assets/Webgraphics/poker.png" width="40" height="40">
+          <div class="btn-group px-3 py-4" role="group" aria-label="Basic example">
+            <button type="button" data-toggle="modal" data-target="#Register" class=" lead theregister btn-outline-primary btn btn-info btn-lg">Register Now</button>
+            <button href="#Developers" type="button" class="theregister btn btn-outline-light btn-lg lead ">See Developers</button>
           </div>
-            <div class="input-group mb-3">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon1"><i class="fa fa-user"></i></span>
-              </div>
-              <input v-model="RegisterPlayer.username" type="text" class="form-control" placeholder="Username" aria-label="Username/Email" aria-describedby="basic-addon1">
-            </div>
-          <!--Username input   -->
-          <!-- Password Input -->
-             <div class="input-group mb-3">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon1"><i class="fa fa-lock"></i></span>
-              </div>
-              <input v-model="RegisterPlayer.password"  type="password" class="form-control" placeholder="Passowrd" aria-label="Username/Email" aria-describedby="basic-addon1">
-             </div>
-          <!--Password input   -->
-            <!--Email input   -->
-                      <div class="input-group mb-3">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon1">@</span>
-              </div>
-              <input v-model="RegisterPlayer.email" type="Email" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="basic-addon1">
-            </div>
-          <!--Email input   -->
-      </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger registerButton " @click="AttemptRegister()">Register</button>
-        <button type="button" class="btn btn-warning "  @click="ResetVariables2()" data-dismiss="modal">Close</button>
+          <img src="../assets/Webgraphics/poker.png" width="40" height="40">
+          <hr style="height:2px;color:#e2e2e2; background-color:#e2e2e2;">
+          <!-- =========================================================Carrosal================================================================================================-->
+
+        </div>
       </div>
     </div>
-  </div>
-</div>
-</div>
-<!--/Modal -->
-
-<!--=======================================================================/Jumbotron========================================================================= -->
-<!--=======================================================================MainLanding Body========================================================================= -->
-<div class="container pt-4">
-  <div class="row">
-    <!--====================================================================Column 1 ========================================================================= -->
-    <div class="col-lg-7">
-      <h4 class="display-3  text-left"><u>Latest News</u></h4>
-      <p class="lead text-left">
-        <!-- <img class="img-thumbnail d-flex px-4" src="../assets/Webgraphics/Undercon.jpg" > -->
-        <div class="landingChip-wprapper">
-        <div class="  d-flex px-2 chip-holder "><button  class="landingChip  bg-success btn btn-lg" ><hr><div class="button-title">POKER PALS</div><hr></button></div>
-         </div>
-         <p class="lead">
-
-        Poker Pals is now curreently Withinin
-      development phase following the generic phases set  by Brock University's COSC 4f00 team poker face. Within our venture we have now moved into the development phase of the Product, While our site is still currently under construction we hope to get things up and running as soon as possible. Until then please observe our structure and lay out of our up comming websitste and all the possible features we look for ward to possible providing in the meant time enjoy.<br> - Team Poker Face.
-             </p>
-
-       </p>
-    </div>
-    <!--====================================================================/Column 1 =========================================================================-->
-     <!--====================================================================Column 2=========================================================================-->
-    <div class="col-lg-5">
-      <!--==================Table/Card:System stats==================-->
-      <div class="card border-dark mb-3 mx-auto" style="max-width: 40rem;">
-        <div class="card-header bg-secondary text-white text-left">
-          <span class="lead" ><i class="fa fa-bar-chart-o fa-lg"></i></span>
-          <u>System Statistics</u>
+    <!-- Modal -->
+    <div>
+      <div v-show="this.registModal" class="modal fade " id="Register" data-backdrop="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+              <h5 class="modal-title " id="exampleModalLongTitle">PokerPals Registration
+                <img src="../assets/Webgraphics/poker.png" width="40" height="40">
+              </h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <h5 class="text-left pb-4">Create Account</h5>
+              <form>
+                <div v-show="this.isRegistrationError">
+                  <error-messages class=".error-messages" :Error="this.ErrorMessage "></error-messages>
+                </div>
+                <!--Username input   -->
+                <div class="form-group mb-3">
+                  <div class="input-group mb-3">
+                    <label>Please enter the following.</label>
+                  </div>
+                </div>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">
+                      <i class="fa fa-user"></i>
+                    </span>
+                  </div>
+                  <input v-model="RegisterPlayer.username" type="text" class="form-control" placeholder="Username" aria-label="Username/Email"
+                    aria-describedby="basic-addon1">
+                </div>
+                <!--Username input   -->
+                <!-- Password Input -->
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">
+                      <i class="fa fa-lock"></i>
+                    </span>
+                  </div>
+                  <input v-model="RegisterPlayer.password" type="password" class="form-control" placeholder="Passowrd" aria-label="Username/Email"
+                    aria-describedby="basic-addon1">
+                </div>
+                <!--Password input   -->
+                <!--Email input   -->
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">@</span>
+                  </div>
+                  <input v-model="RegisterPlayer.email" type="Email" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="basic-addon1">
+                </div>
+                <!--Email input   -->
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger registerButton " @click="AttemptRegister()">Register</button>
+              <button type="button" class="btn btn-warning " @click="ResetVariables2()" data-dismiss="modal">Close</button>
+            </div>
           </div>
-        <div class="card-body text-dark">
-          <ul class="list-group">
-              <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
-               <div class="justify-content-left"> <i class="fa fa-users fa-lg pr-1"> </i> Memebers: </div>
-                <div class="ml-5 pl-5"><span class="badge badge-light badge-pill">{{Members}}</span></div>
-              </li>
-              <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
-                <div class="justify-content-left"> <img src="../assets/Webgraphics/PTable.png" style="decoration:none" width="35" height="35" > Games Today:</div>
-                <span class="badge badge-light badge-pill">{{gamesToday}}</span>
-              </li>
-              <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
-                 <div class="justify-content-left"> <img src="../assets/Webgraphics/poker.png" style="decoration:none" width="35" height="35"> Players Online:</div>
-                <span class="badge badge-light badge-pill">{{onlineMembers}}</span>
-              </li>
-              <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
-                <div class="justify-content-left"> <img src="../assets/Webgraphics/Pokerchip.png" style="decoration:none" width="35" height="35"> Ranking1#:</div>
-                <span class="badge badge-light badge-pill">{{Level1Members}}</span>
-              </li>
-               <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
-                  <div class="justify-content-left"> <img src="../assets/Webgraphics/PokerL2.png" style="decoration:none" width="35" height="35"> Ranking2#:</div>
-                <span class="badge badge-light badge-pill">{{Level2Members}}</span>
-              </li>
-              <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
-                 <div class="justify-content-left"> <img src="../assets/Webgraphics/chipPile.png" style="decoration:none" width="35" height="35">Ranking3#:</div>
-                <span class="badge badge-light badge-pill">{{Level3Members}}</span>
-              </li>
-          </ul>
         </div>
-      </div><!--=======/ Table:System stats=======-->
-<!--=======/Login Card=======-->
-<div class="card border-dark mb-3 mx-auto" style="max-width: 40rem;">
-  <div class="card-header text-left text-white bg-secondary lead"><i class="fa fa-user-circle pr-2 fa-lg"></i> <u>Login</u>
-</div>
-  </div>
-    <div class="card-body text-dark">
-      <form class="needs-validation" ref="theform" action="/#/Lobby">
-     <div v-show="this.isLoginError"> 
-   <error-messages class = "error-messages" :Error="this.ErrorMessage "></error-messages>
-</div>
-  <div class="form-group">
-    <input  v-model="Player.username" ref="myTestField" type="text" class="form-control nameInput" id="formGroupExampleInput" placeholder="UserName/Email">
-  </div>
-  <div class="form-group">
-    <input v-model="Player.password" ref="myTestField2" type="password" class="form-control passwordInput" id="formGroupExampleInput2" placeholder="Password">
-  </div>
-    <div class="form-group">
-      <button class="btn btn-darkgrey btn-lg btn-block text-dark text-center loginButton" type="button" value = "Login"  @click="AttemptLogin()" :disabled="(this.clickedLogin === true)||(this.clickedRegister === true)"><i class="fa fa-sign-in"></i> Login</button>
-  </div>
-  <div class="form-group">
-      <button class="btn btn-warning btn-lg btn-block text-dark  text-center " type="button" value ="Register"  data-toggle="modal" data-target="#Register" :disabled="(this.clickedLogin === true )||(this.clickedRegister === true )">  <i class="fa fa-sign-in"></i> Register</button>
-  </div>
-  <div class="form-group">
-     <p class="text-right">Forgot password?<br><a  style="text-decoration:none" href=""><i class="fa fa-sign-in"></i> Password reset </a></p>
-  </div>
-</form>
-  </div>
-</div><!--=======/Login Card=======-->
-<!--===================================================/Login Card=======-->
-<!--====================================================================/Column 2 =========================================================================-->
+      </div>
     </div>
+    <!--/Modal -->
 
-<!--===================================================Row 3================-->
-  <div class="row">
-    <div class="col-lg">
-      <!--====================================================Developers=================-->
-        <div >
-          <hr style="height:2px;color:#333; background-color:#333;">
+    <!--=======================================================================/Jumbotron========================================================================= -->
+    <!--=======================================================================MainLanding Body========================================================================= -->
+    <div class="container pt-4">
+      <div class="row">
+        <!--====================================================================Column 1 ========================================================================= -->
+        <div class="col-lg-7">
+          <h4 class="display-3  text-left">
+            <u>Latest News</u>
+          </h4>
+          <p class="lead text-left">
+            <!-- <img class="img-thumbnail d-flex px-4" src="../assets/Webgraphics/Undercon.jpg" > -->
+            <div class="landingChip-wprapper">
+              <div class="  d-flex px-2 chip-holder ">
+                <button class="landingChip  bg-success btn btn-lg">
+                  <hr>
+                  <div class="button-title">POKER PALS</div>
+                  <hr>
+                </button>
+              </div>
+            </div>
+            <p class="lead">
+
+              Poker Pals is now curreently Withinin development phase following the generic phases set by Brock University's COSC 4f00
+              team poker face. Within our venture we have now moved into the development phase of the Product, While our
+              site is still currently under construction we hope to get things up and running as soon as possible. Until
+              then please observe our structure and lay out of our up comming websitste and all the possible features we
+              look for ward to possible providing in the meant time enjoy.
+              <br> - Team Poker Face.
+            </p>
+
+          </p>
         </div>
-        <h1 id="Developers" class="display-4 text-center  text-muted ">LeaderBoard</h1>
+        <!--====================================================================/Column 1 =========================================================================-->
+        <!--====================================================================Column 2=========================================================================-->
+        <div class="col-lg-5">
+          <!--==================Table/Card:System stats==================-->
+          <div class="card border-dark mb-3 mx-auto" style="max-width: 40rem;">
+            <div class="card-header bg-secondary text-white text-left">
+              <span class="lead">
+                <i class="fa fa-bar-chart-o fa-lg"></i>
+              </span>
+              <u>System Statistics</u>
+            </div>
+            <div class="card-body text-dark">
+              <ul class="list-group">
+                <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
+                  <div class="justify-content-left">
+                    <i class="fa fa-users fa-lg pr-1"> </i> Memebers: </div>
+                  <div class="ml-5 pl-5">
+                    <span class="badge badge-light badge-pill">{{Members}}</span>
+                  </div>
+                </li>
+                <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
+                  <div class="justify-content-left">
+                    <img src="../assets/Webgraphics/PTable.png" style="decoration:none" width="35" height="35"> Games Today:</div>
+                  <span class="badge badge-light badge-pill">{{gamesToday}}</span>
+                </li>
+                <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
+                  <div class="justify-content-left">
+                    <img src="../assets/Webgraphics/poker.png" style="decoration:none" width="35" height="35"> Players Online:</div>
+                  <span class="badge badge-light badge-pill">{{onlineMembers}}</span>
+                </li>
+                <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
+                  <div class="justify-content-left">
+                    <img src="../assets/Webgraphics/Pokerchip.png" style="decoration:none" width="35" height="35"> Ranking1#:</div>
+                  <span class="badge badge-light badge-pill">{{Level1Members}}</span>
+                </li>
+                <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
+                  <div class="justify-content-left">
+                    <img src="../assets/Webgraphics/PokerL2.png" style="decoration:none" width="35" height="35"> Ranking2#:</div>
+                  <span class="badge badge-light badge-pill">{{Level2Members}}</span>
+                </li>
+                <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
+                  <div class="justify-content-left">
+                    <img src="../assets/Webgraphics/chipPile.png" style="decoration:none" width="35" height="35">Ranking3#:</div>
+                  <span class="badge badge-light badge-pill">{{Level3Members}}</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <!--=======/ Table:System stats=======-->
+          <!--=======/Login Card=======-->
+          <div class="card border-dark mb-3 mx-auto" style="max-width: 40rem;">
+            <div class="card-header text-left text-white bg-secondary lead">
+              <i class="fa fa-user-circle pr-2 fa-lg"></i>
+              <u>Login</u>
+            </div>
+          </div>
+          <div class="card-body text-dark">
+            <form class="needs-validation" ref="theform" action="/#/Lobby">
+              <div v-show="this.isLoginError">
+                <error-messages class="error-messages" :Error="this.ErrorMessage "></error-messages>
+              </div>
+              <div class="form-group">
+                <input v-model="Player.username" ref="myTestField" type="text" class="form-control nameInput" id="formGroupExampleInput"
+                  placeholder="UserName/Email">
+              </div>
+              <div class="form-group">
+                <input v-model="Player.password" ref="myTestField2" type="password" class="form-control passwordInput" id="formGroupExampleInput2"
+                  placeholder="Password">
+              </div>
+              <div class="form-group">
+                <button class="btn btn-darkgrey btn-lg btn-block text-dark text-center loginButton" type="button" value="Login" @click="AttemptLogin()"
+                  :disabled="(this.clickedLogin === true)||(this.clickedRegister === true)">
+                  <i class="fa fa-sign-in"></i> Login</button>
+              </div>
+              <div class="form-group">
+                <button class="btn btn-warning btn-lg btn-block text-dark  text-center " type="button" value="Register" data-toggle="modal"
+                  data-target="#Register" :disabled="(this.clickedLogin === true )||(this.clickedRegister === true )">
+                  <i class="fa fa-sign-in"></i> Register</button>
+              </div>
+              <div class="form-group">
+                <p class="text-right">Forgot password?
+                  <br>
+                  <a style="text-decoration:none" href="">
+                    <i class="fa fa-sign-in"></i> Password reset </a>
+                </p>
+              </div>
+            </form>
+          </div>
+        </div>
+        <!--=======/Login Card=======-->
+        <!--===================================================/Login Card=======-->
+        <!--====================================================================/Column 2 =========================================================================-->
+      </div>
+
+      <!--===================================================Row 3================-->
+      <div class="row">
+        <div class="col-lg">
+          <!--====================================================Developers=================-->
+          <div>
+            <hr style="height:2px;color:#333; background-color:#333;">
+          </div>
+          <h1 id="Developers" class="display-4 text-center  text-muted ">LeaderBoard</h1>
           <!--====================================================Listdevelopers=================-->
-        <div class="pb-4">
-          <hr style="height:2px;color:#333; background-color:#333;">
-        </div>
-      <!--====================================================/Developers=================-->
-         <table class="table table-hover table-dark justify-content-center">
-              <thead>
-                <tr>
-                  <th scope="col">Username</th>
-                  <th scope="col">Poker Chips</th>
-                  <th scope="col">#HandsWon</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th scope="row">Mark</th>
-                  <td>6000</td>
-                  <td>6</td>
-                </tr>
-                <tr>
-                  <th scope="row">Jacob</th>
-                  <td>5000</td>
-                  <td>5</td>
-                </tr>
-                <tr>
-                  <th scope="row">Tomas</th>
-                  <td>5</td>
-                  <td>5</td>
-                </tr>
-              </tbody>
+          <div class="pb-4">
+            <hr style="height:2px;color:#333; background-color:#333;">
+          </div>
+          <!--====================================================/Developers=================-->
+          <table class="table table-hover table-dark justify-content-center">
+            <thead>
+              <tr>
+                <th scope="col">Username</th>
+                <th scope="col">Poker Chips</th>
+                <th scope="col">#HandsWon</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Mark</th>
+                <td>6000</td>
+                <td>6</td>
+              </tr>
+              <tr>
+                <th scope="row">Jacob</th>
+                <td>5000</td>
+                <td>5</td>
+              </tr>
+              <tr>
+                <th scope="row">Tomas</th>
+                <td>5</td>
+                <td>5</td>
+              </tr>
+            </tbody>
           </table>
-    </div>
-</div>
-
-
-
-<!--====================================================================Features row=========================================================================-->
-
-
-
-<!--===================================================Row 2================-->
-
-
-<!--===================================================/Row 2================-->
-
-
-
-
-<!--===================================================Row 3================-->
-  <div class="row">
-    <div class="col-lg">
-      <!--====================================================Developers=================-->
-        <div >
-          <hr style="height:2px;color:#333; background-color:#333;">
         </div>
-        <h1 id="Developers" class="display-4 text-center  text-muted ">Developers</h1>
+      </div>
+
+
+
+      <!--====================================================================Features row=========================================================================-->
+
+
+
+      <!--===================================================Row 2================-->
+
+
+      <!--===================================================/Row 2================-->
+
+
+
+
+      <!--===================================================Row 3================-->
+      <div class="row">
+        <div class="col-lg">
+          <!--====================================================Developers=================-->
+          <div>
+            <hr style="height:2px;color:#333; background-color:#333;">
+          </div>
+          <h1 id="Developers" class="display-4 text-center  text-muted ">Developers</h1>
           <!--====================================================Listdevelopers=================-->
-        <div class="pb-4">
-          <hr style="height:2px;color:#333; background-color:#333;">
-        </div>
-      <!--====================================================/Developers=================-->
-    </div>
-</div>
-<div class="row">
-  <!--Developer 1 -->
-    <div class="col-md-6 col-lg-3">
-      <div class="card mb-3 ">
-        <img class="card-img-top   border-0" src="../assets/Webgraphics/crown.png" alt="Javon Luke">
-        <div class="card-body">
-          <h5 class="card-title">Javon Luke</h5>
-          <p class="card-text">Team Lead and Front-End porgrammer lead of team Pokerface with great interest in Web and Mobile(IOS) Development.</p>
+          <div class="pb-4">
+            <hr style="height:2px;color:#333; background-color:#333;">
+          </div>
+          <!--====================================================/Developers=================-->
         </div>
       </div>
-    </div>
-  <!--/Developer 1 -->
-<!--Developer 2 -->
-    <div class="col-md-6 col-lg-3">
-      <div class="card mb-3 ">
-        <img class="card-img-top" src="../assets/Webgraphics/pointy-hat.png" alt="Adam Caverhill"  >
-        <div class="card-body">
-          <h5 class="card-title">Adam Caverhill</h5>
-          <p class="card-text">Back-End Programmer and Documentation manager of PokerFace, Adam's interest Lies mainly within Back-end Development for the web.  </p>
+      <div class="row">
+        <!--Developer 1 -->
+        <div class="col-md-6 col-lg-3">
+          <div class="card mb-3 ">
+            <img class="card-img-top   border-0" src="../assets/Webgraphics/crown.png" alt="Javon Luke">
+            <div class="card-body">
+              <h5 class="card-title">Javon Luke</h5>
+              <p class="card-text">Team Lead and Front-End porgrammer lead of team Pokerface with great interest in Web and Mobile(IOS) Development.</p>
+            </div>
+          </div>
         </div>
+        <!--/Developer 1 -->
+        <!--Developer 2 -->
+        <div class="col-md-6 col-lg-3">
+          <div class="card mb-3 ">
+            <img class="card-img-top" src="../assets/Webgraphics/pointy-hat.png" alt="Adam Caverhill">
+            <div class="card-body">
+              <h5 class="card-title">Adam Caverhill</h5>
+              <p class="card-text">Back-End Programmer and Documentation manager of PokerFace, Adam's interest Lies mainly within Back-end Development
+                for the web. </p>
+            </div>
+          </div>
+        </div>
+        <!--/Developer 2 -->
+        <!--Developer 3 -->
+        <div class="col-md-6 col-lg-3">
+          <div class="card mb-3 ">
+            <img class="card-img-top" src="../assets/Webgraphics/developers.png" alt="Jason Roper">
+            <div class="card-body">
+              <h5 class="card-title">Jason Roper</h5>
+              <p class="card-text"> Application Architect and DevOps of team Poker Face, Jason's delight are more found within Networking Programming.</p>
+            </div>
+          </div>
+        </div>
+        <!--/Developer 3 -->
+        <!--Developer 4 -->
+        <div class="col-md-6 col-lg-3">
+          <div class="card mb-3 ">
+            <img class="card-img-top" src="../assets/Webgraphics/TopHat.png" alt="">
+            <div class="card-body">
+              <h5 class="card-title">Ashley Hamilton-Morley</h5>
+              <p class="card-text">Front-end Programmer, Test Lead and UserInterface, Ashley's Interest are heavily invested in Game and Web development.
+                </p>
+            </div>
+          </div>
+        </div>
+        <!--/Developer 4-->
+        <!--====================================================Listdevelopers=================-->
       </div>
     </div>
-  <!--/Developer 2 -->
-<!--Developer 3 -->
-    <div class="col-md-6 col-lg-3">
-      <div class="card mb-3 ">
-        <img class="card-img-top" src="../assets/Webgraphics/developers.png" alt="Jason Roper">
-        <div class="card-body">
-          <h5 class="card-title">Jason Roper</h5>
-          <p class="card-text"> Application Architect and DevOps of team Poker Face, Jason's delight are more found within Networking Programming.</p>
-        </div>
-      </div>
-    </div>
-  <!--/Developer 3 -->
-<!--Developer 4 -->
-    <div class="col-md-6 col-lg-3">
-      <div class="card mb-3 ">
-        <img class="card-img-top" src="../assets/Webgraphics/TopHat.png" alt="">
-        <div class="card-body">
-          <h5 class="card-title">Ashley Hamilton-Morley</h5>
-          <p class="card-text">Front-end Programmer, Test Lead and UserInterface, Ashley's Interest are heavily invested in Game and Web development. </p>
-        </div>
-      </div>
-    </div>
-<!--/Developer 4-->
-<!--====================================================Listdevelopers=================-->
-</div>
-</div>
 
-<!--===================================================/Row 3================-->
-<!-- </div> -->
+    <!--===================================================/Row 3================-->
+    <!-- </div> -->
 
-<!--=======================================================================/Mai nLanding Body========================================================================= -->
-</div>
+    <!--=======================================================================/Mai nLanding Body========================================================================= -->
+  </div>
 </template>
 
 <script>
