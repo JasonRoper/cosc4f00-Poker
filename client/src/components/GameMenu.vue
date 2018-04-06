@@ -9,55 +9,59 @@
     <audio id="AudioSource2" src="../assets/Audio/chipLay1.wav">
       <!-- <source src="Cowboy.mp3" type="audio/mpeg"> -->
     </audio>
-    <div v-show="GameMenu">
+    <div>
      <!--  <h2 class="display-4 text-white pb-3 text-left ml-5 pl-5 mr-0 mt-5 pt-5">
         <u>MAIN MENU</u>
       </h2> -->
-      <div class="text-center">
+      <div class="pt-0">
         <div class="chip-holder">
           <button @mouseleave="chiprelaseSound()" @mouseover="chipSound()" class="around-words inner-yellow btn btn-lg" @click="showInstructPoker()">
+             <i v-if="instrcutionPokerMode" class="fa fa-arrow-left  fa-2x"></i>
           </button>
           <hr>
-          <div>Instructional Poker</div>
+          <div>Instructional</div>
         </div>
         <div class="chip-holder">
           <button @mouseleave="chiprelaseSound()" @mouseover="chipSound()" class="around-words inner-green btn btn-lg" @click="showCasualPoker()">
+            <i v-if="casualPokerMode" class="fa fa-arrow-left  fa-2x"></i>
           </button>
           <hr>
-          <div>Casual Poker</div>
+          <div>Casual</div>
         </div>
         <div class="chip-holder">
           <button @mouseleave="chiprelaseSound()" @mouseover="chipSound()" class="around-words inner-blue btn btn-lg" @click="chipChoice('CompetitivePoker')">
           </button>
           <hr>
-          <div>Competitive Poker</div>
+          <div>Competitive</div>
         </div>
       </div>
     </div>
     <div v-show="instrcutionPokerMode">
       <div>
-        <h2 class="display-4 text-white  text-left ml-5 pl-5 mr-0 mt-3 pt-3 ">
-          <button type="button" class="btn btn-default btn-circle backButton  inner-blue" @click="backButton()">
-            <i class="fa fa-arrow-left  fa-2x"></i>
-          </button>
+        <!-- <h2 class="display-4 text-white  text-left ml-5 pl-5 mr-0 mt-3 pt-3 ">
+         
           <br>
           <u>Instructional Poker</u>
-        </h2>
+        </h2> -->
         <div v-show="instructionalSelection" class="instructionalButtons">
-          <div v-show="!instrcutionSubMenu" class="pt-5 mt-5">
-            <div class="chip-holder ">
-              <button @mouseleave="chiprelaseSound()" @mouseover="chipSound()" class="around-words inner-grey btn btn-lg" @click="chipChoice('PokerTutorial')">
-                <hr>
-                <div class="button-title">Poker Tutorial</div>
-                <hr>
+          <div v-show="!instrcutionSubMenu" class="text-center">
+            <!-- <div class="chip-holder ">
+              <button type="button" class="backButton  inner-blue" @click="backButton()">
+                <i class="fa fa-arrow-left  fa-2x"></i>
               </button>
+            </div> -->
+            <div class="chip-holder ">
+              <button @mouseleave="chiprelaseSound()" @mouseover="chipSound()" class="around-words inner-yellow btn btn-lg" @click="chipChoice('PokerTutorial')">
+              </button>
+                <hr>
+                <div>Poker Tutorial</div>
             </div>
             <div class="chip-holder ">
               <button @mouseleave="chiprelaseSound()" @mouseover="chipSound()" data-toggle="modal" data-target="#Register2"
-                class="around-words inner-orange btn btn-lg">
-                <hr> CPU Challenge
-                <hr>
+                class="around-words inner-yellow btn btn-lg">
               </button>
+              <hr>
+              <div>CPU Challenge</div>
             </div>
           </div>
           <div v-show="instrcutionSubMenu" class="pt-5 mt-5">
@@ -65,17 +69,16 @@
               <button @mouseleave="chiprelaseSound()" @mouseover="chipSound()" class="around-words2 inner-green btn btn-lg"
                 @click="chipChoice('InteractiveTutorial')">
                 <hr>
-                <div class="button-title">Interactive Tutorial</div>
+                <div>Interactive Tutorial</div>
                 <hr>
               </button>
             </div>
             <div class="chip-holder ">
               <button @mouseleave="chiprelaseSound()" @mouseover="chipSound()" class="around-words2 inner-gold btn btn-lg"
                 @click="chipChoice('PokerVideo')">
-                <hr>
-                <div class="button-title">Video Tutorial</div>
-                <hr>
               </button>
+              <hr>
+              <div class="button-title">Video Tutorial</div>
             </div>
           </div>
         </div>
@@ -94,36 +97,35 @@
     </div>
     <div v-show="casualPokerMode">
       <div>
-        <h2 class="display-4 text-white text-left ml-3 pl-3 mt-3 pt-3">
-          <button type="button" class="btn btn-default btn-circle backButton  inner-green" @click="backButton()">
+        <!-- <h2 class="display-4 text-white text-left ml-3 pl-3 mt-3 pt-3"> -->
+          <!-- <br>
+          <u>Casual Poker</u> -->
+       <!--  </h2> -->
+        <div class="pt-0">
+        <!--   <div class="chip-holder">
+           <button type="button" class=" btn-circle backButton  inner-green" @click="backButton()">
             <i class="fa fa-arrow-left  fa-2x"></i>
           </button>
-          <br>
-          <u>Casual Poker</u>
-        </h2>
-        <div class="pt-0">
-          <div class="chip-holder pt-5 mt-5">
-            <button @mouseleave="chiprelaseSound()" @mouseover="chipSound()" class="around-words2 inner-grey btn btn-lg" data-toggle="modal"
+          </div> -->
+          <div class="chip-holder">
+            <button @mouseleave="chiprelaseSound()" @mouseover="chipSound()" class="around-words inner-green btn btn-lg" data-toggle="modal"
               data-target="#CreateCasualPoker">
-              <hr>
-              <div class="button-title">Create Game</div>
-              <hr>
             </button>
+            <hr>
+            <div class="button-title">Create Game</div>
           </div>
-          <div class="chip-holder pt-5 mt-5">
-            <button @mouseleave="chiprelaseSound()" @mouseover="chipSound()" class="around-words2 inner-blue btn btn-lg" data-toggle="modal"
+          <div class="chip-holder">
+            <button @mouseleave="chiprelaseSound()" @mouseover="chipSound()" class="around-words inner-green btn btn-lg" data-toggle="modal"
               data-target="#JoinCasualPoker">
-              <hr>
-              <button class="btn btn-lg">Join Game</button>
-              <hr>
             </button>
+            <hr>
+            <div>Join Game</div>
           </div>
-          <div class="chip-holder pt-5 mt-5">
-            <button @mouseleave="chiprelaseSound()" @mouseover="chipSound()" class="around-words bg-transparent btn btn-lg">
-              <hr>
-              <button class="btn btn-lg" @click="chipChoice('CasualPoker')">Match Make</button>
-              <hr>
+          <div class="chip-holder">
+            <button @mouseleave="chiprelaseSound()" @mouseover="chipSound()" class="around-words inner-green btn btn-lg" @click="chipChoice('CasualPoker')">
             </button>
+            <hr>
+            <div>Match Make</div>
           </div>
         </div>
       </div>
@@ -383,10 +385,20 @@ export default {
       }
     },
     showInstructPoker () {
+      if (this.instrcutionPokerMode) {
+        this.backButton()
+        return
+      }
+      this.backButton()
       this.GameMenu = false
       this.instrcutionPokerMode = true
     },
     showCasualPoker () {
+      if (this.casualPokerMode) {
+        this.backButton()
+        return
+      }
+      this.backButton()
       this.GameMenu = false
       this.casualPokerMode = true
     },
@@ -463,7 +475,8 @@ export default {
 }
 </script>
 
-  <style src="@/assets/css/GMenu.css">
+  <style scoped src="@/assets/css/GMenu.css">
 
 </style>
+
 
