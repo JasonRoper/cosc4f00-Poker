@@ -145,7 +145,7 @@ export default {
       }
       if ((this.loginErrorMessage.length === 0)) { // if ater check
         this.$router.push('Game')
-        alert('start game')
+        console.log('start game')
       }
     },
     showLoginModal () {
