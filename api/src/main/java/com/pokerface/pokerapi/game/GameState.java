@@ -407,12 +407,16 @@ public class GameState {
         if (dealer!=-1) {
             players.get(dealer).setDealer(false);
         }
-
-        dealer++;
-        if (dealer>=players.size()){
-            dealer=0;
+        while(true) {
+            dealer++;
+            if (dealer >= players.size()) {
+                dealer = 0;
+            }
+            if (!players.get(dealer).getHasFolded()) {
+                players.get(dealer).setDealer(true);
+                break;
+            }
         }
-        players.get(dealer).setDealer(true);
     }
 
     /**
@@ -514,11 +518,26 @@ public class GameState {
         pot = new Pot(playerCount,this);
 
         minimumBet=0;
-        presentTurn=advanceCounter(dealer);
+        while(true) {
+            presentTurn = advanceCounter(dealer);
+            if (!players.get(presentTurn).getHasFolded()){
+                break;
+            }
+        }
         placeBet(players.get(presentTurn),bigBlind/2);
-        presentTurn=advanceCounter(presentTurn);
+        while(true) {
+            presentTurn = advanceCounter(presentTurn);
+            if (!players.get(presentTurn).getHasFolded()){
+                break;
+            }
+        }
         placeBet(players.get(presentTurn),bigBlind);
-        presentTurn=advanceCounter(presentTurn);
+        while(true) {
+            presentTurn = advanceCounter(presentTurn);
+            if (!players.get(presentTurn).getHasFolded()){
+                break;
+            }
+        }
         round=1;
         // This would represent the small blind last payer. If nobody raises, the round ends when small blind is reached
         for (Player p: players){
@@ -679,6 +698,8 @@ public class GameState {
             p.setBet(0);
             if (p.getCashOnHand()>0) {
                 p.setHasFolded(false);
+            } else {
+                p.setHasFolded(true);
             }
             p.setAllIn(false);
             p.setIsDealer(false);
