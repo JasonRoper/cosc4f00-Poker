@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -19,7 +18,6 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -213,13 +211,13 @@ public class GameController {
 
     @PostMapping("/api/v1/games/")
     public GameInfoTransport createCustomGame(@Payload GameSettingTransport gameSettings,
-                                          Principal principal) {
+                                              Principal principal) {
         UserInfoTransport user = userService.getUserByUsername(principal.getName());
         long gameID;
-        if (gameSettings.gameType== GameState.GameType.AI) {
+        if (gameSettings.gameType == GameState.GameType.AI) {
             gameID = gameService.createAIGame(gameSettings, user.getId(), user.getUsername());
         } else {
-            gameID=gameService.createGame(gameSettings,user.getId(),user.getUsername());
+            gameID = gameService.createGame(gameSettings, user.getId(), user.getUsername());
         }
         GameStateTransport gameStateTransport = gameService.getGameStateTransport(gameID);
         return new GameInfoTransport(gameID);

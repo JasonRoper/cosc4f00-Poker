@@ -1,6 +1,5 @@
 package com.pokerface.pokerapi.game;
 
-import org.hibernate.Session;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
@@ -280,11 +279,11 @@ public class GameService {
         return createGame(4);
     }
 
-    public long createGame(GameSettingTransport gameSettings,long userID,String userName){
-        GameState gameState=new GameState(gameSettings);
+    public long createGame(GameSettingTransport gameSettings, long userID, String userName) {
+        GameState gameState = new GameState(gameSettings);
         gameState.setGameType(GameState.GameType.CUSTOM);
-        gameState=games.save(gameState);
-        for (int i=0;i<gameSettings.aiPlayers;i++){
+        gameState = games.save(gameState);
+        for (int i = 0; i < gameSettings.aiPlayers; i++) {
             addAIPlayer(gameState.getId());
 
         }
@@ -292,11 +291,11 @@ public class GameService {
         return gameState.getId();
     }
 
-    public long createAIGame(GameSettingTransport gameSettings,long userID,String userName){
-        GameState gameState=new GameState(gameSettings);
+    public long createAIGame(GameSettingTransport gameSettings, long userID, String userName) {
+        GameState gameState = new GameState(gameSettings);
         gameState.setGameType(GameState.GameType.AI);
-        gameState=games.save(gameState);
-        for (int i=0;i<gameSettings.aiPlayers;i++){
+        gameState = games.save(gameState);
+        for (int i = 0; i < gameSettings.aiPlayers; i++) {
             addAIPlayer(gameState.getId());
 
         }

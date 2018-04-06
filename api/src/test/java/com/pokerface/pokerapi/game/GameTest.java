@@ -1,7 +1,10 @@
 package com.pokerface.pokerapi.game;
 
 import com.pokerface.pokerapi.users.*;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -362,7 +365,7 @@ private UserRepository userRepository;
 
         TimeUnit.SECONDS.sleep(20);
         testGameState=gameRepository.findOne(testGameState.getId());
-        assertTrue(testGameState.isHasStarted()==false);
+        assertTrue(testGameState.isHasStarted() == false);
 
         cleanUpUserRepository();
         cleanUpGameRepository();
@@ -390,7 +393,7 @@ private UserRepository userRepository;
             }
         TimeUnit.SECONDS.sleep(10);
         testGameState=gameRepository.findOne(testGameState.getId());
-        assertEquals(testGameState.getPlayers().get(2).getCashOnHand(),100);
+        assertEquals(testGameState.getPlayers().get(2).getCashOnHand(), 100);
 
         cleanUpUserRepository();
         cleanUpGameRepository();

@@ -56,11 +56,11 @@ public class GameState {
         setId(id);
     }
 
-    public GameState(GameSettingTransport gameSettings){
-        maxPlayers=gameSettings.maxPlayer;
-        minPlayerCount=gameSettings.minimumPlayer;
-        defaultCashOnHand=gameSettings.cashOnHand;
-        bigBlind=gameSettings.bigBlind;
+    public GameState(GameSettingTransport gameSettings) {
+        maxPlayers = gameSettings.maxPlayer;
+        minPlayerCount = gameSettings.minimumPlayer;
+        defaultCashOnHand = gameSettings.cashOnHand;
+        bigBlind = gameSettings.bigBlind;
     }
 
     /**
@@ -606,7 +606,7 @@ public class GameState {
     public void advanceRound(){
         round++;
         if (round==2){
-            if (communityCardOne==null){
+            if (communityCardOne == null) {
                 System.out.println();
             }
             communityCardOne=deck.dealCard();
