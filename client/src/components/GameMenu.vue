@@ -438,7 +438,7 @@ export default {
           // TableView
           this.$router.push({name: 'TableView', params: {gameId: this.gameReq.gameId}})
         }).catch(() => {
-          alert('an error occured - there is no GameId returned')
+          console.log('an error occured - there is no GameId returned')
         })
       }
       if (choice === 'CPUChallenge') {
@@ -465,7 +465,7 @@ export default {
           // TableView
           this.$router.push({name: 'TableView', params: {gameId: this.gameReq.gameId}})
         }).catch(() => {
-          alert('an error occured - there is no GameId returned')
+          console.log('an error occured - there is no GameId returned')
         })
       }
     }

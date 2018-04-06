@@ -270,7 +270,6 @@ import state from '../store/users'
 
 export default {
   data () {
-    // alert('just logged route' + this.$route.params.gameId)
     return {
       // UserName: state.state.username,
       mechanics: new GameMech(this.$route.params.gameId, state.state.username),
@@ -310,11 +309,10 @@ export default {
       this.mechanics.setGame() // I left this for asnley
     },
     EventBarMessage () {
-      // alert('Change change change')
     },
     roundTwo () {
       // Show your hand Animation
-      // alert('Lets start the show')
+
       // if (this.roundTwo === true) {
       //   this.layCommunity()
       // }
@@ -345,7 +343,7 @@ export default {
   },
   methods: {
     giveRound () {
-      alert('heres your round' + this.roundNumber)
+      console.log('heres your round' + this.roundNumber)
     },
     testGameStarted () {
       console.log(this.gameStarted)
@@ -395,7 +393,6 @@ export default {
       console.log(max)
       this.posX = this.posX + 90
       // this.deckLength = this.deckLength - 1
-      // //  alert('card', i)
       // }
     },
     doCountDown () {
@@ -413,7 +410,7 @@ export default {
         document.getElementById('Events').value = this.EventBarMessage
         if (distance < 0) {
           clearInterval(x)
-          alert('Done')
+          console.log('Done')
           document.getElementById('Events').value = ''
         }
       }, 1000)
@@ -465,7 +462,7 @@ export default {
       if (this.money !== undefined) {
         this.premove(GameActionType.BET, this.money)
       } else {
-        alert('you are trying to Bet with no money')
+        console.log('you are trying to Bet with no money')
       }
     },
     sendCards: function () {
@@ -566,8 +563,6 @@ export default {
       theta = theta + degreeIncrument
       // console.log('heres you x: ' + x + 'here your y:' + y + 'at ' + theta)
     }
-
-    // alert('heres your round'+ this.roundNumber)
     if (this.GameOver === true) {
       // const posX = -191 // This value is not used
       setTimeout(this.showDown, 2000)

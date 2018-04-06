@@ -102,7 +102,7 @@ export default class GameMech {
         this.setGameCards()
       }
     }).catch((error) => {
-      alert('having an error IN JOINING GAME')
+      console.log('having an error IN JOINING GAME')
       console.log(error)
     })
   }
