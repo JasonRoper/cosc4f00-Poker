@@ -124,23 +124,15 @@ export default class GameMech {
     })
     return opponents
   }
-  public winners (): Player[] {
-    const winn: Player[] = []
+  public winner (): Player {
+    let winn: Player | null = null
     this.multiplePlayers.forEach((player: Player) => {
       if (player.winnings > 0) {
-        winn.push(player)
+        winn = player
       }
     })
+    if (winn === null) return this.multiplePlayers[0]
     return winn
-  }
-  public losers (): Player[] {
-    const loser: Player[] = []
-    this.multiplePlayers.forEach((player: Player) => {
-      if (player.winnings <= 0) {
-        loser.push(player)
-      }
-    })
-    return loser
   }
 
   /**
