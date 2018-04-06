@@ -288,7 +288,7 @@ private UserRepository userRepository;
             //testTransport=testGameStateTransport.get(20,TimeUnit.SECONDS);
         }
 
-        TimeUnit.SECONDS.sleep(5);
+        TimeUnit.SECONDS.sleep(10);
         testGameState=gameRepository.findOne(testGameState.getId());
         assertTrue(testGameState.getPresentTurn()==0);
         assertEquals(testGameState.getPlayers().get(3).getBet(),62);

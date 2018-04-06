@@ -173,8 +173,17 @@ public class GameService {
      */
     public boolean isHandEnd(GameState gameState) {
 
-        return (isRoundEnd(gameState) && gameState.getRound() == 4) || allFolded(gameState);
+        return ((isRoundEnd(gameState) && gameState.getRound() == 4)) || allPlayersAllIn(gameState) || allFolded(gameState);
 
+    }
+
+    boolean allPlayersAllIn(GameState gameState){
+        for (Player p : gameState.getPlayers()) {
+            if (!p.isAllIn()){
+                return false;
+            }
+        }
+        return true;
     }
 
     public boolean allFolded(GameState gameState){
@@ -345,6 +354,7 @@ public class GameService {
      */
     public HandEndTransport determineWinnings(long gameID) {
         GameState gameState = games.findOne(gameID);
+        gameState.fillInCommunityCards();
         int[] winners = new int[gameState.getPlayerCount()];
         int[] winnings = new int[gameState.getPlayerCount()];
         if (allFolded(gameState)) {
@@ -572,7 +582,7 @@ public class GameService {
         GameState gameState=games.findOne(gameID);
         int inGameCount=0;
         for (Player p:gameState.getPlayers()){
-            if (p.getCashOnHand()>0){
+            if (p.getCashOnHand()>0&&!p.isAI()){
                 inGameCount++;
             }
         }

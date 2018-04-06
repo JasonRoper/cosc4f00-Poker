@@ -136,7 +136,7 @@ public class GameState {
      * @return a Deck object
      */
     @PrimaryKeyJoinColumn
-    @OneToOne(cascade = CascadeType.ALL, optional = true)
+    @OneToOne(cascade = CascadeType.ALL, optional = true, fetch=FetchType.EAGER)
     public Deck getDeck() {
         return deck;
     }
@@ -673,11 +673,31 @@ public class GameState {
 
     public void endHand(){
         startTime=System.currentTimeMillis();
+        round=0;
         for (Player p: players){
             p.setBet(0);
+            if (p.getCashOnHand()>0) {
+                p.setHasFolded(false);
+            }
+            p.setAllIn(false);
+            p.setIsDealer(false);
             p.updateLastGameAction(new GameAction(null,0));
         }
         hasStarted=false;
+    }
+
+    public void fillInCommunityCards(){
+        if (communityCardOne==null){
+            communityCardOne=deck.dealCard();
+            communityCardTwo=deck.dealCard();
+            communityCardThree=deck.dealCard();
+        }
+        if (communityCardFour==null){
+            communityCardFour=deck.dealCard();
+        }
+        if (communityCardFive==null){
+            communityCardFive=deck.dealCard();
+        }
     }
 
     @Override
