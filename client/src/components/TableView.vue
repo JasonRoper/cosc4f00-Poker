@@ -233,14 +233,6 @@
 </div>
 
 
-                      <button v-on:click="findPlayer()">FindPlayer TEST </button>
-
-                      <button v-on:click="testGameStarted()">Second Round of Betting </button>
-              <button v-on:click="layCommunity()">LayCommunity</button>
-                            <button v-on:click="showDown()">DoShowDown</button>
-
-                            <button v-on:click="giveRound()">give round</button>
-
         </div>
       </div>
     <!-- </div> -->
@@ -339,6 +331,9 @@ export default {
     },
     opponents () {
       return this.mechanics.getOpponent()
+    },
+    GameOver () {
+      return this.mechanics.isHandFinished
     }
   },
   methods: {
@@ -372,7 +367,7 @@ export default {
       card[0].classList.remove('deckCard')
       console.log(max)
       this.posX = this.posX + 90
-      window.setTimeout(this.pumpCard2, 750)
+      window.setTimeout(this.pumpCard2, 850)
     },
     pumpCard2 () {
       var card = document.getElementsByClassName('deckCard')
@@ -382,7 +377,7 @@ export default {
       card[0].classList.remove('deckCard')
       console.log(max)
       this.posX = this.posX + 90
-      window.setTimeout(this.pumpCard3, 750)
+      window.setTimeout(this.pumpCard3, 850)
     },
     pumpCard3 () {
       var card = document.getElementsByClassName('deckCard')
@@ -564,7 +559,14 @@ export default {
       theta = theta + degreeIncrument
       // console.log('heres you x: ' + x + 'here your y:' + y + 'at ' + theta)
     }
+    
     // alert('heres your round'+ this.roundNumber)
+    if (this.GameOver === true) {
+      posX = -191,
+      setTimeout(this.showDown, 2000)
+      
+    }
+
     if (this.roundNumber === 1) {
       setTimeout(this.layCommunity, 2000)
     }

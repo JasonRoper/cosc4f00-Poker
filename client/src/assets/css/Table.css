@@ -55,11 +55,12 @@
    .userCards-wrapper {
      perspective: 700px;
      z-index: 0;
+     margin-left: 180px;
    }
   .TheUsercards{
     width:  480px;
     position: relative;
-    left:120px;
+    /* left:120px; */
     top:-60px;
     /* margin-left: 400px; */
     margin: 0px auto;
