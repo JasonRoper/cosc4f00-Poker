@@ -46,7 +46,7 @@
               <div class="pt-0">
          <div class="chip-holder pt-5 mt-5"><button  @mouseleave="chiprelaseSound()" @mouseover="chipSound()" class="around-words2 inner-grey btn btn-lg" data-toggle="modal" data-target="#CreateCasualPoker"><hr><div class="button-title">Create Game</div><hr></button></div>
         <div class="chip-holder pt-5 mt-5"><button   @mouseleave="chiprelaseSound()" @mouseover="chipSound()" class="around-words2 inner-blue btn btn-lg" data-toggle="modal" data-target="#JoinCasualPoker"><hr><button class="btn btn-lg">Join Game</button><hr></button></div>
-        <div class="chip-holder pt-5 mt-5"><button   @mouseleave="chiprelaseSound()" @mouseover="chipSound()" class="around-words bg-transparent btn btn-lg" data-toggle="modal" data-target="#JoinCasualPoker"><hr><button class="btn btn-lg">Match Make</button><hr></button></div>
+        <div class="chip-holder pt-5 mt-5"><button   @mouseleave="chiprelaseSound()" @mouseover="chipSound()" class="around-words bg-transparent btn btn-lg"><hr><button class="btn btn-lg" @click="chipChoice('CasualPoker')">Match Make</button><hr></button></div>
               </div>
               </div>
       </div>
