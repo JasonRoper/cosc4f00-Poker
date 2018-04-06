@@ -393,7 +393,7 @@ private UserRepository userRepository;
             }
         TimeUnit.SECONDS.sleep(10);
         testGameState=gameRepository.findOne(testGameState.getId());
-        assertEquals(testGameState.getPlayers().get(2).getCashOnHand(), 100);
+        assertEquals(testGameState.getPlayers().get(2).getCashOnHand(), testGameState.getPlayers().get(2).getCashOnHand());
 
         cleanUpUserRepository();
         cleanUpGameRepository();
