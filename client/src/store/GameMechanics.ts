@@ -57,7 +57,7 @@ export default class GameMech {
   public userAction: GameAction | null = null
   public roundNumber: number = -1
   public gameStatus: string = 'Game Pending....'
-  public isHandFinsihed: boolean = false
+  public isHandFinished: boolean = false
   public hasGameStarted: boolean = false
   public username: string = ''
   public disable: number = 1
@@ -124,6 +124,17 @@ export default class GameMech {
     })
     return opponents
   }
+  public winner (): Player {
+    let idx: number = 0
+    let maxWin: number = -1
+    this.multiplePlayers.forEach((player: Player, index: number) => {
+      if (player.winnings > maxWin) {
+        idx = index
+        maxWin = player.winnings
+      }
+    })
+    return this.multiplePlayers[idx]
+  }
 
   /**
    * Handles Game finished event
@@ -136,6 +147,8 @@ export default class GameMech {
     console.log(gameFinished)
     this.setFinishedPlayer(gameFinished)
     console.log('This game finished event does nothing')
+
+    this.isHandFinished = true
   }
 
   /**
@@ -268,6 +281,7 @@ export default class GameMech {
           this.gameStarted(gameTransport)
           this.setGameCards()
           this.hasBet = false
+          this.isHandFinished = false
           break
         }
         case Event.HAND_FINISHED: {

@@ -35,7 +35,7 @@
       <div class="oppentCards">
         <!--<card v-ref='card1' ref='card1' id="hand" class="singleCard" :card="this.data.card1"></card>
         <card v-ref="card2" ref='card2' id="hand2" class="singleCard" :card="this.data.card2"></card>-->
-        <card id="hand" class="" :card="this.data.card1"></card>
+        <card id="hand" class="singleCard" :card="this.data.card1"></card>
         <card id="hand2" class="singleCard" :card="this.data.card2"></card>
       </div>
         <div v-show ="this.data.isDealer" id="isDealerContainer">
@@ -45,20 +45,20 @@
 
 
       <div v-if="this.data.action !== null">
-       <div v-if="this.data.action.type !== null">
+       <!-- <div v-if="this.data.action.type !== null"> -->
         <div v-if ="this.data.action.type === 'FOLD'" id="isChipContainer">
         <strong id="chipAction" ><i class="fa fa-remove"></i></strong>
         </div>
               <transition name="Action">
         <!-- <div v-show = this.FoldAction id="isChipContainer"> -->
-        <div v-if ="this.data.action.type === 'FOLD' " id="isChipContainer">
+        <div v-show ="(this.showMove === true ) && this.data.action.type === 'FOLD' " id="isChipContainer">
         <strong id="chipAction" ><i  style = "padding-left:2px;padding-right:2px;" class="fa fa-remove"></i></strong>
         </div>
         </transition>
 
               <transition name="Action">
         <!-- <div v-show = this.CallAction id="isChipContainer"> -->
-                  <div v-if ="this.data.action.type === 'CALL'" id="isChipContainer">
+                  <div  v-show ="(this.showMove === true ) && this.data.action.type === 'CALL'" id="isChipContainer">
 
         <strong id="chipAction" ><i  style = "padding-left:2px;padding-right:2px;" class="fa fa-dollar"></i></strong>
         <div id="chipMessage">${{this.data.action.bet}}</div>
@@ -66,7 +66,7 @@
 
         <transition name="Action">
         <!-- <div v-show = this.BetAction id="isChipContainer"> -->
-         <div v-if ="this.data.action.type === 'BET'" id="isChipContainer">
+         <div v-show ="(this.showMove === true ) && this.data.action.type === 'BET'" id="isChipContainer">
 
         <strong id="chipAction" ><i class="fa fa-chevron-up"></i></strong>
         <div id="chipMessage">${{this.data.action.bet}}</div>
@@ -74,7 +74,7 @@
 
         <transition name="Action">
         <!-- <div v-show = this.RasieAction id="isChipContainer"> -->
-          <div v-if ="this.data.action.type === 'RAISE'" id="isChipContainer">
+          <div  v-show ="(this.showMove === true ) && this.data.action.type === 'RAISE'" id="isChipContainer">
         <strong id="chipAction" ><i class="fa fa-chevron-up"></i></strong>
         <div id="chipMessage">${{this.data.action.bet}}</div>
         </div></transition>
@@ -84,23 +84,17 @@
         <!-- <div v-show="this.RasieAction" id="isChipContainer">
         <strong id="chipAction" ><i class="fa fa-chevron-up"></i></strong><div id="chipMessage">${{this.data.action.bet}}</div>
         </div> -->
-            <transition name="Action">
+            <transition name="Action" >
         <!-- <div v-show = this.CheckAction id="isChipContainer"> -->
-          <div v-if ="this.data.action.type === 'CHECK'" id="isChipContainer">
+          <div v-show ="(this.showMove === true ) && this.data.action.type === 'CHECK'" id="isChipContainer">
         <strong id="chipAction" ><i class="fa fa-check"></i></strong>
         <div id="chipMessage">${{this.data.action.bet}}</div>
         </div>
         </transition>
-      </div>
+      <!-- </div> -->
       </div>
 
     </div>
-    <div>
-      <button @click="test()"> A test</button>
-       <button @click="test2()"> A test2</button>
-              <button @click="test3()"> ShowHand</button>
-
-      </div>
     <!--Display status big blind small blind  dealer etc   -->
   </div>
 </template>
@@ -108,7 +102,6 @@
  
 <script>
 import Card from '@/components/table/Card'
-import { GameActionType } from '@/api/gameservice'
 export default {
   data () {
     return {
@@ -122,6 +115,8 @@ export default {
       progressBar: 0,
       timerDone: false,
       showHand: false,
+      justFinished: false,
+      // showMove :false,
       isUser: this.data.isUser
     }
   },
@@ -130,7 +125,10 @@ export default {
     card: Card
   },
   updated: function () {
-   // this.seeAction()
+    // this.seeAction()
+    if (this.data.action.type !== null) {
+      setTimeout(this.resetActions, 3000)
+    }
   },
   methods: {
     addBar: function () {
@@ -164,7 +162,7 @@ export default {
       countDown.setSeconds(countDown.getSeconds() + 45) // countDown.getMinutes() + numberofMins
     },
     test2 () {
-      this.data.action.type = GameActionType.CALL
+      this.data.action.type = 'CALL'
     },
     test3 () {
       this.showHand = !this.showHand
@@ -173,14 +171,16 @@ export default {
       this.BetMessage = true
     },
     resetActions () {
+      this.data.action.type = ''
       this.BetAction = false
       this.RasieAction = false
       this.FoldAction = false
       this.CallAction = false
       this.CheckAction = false
+      this.showMove = false // reset
     },
     seeAction () {
-      if (this.data.action !== null) {
+      if (this.data.action.type !== null) {
         switch (this.data.action.type) {
           case 'BET': {
             alert('YO GON BETS EVERYONE')
@@ -200,6 +200,7 @@ export default {
           case 'CHECK': {
             alert('Yo GON CHECK EVERYONE')
             this.CheckAction = true
+            setTimeout(this.resetActions, 1000)
             break
           }
           case 'FOLD': {
@@ -213,9 +214,9 @@ export default {
         }
         if (this.data.action !== '') {
           this.data.action = ''
-          let interval = 2200
-          // window.setInterval(900)
-          setTimeout(this.resetActions, interval)
+          // let interval = 2200
+          // // window.setInterval(900)
+          setTimeout(this.resetActions, 3000)
         }
       }
     }
@@ -227,14 +228,18 @@ export default {
   },
   watch: {
     isTurn () {
-     /*  window.setInterval(() => {
-        this.addBar()
-      }, 100) */
+      if (this.isTurn === true) {
+        this.justFinished = true
+      }
+      if (this.isTurn === false) {
+        if (this.justFinished === true) {
+          this.showMove = true // reset
+          this.justFinished = false
+        }
+      }
     },
     showHand () {
       if (this.showHand === true) {
-        // document.getElementById('hand').classList.toggle('active')
-        // document.getElementById('hand2').classList.toggle('active')
         var playerCards = document.getElementsByClassName('singleCard')
         playerCards[playerCards.length - 1].classList.toggle('active')
         playerCards[playerCards.length - 2].classList.toggle('active')

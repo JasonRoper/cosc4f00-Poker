@@ -114,7 +114,7 @@
 Welcome! We here at Poker Pals have been working hard to get this site 
 up and running and are happy to present to you our prototype launch! 
 You'll notice on the right/below that you can register and log in, feel free to look around and check things out! Bring a friend, and have some fun playing poker. Enjoy! -<br> - Team Poker Face.
-             
+
              </p>
 
           </p>
