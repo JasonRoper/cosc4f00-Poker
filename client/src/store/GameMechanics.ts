@@ -93,12 +93,14 @@ export default class GameMech {
     axios.get(API_V1 + '/games/' + this.gameId).then((responce) => {
       console.log('GAME MECHANICS CONSTRUCTOR - ASKING TO JOIN GAME')
       this.setGameTransport(responce.data)
-      this.multiplePlayers.forEach((player: Player, index: number) => {
-        if (player.name === this.username) {
-          this.playerId = index
-        }
-      })
-      this.setGameCards()
+      if (this.multiplePlayers.length > 0) {
+        this.multiplePlayers.forEach((player: Player, index: number) => {
+          if (player.name === this.username) {
+            this.playerId = index
+          }
+        })
+        this.setGameCards()
+      }
     }).catch((error) => {
       alert('having an error IN JOINING GAME')
       console.log(error)
@@ -170,7 +172,7 @@ export default class GameMech {
     const move: GameAction = { type: action, bet: money }
     if (this.validatePreMove(move)) {
       console.log(this.username + ' Premove was valid')
-      this.disableButton(action)
+      // this.disableButton(action)
       this.userAction = move
       if (this.sendAction()) {
         return true
@@ -179,7 +181,7 @@ export default class GameMech {
       }
     } else {
       console.log(this.username + ' The move you attempted to send was invalid')
-      this.setTableActions()
+      // this.setTableActions()
       this.userAction = null
       return false
     }
@@ -189,45 +191,49 @@ export default class GameMech {
    * Disables the TableActions based on a users previous action
    * @param action holds the action of the user
    */
-  public disableButton (action: GameActionType) {
-    switch (action) {
-      case GameActionType.CHECK:
-        this.checkAction = this.disable
-        break
-      case GameActionType.BET:
-        this.betAction = this.disable
-        break
-      case GameActionType.CALL:
-        this.callAction = this.disable
-        break
-      case GameActionType.RAISE:
-        this.raiseAction = this.disable
-        break
-      case GameActionType.FOLD:
-        this.foldAction = this.disable
-        break
-      default:
-        alert('disable Button went wrong')
+  /*
+    public disableButton (action: GameActionType) {
+      switch (action) {
+        case GameActionType.CHECK:
+          this.checkAction = this.disable
+          break
+        case GameActionType.BET:
+          this.betAction = this.disable
+          break
+        case GameActionType.CALL:
+          this.callAction = this.disable
+          break
+        case GameActionType.RAISE:
+          this.raiseAction = this.disable
+          break
+        case GameActionType.FOLD:
+          this.foldAction = this.disable
+          break
+        default:
+          alert('disable Button went wrong')
+      }
     }
-  }
+   */
   /**
    * Disables specific tableActions based on if there has been a bet at the table
    */
-  public setTableActions () {
-    if (this.hasBet) {
-      this.foldAction = 0
-      this.betAction = 1
-      this.checkAction = 1
-      this.callAction = 0
-      this.raiseAction = 0
-    } else {
-      this.foldAction = 0
-      this.betAction = 0
-      this.checkAction = 0
-      this.callAction = 1
-      this.raiseAction = 1
+  /*
+    public setTableActions () {
+      if (this.hasBet) {
+        this.foldAction = 0
+        this.betAction = 1
+        this.checkAction = 1
+        this.callAction = 0
+        this.raiseAction = 0
+      } else {
+        this.foldAction = 0
+        this.betAction = 0
+        this.checkAction = 0
+        this.callAction = 1
+        this.raiseAction = 1
+      }
     }
-  }
+   */
 
   /**
    * ValidatePreMove
@@ -260,7 +266,7 @@ export default class GameMech {
   public setGameTransport (gameTransport: any) {
     console.log('CurrentGameTransport')
     console.log(gameTransport)
-    if (gameTransport.event) {
+    if (gameTransport.event !== null) {
       if (gameTransport.event.message) {
         // this.gameStatus = gameTransport.event.message
         // alert(gameTransport.event.message + ' The gamestatus is')
@@ -273,6 +279,7 @@ export default class GameMech {
           this.roundNumber = 0
           this.gameStarted(gameTransport)
           this.setGameCards()
+          this.hasBet = false
           break
         }
         case Event.HAND_FINISHED: {
@@ -316,6 +323,7 @@ export default class GameMech {
       alert('GAMETRANSPORT EVENT is NULL')
       this.defaultGameTransport(gameTransport)
     }
+    this.hasSomeoneBet()
     this.bigBlind = gameTransport.bigBlind
     this.turn = gameTransport.nextPlayer
     this.potSum = gameTransport.potSum
@@ -342,12 +350,13 @@ export default class GameMech {
   public playerAction (gameTransport: any) {
     this.setPlayers(gameTransport)
     this.setCommunityCards(gameTransport)
-    this.setTableActions()
+    // this.setTableActions()
   }
 
   public roundFinished (gameTransport: any) {
     this.setCommunityCards(gameTransport)
     this.roundNumber++
+    this.hasBet = false
   }
 
   public gameStarted (gameTransport: any) {
@@ -364,6 +373,7 @@ export default class GameMech {
   public handFinished (gameTransport: any) {
     alert(this.username + ' The HAND_FINISHED  was called')
     this.setPlayers(gameTransport)
+    this.hasGameStarted = false
   }
 
   public defaultGameTransport (gameTransport: any) {
@@ -373,34 +383,46 @@ export default class GameMech {
     this.setCommunityCards(gameTransport)
   }
 
-  public setPlayers (gameTransport: any) {
-    this.multiplePlayers = []
-    gameTransport.players.forEach((item: any, index: number) => {
-      let act: GameAction | null = null
-      if (item.action !== null) {
-        if (item.action.type !== null) {
-          act = { type: item.action.type, bet: item.action.bet }
+  public hasSomeoneBet () {
+    this.multiplePlayers.forEach((player: Player) => {
+      if (player.action !== null) {
+        if (player.action.type === GameActionType.BET || player.action.type === GameActionType.RAISE) {
+          this.hasBet = true
         }
       }
-      // console.log('This is for the is it your turn' + index + ' ' + gameTransport.nextPlayer)
-      const userTurn: boolean = (index === gameTransport.nextPlayer)
-      const user: boolean = (item.name === this.username)
-      const player: Player = {
-        id: item.id,
-        money: item.money,
-        name: item.name,
-        action: act,
-        card1: Card.BLANK_CARD,
-        card2: Card.BLANK_CARD,
-        isFold: item.fold,
-        winnings: 0,
-        isPlayer: item.player,
-        isDealer: item.dealer,
-        isTurn: userTurn,
-        isUser: user
-      }
-      this.multiplePlayers.push(player)
     })
+  }
+
+  public setPlayers (gameTransport: any) {
+    this.multiplePlayers = []
+    if (gameTransport.players.length !== 0) {
+      gameTransport.players.forEach((item: any, index: number) => {
+        let act: GameAction | null = null
+        if (item.action !== null) {
+          if (item.action.type !== null) {
+            act = { type: item.action.type, bet: item.action.bet }
+          }
+        }
+        // console.log('This is for the is it your turn' + index + ' ' + gameTransport.nextPlayer)
+        const userTurn: boolean = (index === gameTransport.nextPlayer)
+        const user: boolean = (item.name === this.username)
+        const player: Player = {
+          id: item.id,
+          money: item.money,
+          name: item.name,
+          action: act,
+          card1: Card.BLANK_CARD,
+          card2: Card.BLANK_CARD,
+          isFold: item.fold,
+          winnings: 0,
+          isPlayer: item.player,
+          isDealer: item.dealer,
+          isTurn: userTurn,
+          isUser: user
+        }
+        this.multiplePlayers.push(player)
+      })
+    }
   }
 
   public setFinishedPlayer (gameTransport: any) {
