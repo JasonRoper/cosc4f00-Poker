@@ -438,7 +438,7 @@ export default {
           // TableView
           this.$router.push({name: 'TableView', params: {gameId: this.gameReq.gameId}})
         }).catch(() => {
-          alert('an error occured - there is no GameId returned')
+          console.log('an error occured - there is no GameId returned')
         })
       }
       if (choice === 'CPUChallenge') {
@@ -450,7 +450,7 @@ export default {
         aiGame.push(4)// min player
         this.gameReq.createAiGame(aiGame).then((responce) => {
           // console.log('found AI game')
-          router.push({name: 'TableView', params: {gameId: this.gameReq.gameId}})
+          this.$router.push({name: 'TableView', params: {gameId: this.gameReq.gameId}})
         }).catch((error) => {
           console.log(error)
           console.log('Couldnt find the AI game')
@@ -465,7 +465,7 @@ export default {
           // TableView
           this.$router.push({name: 'TableView', params: {gameId: this.gameReq.gameId}})
         }).catch(() => {
-          alert('an error occured - there is no GameId returned')
+          console.log('an error occured - there is no GameId returned')
         })
       }
     }
