@@ -566,12 +566,11 @@ export default {
       theta = theta + degreeIncrument
       // console.log('heres you x: ' + x + 'here your y:' + y + 'at ' + theta)
     }
-    
+
     // alert('heres your round'+ this.roundNumber)
     if (this.GameOver === true) {
-      posX = -191,
+      // const posX = -191 // This value is not used
       setTimeout(this.showDown, 2000)
-      
     }
 
     if (this.roundNumber === 1) {
