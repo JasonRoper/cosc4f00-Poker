@@ -501,6 +501,7 @@ export default {
     this.updateLeaderBoard()
     this.intervalTicker = window.setInterval(() => {
       Promise.all(this.updateGeneralInfo(), this.updateLeaderBoard()).catch((error) => {
+        console.log(error)
         window.clearInterval(this.intervalTicker)
       })
     }, 5000)

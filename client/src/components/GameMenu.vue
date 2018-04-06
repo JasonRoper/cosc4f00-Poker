@@ -430,11 +430,9 @@ export default {
         this.videoSelect = true
       }
       if (choice === 'CompetitivePoker') {
-        // alert('Lets Compete Poker')
         this.instrcutionPokerMode = false
         this.showTable = true
         this.gameReq.createCompetitiveGame().then((responce) => {
-          alert('I am pushing you to the competitive view' + this.gameReq.gameId)
           // this.$route.params = this.gameReq.gameId
           // router.push({path: '/Table', props: {gameId: this.gameReq.gameId}})
           // TableView
@@ -444,7 +442,6 @@ export default {
         })
       }
       if (choice === 'CPUChallenge') {
-        alert('looking for AI game')
         const aiGame = []
         aiGame.push(3)// AI players
         aiGame.push(2)// Big blind
@@ -452,8 +449,8 @@ export default {
         aiGame.push(6)// max player
         aiGame.push(4)// min player
         this.gameReq.createAiGame(aiGame).then((responce) => {
-          console.log('found AI game')
-          router.push({name: 'TableView', params: {gameId: this.gameReq.gameId}})
+          // console.log('found AI game')
+          this.$router.push({name: 'TableView', params: {gameId: this.gameReq.gameId}})
         }).catch((error) => {
           console.log(error)
           console.log('Couldnt find the AI game')
@@ -463,7 +460,6 @@ export default {
         this.instrcutionPokerMode = false
         this.showTable = true
         this.gameReq.createCasualGame().then((responce) => {
-          alert('I am pushing you to the casual table view' + this.gameReq.gameId)
           // this.$route.params = this.gameReq.gameId
           // router.push({path: '/Table', props: {gameId: this.gameReq.gameId}})
           // TableView
