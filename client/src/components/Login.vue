@@ -158,13 +158,13 @@ You'll notice on the right/below that you can register and log in, feel free to 
                 <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
                   <div class="justify-content-left">
                     <img src="../assets/Webgraphics/PokerL2.png" style="decoration:none" width="35" height="35"> Ranking2#:</div>
-                  <span v-if="Level1Members" class="badge badge-light badge-pill">{{Level2Members.username}}</span>
+                  <span v-if="Level2Members" class="badge badge-light badge-pill">{{Level2Members.username}}</span>
                   <span v-else class="badge badge-light badge-pill">...</span>
                 </li>
                 <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
                   <div class="justify-content-left">
                     <img src="../assets/Webgraphics/chipPile.png" style="decoration:none" width="35" height="35">Ranking3#:</div>
-                  <span v-if="Level1Members" class="badge badge-light badge-pill">{{Level3Members.username}}</span>
+                  <span v-if="Level3Members" class="badge badge-light badge-pill">{{Level3Members.username}}</span>
                   <span v-else class="badge badge-light badge-pill">...</span>
                 </li>
               </ul>
@@ -480,7 +480,7 @@ export default {
       this.RegisterPlayer.password = ''
     },
     updateGeneralInfo () {
-      axios.get(API_V1 + '/info').then((response) => {
+      return axios.get(API_V1 + '/info').then((response) => {
         let data = response.data
         this.Members = data.registeredUsers
         this.onlineMembers = data.usersOnline
@@ -491,7 +491,7 @@ export default {
       })
     },
     updateLeaderBoard () {
-      axios.get(API_V1 + '/users?sort=money').then((response) => {
+      return axios.get(API_V1 + '/users?sort=money').then((response) => {
         this.leaderboard = response.data.data.slice(0, 5)
       })
     }
@@ -500,8 +500,9 @@ export default {
     this.updateGeneralInfo()
     this.updateLeaderBoard()
     this.intervalTicker = window.setInterval(() => {
-      this.updateGeneralInfo()
-      this.updateLeaderBoard()
+      Promise.all(this.updateGeneralInfo(), this.updateLeaderBoard()).catch((error) => {
+        window.clearInterval(this.intervalTicker)
+      })
     }, 5000)
   },
   destroyed () {
