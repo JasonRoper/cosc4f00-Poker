@@ -67,7 +67,9 @@ public class AIService {
         int playerNumber=gameState.getPresentTurn();
         int roll;
         Random rand = new Random(System.currentTimeMillis());
+        roll=6;
             roll=rand.nextInt(10);
+
             if (roll==0){
                 return fold(gameState,playerNumber);
             } else if (roll>0&&roll<7) {

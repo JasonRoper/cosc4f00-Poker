@@ -71,6 +71,21 @@ public class GameController {
                     messenger.convertAndSendToUser(user.getUsername(), "/messages/game/" + gameID, userHand);
                 }
             }
+//            GameStateTransport nextGameState=gameService.getGameStateTransport(gameID);
+//            while (gameService.isAITurn(gameID)) {
+//                GameAction aiAction = aiService.playAction(gameService,gameID);
+//                nextGameState = handleAction(gameID, aiAction, nextGameState.getNextPlayer());
+//            }
+        }
+    }
+
+    @Scheduled(fixedRate=5000)
+    public void AILivelinessFix(){
+        List<Long> gamesToCheck=gameService.getPotentialAIGames();
+        for (Long gameID:gamesToCheck){
+            GameStateTransport nextGameState=gameService.getGameStateTransport(gameID);
+                GameAction aiAction = aiService.playAction(gameService,gameID);
+                handleAction(gameID, aiAction, nextGameState.getNextPlayer());
         }
     }
 //    @MessageMapping("/game/{game_id}/ready")
@@ -136,10 +151,10 @@ public class GameController {
 
         GameStateTransport nextGameState = handleAction(gameID, action, playerId);
 
-        while (gameService.isAITurn(gameID)) {
-            GameAction aiAction = aiService.playAction(gameService,gameID);
-            nextGameState = handleAction(gameID, aiAction, nextGameState.getNextPlayer());
-        }
+//        while (gameService.isAITurn(gameID)) {
+//            GameAction aiAction = aiService.playAction(gameService,gameID);
+//            nextGameState = handleAction(gameID, aiAction, nextGameState.getNextPlayer());
+//        }
     }
 
     /**
@@ -173,6 +188,7 @@ public class GameController {
             messenger.convertAndSend("/messages/game/" + gameID+"/gamefinished",winners);
             if (gameService.isGameEnd(gameID)){
                 messenger.convertAndSend("/messages/game/" + gameID, nextGameState.reason(GameStateTransport.Reason.GAME_FINISHED, ""));
+                closeGame(gameID);
             }
         } else if (gameService.isRoundEnd(gameID)) {
             nextGameState = gameService.handleRound(gameID);
@@ -230,14 +246,6 @@ public class GameController {
     @GetMapping("/api/v1/games")
     public void getGameListing() {
         gameService.getGameStateList();
-    }
-
-    @PostMapping("/api/v1/games")
-    public GameInfoTransport createCustomGame(Principal principal) {
-
-        GameInfoTransport newGame = new GameInfoTransport(gameService.createGame(3, GameState.GameType.CUSTOM));
-        gameService.getGameState(newGame.getGameId()).addPlayer(userService.getUserByUsername(principal.getName()).getId(), principal.getName());
-        return newGame;
     }
 
     /**

@@ -53,6 +53,7 @@ public class GameService {
     public GameStateTransport handleAction(long gameID, GameAction action, int playerID) {
 
         GameState gameState = games.findOne(gameID);
+        int lastBet=gameState.getLastBet();
         if (gameState.getPresentTurn() == playerID && gameState.isHasStarted()) {
             action.setBet(Math.abs(action.getBet()));
             Player player = gameState.getPlayer(playerID);
@@ -62,6 +63,7 @@ public class GameService {
                 fold(gameState, action, player);
             } else if (action.getType() == GameActionType.CHECK||action.getType()==GameActionType.CALL) {
                 check(gameState, action, player);
+                gameState.setLastBet(lastBet);
             }
             player.updateLastGameAction(action);
             gameState.nextTurn();
@@ -81,13 +83,17 @@ public class GameService {
      * @return boolean representing if it went through successfully
      */
     public boolean bet(GameState gameState, GameAction action, Player player) {
+        int lastBet=player.getPlayerID();
+        if (player.getCashOnHand()+player.getBet()<gameState.getMinimumBet()){
+            lastBet=gameState.getLastBet();
+        }
         int amountToBet = action.getBet() + gameState.getMinimumBet() - player.getBet();
         if (amountToBet >= player.getCashOnHand()) {
-            return allIn(gameState, player);
+            allIn(gameState, player);
         } else {
             gameState.placeBet(player, amountToBet);
         }
-
+        gameState.setLastBet(lastBet);
         return true;
     }
 
@@ -108,7 +114,7 @@ public class GameService {
      */
     private boolean check(GameState gameState, GameAction action, Player player) {
         int amountToBet = gameState.getMinimumBet() - player.getBet();
-        if (amountToBet > player.getCashOnHand()) {
+        if (amountToBet >= player.getCashOnHand()) {
             return allIn(gameState, player);
         }
         gameState.placeCheck(player);
@@ -173,8 +179,21 @@ public class GameService {
      */
     public boolean isHandEnd(GameState gameState) {
 
-        return (isRoundEnd(gameState) && gameState.getRound() == 4) || allFolded(gameState);
+        return ((isRoundEnd(gameState) && gameState.getRound() == 4)) || allPlayersAllIn(gameState) || allFolded(gameState);
 
+    }
+
+    boolean allPlayersAllIn(GameState gameState){
+        int outCount=0;
+        for (Player p : gameState.getPlayers()) {
+            if (p.isAllIn()||p.getHasFolded()){
+               outCount++;
+            }
+        }
+        if (outCount>=gameState.getPlayerCount()){
+            return true;
+        }
+        return false;
     }
 
     public boolean allFolded(GameState gameState){
@@ -345,6 +364,7 @@ public class GameService {
      */
     public HandEndTransport determineWinnings(long gameID) {
         GameState gameState = games.findOne(gameID);
+        gameState.fillInCommunityCards();
         int[] winners = new int[gameState.getPlayerCount()];
         int[] winnings = new int[gameState.getPlayerCount()];
         if (allFolded(gameState)) {
@@ -474,6 +494,7 @@ public class GameService {
     }
 
     public void removeGame(long gameID){
+        GameState test = games.findOne(gameID);
         games.delete(gameID);
     }
 
@@ -497,6 +518,18 @@ public class GameService {
     public List<Long> startingGameIDs(){
         List<Long> gameIDs = new ArrayList<>();
         gameIDs = games.findWaitingToStartGamesIDs(System.currentTimeMillis());
+        return gameIDs;
+    }
+
+    public List<Long> getPotentialAIGames(){
+        List<GameState> gameStates=new ArrayList<>();
+        gameStates=games.findGamesWithPotentialAI();
+        List<Long>gameIDs=new ArrayList<>();
+        for (GameState g:gameStates){
+            if (g.getPlayers().get(g.getPresentTurn()).isAI()){
+                gameIDs.add(g.getId());
+            }
+        }
         return gameIDs;
     }
 
@@ -571,11 +604,20 @@ public class GameService {
     public boolean isGameEnd(long gameID){
         GameState gameState=games.findOne(gameID);
         int inGameCount=0;
+        boolean allAI=true;
         for (Player p:gameState.getPlayers()){
             if (p.getCashOnHand()>0){
                 inGameCount++;
             }
         }
-        return (inGameCount==1);
+        for (Player p:gameState.getPlayers()){
+            if (!p.isAI()&&p.getCashOnHand()>0){
+                allAI=false;
+            }
+        }
+        if (allAI){
+            return true;
+        }
+        return (inGameCount<=1);
     }
 }

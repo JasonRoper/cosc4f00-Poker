@@ -111,13 +111,11 @@
             </div>
             <p class="lead">
 
-              Poker Pals is now curreently Withinin development phase following the generic phases set by Brock University's COSC 4f00
-              team poker face. Within our venture we have now moved into the development phase of the Product, While our
-              site is still currently under construction we hope to get things up and running as soon as possible. Until
-              then please observe our structure and lay out of our up comming websitste and all the possible features we
-              look for ward to possible providing in the meant time enjoy.
-              <br> - Team Poker Face.
-            </p>
+Welcome! We here at Poker Pals have been working hard to get this site 
+up and running and are happy to present to you our prototype launch! 
+You'll notice on the right/below that you can register and log in, feel free to look around and check things out! Bring a friend, and have some fun playing poker. Enjoy! -<br> - Team Poker Face.
+             
+             </p>
 
           </p>
         </div>
@@ -485,7 +483,7 @@ export default {
       axios.get(API_V1 + '/info').then((response) => {
         let data = response.data
         this.Members = data.registeredUsers
-        this.onlineMembers = data.usersOnline + 1
+        this.onlineMembers = data.usersOnline
         this.gamesToday = data.activeGames
         this.Level1Members = data.highestRated[0]
         this.Level2Members = data.highestRated[1]
@@ -499,10 +497,12 @@ export default {
     }
   },
   created () {
-    this.intervalTicker = window.setInterval(5000, () => {
+    this.updateGeneralInfo()
+    this.updateLeaderBoard()
+    this.intervalTicker = window.setInterval(() => {
       this.updateGeneralInfo()
       this.updateLeaderBoard()
-    })
+    }, 5000)
   },
   destroyed () {
     window.clearInterval(this.intervalTicker)
