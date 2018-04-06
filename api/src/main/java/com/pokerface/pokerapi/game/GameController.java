@@ -71,11 +71,21 @@ public class GameController {
                     messenger.convertAndSendToUser(user.getUsername(), "/messages/game/" + gameID, userHand);
                 }
             }
+//            GameStateTransport nextGameState=gameService.getGameStateTransport(gameID);
+//            while (gameService.isAITurn(gameID)) {
+//                GameAction aiAction = aiService.playAction(gameService,gameID);
+//                nextGameState = handleAction(gameID, aiAction, nextGameState.getNextPlayer());
+//            }
+        }
+    }
+
+    @Scheduled(fixedRate=5000)
+    public void AILivelinessFix(){
+        List<Long> gamesToCheck=gameService.getPotentialAIGames();
+        for (Long gameID:gamesToCheck){
             GameStateTransport nextGameState=gameService.getGameStateTransport(gameID);
-            while (gameService.isAITurn(gameID)) {
                 GameAction aiAction = aiService.playAction(gameService,gameID);
-                nextGameState = handleAction(gameID, aiAction, nextGameState.getNextPlayer());
-            }
+                handleAction(gameID, aiAction, nextGameState.getNextPlayer());
         }
     }
 //    @MessageMapping("/game/{game_id}/ready")
@@ -141,10 +151,10 @@ public class GameController {
 
         GameStateTransport nextGameState = handleAction(gameID, action, playerId);
 
-        while (gameService.isAITurn(gameID)) {
-            GameAction aiAction = aiService.playAction(gameService,gameID);
-            nextGameState = handleAction(gameID, aiAction, nextGameState.getNextPlayer());
-        }
+//        while (gameService.isAITurn(gameID)) {
+//            GameAction aiAction = aiService.playAction(gameService,gameID);
+//            nextGameState = handleAction(gameID, aiAction, nextGameState.getNextPlayer());
+//        }
     }
 
     /**

@@ -40,8 +40,8 @@ public interface GameRepository extends CrudRepository<GameState, Long> {
     @Query("SELECT COUNT(g) FROM GameState g WHERE g.hasStarted = true")
     long countActiveGames();
 
-    @Query("SELECT g FROM GameState g WHERE g.gameType=0 OR g.gameType=1 OR g.gameType=3")
-    List<GameState> gamesWithPotentialAI();
+    @Query("SELECT g FROM GameState g WHERE g.hasStarted=true AND (g.gameType=0 OR g.gameType=1 OR g.gameType=3)")
+    List<GameState> findGamesWithPotentialAI();
 }
 
 
