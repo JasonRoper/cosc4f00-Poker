@@ -56,6 +56,13 @@ public class GameState {
         setId(id);
     }
 
+    public GameState(GameSettingTransport gameSettings){
+        maxPlayers=gameSettings.maxPlayer;
+        minPlayerCount=gameSettings.minimumPlayer;
+        defaultCashOnHand=gameSettings.cashOnHand;
+        bigBlind=gameSettings.bigBlind;
+    }
+
     /**
      * The chained constructor creates a gameState based on all settings given
      * @param id the id of the game
@@ -599,6 +606,9 @@ public class GameState {
     public void advanceRound(){
         round++;
         if (round==2){
+            if (communityCardOne==null){
+                System.out.println();
+            }
             communityCardOne=deck.dealCard();
             communityCardTwo=deck.dealCard();
             communityCardThree=deck.dealCard();
