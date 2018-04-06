@@ -178,10 +178,11 @@ public class GameStateTransport {
         GAME_STARTED,
         HAND_STARTED,
         PLAYER_ACTION,
-        ROUND_FINSHED,
+        ROUND_FINISHED,
         HAND_FINISHED,
         PLAYER_JOINED,
         PLAYER_LEFT,
+        GAME_FINISHED
     }
 
     @Override

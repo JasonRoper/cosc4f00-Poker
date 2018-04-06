@@ -341,7 +341,7 @@ export default {
         this.instrcutionPokerMode = false
         this.showTable = true
         this.gameReq.createCompetitiveGame().then((responce) => {
-          alert('I am pushing you to the table view' + this.gameReq.gameId)
+          alert('I am pushing you to the competitive view' + this.gameReq.gameId)
           // this.$route.params = this.gameReq.gameId
           // router.push({path: '/Table', props: {gameId: this.gameReq.gameId}})
           // TableView
@@ -355,8 +355,17 @@ export default {
         this.$router.push('Table')
       }
       if (choice === 'CasualPoker') {
-        alert('Casual Plays Poker')
-        router.push('Table')
+        this.instrcutionPokerMode = false
+        this.showTable = true
+        this.gameReq.createCasualGame().then((responce) => {
+          alert('I am pushing you to the casual table view' + this.gameReq.gameId)
+          // this.$route.params = this.gameReq.gameId
+          // router.push({path: '/Table', props: {gameId: this.gameReq.gameId}})
+          // TableView
+          router.push({name: 'TableView', params: {gameId: this.gameReq.gameId}})
+        }).catch(() => {
+          alert('an error occured - there is no GameId returned')
+        })
       }
     }
   },

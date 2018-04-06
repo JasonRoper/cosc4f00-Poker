@@ -59,7 +59,7 @@ export class GamePaths {
   constructor (gameId: number, userId?: number) {
     const messageGame = '/messages/game/'
     this.GAME_UPDATES = messageGame + gameId
-    this.GAME_FINISHED = messageGame + gameId + '/status'
+    this.GAME_FINISHED = messageGame + gameId + '/gamefinished'
 
     this.GAME_ERROR = messageGame + gameId + '/error'
 
@@ -83,6 +83,7 @@ export interface UserCards {
  */
 export interface GameFinished {
   multiplePlayers: Player
+  winners: [number]
 }
 
 /**
@@ -111,10 +112,9 @@ export interface Player {
   money: number
   id: number
   name: string
-  action: GameActionType | null
+  action: GameAction | null
   card1: string
   card2: string
-  currentBet: number
   isPlayer: boolean
   isDealer: boolean
   isFold: boolean
@@ -131,7 +131,6 @@ export interface PlayerWithoutCards {
   playerID: number // Location within the array
   name: string
   action: GameAction | null
-  currentBet: number // Total amount of money that has been transfered
   isPlayer: boolean
   isDealer: boolean
   isFold: boolean
@@ -147,9 +146,10 @@ export enum Event {
   HAND_STARTED = 'HAND_STARTED', // USER Joins the GAME
   USER_ACTION = 'PLAYER_ACTION', // This is sent after a player makes an action
   HAND_FINISHED = 'HAND_FINISHED', // Equivalent for a winnder being determined from a hand
-  ROUND_FINISHED = 'ROUND_FINSHED', // All players have bet - this results in a new Community cards
+  ROUND_FINISHED = 'ROUND_FINISHED', // All players have bet - this results in a new Community cards
   USER_JOIN = 'PLAYER_JOINED',// A new player has been added to the game
-  USER_LEAVE = 'PLAYER_LEFT' // A new player has left the game
+  USER_LEAVE = 'PLAYER_LEFT', // A new player has left the game
+  GAME_FINISHED = 'GAME_FINISHED'
 }
 
 /**
@@ -181,7 +181,7 @@ export type GameUpdatedCallback = (newState: any) => void
  * The GameFinishedCallback is the type of function that will be
  * called when the GameService recieves a GameFinished update
  */
-export type GameFinishedCallback = (gameFinished: GameFinished) => void
+export type GameFinishedCallback = (gameFinished: any) => void
 
 /**
  * The GameErrorCallback is the type of function that will be
@@ -215,7 +215,6 @@ export class GameService {
     this.gameId = gameId
     this.gamePaths = new GamePaths(gameId, userId)
     this.switchGame(gameId)
-
   }
 
   /**
