@@ -68,7 +68,7 @@ public class AIService {
         int roll;
         Random rand = new Random(System.currentTimeMillis());
         roll=9;
-            //roll=rand.nextInt(10);
+            roll=rand.nextInt(10);
 
             if (roll==0){
                 return fold(gameState,playerNumber);
