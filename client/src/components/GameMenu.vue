@@ -1,8 +1,8 @@
 <template>
   <div>
-    <h2 class="display-1 text-white">PokerPals!!
+    <!-- <h2 class="display-1 text-white">PokerPals!!
       <img src="../assets/Webgraphics/poker.png" width="100" height="100">
-    </h2>
+    </h2> -->
     <audio id="AudioSource" src="../assets/Audio/chipsHandle3.wav">
       <!-- <source src="Cowboy.mp3" type="audio/mpeg"> -->
     </audio>
@@ -10,30 +10,27 @@
       <!-- <source src="Cowboy.mp3" type="audio/mpeg"> -->
     </audio>
     <div v-show="GameMenu">
-      <h2 class="display-4 text-white pb-3 text-left ml-5 pl-5 mr-0 mt-5 pt-5">
+     <!--  <h2 class="display-4 text-white pb-3 text-left ml-5 pl-5 mr-0 mt-5 pt-5">
         <u>MAIN MENU</u>
-      </h2>
-      <div class="text-center mx-4 my-2 ">
+      </h2> -->
+      <div class="text-center">
         <div class="chip-holder">
           <button @mouseleave="chiprelaseSound()" @mouseover="chipSound()" class="around-words inner-yellow btn btn-lg" @click="showInstructPoker()">
-            <hr>
-            <div class="inner-button  btn btn-lg">Instructional Poker</div>
-            <hr>
           </button>
+          <hr>
+          <div>Instructional Poker</div>
         </div>
         <div class="chip-holder">
           <button @mouseleave="chiprelaseSound()" @mouseover="chipSound()" class="around-words inner-green btn btn-lg" @click="showCasualPoker()">
-            <hr>
-            <div>Casual Poker</div>
-            <hr>
           </button>
+          <hr>
+          <div>Casual Poker</div>
         </div>
         <div class="chip-holder">
           <button @mouseleave="chiprelaseSound()" @mouseover="chipSound()" class="around-words inner-blue btn btn-lg" @click="chipChoice('CompetitivePoker')">
-            <hr>
-            <div class="btn btn-lg">Competitive Poker</div>
-            <hr>
           </button>
+          <hr>
+          <div>Competitive Poker</div>
         </div>
       </div>
     </div>
@@ -83,7 +80,7 @@
           </div>
         </div>
         <div v-show="videoSelect" class='instructional Video'>
-          <instructVideo></instructVideo>
+          <!-- <instructVideo></instructVideo> -->
         </div>
       </div>
     </div>
@@ -308,10 +305,9 @@
 </template>
 
 <script>
-import AvailbleGame from '@/components/AvailbleGame.vue'
-import router from '@/router'
-import GameRequest from '@/store/GameRequest.ts'
-import InstrucVid from '@/components/InstrucVid'
+// import AvailbleGame from '@/components/AvailbleGame.vue'
+import GameRequest from '@/store/GameRequest'
+// import InstrucVid from '@/components/InstrucVid'
 export default {
   data () {
     return {
@@ -430,7 +426,7 @@ export default {
           // this.$route.params = this.gameReq.gameId
           // router.push({path: '/Table', props: {gameId: this.gameReq.gameId}})
           // TableView
-          router.push({name: 'TableView', params: {gameId: this.gameReq.gameId}})
+          this.$router.push({name: 'TableView', params: {gameId: this.gameReq.gameId}})
         }).catch(() => {
           alert('an error occured - there is no GameId returned')
         })
@@ -447,7 +443,7 @@ export default {
           // this.$route.params = this.gameReq.gameId
           // router.push({path: '/Table', props: {gameId: this.gameReq.gameId}})
           // TableView
-          router.push({name: 'TableView', params: {gameId: this.gameReq.gameId}})
+          this.$router.push({name: 'TableView', params: {gameId: this.gameReq.gameId}})
         }).catch(() => {
           alert('an error occured - there is no GameId returned')
         })
@@ -461,8 +457,8 @@ export default {
     // actions: TableActions,
     // card: CardView,
     // tableView: TableView,
-    availbleGame: AvailbleGame,
-    instructVideo: InstrucVid
+//    availbleGame: AvailbleGame,
+    // instructVideo: InstrucVid
   }
 }
 </script>

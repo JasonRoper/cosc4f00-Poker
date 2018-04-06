@@ -11,7 +11,8 @@
           <!--   button group-->
           <img src="../assets/Webgraphics/poker.png" width="40" height="40">
           <div class="btn-group px-3 py-4" role="group" aria-label="Basic example">
-            <button type="button" data-toggle="modal" data-target="#Register" class=" lead theregister btn-outline-primary btn btn-info btn-lg">Register Now</button>
+            <button v-if="!loggedIn" type="button" class=" lead theregister btn-outline-primary btn btn-info btn-lg" @click="registModal = true">Register Now</button>
+             <button v-else type="button" class=" lead theregister btn-outline-primary btn btn-info btn-lg">  Play Poker  </button>
             <button href="#Developers" type="button" class="theregister btn btn-outline-light btn-lg lead ">See Developers</button>
           </div>
           <img src="../assets/Webgraphics/poker.png" width="40" height="40">
@@ -23,7 +24,7 @@
     </div>
     <!-- Modal -->
     <div>
-      <div v-show="this.registModal" class="modal fade " id="Register" data-backdrop="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+      <div class="modal fade" id="Register" data-backdrop="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
           <div class="modal-content">
@@ -31,15 +32,15 @@
               <h5 class="modal-title " id="exampleModalLongTitle">PokerPals Registration
                 <img src="../assets/Webgraphics/poker.png" width="40" height="40">
               </h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <button type="button" class="close" aria-label="Close" @click="closeRegisterModal()">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body">
               <h5 class="text-left pb-4">Create Account</h5>
               <form>
-                <div v-show="this.isRegistrationError">
-                  <error-messages class=".error-messages" :Error="this.ErrorMessage "></error-messages>
+                <div v-show="registerErrorMessage !== ''">
+                  <error-messages class=".error-messages" :Error="registerErrorMessage"></error-messages>
                 </div>
                 <!--Username input   -->
                 <div class="form-group mb-3">
@@ -64,7 +65,7 @@
                       <i class="fa fa-lock"></i>
                     </span>
                   </div>
-                  <input v-model="RegisterPlayer.password" type="password" class="form-control" placeholder="Passowrd" aria-label="Username/Email"
+                  <input v-model="RegisterPlayer.password" type="password" class="form-control" placeholder="Password" aria-label="Username/Email"
                     aria-describedby="basic-addon1">
                 </div>
                 <!--Password input   -->
@@ -80,7 +81,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-danger registerButton " @click="AttemptRegister()">Register</button>
-              <button type="button" class="btn btn-warning " @click="ResetVariables2()" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-warning " @click="closeRegisterModal()">Close</button>
             </div>
           </div>
         </div>
@@ -171,15 +172,18 @@
           <!--=======/ Table:System stats=======-->
           <!--=======/Login Card=======-->
           <div class="card border-dark mb-3 mx-auto" style="max-width: 40rem;">
-            <div class="card-header text-left text-white bg-secondary lead">
+            <div class="card-header text-left text-white bg-secondary lead" v-if="!loggedIn">
               <i class="fa fa-user-circle pr-2 fa-lg"></i>
               <u>Login</u>
             </div>
+            <div class="card-header text-left text-white bg-secondary lead" v-else>
+              Play Poker!
+            </div>
           </div>
-          <div class="card-body text-dark">
+          <div class="card-body text-dark" v-if="!loggedIn">
             <form class="needs-validation" ref="theform" action="/#/Lobby">
-              <div v-show="this.isLoginError">
-                <error-messages class="error-messages" :Error="this.ErrorMessage "></error-messages>
+              <div v-show="loginErrorMessage !== ''">
+                <error-messages class="error-messages" :Error="loginErrorMessage"></error-messages>
               </div>
               <div class="form-group">
                 <input v-model="Player.username" ref="myTestField" type="text" class="form-control nameInput" id="formGroupExampleInput"
@@ -195,8 +199,8 @@
                   <i class="fa fa-sign-in"></i> Login</button>
               </div>
               <div class="form-group">
-                <button class="btn btn-warning btn-lg btn-block text-dark  text-center " type="button" value="Register" data-toggle="modal"
-                  data-target="#Register" :disabled="(this.clickedLogin === true )||(this.clickedRegister === true )">
+                <button class="btn btn-warning btn-lg btn-block text-dark  text-center " type="button" value="Register"
+                  @click="registModal = true" :disabled="(this.clickedLogin === true )||(this.clickedRegister === true )" data-target="#Register">
                   <i class="fa fa-sign-in"></i> Register</button>
               </div>
               <div class="form-group">
@@ -208,7 +212,11 @@
               </div>
             </form>
           </div>
+          <div class="card-body text-dark" v-else>
+            <GameMenu/>
+          </div>
         </div>
+
         <!--=======/Login Card=======-->
         <!--===================================================/Login Card=======-->
         <!--====================================================================/Column 2 =========================================================================-->
@@ -346,6 +354,7 @@
 <script>
 import { mapActions } from 'vuex' // used for maping actions of the vue store files
 import ErrorMessages from '@/components/WebComponents/ErrorMessages' // ErrorMessages Components
+import GameMenu from '@/components/GameMenu'
 // import router from '@/router'
 export default {
   name: 'Login',
@@ -370,11 +379,6 @@ export default {
       Level1Members: 3000,
       Level2Members: 6000,
       Level3Members: 1300,
-      // registerErrorMessage: [],
-      // loginErrorMessage: [],
-      isLoginError: false,
-      isRegistrationError: false,
-      ErrorMessage: '',
       registModal: false,
       after: false,
       clickedLogin: false,
@@ -382,134 +386,110 @@ export default {
       checked: false,
       checkedRegisterErrors: false,
       iszero: false,
-      LoginisBlank: true,
-      RegisterisBlank: true
+      errorMessage: ''
     }
   },
   watch: {
-    checked () {
-      if ((this.checked === true) && (this.isLoginError === false)) {
-        this.$router.push('Game')
-      }
-    },
-    checkedRegisterErrors () {
-      if ((this.checkedRegisterErrors === true) && (this.isRegistrationError === false)) {
-        this.$router.push('Game')
-      }
-    },
-    registModal () {
-      if (this.registModal === false) {
-        console.log('somthing')
-      }
-    },
-    loginErrorMessage () {
-      // Checks  to see if the number of errors are greater thatn zero then checks those errors
-      if (this.loginErrorMessage.length > 0) {
-        // this.checkLoginErrors()
-        return
-      }
-      // after = true
-    },
-    registerErrorMessage () {
-      // Checks  to see if the number of errors are greater thatn zero then checks those errors
-      if (this.registerErrorMessage.length > 0) {
-        // this.checkRegisterErrors()
-        return
+    registModal(val) {
+      if (val) {
+        $('#Register').modal({show: true, backdrop: true})
+        this.errorMessage = ''
+      } else {
+        $('#Register').modal('hide')
       }
     }
   },
   computed: {
+    loggedIn () {
+      return this.$store.getters.loggedIn
+    },
+    username () {
+      return this.$store.state.users.username
+    },
+    loginBlank () {
+      return (this.Player.username.length === 0) || (this.Player.password.length === 0)
+    },
+    registerBlank () {
+      return ((this.RegisterPlayer.username.length === 0) || (this.RegisterPlayer.password.length === 0) || (this.RegisterPlayer.email.length === 0))
+    },
     loginErrorMessage () {
       // if(this.after === true)
-      if (this.LoginisBlank === false) {
-        return this.$store.state.users.errors.login // Sets login errorMessage to the store array to the store array of error login message
+      let loginErrors = this.$store.state.users.errors.login
+      if (this.errorMessage !== '') {
+        return this.errorMessage
       }
+      if (loginErrors.length !== 0) {
+        return loginErrors[0].message
+      }
+      return ''
     },
     registerErrorMessage () {
-      if (this.RegisterisBlank === false) {
-        return this.$store.state.users.errors.registration // Sets login errorMessage to the store array to the store array of error login message
+      let registrationErrors = this.$store.state.users.errors.registration
+      if (this.errorMessage !== '') {
+        return this.errorMessage
       }
+      if (registrationErrors.length !== 0) {
+        return registrationErrors[0].message
+      }
+      return ''
     }
   },
   methods: {
     ...mapActions([
       'register',
-      'login'
+      'login',
+      'logout'
     ]),
      /*
       Attempts login  givent the requested fields If the fields
        are empty then return an aerror
     */
     AttemptLogin () {
-      this.clickedLogin = true
-      if ((this.Player.username.length === 0) || (this.Player.password.length === 0)) {
-        this.LoginisBlank = true
-        this.isLoginError = true  // there is an error
-        this.clickedLogin = false // Click login reset
-        this.ErrorMessage = 'Both Fields Must Be Filled'
+      if (this.loginBlank) {
+        this.errorMessage = 'Both Fields Must Be Filled'
         return // Must add CSS for this action
       } else {
-        this.LoginisBlank = false
-        this.login(this.Player).then((responce) => {
-          this.checkLoginErrors()
+        this.errorMessage = ''
+        this.clickedLogin = true
+        this.login(this.Player).then((response) => {
+          this.clickedLogin = false
+          if (this.loggedIn) {
+            this.errorMessage = ''
+          }
         })
         // Servery queries for login
         // add animation
         // setTimeout(this.checkLoginErrors, 3000) // Chec Login Errors after 900 ms
       }
-      this.ResetVariables()
-    },
-    checkLoginErrors () {
-      console.log(this.loginErrorMessage.length)
-      if (this.loginErrorMessage.length > 0) {
-        this.ErrorMessage = this.loginErrorMessage[0].message
-        this.isLoginError = true
-      }
-      this.checked = true
     },
     AttemptRegister () {
-      this.clickedLogin = true
-      if ((this.RegisterPlayer.username.length === 0) || (this.RegisterPlayer.password.length === 0) || (this.RegisterPlayer.email.length === 0)) {
-        this.RegisterisBlank = true
-        this.isRegistrationError = true
-        this.clickedRegister = false
-        this.ErrorMessage = 'All fields must Filled'
+      if (this.registerBlank) {
+        this.errorMessage = 'All fields must filled'
         return // Must add CSS for this action
       } else {
-        this.RegisterisBlank = false
+        this.clickedRegister = true
         this.register(this.RegisterPlayer).then(() => {
-          this.checkRegisterErrors()
+          this.errorMessage = ''
+          this.clickedRegister = false
+          if (this.loggedIn) {
+            this.errorMessage = ''
+            this.closeRegisterModal()
+          }
         })
         // setTimeout(this.checkRegisterErrors, 4000) // Check Registratio Errors after 900 ms
       }
-      this.ResetVariables()
     },
-    checkRegisterErrors () {
-      if (this.registerErrorMessage.length > 0) {
-        this.ErrorMessage = this.registerErrorMessage[0].message // Set the error message
-        this.isRegistrationError = true
-      }
-      this.checkedRegisterErrors = true
-    },
-    ResetVariables () {
-      this.isRegistrationError = false
-      this.isLoginError = false
-      this.ErrorMessage = ''
-      this.checked = false
-      this.checkedRegisterErrors = false
-      this.clickedLogin = false
-      this.clickedRegister = false
-    },
-    ResetVariables2 () {
-      this.clickedLogin = false
-      this.clickedRegister = false
+    closeRegisterModal() {
+      this.registModal = false
+      this.RegisterPlayer.username = ''
+      this.RegisterPlayer.email = ''
+      this.RegisterPlayer.password = ''
     }
   },
   components: {
-    errorMessages: ErrorMessages
+    errorMessages: ErrorMessages,
+    GameMenu
   }
 }
 </script>
 <style src="@/assets/css/Login.css"></style>
-
-  
