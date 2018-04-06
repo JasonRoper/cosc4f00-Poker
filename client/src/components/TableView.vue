@@ -192,14 +192,14 @@
 
       </div> -->
               <div class="inner-tableBorder ">
-          <player  class="player" v-for="player in this.mechanics.multiplePlayers" v-if="!player.isUser" :key="player.id" :data="player">
+          <player  class="player" v-for="player in this.mechanics.multiplePlayers" :key="player.id" :data="player">
         </player>
             <div class="CompleteTable">
         <div class= 'tableContent'>
          <h2 class="display-4 pr-4 pb-0  text-white"><img src="../assets/Webgraphics/poker.png" width="70" height="70">PokerPals!!<img src="../assets/Webgraphics/poker.png" width="70" height="70"></h2>
          <div class= "tableHead"></div>
    
-         <h2 class=" mr-5  pt-0 text-info">Pot:<span class="text-warning"> {{this.mechanics.pot}}</span><img src="../assets/Webgraphics/chipPile.png" style="decoration:none" width="55" height="55"></h2>
+         <h2 class=" mr-5  pt-0 text-info">Pot:<span class="text-warning"> {{this.mechanics.potSum}}</span><img src="../assets/Webgraphics/chipPile.png" style="decoration:none" width="55" height="55"></h2>
       <div class="Communitycards-holder">
       <p class='Communitycards  ml-4  '>
         <card class='size' v-for="card in this.mechanics.communityCards" :key="card" :card="BLANK_CARD"></card>
@@ -274,7 +274,7 @@ import state from '../store/users'
 
 export default {
   data () {
-    alert('just logged route' + this.$route.params.gameId)
+    // alert('just logged route' + this.$route.params.gameId)
     return {
       // UserName: state.state.username,
       mechanics: new GameMech(this.$route.params.gameId, state.state.username),
@@ -282,8 +282,6 @@ export default {
       preivousnumberofPlayers: 0,
       money: '0',
       BigBlindCurrentBet: 0,
-      user: 0,
-      opponents: 0,
       incrument: 0,
       posX: -191,
       posY: -141,
@@ -299,16 +297,12 @@ export default {
     preivousnumberofPlayers  () {
       // this.mechanics = new GameMech(1, this.userId)
     },
-    mechanics: function (newValue, oldValue) {
-      this.user = this.getUser()
-      this.opponents = this.getOpponents()
-    },
     numberofPlayers () {
-      console.log(this.numberofPlayers)
-      this.mechanics.setGame()
+      // console.log(this.numberofPlayers)
+      this.mechanics.setGame() // I left this for asnley
     },
     EventBarMessage () {
-      alert('Change change change')
+      // alert('Change change change')
     },
     roundTwo () {
       // Show your hand Animation
@@ -320,7 +314,7 @@ export default {
   },
   computed: {
     numberofPlayers () {
-      return this.mechanics.getMultiplayers()
+      return this.mechanics.getMultiplayers() // Kept this for ashley
     },
     UserName () {
       return this.$store.state.users.username
@@ -383,6 +377,9 @@ export default {
       card[0].classList.remove('deckCard')
       console.log(max)
       this.posX = this.posX + 90
+      // this.deckLength = this.deckLength - 1
+      // //  alert('card', i)
+      // }
     },
     doCountDown () {
       var countDown = new Date()
@@ -438,11 +435,7 @@ export default {
       this.premove(GameActionType.CHECK, 0)
     },
     call: function () {
-      if (this.money !== undefined) {
-        this.premove(GameActionType.CALL, this.money)
-      } else {
-        console.log('Action: CALL - you are trying to CALL with no money')
-      }
+      this.premove(GameActionType.CALL, this.mechanics.minimumBet)
     },
     raise: function () {
       if (this.money !== undefined) {
@@ -465,9 +458,7 @@ export default {
       this.mechanics.sendAction()
     },
     premove: function (action, money) {
-      alert('Tried to make tableAction ' + money)
       money = parseInt(money)
-      alert('money is still ' + money)
       if (this.mechanics.turn === this.mechanics.playerId && typeof money === 'number' && money >= 0) {
         console.log('You are attempting to send a move to the server')
         if (this.mechanics.storePremove(action, money)) {
