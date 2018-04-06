@@ -222,4 +222,20 @@ public class UserService implements UserDetailsService {
                 .map(UserInfoTransport::new)
                 .collect(Collectors.toList());
     }
+
+    UserTransport registerAdministrator(RegistrationFields fields) {
+        if (userRepository.existsByEmailIgnoreCase(fields.getEmail())) {
+            throw new EmailAlreadyExistsException();
+        }
+
+        if (userRepository.existsByUsernameIgnoreCase(fields.getUsername())) {
+            throw new UsernameAlreadyExistsException();
+        }
+
+        User newUser = new User(fields.getUsername(),
+                encoder.encode(fields.getPassword()),
+                fields.getEmail());
+        newUser.setRole("ROLE_USER,ROLE_ADMIN");
+        return userRepository.save(newUser).toTransfer();
+    }
 }
