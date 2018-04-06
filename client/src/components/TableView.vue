@@ -126,7 +126,7 @@
         
          <div class="Action text-center lead text-muted">
         <div class="ActionTitle">
-        Check/Call
+        Check
         </div>
         <button type="button" class="btn  btn-lg check"  v-on:click="check(money)" :disabled="this.mechanics.checkAction == 1"><i class="fa fa-check  fa-lg"></i></button>
         </div>
@@ -137,6 +137,13 @@
           Fold
         </div>
         <button type="button" class="btn btn-lg fold" v-on:click="fold(money)" :disabled="this.mechanics.foldAction == 1"><strong><i class="fa fa-remove fa-lg "></i></strong></button>
+        </div>
+
+              <div class="Action text-center lead text-muted">
+        <div class="ActionTitle">
+          Call
+        </div>
+        <button type="button" class="btn  btn-lg CALL "  v-on:click="call(money)" :disabled="this.mechanics.callAction == 1"><i class="fa fa-dollar  fa-lg"></i>{{this.mechanics.minimumBet}}</button>
         </div>
 
 
