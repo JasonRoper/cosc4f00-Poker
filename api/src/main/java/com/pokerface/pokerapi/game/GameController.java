@@ -144,61 +144,6 @@ public class GameController {
         }
     }
 
-    @MessageMapping("/game/{game_id}/gamestate")
-    @SendTo("/messages/game/{game_id}")
-    public GameStateTransport testGameState(@Payload GameAction action,
-                                            @DestinationVariable("game_id") long gameID,
-                                            Principal principal) {
-        UserInfoTransport user = userService.getUserByUsername(principal.getName());
-        UserInfoTransport jason = userService.getUserByUsername("jason");
-        UserInfoTransport admin = userService.getUserByUsername("admin");
-
-        GameStateTransport gameState = new GameStateTransport();
-        if (user.getId() == jason.getId()) {
-            gameState.setNextPlayer(1);
-        } else {
-            gameState.setNextPlayer(2);
-        }
-//int id, int money, GameAction action, boolean isPlayer, boolean isDealer,boolean isFold,int amountBet
-        gameState.setPlayers(new PlayerTransport[]{
-                new PlayerTransport(
-                        1,
-                        200,
-                        new GameAction(GameActionType.BET, 1),
-                        true,
-                        true,
-                        true,
-                        0,
-                        "Sal"
-                ), // admin
-                new PlayerTransport(
-                        2,
-                        10000,
-                        new GameAction(GameActionType.BET, 1),
-                        true,
-                        false,
-                        true,
-                        0,
-                        "Fred"
-                )}); // jason
-        gameState.setBigBlind(10);
-        gameState.setCommunityCards(Arrays.asList(Card.SPADES_QUEEN, Card.SPADES_SEVEN, Card.SPADES_KING));
-        gameState.setPotSum(30);
-
-        return gameState.reason(GameStateTransport.Reason.PLAYER_ACTION, "");
-    }
-
-//    @SendTo("game/{game_id}/{user_id}")
-//    public HandTransport sendHand(@DestinationVariable("game_id")long gameID, @DestinationVariable("user_id")long userID){
-//        return gameService.getHandTransport(gameID,userID);
-//    }
-
-    @MessageMapping("test")
-    public void testWebsocket(@Payload long number, Principal principal) {
-        messenger.convertAndSend("/messages/game", new GameInfoTransport(number));
-        messenger.convertAndSendToUser(principal.getName(), "/messages/game", new GameInfoTransport(number));
-    }
-
     /**
      * handleAction is what takes a received action and breaks it down to send to gameService. This updates the
      * gameState and returns a transport object for the user to update their Front End
@@ -211,6 +156,7 @@ public class GameController {
     private GameStateTransport handleAction(long gameID, GameAction action, int playerID) {
         GameStateTransport nextGameState = gameService.handleAction(gameID, action, playerID);
         nextGameState.reason(GameStateTransport.Reason.PLAYER_ACTION,playerID+" played an action.");
+
         messenger.convertAndSend("/messages/game/" + gameID, nextGameState);
 
         if (gameService.isHandEnd(gameID)) {
@@ -265,13 +211,19 @@ public class GameController {
         return new GameInfoTransport(gameID);
     }
 
-//    @PostMapping("/api/v1/matchmaking/aiGame")
-//    public GameInfoTransport aiGameCreate(Principal principal) {
-//        UserInfoTransport user = userService.getUserByUsername(principal.getName());
-//        long gameID = gameService.createAIGame(user.getId(), user.getUsername());
-//        GameStateTransport gameStateTransport = gameService.getGameStateTransport(gameID);
-//        return new GameInfoTransport(gameID);
-//    }
+    @PostMapping("/api/v1/games/")
+    public GameInfoTransport createCustomGame(@Payload GameSettingTransport gameSettings,
+                                          Principal principal) {
+        UserInfoTransport user = userService.getUserByUsername(principal.getName());
+        long gameID;
+        if (gameSettings.gameType== GameState.GameType.AI) {
+            gameID = gameService.createAIGame(gameSettings, user.getId(), user.getUsername());
+        } else {
+            gameID=gameService.createGame(gameSettings,user.getId(),user.getUsername());
+        }
+        GameStateTransport gameStateTransport = gameService.getGameStateTransport(gameID);
+        return new GameInfoTransport(gameID);
+    }
 
     @GetMapping("/api/v1/games")
     public void getGameListing() {

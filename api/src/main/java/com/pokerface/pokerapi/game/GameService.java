@@ -280,6 +280,31 @@ public class GameService {
         return createGame(4);
     }
 
+    public long createGame(GameSettingTransport gameSettings,long userID,String userName){
+        GameState gameState=new GameState(gameSettings);
+        gameState.setGameType(GameState.GameType.CUSTOM);
+        gameState=games.save(gameState);
+        for (int i=0;i<gameSettings.aiPlayers;i++){
+            addAIPlayer(gameState.getId());
+
+        }
+        addPlayer(userID, gameState.getId(), userName);
+        return gameState.getId();
+    }
+
+    public long createAIGame(GameSettingTransport gameSettings,long userID,String userName){
+        GameState gameState=new GameState(gameSettings);
+        gameState.setGameType(GameState.GameType.AI);
+        gameState=games.save(gameState);
+        for (int i=0;i<gameSettings.aiPlayers;i++){
+            addAIPlayer(gameState.getId());
+
+        }
+        addPlayer(userID, gameState.getId(), userName);
+        gameState.setStartTime(System.currentTimeMillis());
+        return gameState.getId();
+    }
+
     /**
      * Create game takes settings and creates a game with those settings, returning the ID of that game
      *
