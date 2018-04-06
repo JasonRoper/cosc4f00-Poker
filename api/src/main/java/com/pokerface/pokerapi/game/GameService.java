@@ -66,7 +66,17 @@ public class GameService {
                 gameState.setLastBet(lastBet);
             }
             player.updateLastGameAction(action);
-            gameState.nextTurn();
+            if (!allPlayersAllIn(gameState)) {
+                gameState.nextTurn();
+            } else {
+                gameState.setPreviousTurn(gameState.getPresentTurn());
+                while(true) {
+                    gameState.setPresentTurn(gameState.advanceCounter(gameState.getPresentTurn()));
+                    if (!gameState.getPlayers().get(gameState.getPresentTurn()).getHasFolded()){
+                        break;
+                    }
+                }
+            }
             gameState = games.save(gameState);
         }
 
@@ -84,7 +94,7 @@ public class GameService {
      */
     public boolean bet(GameState gameState, GameAction action, Player player) {
         int lastBet=player.getPlayerID();
-        if (player.getCashOnHand()+player.getBet()<gameState.getMinimumBet()){
+        if (player.getCashOnHand()<gameState.getMinimumBet()){
             lastBet=gameState.getLastBet();
         }
         int amountToBet = action.getBet() + gameState.getMinimumBet() - player.getBet();
