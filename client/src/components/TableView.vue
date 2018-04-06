@@ -367,7 +367,7 @@ export default {
       card[0].classList.remove('deckCard')
       console.log(max)
       this.posX = this.posX + 90
-      window.setTimeout(this.pumpCard2, 850)
+      window.setTimeout(this.pumpCard2, 750)
     },
     pumpCard2 () {
       var card = document.getElementsByClassName('deckCard')
@@ -377,7 +377,7 @@ export default {
       card[0].classList.remove('deckCard')
       console.log(max)
       this.posX = this.posX + 90
-      window.setTimeout(this.pumpCard3, 850)
+      window.setTimeout(this.pumpCard3, 750)
     },
     pumpCard3 () {
       var card = document.getElementsByClassName('deckCard')
@@ -559,12 +559,10 @@ export default {
       theta = theta + degreeIncrument
       // console.log('heres you x: ' + x + 'here your y:' + y + 'at ' + theta)
     }
-    
     // alert('heres your round'+ this.roundNumber)
     if (this.GameOver === true) {
-      posX = -191,
+      this.posX = -191
       setTimeout(this.showDown, 2000)
-      
     }
 
     if (this.roundNumber === 1) {
