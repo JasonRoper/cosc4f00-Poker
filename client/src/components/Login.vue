@@ -5,7 +5,7 @@
     <div id="Home" class="jumbotron jumboTron-image jumbotron-fluid  text-white mb-4 ">
   <div class="container text-sm-center pt-5">
     <h1 class="display-1">PokerPals</h1>
-    <h1 class=" tagLine text-dark lead "><strong>We came to Play.</strong></h1>
+    <h1 class=" tagLine   lead "><strong>We came to Play.</strong></h1>
 <!--   button group-->
       <img src="../assets/Webgraphics/poker.png" width="40" height="40">
     <div class="btn-group px-3 py-4" role="group" aria-label="Basic example">
@@ -90,8 +90,10 @@
          </div>
          <p class="lead">
 
-        Poker Pals is now curreently Withinin
-      development phase following the generic phases set  by Brock University's COSC 4f00 team poker face. Within our venture we have now moved into the development phase of the Product, While our site is still currently under construction we hope to get things up and running as soon as possible. Until then please observe our structure and lay out of our up comming websitste and all the possible features we look for ward to possible providing in the meant time enjoy.<br> - Team Poker Face.
+Welcome! We here at Poker Pals have been working hard to get this site 
+up and running and are happy to present to you our prototype launch! 
+You'll notice on the right/below that you can register and log in, feel free to look around and check things out! Bring a friend, and have some fun playing poker. Enjoy! -<br> - Team Poker Face.
+             
              </p>
 
        </p>

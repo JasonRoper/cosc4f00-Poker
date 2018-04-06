@@ -24,10 +24,9 @@
         </div>
           <div v-else class="text-dark oppName lead"> 
          <strong> {{this.data.name}} </strong>
-         
         </div>
 
-        <p>{{this.data.id}}</p> 
+        <!-- <p>{{this.data.id}}</p>  -->
         <div class="text-white oppBalance">
           $ {{ this.data.money}}
           <!-- Put talbe action made -->
@@ -36,7 +35,7 @@
       <div class="oppentCards">
         <!--<card v-ref='card1' ref='card1' id="hand" class="singleCard" :card="this.data.card1"></card>
         <card v-ref="card2" ref='card2' id="hand2" class="singleCard" :card="this.data.card2"></card>-->
-        <card id="hand" class="singleCard" :card="this.data.card1"></card>
+        <card id="hand" class="" :card="this.data.card1"></card>
         <card id="hand2" class="singleCard" :card="this.data.card2"></card>
       </div>
         <div v-show ="this.data.isDealer" id="isDealerContainer">
@@ -51,25 +50,31 @@
         <strong id="chipAction" ><i class="fa fa-remove"></i></strong>
         </div>
               <transition name="Action">
-        <div v-show = this.FoldAction id="isChipContainer">
+        <!-- <div v-show = this.FoldAction id="isChipContainer"> -->
+        <div v-if ="this.data.action.type === 'FOLD' " id="isChipContainer">
         <strong id="chipAction" ><i  style = "padding-left:2px;padding-right:2px;" class="fa fa-remove"></i></strong>
         </div>
         </transition>
 
               <transition name="Action">
-        <div v-show = this.CallAction id="isChipContainer">
+        <!-- <div v-show = this.CallAction id="isChipContainer"> -->
+                  <div v-if ="this.data.action.type === 'CALL'" id="isChipContainer">
+
         <strong id="chipAction" ><i  style = "padding-left:2px;padding-right:2px;" class="fa fa-dollar"></i></strong>
         <div id="chipMessage">${{this.data.action.bet}}</div>
         </div></transition>
 
         <transition name="Action">
-        <div v-show = this.BetAction id="isChipContainer">
+        <!-- <div v-show = this.BetAction id="isChipContainer"> -->
+         <div v-if ="this.data.action.type === 'BET'" id="isChipContainer">
+
         <strong id="chipAction" ><i class="fa fa-chevron-up"></i></strong>
         <div id="chipMessage">${{this.data.action.bet}}</div>
         </div></transition>
 
         <transition name="Action">
-        <div v-show = this.RasieAction id="isChipContainer">
+        <!-- <div v-show = this.RasieAction id="isChipContainer"> -->
+          <div v-if ="this.data.action.type === 'RAISE'" id="isChipContainer">
         <strong id="chipAction" ><i class="fa fa-chevron-up"></i></strong>
         <div id="chipMessage">${{this.data.action.bet}}</div>
         </div></transition>
@@ -80,7 +85,8 @@
         <strong id="chipAction" ><i class="fa fa-chevron-up"></i></strong><div id="chipMessage">${{this.data.action.bet}}</div>
         </div> -->
             <transition name="Action">
-        <div v-show = this.CheckAction id="isChipContainer">
+        <!-- <div v-show = this.CheckAction id="isChipContainer"> -->
+          <div v-if ="this.data.action.type === 'CHECK'" id="isChipContainer">
         <strong id="chipAction" ><i class="fa fa-check"></i></strong>
         <div id="chipMessage">${{this.data.action.bet}}</div>
         </div>
@@ -158,7 +164,7 @@ export default {
       countDown.setSeconds(countDown.getSeconds() + 45) // countDown.getMinutes() + numberofMins
     },
     test2 () {
-      this.data.action = GameActionType.CALL
+      this.data.action.type = GameActionType.CALL
     },
     test3 () {
       this.showHand = !this.showHand

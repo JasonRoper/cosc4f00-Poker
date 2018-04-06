@@ -27,7 +27,6 @@
 
        <div v-if="this.mechanics.getUser().isDealer" class="input-group input-group ">
                   <button type="button" class="btn btn-default btn-circle bg-warning  tabAction-chip-dealer inner-orange mx-4 ml-5"><strong> D</strong></button>
-
              </div>
     <form  class=" statsBar form-control bg-light-transparent   ">
 <div class="lead"><label> User Status: </label> </div>
@@ -42,9 +41,13 @@
                 
 
   <!-- <input v-model="this.UserName()" id="Events"  type="number" class="form-control mx-2 text-center bg-secondary lead text-light  " placeholder="Event Bar" aria-label="Event Bar" aria-describedby="basic-addon1" disabled> -->
-           <div class="form-control mx-2 text-center bg-secondary lead text-light">
+           <div v-if="this.mechanics.getUser().isTurn" class="form-control mx-2 text-center bg-info lead text-light">
              {{this.UserName}}
               </div>
+          <div v-else class="form-control mx-2 text-center bg-secondary lead text-light">
+             {{this.UserName}}
+              </div>
+              
             </div>
 
          <div class="input-group input-group ">
@@ -202,7 +205,7 @@
          <h2 class=" mr-5  pt-0 text-info">Pot:<span class="text-warning"> {{this.mechanics.potSum}}</span><img src="../assets/Webgraphics/chipPile.png" style="decoration:none" width="55" height="55"></h2>
       <div class="Communitycards-holder">
       <p class='Communitycards  ml-4  '>
-        <card class='size' v-for="card in this.mechanics.communityCards" :key="card" :card="BLANK_CARD"></card>
+        <card class='size' v-for="card in this.comunityCards" :key="card" :card="BLANK_CARD"></card>
       </p>
       </div>
         <p id="theDeck" class='DECK mt-2  '>
@@ -221,8 +224,8 @@
   </div>
                  <div class="userCards-wrapper">            
   <p class='TheUsercards'>
-        <card class='size' :card= this.mechanics.getUser().card1></card>
-        <card class='size' :card= this.mechanics.getUser().card1></card>
+        <card class='size ' :card= this.mechanics.getUser().card1></card>
+        <card class='size' :card= this.mechanics.getUser().card2></card>
       </p>
 </div>
 
@@ -286,7 +289,14 @@ export default {
       posX: -191,
       posY: -141,
       posZ: 200,
-      cardDown: false
+      cardDown: false,
+      comunityCards: {
+        card1: '',
+        card2: '',
+        card3: '', 
+        card4: '', 
+        card5: ''
+       } 
       // gameStarted: false
     }
   },
