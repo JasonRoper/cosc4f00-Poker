@@ -293,10 +293,10 @@ export default {
       comunityCards: {
         card1: '',
         card2: '',
-        card3: '', 
-        card4: '', 
+        card3: '',
+        card4: '',
         card5: ''
-       } 
+      }
       // gameStarted: false
     }
   },
