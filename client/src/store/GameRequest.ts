@@ -48,7 +48,7 @@ export default class GameRequest {
     // , {})
     // , { auth: { username: 'admin', password: 'admin' } })
     const prom = axios.post(this.CASUAL, {}).then((response) => {
-      alert('it is looking for a game')
+      alert('it is looking for casualGame a game')
       this.gameId = response.data.gameId
       alert(response)
       console.log(response)

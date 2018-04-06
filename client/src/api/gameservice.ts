@@ -146,9 +146,10 @@ export enum Event {
   HAND_STARTED = 'HAND_STARTED', // USER Joins the GAME
   USER_ACTION = 'PLAYER_ACTION', // This is sent after a player makes an action
   HAND_FINISHED = 'HAND_FINISHED', // Equivalent for a winnder being determined from a hand
-  ROUND_FINISHED = 'ROUND_FINSHED', // All players have bet - this results in a new Community cards
+  ROUND_FINISHED = 'ROUND_FINISHED', // All players have bet - this results in a new Community cards
   USER_JOIN = 'PLAYER_JOINED',// A new player has been added to the game
-  USER_LEAVE = 'PLAYER_LEFT' // A new player has left the game
+  USER_LEAVE = 'PLAYER_LEFT', // A new player has left the game
+  GAME_FINISHED = 'GAME_FINISHED'
 }
 
 /**

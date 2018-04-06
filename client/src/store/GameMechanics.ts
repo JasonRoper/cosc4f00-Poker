@@ -44,7 +44,7 @@ import state from '../store/users'
  */
 export default class GameMech {
   public gameId: number
-
+  public leaveGame: boolean = false
   // Defines how many players can be at a table
   public numberOfPlayers: number = 5
   public bigBlind: number = 0
@@ -262,7 +262,7 @@ export default class GameMech {
     console.log(gameTransport)
     if (gameTransport.event) {
       if (gameTransport.event.message) {
-        this.gameStatus = gameTransport.event.message
+        // this.gameStatus = gameTransport.event.message
         // alert(gameTransport.event.message + ' The gamestatus is')
       }
       switch (gameTransport.event.action) {
@@ -281,12 +281,14 @@ export default class GameMech {
           this.roundNumber++
           this.handFinished(gameTransport)
           this.setGameCards()
+          this.gameStatus = 'Game Finished'
           break
         }
         case Event.ROUND_FINISHED: {
           alert('ROUND FINISHED event triggered')
           this.roundFinished(gameTransport)
           this.setGameCards()
+          this.gameStatus = 'Round Finished'
           break
         }
         case Event.USER_ACTION: {
@@ -296,6 +298,11 @@ export default class GameMech {
         }
         case Event.USER_JOIN: {
           this.playerJoined(gameTransport)
+          this.gameStatus = 'Here comes a new Challenger'
+          break
+        }
+        case Event.GAME_FINISHED: {
+          this.leaveGame = true
           break
         }
         default: {

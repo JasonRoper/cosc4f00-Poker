@@ -194,7 +194,7 @@ export default {
           case 'CHECK': {
             alert('Yo GON CHECK EVERYONE')
             this.CheckAction = true
-           break
+            break
           }
           case 'FOLD': {
             alert('Yo GON FOLD EVERYONE')
