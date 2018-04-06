@@ -239,6 +239,7 @@
               <button v-on:click="layCommunity()">LayCommunity</button>
                             <button v-on:click="showDown()">DoShowDown</button>
 
+                            <button v-on:click="giveRound()">give round</button>
 
         </div>
       </div>
@@ -297,6 +298,11 @@ export default {
   Below Should really be updated to avoid visual issues
   */
   watch: {
+    roundNumber () {
+      if (this.roundNumber >= 1) {
+        this.layCommunity()
+      }
+    },
     preivousnumberofPlayers  () {
       // this.mechanics = new GameMech(1, this.userId)
     },
@@ -309,10 +315,10 @@ export default {
     },
     roundTwo () {
       // Show your hand Animation
-      alert('Lets start the show')
-      if (this.roundTwo === true) {
-        this.layCommunity()
-      }
+      // alert('Lets start the show')
+      // if (this.roundTwo === true) {
+      //   this.layCommunity()
+      // }
     }
   },
   computed: {
@@ -328,11 +334,17 @@ export default {
     roundTwo () {
       return this.mechanics.hasGameStarted
     },
+    roundNumber () {
+      return this.mechanics.roundNumber
+    },
     opponents () {
       return this.mechanics.getOpponent()
     }
   },
   methods: {
+    giveRound () {
+      alert('heres your round' + this.roundNumber)
+    },
     testGameStarted () {
       console.log(this.gameStarted)
       // this.gameStarted = !this.gameStarted
@@ -551,6 +563,17 @@ export default {
       players[i].style.transform = 'translateX(' + x + 'pt) translateY(' + y + 'pt)'
       theta = theta + degreeIncrument
       // console.log('heres you x: ' + x + 'here your y:' + y + 'at ' + theta)
+    }
+    // alert('heres your round'+ this.roundNumber)
+    if (this.roundNumber === 1) {
+      setTimeout(this.layCommunity, 2000)
+    }
+    if (this.roundNumber === 2) {
+      setTimeout(this.pumpCard3, 2000)
+    }
+    if (this.roundNumber === 3) {
+      setTimeout(this.pumpCard3, 2000)
+      setTimeout(this.showDown, 2000)
     }
   },
   destroyed () {

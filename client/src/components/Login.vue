@@ -45,7 +45,7 @@
               <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon1"><i class="fa fa-user"></i></span>
               </div>
-              <input v-model="RegisterPlayer.username" type="text" class="form-control" placeholder="Username" aria-label="Username/Email" aria-describedby="basic-addon1">
+              <input v-model="RegisterPlayer.username" type="text" class="form-control" placeholder="Username" aria-label="UserName" aria-describedby="basic-addon1">
             </div>
           <!--Username input   -->
           <!-- Password Input -->
@@ -53,7 +53,7 @@
               <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon1"><i class="fa fa-lock"></i></span>
               </div>
-              <input v-model="RegisterPlayer.password"  type="password" class="form-control" placeholder="Passowrd" aria-label="Username/Email" aria-describedby="basic-addon1">
+              <input v-model="RegisterPlayer.password"  type="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="basic-addon1">
              </div>
           <!--Password input   -->
             <!--Email input   -->
@@ -147,7 +147,7 @@ You'll notice on the right/below that you can register and log in, feel free to 
    <error-messages class = "error-messages" :Error="this.ErrorMessage "></error-messages>
 </div>
   <div class="form-group">
-    <input  v-model="Player.username" ref="myTestField" type="text" class="form-control nameInput" id="formGroupExampleInput" placeholder="UserName/Email">
+    <input  v-model="Player.username" ref="myTestField" type="text" class="form-control nameInput" id="formGroupExampleInput" placeholder="Username">
   </div>
   <div class="form-group">
     <input v-model="Player.password" ref="myTestField2" type="password" class="form-control passwordInput" id="formGroupExampleInput2" placeholder="Password">
@@ -158,9 +158,9 @@ You'll notice on the right/below that you can register and log in, feel free to 
   <div class="form-group">
       <button class="btn btn-warning btn-lg btn-block text-dark  text-center " type="button" value ="Register"  data-toggle="modal" data-target="#Register" :disabled="(this.clickedLogin === true )||(this.clickedRegister === true )">  <i class="fa fa-sign-in"></i> Register</button>
   </div>
-  <div class="form-group">
+  <!-- <div class="form-group">
      <p class="text-right">Forgot password?<br><a  style="text-decoration:none" href=""><i class="fa fa-sign-in"></i> Password reset </a></p>
-  </div>
+  </div> -->
 </form>
   </div>
 </div><!--=======/Login Card=======-->
