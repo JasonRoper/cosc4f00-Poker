@@ -44,7 +44,7 @@
           <u>Instructional Poker</u>
         </h2> -->
         <div v-show="instructionalSelection" class="instructionalButtons">
-          <div v-show="!instrcutionSubMenu" class="text-center">
+          <div class="text-center">
             <!-- <div class="chip-holder ">
               <button type="button" class="backButton  inner-blue" @click="backButton()">
                 <i class="fa fa-arrow-left  fa-2x"></i>
@@ -64,7 +64,7 @@
               <div>CPU Challenge</div>
             </div>
           </div>
-          <div v-show="instrcutionSubMenu" class="pt-5 mt-5">
+          <!-- <div v-show="instrcutionSubMenu" class="pt-5 mt-5">
             <div class="chip-holder ">
               <button @mouseleave="chiprelaseSound()" @mouseover="chipSound()" class="around-words2 inner-green btn btn-lg"
                 @click="chipChoice('InteractiveTutorial')">
@@ -80,7 +80,7 @@
               <hr>
               <div class="button-title">Video Tutorial</div>
             </div>
-          </div>
+          </div> -->
         </div>
         <div v-show="videoSelect" class='instructional Video'>
           <!-- <instructVideo></instructVideo> -->
@@ -296,20 +296,20 @@
       </div>
     </div>
     <!--==================*
-    /Casual Poker  Join Game MODAL !! 
+    /Casual Poker  Join Game MODAL !!
   *==================-->
 
-
+  <InstrucVid :name="'InstructVideo'" :showModal="videoSelect" @close="videoSelect = false"/>
   </div>
   <!-- <table-view :userId="1" ></table-view>  -->
-
 
 </template>
 
 <script>
 // import AvailbleGame from '@/components/AvailbleGame.vue'
 import GameRequest from '@/store/GameRequest'
-// import InstrucVid from '@/components/InstrucVid'
+import InstrucVid from '@/components/InstrucVid'
+
 export default {
   data () {
     return {
@@ -427,7 +427,7 @@ export default {
         this.instructionalSelection = false
       }
       if (choice === 'PokerTutorial') {
-        this.instrcutionSubMenu = true
+        this.videoSelect = true
       }
       if (choice === 'CompetitivePoker') {
         // alert('Lets Compete Poker')
@@ -465,6 +465,7 @@ export default {
   watch: {
   },
   components: {
+    InstrucVid
     // player: Player,
     // actions: TableActions,
     // card: CardView,
