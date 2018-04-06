@@ -407,6 +407,7 @@ public class GameState {
         if (dealer!=-1) {
             players.get(dealer).setDealer(false);
         }
+
         dealer++;
         if (dealer>=players.size()){
             dealer=0;
@@ -672,7 +673,7 @@ public class GameState {
     }
 
     public void endHand(){
-        startTime=System.currentTimeMillis();
+        startTime=System.currentTimeMillis()+30000;
         round=0;
         for (Player p: players){
             p.setBet(0);

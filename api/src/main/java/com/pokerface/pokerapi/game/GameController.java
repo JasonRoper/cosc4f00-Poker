@@ -230,11 +230,11 @@ public class GameController {
     }
 
     @PostMapping("/api/v1/games/")
-    public GameInfoTransport createCustomGame(@Payload GameSettingTransport gameSettings,
+    public GameInfoTransport createCustomGame(@RequestBody GameSettingTransport gameSettings,
                                               Principal principal) {
         UserInfoTransport user = userService.getUserByUsername(principal.getName());
         long gameID;
-        if (gameSettings.gameType == GameState.GameType.AI) {
+        if (gameSettings.gameType == GameState.GameType.AI || gameSettings.gameType==null) {
             gameID = gameService.createAIGame(gameSettings, user.getId(), user.getUsername());
         } else {
             gameID = gameService.createGame(gameSettings, user.getId(), user.getUsername());
