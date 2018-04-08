@@ -28,16 +28,16 @@
        <div v-if="this.mechanics.getUser().isDealer" class="input-group input-group ">
                   <button type="button" class="btn btn-default btn-circle bg-warning  tabAction-chip-dealer inner-orange mx-4 ml-5"><strong> D</strong></button>
              </div>
-    <form  class=" statsBar form-control bg-light-transparent   ">
-<div class="lead"><label> User Status: </label> </div>
+    <form  class=" statsBar form-control bg-transparent ">
+<div class="lead text-white text-left"><label> User Status: </label> </div>
 
          <div class="input-group input-group ">
 
 
-<label> User: </label>
+<label  class="lead text-white text-left"> User: </label>
              </div>
 
-              <div class="input-group input-group">
+              <div class="input-group input-group roundedName">
                 
 
   <!-- <input v-model="this.UserName()" id="Events"  type="number" class="form-control mx-2 text-center bg-secondary lead text-light  " placeholder="Event Bar" aria-label="Event Bar" aria-describedby="basic-addon1" disabled> -->
@@ -53,7 +53,7 @@
          <div class="input-group input-group ">
 
 
-<label> Chips: </label>
+<label class="lead text-white " > Chips: </label>
              </div>
 
               <div class="input-group input-group ">
@@ -215,12 +215,18 @@
                  <card  class= " DECKsize mt-4" v-for="card in this.mechanics.communityCards" :key="card" :card="card.BLANK_CARD"></card>
 
                     </transition-group>
+
+                    
       </p>
+                          <!-- <p id="theDeck" class='DECK mt-2'>
+    <card  class= "deckCard DECKsize mt-4" v-for="card  in this.comunityCards" :key="card" :card="card"></card>
+</p> -->
 
 
       </div>
       
     </div>
+
   </div>
                  <div class="userCards-wrapper">            
   <p class='TheUsercards'>
@@ -426,12 +432,12 @@ export default {
       'logout'
     ]),
     logOut: function () {
+      this.logout()
       const logoutRequest = new GameRequest()
-      logoutRequest.removeCompetitiveGame(this.mechanics.gameId, state.state.userId).then((responce) => {
-        router.push({ name: '/Home' })
-        this.logout()
+      logoutRequest.removeCompetitiveGame(this.mechanics.gameId, state.state.userId).then(() => {
         console.log(responce + 'success in delete request')
       }).catch((error) => { console.log('Failed delete request' + error) })
+         this.$router.push('/Home')
     },
     getUser: function () {
       return this.mechanics.getUser()

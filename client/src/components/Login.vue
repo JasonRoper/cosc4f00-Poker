@@ -177,8 +177,9 @@ You'll notice on the right/below that you can register and log in, feel free to 
               <i class="fa fa-user-circle pr-2 fa-lg"></i>
               <u>Login</u>
             </div>
-            <div class="card-header text-left text-white bg-secondary lead" v-else>
-              Play Poker!
+            <div class="card-header text-left text-white bg-secondary lead d-flex" v-else>
+              Welcome PokerPal: {{this.username}}
+              <div class=" ml-auto"> <a href="" class="logoutButton" @click="logOut()" >Log out</a> </div>
             </div>
           </div>
           <div class="card-body text-dark" v-if="!loggedIn">
@@ -188,7 +189,7 @@ You'll notice on the right/below that you can register and log in, feel free to 
               </div>
               <div class="form-group">
                 <input v-model="Player.username" ref="myTestField" type="text" class="form-control nameInput" id="formGroupExampleInput"
-                  placeholder="UserName/Email">
+                  placeholder="Username">
               </div>
               <div class="form-group">
                 <input v-model="Player.password" ref="myTestField2" type="password" class="form-control passwordInput" id="formGroupExampleInput2"
@@ -203,13 +204,6 @@ You'll notice on the right/below that you can register and log in, feel free to 
                 <button class="btn btn-warning btn-lg btn-block text-dark  text-center " type="button" value="Register"
                   @click="registModal = true" :disabled="(this.clickedLogin === true )||(this.clickedRegister === true )" data-target="#Register">
                   <i class="fa fa-sign-in"></i> Register</button>
-              </div>
-              <div class="form-group">
-                <p class="text-right">Forgot password?
-                  <br>
-                  <a style="text-decoration:none" href="">
-                    <i class="fa fa-sign-in"></i> Password reset </a>
-                </p>
               </div>
             </form>
           </div>
@@ -434,6 +428,10 @@ export default {
       'login',
       'logout'
     ]),
+    logOut () {
+      this.logout()
+      this.$router.push('/Home')
+    },
      /*
       Attempts login  givent the requested fields If the fields
        are empty then return an aerror

@@ -1,3 +1,10 @@
+.logoutButton {
+    text-decoration: none;
+    color: #e2e2e2
+}
+.logoutButton:hover {
+    text-decoration: none;
+}
 .jumboTron-image{
     background-image: url('../Webgraphics/pokerJumbo2.jpg');
     background-size: cover;
