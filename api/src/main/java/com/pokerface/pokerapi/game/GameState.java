@@ -710,7 +710,11 @@ public class GameState {
 
     public void fillInCommunityCards(){
         if (communityCardOne==null){
-            communityCardOne=deck.dealCard();
+            try {
+                communityCardOne = deck.dealCard();
+            } catch (Exception e){
+                System.out.println();
+            }
             communityCardTwo=deck.dealCard();
             communityCardThree=deck.dealCard();
         }

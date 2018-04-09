@@ -66,7 +66,7 @@ public class GameService {
                 gameState.setLastBet(lastBet);
             }
             player.updateLastGameAction(action);
-            if (!allPlayersAllIn(gameState)) {
+            if (playersStillIn(gameState)) {
                 gameState.nextTurn();
             } else {
                 gameState.setPreviousTurn(gameState.getPresentTurn());
@@ -189,37 +189,27 @@ public class GameService {
      */
     public boolean isHandEnd(GameState gameState) {
 
-        return ((isRoundEnd(gameState) && gameState.getRound() == 4)) || allPlayersAllIn(gameState) || allFolded(gameState);
+        return ((isRoundEnd(gameState) && gameState.getRound() == 4)) || !playersStillIn(gameState);
 
     }
 
-    boolean allPlayersAllIn(GameState gameState){
-        int outCount=0;
-        for (Player p : gameState.getPlayers()) {
-            if (p.isAllIn()||p.getHasFolded()){
-               outCount++;
+    boolean playersStillIn(GameState gameState){
+        int playersFolded=0;
+        int playersAllIn=0;
+        for (Player p : gameState.getPlayers()){
+            if (p.isAllIn()){
+                playersAllIn++;
+            }else if (p.getHasFolded()){
+                playersFolded++;
             }
         }
-        if (outCount>=gameState.getPlayerCount()){
+        if (playersAllIn+playersFolded==gameState.getPlayerCount()||playersFolded==gameState.getPlayerCount()-1){
+            return false;
+        } else  {
             return true;
         }
-        return false;
     }
 
-    public boolean allFolded(GameState gameState){
-        int folded = 0;
-
-        for (Player p : gameState.getPlayers()) {
-            if (p.getHasFolded()) {
-                folded++;
-            }
-        }
-
-        if (folded >= gameState.getPlayerCount() - 1) {
-            return true;
-        }
-        return false;
-    }
 
     /**
      * This function adds players to the game
@@ -381,15 +371,6 @@ public class GameService {
         gameState.fillInCommunityCards();
         int[] winners = new int[gameState.getPlayerCount()];
         int[] winnings = new int[gameState.getPlayerCount()];
-        if (allFolded(gameState)) {
-            for (int i=0; i<winners.length;i++){
-                if (gameState.getPlayers().get(i).getHasFolded()){
-                    winners[i]=10;
-                } else {
-                    winners[i]=1;
-                }
-            }
-        } else {
 
         List<Card> communityCards = gameState.receiveCommunityCards();
         List<Pair<Integer, HandRanking>> handRanks = new ArrayList<>();
@@ -414,7 +395,7 @@ public class GameService {
             }
         }
 
-        }
+
         for (int i=0;i<winners.length;i++){
             if (gameState.getPlayers().get(i).getHasFolded()){
                 winners[i]=1000;
