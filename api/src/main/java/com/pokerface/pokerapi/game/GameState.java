@@ -425,15 +425,15 @@ public class GameState {
      */
     public List<Card> receiveCommunityCards() {
         List<Card> cards = new ArrayList<>();
-        if (round>=2) {
+        if (communityCardOne!=null) {
             cards.add(getCommunityCardOne());
             cards.add(getCommunityCardTwo());
             cards.add(getCommunityCardThree());
         }
-        if (round >= 3) {
+        if (communityCardFour!=null) {
             cards.add(getCommunityCardFour());
         }
-        if (round >= 4) {
+        if (communityCardFive!=null) {
             cards.add(getCommunityCardFive());
         }
         return cards;
