@@ -352,7 +352,7 @@ overflow: auto;
     #TableActions
     { 
       position: fixed;
-      top: 5px;
+      top: -55px;
       left: -500px;
       margin-top: 195px;
       width: 160px;
@@ -366,6 +366,7 @@ overflow: auto;
        opacity: 0.80;
        border-radius: 10%;
        border: 7pt solid black;
+       transform:  scale(0.85)
     
     }
     #TableActions button {
@@ -394,11 +395,11 @@ overflow: auto;
     #TableActions
     { 
       position: fixed;
-      top: 280px;
+      top: -20px;
       left: -500px;
       margin-top: 155px;
-      width:33%;
-      height: 19.5em;
+      width:15%;
+      height: 31em;
       background: #0071a5;
     
       text-align: center;
@@ -425,11 +426,11 @@ overflow: auto;
      position:relative;
       /* background-color: red; */
       top:-27px;
-      left:-2px;
+      left:-60px;
       margin-left:20px;
     }
   
 
   }
-    
+  
 

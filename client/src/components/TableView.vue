@@ -632,6 +632,7 @@ export default {
     if (this.GameOver === true) {
       this.posX = -191
       this.showDown()
+      //  Make Sure all the comunity cards have shown after this point
     }
 
     // if (this.roundNumber === 1) {
