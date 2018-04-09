@@ -54,7 +54,7 @@
   }
    .userCards-wrapper {
      perspective: 700px;
-     z-index: 0;
+     z-index: 1;
      margin-left: 180px;
    }
   .TheUsercards{
@@ -188,7 +188,23 @@
       justify-content: center;
       flex-wrap:wrap;
       justify-content:  space-between;
-      margin-top:30px;
+      margin-top:5px;
+      
+    }
+
+    .TableActions2{
+      /* position: relative; */
+      /* border: 20px solid lightslategrey; */
+      /* margin-top: -200px; */
+      /* margin:auto; */
+      /* width:80em; */
+      /* right:20px; */
+      /* margin-left:-450px; */
+      position: absolute;
+      top:-250px;
+      color:white;
+      width:70em;
+      z-index: 0.2;
       
     }
   
@@ -285,7 +301,7 @@
     }
     .ActionTitle{
     position: relative;
-    color:#131313;
+    color:#e2e2e2;
     margin-bottom: 10px;
     /* left: -20px; */
   }

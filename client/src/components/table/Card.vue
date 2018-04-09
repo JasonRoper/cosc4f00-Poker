@@ -2,7 +2,7 @@
   <div class=" Playingcard pokerCard">
 <div class=" Playingcard  blank card topCard">   </div>
 
-  <div  class="Playingcard bottomCard" :class="cssMappings[this.card]">
+  <div  class="Playingcard bottomCard " :class="cssMappings[this.card]">
     <div  class='Pcard'>
     <!-- {{this.card}} -->
     </div>

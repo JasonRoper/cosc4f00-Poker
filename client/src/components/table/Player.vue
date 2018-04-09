@@ -35,8 +35,8 @@
       <div class="oppentCards">
         <!--<card v-ref='card1' ref='card1' id="hand" class="singleCard" :card="this.data.card1"></card>
         <card v-ref="card2" ref='card2' id="hand2" class="singleCard" :card="this.data.card2"></card>-->
-        <card id="hand" class="singleCard" :card="this.data.card1"></card>
-        <card id="hand2" class="singleCard" :card="this.data.card2"></card>
+        <card id="hand" class="oppHand" :card="this.data.card1"></card>
+        <card id="hand2" class="oppHand" :card="this.data.card2"></card>
       </div>
         <div v-show ="this.data.isDealer" id="isDealerContainer">
           

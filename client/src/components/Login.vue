@@ -172,13 +172,13 @@ You'll notice on the right/below that you can register and log in, feel free to 
           </div>
           <!--=======/ Table:System stats=======-->
           <!--=======/Login Card=======-->
-          <div class="card border-dark mb-3 mx-auto" style="max-width: 40rem;">
-            <div class="card-header text-left text-white bg-secondary lead" v-if="!loggedIn">
+          <div class="card border-dark mb-3 mx-auto" style="max-width: 40rem;" >
+            <div class="card-header text-left text-white bg-secondary lead" v-if="!loggedIn"  >
               <i class="fa fa-user-circle pr-2 fa-lg"></i>
               <u>Login</u>
             </div>
             <div class="card-header text-left text-white bg-secondary lead d-flex" v-else>
-              Welcome PokerPal: {{this.username}}
+              Welcome, {{this.username}}
               <div class=" ml-auto"> <a href="" class="logoutButton" @click="logOut()" >Log out</a> </div>
             </div>
           </div>
@@ -374,7 +374,8 @@ export default {
       checkedRegisterErrors: false,
       iszero: false,
       errorMessage: '',
-      leaderboard: []
+      leaderboard: [],
+      loggedIn: false
     }
   },
   watch: {
@@ -389,7 +390,7 @@ export default {
   },
   computed: {
     loggedIn () {
-      return this.$store.getters.loggedIn
+      // return this.$store.getters.loggedIn
     },
     username () {
       return this.$store.state.users.username
@@ -447,6 +448,9 @@ export default {
           this.clickedLogin = false
           if (this.loggedIn) {
             this.errorMessage = ''
+          }
+          if (this.loginErrorMessage.length === 0) {
+            this.loggedIn = true
           }
         })
         // Servery queries for login

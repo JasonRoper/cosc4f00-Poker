@@ -337,13 +337,14 @@ FOR small screens
   transition: 1s all cubic-bezier(0.23, 1, 0.320, 1);
 
 }
-
+/*  
 #hand.active,#hand2.active {
   transform: rotateY(-180deg)
 
 }
 #hand:hover {
-  /* background:s violet; */
+  /* background:s violet; 
   transform: rotateY(-180deg)
 
 }
+*/
