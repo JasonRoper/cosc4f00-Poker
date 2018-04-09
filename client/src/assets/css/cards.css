@@ -3,7 +3,7 @@
   transform-style: preserve-3d;
   
 }
-.pokerCard:hover, .pokerCard.active {
+.pokerCard.active {
   transform: rotateY(-180deg)
   
 }
