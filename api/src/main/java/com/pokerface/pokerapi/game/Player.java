@@ -3,6 +3,7 @@ package com.pokerface.pokerapi.game;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A player representation that lives in the GameState
@@ -242,8 +243,31 @@ this.lastGameAction=lastGameAction;
         this.lastGameAction.setBet(lastGameAction.getBet());
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Player player = (Player) o;
+        return cashOnHand == player.cashOnHand &&
+                ID == player.ID &&
+                userID == player.userID &&
+                playerID == player.playerID &&
+                hasFolded == player.hasFolded &&
+                isAI == player.isAI &&
+                isDealer == player.isDealer &&
+                isAllIn == player.isAllIn &&
+                bet == player.bet &&
+                cardOne == player.cardOne &&
+                cardTwo == player.cardTwo &&
+                Objects.equals(lastGameAction, player.lastGameAction) &&
+                Objects.equals(name, player.name);
+    }
 
+    @Override
+    public int hashCode() {
 
+        return Objects.hash(cardOne, cardTwo, cashOnHand, ID, userID, playerID, hasFolded, isAI, isDealer, isAllIn, bet, lastGameAction, name);
+    }
 }
 
 

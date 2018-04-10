@@ -33,6 +33,7 @@ public class GameState {
     private GameType gameType;
     private int maxPlayers = 6;
     private int previousTurn;
+    private long lastActionTime=0;
 
     /**
      * These are game settings
@@ -725,6 +726,15 @@ public class GameState {
             communityCardFive=deck.dealCard();
         }
     }
+
+    public long getLastActionTime() {
+        return lastActionTime;
+    }
+
+    public void setLastActionTime(long lastActionTime) {
+        this.lastActionTime = lastActionTime;
+    }
+
 
     @Override
     public int hashCode() {
