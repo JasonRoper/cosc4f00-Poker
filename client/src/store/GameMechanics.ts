@@ -298,7 +298,7 @@ export default class GameMech {
   public handFinished (gameTransport: any) {
     this.gameStatus = this.username + ' The HAND_FINISHED  was called'
     this.setPlayers(gameTransport)
-    this.setCommunityCards(gameTransport)
+    // this.setCommunityCards(gameTransport)
     this.hasGameStarted = false
   }
 
@@ -383,14 +383,6 @@ export default class GameMech {
       }
       this.multiplePlayers.push(player)
     })
-
-    // :0,"id":0,"player":true,"fold":true,"dealer":true},{"money":136,"name":"AIPlayer1",
-    // "action":{"type":"CHECK","bet":0},"cardOne":"SPADES_THREE","cardTwo":"HEARTS_FOUR",
-    // "winnings":72,"id":1,"player":true,"fold":false,"dealer":false},{"money":64,"name":
-    // "javon","action":{"type":"CHECK","bet":0},"cardOne":"CLUBS_SEVEN","cardTwo":"CLUBS_A
-    // CE","winnings":0,"id":2,"player":false,"fold":false,"dealer":false},{"money":100,"name":
-    // "jason","action":{"type":"FOLD","bet":0},"cardOne":"CLUBS_KING","cardTwo":"HEARTS_NINE",
-    // "winnings":0,"id":3,"player":false,"fold":true,"dealer":false}]}
   }
 
   public setCommunityCards (gameTransport: any) {
