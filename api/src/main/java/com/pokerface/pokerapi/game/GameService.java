@@ -67,6 +67,9 @@ public class GameService {
                 gameState.setLastBet(lastBet);
             }
             player.updateLastGameAction(action);
+            if (onlyPlayerLeftAfterTheyAllIn(playerID,gameState)){
+
+            }
             if (playersStillIn(gameState)) {
                 gameState.nextTurn();
             } else {
@@ -105,6 +108,21 @@ public class GameService {
             gameState.placeBet(player, amountToBet);
         }
         gameState.setLastBet(lastBet);
+        return true;
+    }
+
+    private boolean onlyPlayerLeftAfterTheyAllIn(int playerID,GameState gameState){
+        for (Player p:gameState.getPlayers()){
+            if (p.getPlayerID()!=playerID){
+                if (!p.isAllIn()&&!p.getHasFolded()){
+                    return false;
+                }
+            }
+        }
+        if (!gameState.getPlayers().get(playerID).getHasFolded()){
+            gameState.getPlayers().get(playerID).setAllIn(true);
+            return true;
+        }
         return true;
     }
 
