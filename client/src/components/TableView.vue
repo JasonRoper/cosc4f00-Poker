@@ -484,7 +484,8 @@ export default {
       document.getElementById('Events').value = ''
     },
     backButton () {
-      this.$router.push('/Game')
+      this.logOut()
+      // this.$router.push('/Game')
     },
     force () {
       // console.log(this.mechanics.getMultiplayers())
