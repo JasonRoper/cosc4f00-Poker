@@ -286,7 +286,7 @@ export default class GameMech {
           this.roundNumber++
           this.handFinished(gameTransport)
           this.setGameCards()
-          this.gameStatus = 'Game Finished'
+          this.gameStatus = 'Hand Finished'
           break
         }
         case Event.ROUND_FINISHED: {
