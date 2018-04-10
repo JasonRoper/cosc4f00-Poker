@@ -1,138 +1,128 @@
 <template>
   <div>
 
-  <div class='oppenentContainer'>
-    <div v-if="this.isTurn === true">
-      <div class="progress bg-secondary  theTimeBar">
-        <transition name="Action">
-          <progress id='theBar' :value=this.progressBar class="progress-bar " role="progressbar" aria-valuenow="15" aria-valuemin="0"
-            max="45"></progress>
-        </transition>
-      </div>
-    </div>
-
-
-    <div  class='oppenentContainer'>
-<div  v-if ="this.isTurn === true">
-<div  class="progress bg-secondary  theTimeBar">
-<transition name="Action">
-  <progress  id='theBar'  :value= this.progressBar class="progress-bar " role="progressbar" aria-valuenow="15" aria-valuemin="0" max="45"></progress>
-</transition>
-</div>
-</div>
-
-  <!-- <div class="progress-bar  " role="progressbar" style="width: 15%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"></div> -->
-   <transition name="theWinner">
-           <div  v-show="this.isWinner" class="WinnerBanner text-dark ">
-
-         <!-- <img src="../assets/PlayerGraphics/winnerBanner2.jpg">  -->
+    <div class='oppenentContainer'>
+      <div v-if="this.isTurn === true">
+        <div class="progress bg-secondary  theTimeBar">
+          <transition name="Action">
+            <progress id='theBar' :value=t his.progressBar class="progress-bar " role="progressbar" aria-valuenow="15" aria-valuemin="0"
+              max="45"></progress>
+          </transition>
         </div>
-        </transition>
+      </div>
+
+      <!-- <div class="progress-bar  " role="progressbar" style="width: 15%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"></div> -->
+      <transition name="theWinner">
+        <div v-show="this.isWinner" class="WinnerBanner text-dark ">
+
+          <!-- <img src="../assets/PlayerGraphics/winnerBanner2.jpg">  -->
+        </div>
+      </transition>
       <div class="showImage " placeholder="asdas">
-   
-              <!-- <div class="showImage2 " placeholder="asdas">  
-                          </div> -->
 
-      <div v-if="this.data.isTurn === true" class="text-dark oppName lead bg-danger">
-        <strong>
-          <em>!</em>{{this.data.name}}
-          <em>!</em>
-        </strong>
-      </div>
-      <div v-else class="text-dark oppName lead">
-        <strong> {{this.data.name}} </strong>
-      </div>
+        <!-- <div class="showImage2 " placeholder="asdas">  
+                            </div> -->
 
-      <!-- <p>{{this.data.id}}</p>  -->
-      <div class="text-white oppBalance">
-        $ {{ this.data.money}}
-        <!-- Put talbe action made -->
-      </div>
-    </div>
-    <div class="oppentCards">
-      <!--<card v-ref='card1' ref='card1' id="hand" class="singleCard" :card="this.data.card1"></card>
-        <card v-ref="card2" ref='card2' id="hand2" class="singleCard" :card="this.data.card2"></card>-->
-      <card id="hand" class="oppHand" :card="this.data.card1"></card>
-      <card id="hand2" class="oppHand" :card="this.data.card2"></card>
-    </div>
-    <div v-show="this.data.isDealer" id="isDealerContainer">
-
-      <strong id="isDealer">D </strong>
-    </div>
-
-
-    <div v-if="this.data.action !== null">
-      <!-- <div v-if="this.data.action.type !== null"> -->
-      <div v-if="this.data.action.type !== null">
-
-        <div v-if="this.data.action.type === 'FOLD'" id="isChipContainer">
-          <strong id="chipAction">
-            <i class="fa fa-remove"></i>
+        <div v-if="this.data.isTurn === true" class="text-dark oppName lead bg-danger">
+          <strong>
+            <em>!</em>{{this.data.name}}
+            <em>!</em>
           </strong>
         </div>
-        <transition name="Action">
-          <!-- <div v-show = this.FoldAction id="isChipContainer"> -->
-          <div v-show="(this.showMove === true ) && this.data.action.type === 'FOLD' " id="isChipContainer">
-            <strong id="chipAction">
-              <i style="padding-left:2px;padding-right:2px;" class="fa fa-remove"></i>
-            </strong>
-          </div>
-        </transition>
+        <div v-else class="text-dark oppName lead">
+          <strong> {{this.data.name}} </strong>
+        </div>
 
-        <transition name="Action">
-          <!-- <div v-show = this.CallAction id="isChipContainer"> -->
-          <div v-show="(this.showMove === true ) && this.data.action.type === 'CALL'" id="isChipContainer">
-
-            <strong id="chipAction">
-              <i style="padding-left:2px;padding-right:2px;" class="fa fa-dollar"></i>
-            </strong>
-            <div id="chipMessage">${{this.data.action.bet}}</div>
-          </div>
-        </transition>
-
-        <transition name="Action">
-          <!-- <div v-show = this.BetAction id="isChipContainer"> -->
-          <div v-show="(this.showMove === true ) && this.data.action.type === 'BET'" id="isChipContainer">
-
-            <strong id="chipAction">
-              <i class="fa fa-chevron-up"></i>
-            </strong>
-            <div id="chipMessage">${{this.data.action.bet}}</div>
-          </div>
-        </transition>
-
-        <transition name="Action">
-          <!-- <div v-show = this.RasieAction id="isChipContainer"> -->
-          <div v-show="(this.showMove === true ) && this.data.action.type === 'RAISE'" id="isChipContainer">
-            <strong id="chipAction">
-              <i class="fa fa-chevron-up"></i>
-            </strong>
-            <div id="chipMessage">${{this.data.action.bet}}</div>
-          </div>
-        </transition>
-
-        <!-- <strong id="chipAction" ><i class="fa fa-chevron-up"></i></strong>
-        <div id="chipMessage">${{this.data.action.bet}}</div> -->
-        <!-- <div v-show="this.RasieAction" id="isChipContainer">
-        <strong id="chipAction" ><i class="fa fa-chevron-up"></i></strong><div id="chipMessage">${{this.data.action.bet}}</div>
-        </div> -->
-        <transition name="Action">
-          <!-- <div v-show = this.CheckAction id="isChipContainer"> -->
-          <div v-show="(this.showMove === true ) && this.data.action.type === 'CHECK'" id="isChipContainer">
-            <strong id="chipAction">
-              <i class="fa fa-check"></i>
-            </strong>
-            <div id="chipMessage">${{this.data.action.bet}}</div>
-          </div>
-        </transition>
-        <!-- </div> -->
+        <!-- <p>{{this.data.id}}</p>  -->
+        <div class="text-white oppBalance">
+          $ {{ this.data.money}}
+          <!-- Put talbe action made -->
+        </div>
       </div>
+      <div class="oppentCards">
+        <!--<card v-ref='card1' ref='card1' id="hand" class="singleCard" :card="this.data.card1"></card>
+          <card v-ref="card2" ref='card2' id="hand2" class="singleCard" :card="this.data.card2"></card>-->
+        <card id="hand" class="oppHand" :card="this.data.card1"></card>
+        <card id="hand2" class="oppHand" :card="this.data.card2"></card>
+      </div>
+      <div v-show="this.data.isDealer" id="isDealerContainer">
+
+        <strong id="isDealer">D </strong>
+      </div>
+
+
+      <div v-if="this.data.action !== null">
+        <!-- <div v-if="this.data.action.type !== null"> -->
+        <div v-if="this.data.action.type !== null">
+
+          <div v-if="this.data.action.type === 'FOLD'" id="isChipContainer">
+            <strong id="chipAction">
+              <i class="fa fa-remove"></i>
+            </strong>
+          </div>
+          <transition name="Action">
+            <!-- <div v-show = this.FoldAction id="isChipContainer"> -->
+            <div v-show="(this.showMove === true ) && this.data.action.type === 'FOLD' " id="isChipContainer">
+              <strong id="chipAction">
+                <i style="padding-left:2px;padding-right:2px;" class="fa fa-remove"></i>
+              </strong>
+            </div>
+          </transition>
+
+          <transition name="Action">
+            <!-- <div v-show = this.CallAction id="isChipContainer"> -->
+            <div v-show="(this.showMove === true ) && this.data.action.type === 'CALL'" id="isChipContainer">
+
+              <strong id="chipAction">
+                <i style="padding-left:2px;padding-right:2px;" class="fa fa-dollar"></i>
+              </strong>
+              <div id="chipMessage">${{this.data.action.bet}}</div>
+            </div>
+          </transition>
+
+          <transition name="Action">
+            <!-- <div v-show = this.BetAction id="isChipContainer"> -->
+            <div v-show="(this.showMove === true ) && this.data.action.type === 'BET'" id="isChipContainer">
+
+              <strong id="chipAction">
+                <i class="fa fa-chevron-up"></i>
+              </strong>
+              <div id="chipMessage">${{this.data.action.bet}}</div>
+            </div>
+          </transition>
+
+          <transition name="Action">
+            <!-- <div v-show = this.RasieAction id="isChipContainer"> -->
+            <div v-show="(this.showMove === true ) && this.data.action.type === 'RAISE'" id="isChipContainer">
+              <strong id="chipAction">
+                <i class="fa fa-chevron-up"></i>
+              </strong>
+              <div id="chipMessage">${{this.data.action.bet}}</div>
+            </div>
+          </transition>
+
+          <!-- <strong id="chipAction" ><i class="fa fa-chevron-up"></i></strong>
+          <div id="chipMessage">${{this.data.action.bet}}</div> -->
+          <!-- <div v-show="this.RasieAction" id="isChipContainer">
+          <strong id="chipAction" ><i class="fa fa-chevron-up"></i></strong><div id="chipMessage">${{this.data.action.bet}}</div>
+          </div> -->
+          <transition name="Action">
+            <!-- <div v-show = this.CheckAction id="isChipContainer"> -->
+            <div v-show="(this.showMove === true ) && this.data.action.type === 'CHECK'" id="isChipContainer">
+              <strong id="chipAction">
+                <i class="fa fa-check"></i>
+              </strong>
+              <div id="chipMessage">${{this.data.action.bet}}</div>
+            </div>
+          </transition>
+          <!-- </div> -->
+        </div>
+      </div>
+      <!-- <button @click="seeWinner()"> Show winner </button> -->
+      <!--Display status big blind small blind  dealer etc   -->
     </div>
-    <!-- <button @click="seeWinner()"> Show winner </button> -->
     <!--Display status big blind small blind  dealer etc   -->
   </div>
-  <!--Display status big blind small blind  dealer etc   -->
-</div>
 </template>
 
  
