@@ -6,14 +6,14 @@
         <div class="container text-sm-center pt-5">
           <h1 class="display-1">PokerPals</h1>
           <h1 class=" tagLine text-dark lead ">
-            <strong>We came to Play.</strong>
+            <strong>Where your pals Play.</strong>
           </h1>
           <!--   button group-->
           <img src="../assets/Webgraphics/poker.png" width="40" height="40">
           <div class="btn-group px-3 py-4" role="group" aria-label="Basic example">
             <button v-if="!loggedIn" type="button" class=" lead theregister btn-outline-primary btn btn-info btn-lg" @click="registModal = true">Register Now</button>
              <button v-else type="button" class=" lead theregister btn-outline-primary btn btn-info btn-lg">  Play Poker  </button>
-            <button href="#Developers" type="button" class="theregister btn btn-outline-light btn-lg lead ">See Developers</button>
+            <a href="#Dev2" style="text-decoration:none"><button  href="#Developers" type="button" class="theregister btn btn-outline-light btn-lg lead ">See Developers</button></a>
           </div>
           <img src="../assets/Webgraphics/poker.png" width="40" height="40">
           <hr style="height:2px;color:#e2e2e2; background-color:#e2e2e2;">
@@ -223,7 +223,7 @@ You'll notice on the right/below that you can register and log in, feel free to 
           <div>
             <hr style="height:2px;color:#333; background-color:#333;">
           </div>
-          <h1 id="Developers" class="display-4 text-center  text-muted ">LeaderBoard</h1>
+          <h1  class="display-4 text-center  text-muted ">LeaderBoard</h1>
           <!--====================================================Listdevelopers=================-->
           <div class="pb-4">
             <hr style="height:2px;color:#333; background-color:#333;">
@@ -263,13 +263,14 @@ You'll notice on the right/below that you can register and log in, feel free to 
 
 
       <!--===================================================Row 3================-->
-      <div class="row">
+      <div class="row" name="Dev2">
+        <a name="Dev2"> </a>
         <div class="col-lg">
           <!--====================================================Developers=================-->
           <div>
             <hr style="height:2px;color:#333; background-color:#333;">
           </div>
-          <h1 id="Developers" class="display-4 text-center  text-muted ">Developers</h1>
+          <h1   id="Developers" class="display-4 text-center  text-muted "> Developers</h1>
           <!--====================================================Listdevelopers=================-->
           <div class="pb-4">
             <hr style="height:2px;color:#333; background-color:#333;">

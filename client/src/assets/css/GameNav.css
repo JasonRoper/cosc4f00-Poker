@@ -211,7 +211,7 @@ display:inline-flex;
 
 /* Wrapping div of the page  */
 #page-bg {
-background:  #cc9808;
+background:  #e2e2e2;
 height:100vh;
 overflow: auto;
 }
@@ -223,7 +223,7 @@ overflow: auto;
 #page-content{
   left: 0px;
   text-align: center;
-  background: #cc9808;
+  background: #e2e2e2;
   box-sizing: border-box;    
   height:100%;
   width:100%;
@@ -270,7 +270,7 @@ overflow: auto;
   box-sizing: border-box;
   transition : all 400ms linear; 
    z-index: 1; 
-   opacity: 0.90;
+   opacity: 1;
    border-radius: 20%;
    border: 7pt solid black;
 
@@ -363,7 +363,7 @@ overflow: auto;
       box-sizing: border-box;
       transition : all 400ms linear; 
        z-index: 1; 
-       opacity: 0.80;
+       opacity: 1;
        border-radius: 10%;
        border: 7pt solid black;
        transform:  scale(0.85)
