@@ -484,8 +484,10 @@ export default {
       document.getElementById('Events').value = ''
     },
     backButton () {
-      this.logOut()
-      // this.$router.push('/Game')
+      const backButtonRequest = new GameRequest()
+      backButtonRequest.removeCompetitiveGame(this.mechanics.gameId, state.state.userId).then(() => {
+        this.$router.push('/Game')
+      }).catch((error) => { console.log('Failed delete request' + error) })
     },
     force () {
       // console.log(this.mechanics.getMultiplayers())
