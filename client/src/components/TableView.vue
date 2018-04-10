@@ -28,16 +28,16 @@
        <div v-if="this.mechanics.getUser().isDealer" class="input-group input-group ">
                   <button type="button" class="btn btn-default btn-circle bg-warning  tabAction-chip-dealer inner-orange mx-4 ml-5"><strong> D</strong></button>
              </div>
-    <form  class=" statsBar form-control bg-light-transparent   ">
-<div class="lead"><label> User Status: </label> </div>
+    <form  class=" statsBar form-control bg-transparent ">
+<div class="lead text-white text-left"><label> User Status: </label> </div>
 
          <div class="input-group input-group ">
 
 
-<label> User: </label>
+<label  class="lead text-white text-left"> User: </label>
              </div>
 
-              <div class="input-group input-group">
+              <div class="input-group input-group roundedName">
                 
 
   <!-- <input v-model="this.UserName()" id="Events"  type="number" class="form-control mx-2 text-center bg-secondary lead text-light  " placeholder="Event Bar" aria-label="Event Bar" aria-describedby="basic-addon1" disabled> -->
@@ -53,7 +53,7 @@
          <div class="input-group input-group ">
 
 
-<label> Chips: </label>
+<label class="lead text-white " > Chips: </label>
              </div>
 
               <div class="input-group input-group ">
@@ -112,6 +112,8 @@
     </ul>
   </div>
 </div>
+
+
             <div id="TableActions"  class="col">
   <div class="TA-SideBarContent" >
      <div class="TableActions row">
@@ -160,15 +162,15 @@
         </div>
         <button type="button" class="btn  btn-lg Bet " v-on:click="raise(money)" :disabled="this.mechanics.raiseAction == 1"><i class="fa fa-chevron-up  fa-lg"></i></button>
         </div> -->
-
-   <form  class="form-control bg-warning mt-5 mx-4 ">
+  <div class="holster">
+   <form  class="  inputGroup form-control bg-warning mt-5 mx-4 ">
 
               <div class="input-group input-group-lg ">
 
   <input v-model="money"  type="number" class="form-control mx-5 text-center bg-secondary lead text-light  " placeholder="Event Bar" aria-label="Event Bar" aria-describedby="basic-addon1" >
             </div>
            </form>
-
+</div>
       </div>
   </div>
 </div>
@@ -215,19 +217,28 @@
                  <card  class= " DECKsize mt-4" v-for="card in this.mechanics.communityCards" :key="card" :card="card.BLANK_CARD"></card>
 
                     </transition-group>
+
+                    
       </p>
+                          <!-- <p id="theDeck" class='DECK mt-2'>
+    <card  class= "deckCard DECKsize mt-4" v-for="card  in this.comunityCards" :key="card" :card="card"></card>
+</p> -->
 
 
       </div>
       
     </div>
+
   </div>
                  <div class="userCards-wrapper">            
   <p class='TheUsercards'>
         <card class='size ' :card= this.mechanics.getUser().card1></card>
         <card class='size' :card= this.mechanics.getUser().card2></card>
+     
       </p>
+      
 </div>
+
 
         <button type="button" class="btn btn-default btn-circle backButton  inner-blue BackButton" @click="doCountDown()">quit</button><br>
 
@@ -236,7 +247,64 @@
         <button type="button" class="btn btn-default btn-circle backButton  inner-blue BackButton" @click="backButton()"><i class="fa fa-arrow-left  fa-2x"></i></button><br>
         </div>
                 </div>
+
+
+                
+            <!-- <div id="TableActions "  class="col">
+  <div class="TA-SideBarContent TableActions2" >
+     <div class="TableActions row">
+
+
+
+        
+         <div class="Action text-center lead text-muted">
+        <div class="ActionTitle">
+        Check
+        </div>
+        <button type="button" class="btn  btn-lg check"  v-on:click="check(money)" :disabled="this.mechanics.checkAction == 1"><i class="fa fa-check  fa-lg"></i></button>
+        </div>
+
+
+     <div class="Action text-center lead text-white">
+        <div class="ActionTitle">
+          Fold
+        </div>
+        <button type="button" class="btn btn-lg fold" v-on:click="fold(money)" :disabled="this.mechanics.foldAction == 1"><strong><i class="fa fa-remove fa-lg "></i></strong></button>
+        </div>
+
+              <div class="Action text-center lead text-muted">
+        <div class="ActionTitle">
+          Call
+        </div>
+        <button type="button" class="btn  btn-lg CALL "  v-on:click="call(money)" :disabled="this.mechanics.callAction == 1"><i class="fa fa-dollar  fa-lg"></i>{{this.mechanics.minimumBet}}</button>
+        </div>
+
+
+         <div class="Action text-center lead text-muted">
+        <div class="ActionTitle">
+        Bet/Raise
+        </div>
+        <button type="button" class="btn  btn-lg Bet "  v-on:click="bet(money)" :disabled="this.mechanics.betAction == 1"><i class="fa fa-chevron-up  fa-lg"></i></button>
+        </div>
+
+
+
+   <form  class="form-control bg-warning mt-5 mx-4 ">
+
+              <div class="input-group input-group-lg ">
+
+  <input v-model="money"  type="number" class="form-control mx-5 text-center bg-secondary lead text-light  " placeholder="Event Bar" aria-label="Event Bar" aria-describedby="basic-addon1" >
+            </div>
+           </form>
+
+      </div>
+  </div>
+</div> -->
+
+
+
  </div>
+
 </div>
 
 
@@ -257,13 +325,8 @@ import CardView from '@/components/table/Card'
 import TableActions from '@/components/table/TableActions'
 import { Card } from '@/types/cards.ts'
 import { mapActions } from 'vuex' // used for maping actions of the vue store files
-// import Actions from '@/types/actions'
-// import { GameService, GameActionType } from '@/api/gameservice'
 import GameMech from '@/store/GameMechanics.ts'
 import GameRequest from '@/store/GameRequest.ts'
-// import { GameAction } from '../api/gameservice'
-// import Game from '@/store/game.ts'
-import router from '@/router'
 import Seat from '@/components/table/Seat'
 import {GameActionType} from '@/api/gameservice.ts'
 import state from '../store/users'
@@ -297,9 +360,12 @@ export default {
   */
   watch: {
     roundNumber () {
-      if (this.roundNumber >= 1) {
-        this.layCommunity()
+      if (this.roundNumber === 1) {
+        setTimeout(this.layCommunity, 1000)
       }
+      // if (this.roundNumber >= 1) {
+      //   this.layCommunity()
+      // }
     },
     preivousnumberofPlayers  () {
       // this.mechanics = new GameMech(1, this.userId)
@@ -359,7 +425,8 @@ export default {
       console.log(user)
     },
     showDown () {
-      var playerCards = document.getElementsByClassName('singleCard')
+      // var playerCards = document.get
+      var playerCards = document.getElementsByClassName('oppHand')
       for (let i = 0; i < playerCards.length; i++) {
         playerCards[i].classList.toggle('active')
       }
@@ -426,12 +493,11 @@ export default {
       'logout'
     ]),
     logOut: function () {
+      this.logout()
       const logoutRequest = new GameRequest()
-      logoutRequest.removeCompetitiveGame(this.mechanics.gameId, state.state.userId).then((responce) => {
-        router.push({ name: '/Home' })
-        this.logout()
-        console.log(responce + 'success in delete request')
+      logoutRequest.removeCompetitiveGame(this.mechanics.gameId, state.state.userId).then(() => {
       }).catch((error) => { console.log('Failed delete request' + error) })
+      this.$router.push('/Home')
     },
     getUser: function () {
       return this.mechanics.getUser()
@@ -565,19 +631,22 @@ export default {
     }
     if (this.GameOver === true) {
       this.posX = -191
-      setTimeout(this.showDown, 2000)
+      this.showDown()
+      //  Make Sure all the comunity cards have shown after this point
     }
 
-    if (this.roundNumber === 1) {
-      setTimeout(this.layCommunity, 2000)
-    }
+    // if (this.roundNumber === 1) {
+    //   setTimeout(this.layCommunity, 2000)
+    // }
     if (this.roundNumber === 2) {
       setTimeout(this.pumpCard3, 2000)
     }
     if (this.roundNumber === 3) {
       setTimeout(this.pumpCard3, 2000)
-      setTimeout(this.showDown, 2000)
     }
+    // if (this.mechanics.isHandFinished === true) {
+    //   setTimeout(this.showDown, 2000)
+    // }
   },
   destroyed () {
     if (this.gameService) {

@@ -54,7 +54,7 @@
   }
    .userCards-wrapper {
      perspective: 700px;
-     z-index: 0;
+     z-index: 1;
      margin-left: 180px;
    }
   .TheUsercards{
@@ -144,10 +144,11 @@
       /* left: -50px;
       margin-top: -100px;
      z-index:0;
-  
+     
      /* transform: scale(1); */
      perspective: 700px;
     
+    /* background-color:#065e0a; */
       transform: scale(0.9);
   
      } 
@@ -187,7 +188,23 @@
       justify-content: center;
       flex-wrap:wrap;
       justify-content:  space-between;
-      margin-top:30px;
+      margin-top:5px;
+      
+    }
+
+    .TableActions2{
+      /* position: relative; */
+      /* border: 20px solid lightslategrey; */
+      /* margin-top: -200px; */
+      /* margin:auto; */
+      /* width:80em; */
+      /* right:20px; */
+      /* margin-left:-450px; */
+      position: absolute;
+      top:-250px;
+      color:white;
+      width:70em;
+      z-index: 0.2;
       
     }
   
@@ -284,7 +301,7 @@
     }
     .ActionTitle{
     position: relative;
-    color:#131313;
+    color:#e2e2e2;
     margin-bottom: 10px;
     /* left: -20px; */
   }
@@ -346,7 +363,7 @@
   border-radius: 50%;
   border-width: 40px;
 
-  /* border-color: #000000; */
+  border-color: #000000;
 
 
   height: 480pt;
@@ -359,10 +376,28 @@
   /* margin-top: -20px; */
  z-index:0.5;
 
-
+background-color: #065e0a;
   /* perspective: 700px; */
   transform: rotateX(30deg);
   
+}
+.CompleteTable-B{
+  position: absolute;
+  /* margin-top: -67px; */
+  border : 1px solid #929292;
+  border-radius: 50%;
+  border-width: 40px;
+
+  /* border-color: #000000; */
+
+
+  height: 480pt;
+  width: 480pt;
+  margin: auto;
+  padding: 0%;
+  transform: translateZ(123px);
+  z-index:0.4;
+
 }
  /* TAble title */
  .cover{

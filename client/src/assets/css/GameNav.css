@@ -14,13 +14,23 @@
 }
 .statsBar{
   position:fixed;
-  width: 25%;
+  width: 17%;
   margin-top:150px;
   top: 20px;
+  border:0;
   /* Change to 20px from the left  */
-  right: 20px; 
+  right: 5px; 
   cursor:pointer;
   z-index: 1;
+  /* border: solid #e2e2e2 5px; */
+  border-radius: 14%;
+  /* background-color: #34d625; */
+  background-blend-mode: hard-light;
+  /* opacity: 0.3; */
+  
+}
+.roundedName{
+  border-radius: 50%;
 }
 .eventgameBar{
   position:fixed;
@@ -201,7 +211,7 @@ display:inline-flex;
 
 /* Wrapping div of the page  */
 #page-bg {
-background: #065e0a;
+background:  #cc9808;
 height:100vh;
 overflow: auto;
 }
@@ -213,7 +223,7 @@ overflow: auto;
 #page-content{
   left: 0px;
   text-align: center;
-  background: #065e0a;
+  background: #cc9808;
   box-sizing: border-box;    
   height:100%;
   width:100%;
@@ -245,13 +255,14 @@ overflow: auto;
   opacity: 1;
 
 }
+
 #TableActions
 { 
   position: fixed;
-  top: 0;
+  top: 5px;
   left: -500px;
   margin-top: 195px;
-  width: 500px;
+  width: 420px;
   height: 18em;
   background: #a58c00;
 
@@ -263,9 +274,8 @@ overflow: auto;
    border-radius: 20%;
    border: 7pt solid black;
 
-  
-  
 }
+ 
 
 #sidebar
 { 
@@ -332,3 +342,95 @@ overflow: auto;
  /* { */
   /* height: 100vh; */
   /* width: 100%;} */
+
+
+  /* Media Quries */
+/*====== Break Point 1==========  */
+  @media  screen and (max-width:1600px)     { 
+/* can be 1800 and less have it  */
+  
+    #TableActions
+    { 
+      position: fixed;
+      top: -55px;
+      left: -500px;
+      margin-top: 195px;
+      width: 160px;
+      height: 34em;
+      background: #065e0a;
+    
+      text-align: center;
+      box-sizing: border-box;
+      transition : all 400ms linear; 
+       z-index: 1; 
+       opacity: 0.80;
+       border-radius: 10%;
+       border: 7pt solid black;
+       transform:  scale(0.85)
+    
+    }
+    #TableActions button {
+      left:10px;
+    }
+    #TableActions form,#TableActions input {
+      left:-60px;
+      width:140px;
+      right:20px;
+      /* top:20px; */
+      /* background-color: red; */
+        }
+        .holster {
+          /* margin-top:200px; */
+          /* top:200px; */
+         position:relative;
+          /* background-color: red; */
+          top:-27px;
+          left:-42px;
+          margin-left:20px;
+        }
+      
+  }
+  /* break point 2  */
+  @media  screen and    (max-width:1000px)  {
+    #TableActions
+    { 
+      position: fixed;
+      top: -20px;
+      left: -500px;
+      margin-top: 155px;
+      width:15%;
+      height: 31em;
+      background: #0071a5;
+    
+      text-align: center;
+      box-sizing: border-box;
+      transition : all 400ms linear; 
+       z-index: 1; 
+       opacity: 0.90;
+       border-radius: 20%;
+       border: 7pt solid black;
+       transform: scale(0.8);
+       /* margin-left: 580px; */
+       overflow:;
+      
+      
+    }
+    #TableActions form,#TableActions input {
+      left:-60px;
+      width:140px;
+      /* right:40px; */
+    }
+    .holster {
+      /* margin-top:200px; */
+      /* top:200px; */
+     position:relative;
+      /* background-color: red; */
+      top:-27px;
+      left:-60px;
+      margin-left:20px;
+    }
+  
+
+  }
+  
+

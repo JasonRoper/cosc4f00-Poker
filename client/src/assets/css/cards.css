@@ -1,8 +1,9 @@
 .pokerCard{
   transition: transform 500ms cubic-bezier(.2,-0.02,.39,1.27);
   transform-style: preserve-3d;
+  
 }
-.pokerCard:hover {
+.pokerCard.active {
   transform: rotateY(-180deg)
   
 }
@@ -15,7 +16,7 @@
   
 }
 .bottomCard{
-  /* position: absolute; */
+  position: absolute;
   transform: rotatey(-180deg);
 
   /* z-index: 0; */
@@ -36,10 +37,11 @@
     background-repeat: no-repeat;
 }
 
-.blank.card:hover{
+/* .blank.card:hover{
   /* perspective:700px;  */
   transform: scaleY(180deg);
-}
+/* } */ */
+
 
 .clubs.ace {
   background: url("../cards/Clubs 1.png");
