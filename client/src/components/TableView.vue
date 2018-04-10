@@ -376,6 +376,9 @@ export default {
     },
     EventBarMessage () {
     },
+    Winner () {
+
+    },
     roundTwo () {
       // Show your hand Animation
 
@@ -393,6 +396,9 @@ export default {
     },
     EventBarMessage () {
       return this.mechanics.gameStatus
+    },
+    Winner () {
+      return this.mechanics.winners
     },
     roundTwo () {
       return this.mechanics.hasGameStarted

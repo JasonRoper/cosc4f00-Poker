@@ -193,7 +193,9 @@ export default {
       this.BetMessage = true
     },
     resetActions () {
-      this.data.action.type = ''
+      if (this.data.action !== null) {
+        this.data.action.type = ''
+      }
       this.BetAction = false
       this.RasieAction = false
       this.FoldAction = false

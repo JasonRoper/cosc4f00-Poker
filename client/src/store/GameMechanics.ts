@@ -181,74 +181,6 @@ export default class GameMech {
   }
 
   /**
-   * Disables the TableActions based on a users previous action
-   * @param action holds the action of the user
-   */
-  /*
-    public disableButton (action: GameActionType) {
-      switch (action) {
-        case GameActionType.CHECK:
-          this.checkAction = this.disable
-          break
-        case GameActionType.BET:
-          this.betAction = this.disable
-          break
-        case GameActionType.CALL:
-          this.callAction = this.disable
-          break
-        case GameActionType.RAISE:
-          this.raiseAction = this.disable
-          break
-        case GameActionType.FOLD:
-          this.foldAction = this.disable
-          break
-        default:
-      }
-    }
-   */
-  /**
-   * Disables specific tableActions based on if there has been a bet at the table
-   */
-  /*
-    public setTableActions () {
-      if (this.hasBet) {
-        this.foldAction = 0
-        this.betAction = 1
-        this.checkAction = 1
-        this.callAction = 0
-        this.raiseAction = 0
-      } else {
-        this.foldAction = 0
-        this.betAction = 0
-        this.checkAction = 0
-        this.callAction = 1
-        this.raiseAction = 1
-      }
-    }
-   */
-
-  /**
-   * ValidatePreMove
-   */
-  /*
-    public validatePreMove (move: GameAction) {
-      // Confirm that you made a valid move
-      if (this.hasBet) {
-        if (this.possibleAction[1].indexOf(move.type) === -1) {
-          console.log(this.username + ' ' + move + 'you have not made a valid move possibleAction[1]')
-          return false
-        }
-      } else {
-        if (this.possibleAction[0].indexOf(move.type) === -1) {
-          console.log(this.username + ' ' + move + 'you have not made a valid move possibleAction[0]')
-          return false
-        }
-      }
-      return true
-    }
-  */
-
-  /**
    *  Sets the Game Transport in the Game Mechanics
    * @param GameState
    */
@@ -295,8 +227,8 @@ export default class GameMech {
           break
         }
         case Event.GAME_FINISHED: {
-
-          this.leaveGame = true
+          this.gameFinished(gameTransport)
+          this.gameStatus = 'Game Finished'
           break
         }
         default: {
@@ -330,6 +262,11 @@ export default class GameMech {
     console.log('Username: ' + state.state.username + ' UserId: ' + state.state.userId)
   }
 
+  public gameFinished (gameTransport: any) {
+    this.setCommunityCards(gameTransport)
+    this.setPlayers(gameTransport)
+  }
+
   public playerJoined (gameTransport: any) {
     this.setPlayers(gameTransport)
   }
@@ -361,6 +298,7 @@ export default class GameMech {
   public handFinished (gameTransport: any) {
     this.gameStatus = this.username + ' The HAND_FINISHED  was called'
     this.setPlayers(gameTransport)
+    this.setCommunityCards(gameTransport)
     this.hasGameStarted = false
   }
 
