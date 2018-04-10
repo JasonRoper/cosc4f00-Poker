@@ -47,6 +47,7 @@ export default class GameMech {
   public leaveGame: boolean = false
   // Defines how many players can be at a table
   public numberOfPlayers: number = 5
+  public winners: string[] = []
   public bigBlind: number = 0
   public hasBet: boolean = false
   public turn: number = 0
@@ -124,17 +125,6 @@ export default class GameMech {
     })
     return opponents
   }
-  public winner (): Player {
-    let idx: number = 0
-    let maxWin: number = -1
-    this.multiplePlayers.forEach((player: Player, index: number) => {
-      if (player.winnings > maxWin) {
-        idx = index
-        maxWin = player.winnings
-      }
-    })
-    return this.multiplePlayers[idx]
-  }
 
   /**
    * Handles Game finished event
@@ -142,12 +132,11 @@ export default class GameMech {
    * @param gameFinished The inforamtion that you need to finish a game
    */
   public onGameFinishedEvent (gameFinished: any) {
-    this.gameStatus = 'GAME FINISHED'
+    this.gameStatus = 'Hand Finished'
     console.log('The finished Event has been called')
     console.log(gameFinished)
     this.setFinishedPlayer(gameFinished)
     console.log('This game finished event does nothing')
-
     this.isHandFinished = true
   }
 
@@ -306,6 +295,7 @@ export default class GameMech {
           break
         }
         case Event.GAME_FINISHED: {
+
           this.leaveGame = true
           break
         }
@@ -357,6 +347,7 @@ export default class GameMech {
   }
 
   public gameStarted (gameTransport: any) {
+    this.winners = []
     console.log(this.username + ' The game has started GAME_STARTED TRIGGERED')
     this.setPlayers(gameTransport)
     this.multiplePlayers.forEach((player: Player, index: number) => {
@@ -424,6 +415,7 @@ export default class GameMech {
 
   public setFinishedPlayer (gameTransport: any) {
     this.multiplePlayers = []
+    this.winners = []
     gameTransport.players.forEach((item: any, index: number) => {
       let act: GameAction | null = null
       if (item.action !== null) {
@@ -447,6 +439,9 @@ export default class GameMech {
         isDealer: item.dealer,
         isTurn: userTurn,
         isUser: user
+      }
+      if (item.winnings !== 0) {
+        this.winners.push(item.name)
       }
       this.multiplePlayers.push(player)
     })

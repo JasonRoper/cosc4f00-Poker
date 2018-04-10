@@ -39,14 +39,12 @@
 
 /* .blank.card:hover{
   /* perspective:700px;  */
-  transform: scaleY(180deg);
-/* } */ */
+  /*transform: scaleY(180deg);*/
+/* } */
 
 
 .clubs.ace {
   background: url("../cards/Clubs 1.png");
-
-
 }
 .clubs.two {
   background: url("../cards/Clubs 2.png");
