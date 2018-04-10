@@ -515,6 +515,7 @@ public class GameState {
 
     public void startGame(){
         advanceDealer();
+        clearCommunityCards();
         deck=new Deck(this);
         pot = new Pot(playerCount,this);
 
