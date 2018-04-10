@@ -37,11 +37,11 @@ export default class GameRequest {
   public createCustomeGame (): Promise<number | void> {
     const prom = axios.post(this.CUSTOM, {}).then((response) => {
       this.gameId = response.data.gameId
-      alert(response)
+      console.log(response)
       console.log(response)
       return Promise.resolve(response.data.gameId)
     }).catch((error) => {
-      alert('A game couldn\'t be found')
+      console.log('A game couldn\'t be found')
       console.log(error)
       return Promise.reject(error)
     })
@@ -63,13 +63,13 @@ export default class GameRequest {
     // , {})
     // , { auth: { username: 'admin', password: 'admin' } })
     const prom = axios.post(this.CASUAL, {}).then((response) => {
-      alert('it is looking for casualGame a game')
+      console.log('it is looking for casualGame a game')
       this.gameId = response.data.gameId
-      alert(response)
+      console.log(response)
       console.log(response)
       return Promise.resolve(response.data.gameId)
     }).catch((error) => {
-      alert('A game couldn\'t be found')
+      console.log('A game couldn\'t be found')
       console.log(error)
       return Promise.reject(error)
     })
@@ -90,11 +90,11 @@ export default class GameRequest {
       }
     }).then((response) => {
       this.gameId = response.data.gameId
-      alert(response)
+      console.log(response)
       console.log(response)
       return Promise.resolve(response.data.gameId)
     }).catch((error) => {
-      alert('A game couldn\'t be found')
+      console.log('A game couldn\'t be found')
       console.log(error)
       return Promise.reject(error)
     })

@@ -141,7 +141,7 @@ const actions = {
    * @param {Vuex} - the vuex context
    */
   logout (context) {
-    axios.post(paths.LOGOUT).then((response) => {
+    return axios.post(paths.LOGOUT).then((response) => {
       context.commit('logout')
       // need to reconnect to the websocket in order to remove the previous authentication
       PokerClient.reconnect()
@@ -154,7 +154,7 @@ const actions = {
    * @param {Vuex} context - the vuex context
    */
   verifyLoginState (context) {
-    axios.get(paths.LOGIN).then((response) => {
+    return axios.get(paths.LOGIN).then((response) => {
       const loginInfo = {
         userId: response.data.id,
         username: response.data.username
@@ -180,7 +180,7 @@ const actions = {
       context.commit('logout')
     }
 
-    axios.get(paths.LOGIN, {
+    return axios.get(paths.LOGIN, {
       auth: {
         username: loginInfo.username,
         password: loginInfo.password
@@ -238,7 +238,7 @@ const actions = {
     }
 
     context.commit('resetRegistrationErrors')
-    axios.post(paths.REGISTER, registrationFields)
+    return axios.post(paths.REGISTER, registrationFields)
       .then(function (response) {
         // success - the response body contains a userId, username and email - need to add password
         context.commit('setUser', {

@@ -126,7 +126,7 @@
         
          <div class="Action text-center lead text-muted">
         <div class="ActionTitle">
-        Check/Call
+        Check
         </div>
         <button type="button" class="btn  btn-lg check"  v-on:click="check(money)" :disabled="this.mechanics.checkAction == 1"><i class="fa fa-check  fa-lg"></i></button>
         </div>
@@ -137,6 +137,13 @@
           Fold
         </div>
         <button type="button" class="btn btn-lg fold" v-on:click="fold(money)" :disabled="this.mechanics.foldAction == 1"><strong><i class="fa fa-remove fa-lg "></i></strong></button>
+        </div>
+
+              <div class="Action text-center lead text-muted">
+        <div class="ActionTitle">
+          Call
+        </div>
+        <button type="button" class="btn  btn-lg CALL "  v-on:click="call(money)" :disabled="this.mechanics.callAction == 1"><i class="fa fa-dollar  fa-lg"></i>{{this.mechanics.minimumBet}}</button>
         </div>
 
 
@@ -263,7 +270,6 @@ import state from '../store/users'
 
 export default {
   data () {
-    // alert('just logged route' + this.$route.params.gameId)
     return {
       // UserName: state.state.username,
       mechanics: new GameMech(this.$route.params.gameId, state.state.username),
@@ -303,11 +309,10 @@ export default {
       this.mechanics.setGame() // I left this for asnley
     },
     EventBarMessage () {
-      // alert('Change change change')
     },
     roundTwo () {
       // Show your hand Animation
-      // alert('Lets start the show')
+
       // if (this.roundTwo === true) {
       //   this.layCommunity()
       // }
@@ -338,7 +343,7 @@ export default {
   },
   methods: {
     giveRound () {
-      alert('heres your round' + this.roundNumber)
+      console.log('heres your round' + this.roundNumber)
     },
     testGameStarted () {
       console.log(this.gameStarted)
@@ -367,7 +372,7 @@ export default {
       card[0].classList.remove('deckCard')
       console.log(max)
       this.posX = this.posX + 90
-      window.setTimeout(this.pumpCard2, 850)
+      window.setTimeout(this.pumpCard2, 750)
     },
     pumpCard2 () {
       var card = document.getElementsByClassName('deckCard')
@@ -377,7 +382,7 @@ export default {
       card[0].classList.remove('deckCard')
       console.log(max)
       this.posX = this.posX + 90
-      window.setTimeout(this.pumpCard3, 850)
+      window.setTimeout(this.pumpCard3, 750)
     },
     pumpCard3 () {
       var card = document.getElementsByClassName('deckCard')
@@ -388,7 +393,6 @@ export default {
       console.log(max)
       this.posX = this.posX + 90
       // this.deckLength = this.deckLength - 1
-      // //  alert('card', i)
       // }
     },
     doCountDown () {
@@ -406,7 +410,7 @@ export default {
         document.getElementById('Events').value = this.EventBarMessage
         if (distance < 0) {
           clearInterval(x)
-          alert('Done')
+          console.log('Done')
           document.getElementById('Events').value = ''
         }
       }, 1000)
@@ -458,7 +462,7 @@ export default {
       if (this.money !== undefined) {
         this.premove(GameActionType.BET, this.money)
       } else {
-        alert('you are trying to Bet with no money')
+        console.log('you are trying to Bet with no money')
       }
     },
     sendCards: function () {
@@ -559,12 +563,9 @@ export default {
       theta = theta + degreeIncrument
       // console.log('heres you x: ' + x + 'here your y:' + y + 'at ' + theta)
     }
-    
-    // alert('heres your round'+ this.roundNumber)
     if (this.GameOver === true) {
-      posX = -191,
+      this.posX = -191
       setTimeout(this.showDown, 2000)
-      
     }
 
     if (this.roundNumber === 1) {

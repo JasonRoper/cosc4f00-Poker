@@ -102,7 +102,7 @@ export default class GameMech {
         this.setGameCards()
       }
     }).catch((error) => {
-      alert('having an error IN JOINING GAME')
+      console.log('having an error IN JOINING GAME')
       console.log(error)
     })
   }
@@ -142,7 +142,7 @@ export default class GameMech {
    * @param gameFinished The inforamtion that you need to finish a game
    */
   public onGameFinishedEvent (gameFinished: any) {
-    alert('GAME FINISHED')
+    this.gameStatus = 'GAME FINISHED'
     console.log('The finished Event has been called')
     console.log(gameFinished)
     this.setFinishedPlayer(gameFinished)
@@ -157,7 +157,7 @@ export default class GameMech {
    * @param gameError When the game Sends and Error
    */
   public onGameError (gameError: GameError) {
-    alert('Error: ' + gameError.error)
+    this.gameStatus = 'Error: ' + gameError.error
     console.log('Error: ' + gameError.error)
   }
 
@@ -214,7 +214,6 @@ export default class GameMech {
           this.foldAction = this.disable
           break
         default:
-          alert('disable Button went wrong')
       }
     }
    */
@@ -269,12 +268,10 @@ export default class GameMech {
     console.log(gameTransport)
     if (gameTransport.event !== null) {
       if (gameTransport.event.message) {
-        // this.gameStatus = gameTransport.event.message
-        // alert(gameTransport.event.message + ' The gamestatus is')
+        this.gameStatus = gameTransport.event.message
       }
       switch (gameTransport.event.action) {
         case Event.GAME_STARTED: {
-          alert('GAME_STARTED event triggered')
           this.gameStatus = 'Game Start!'
           this.hasGameStarted = true
           this.roundNumber = 0
@@ -285,7 +282,6 @@ export default class GameMech {
           break
         }
         case Event.HAND_FINISHED: {
-          alert('HAND_FINISHED event triggered')
           console.log('HAND_FINISHED event triggered')
           this.roundNumber++
           this.handFinished(gameTransport)
@@ -294,7 +290,6 @@ export default class GameMech {
           break
         }
         case Event.ROUND_FINISHED: {
-          alert('ROUND FINISHED event triggered')
           this.roundFinished(gameTransport)
           this.setGameCards()
           this.gameStatus = 'Round Finished'
@@ -315,14 +310,14 @@ export default class GameMech {
           break
         }
         default: {
-          alert('GAMETRANSPORT EVENT is ' + gameTransport.event.action + ' there is not proper case for this')
+          this.gameStatus = 'GAMETRANSPORT EVENT is ' +
+          gameTransport.event.action + ' there is not proper case for this'
           console.log('GAMETRANSPORT EVENT is ' + gameTransport.event.action + ' there is not proper case for this')
           this.defaultGameTransport(gameTransport)
           this.setGameCards()
         }
       }
     } else {
-      alert('GAMETRANSPORT EVENT is NULL')
       this.defaultGameTransport(gameTransport)
     }
     this.hasSomeoneBet()
@@ -373,7 +368,7 @@ export default class GameMech {
   }
 
   public handFinished (gameTransport: any) {
-    alert(this.username + ' The HAND_FINISHED  was called')
+    this.gameStatus = this.username + ' The HAND_FINISHED  was called'
     this.setPlayers(gameTransport)
     this.hasGameStarted = false
   }

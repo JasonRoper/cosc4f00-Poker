@@ -24,7 +24,7 @@ public class InformationController {
         information.setActiveGames(gameService.getNumActiveGames());
         information.setRegisteredUsers(userService.getNumUsers());
         information.setUsersOnline(userService.getNumUsersOnline());
-        information.setHighestRated(userService.getUsersByRating(3));
+        information.setHighestRated(userService.getUsersByMoney(3));
         return information;
     }
 }

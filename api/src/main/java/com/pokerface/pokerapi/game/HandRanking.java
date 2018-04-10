@@ -2,6 +2,7 @@ package com.pokerface.pokerapi.game;
 
 import org.springframework.data.util.Pair;
 
+import javax.validation.constraints.Max;
 import java.util.*;
 
 /**
@@ -328,7 +329,8 @@ public class HandRanking implements Comparable<HandRanking> {
         }
 
         Comparator<Card> compare = Card.rankCompare();
-        for (int i = 0; i < tieBreakers.size(); i++) {
+        int smallestSize= Math.min(tieBreakers.size(),otherHand.tieBreakers.size());
+        for (int i = 0; i < smallestSize; i++) {
             int res = compare.compare(tieBreakers.get(i), otherHand.tieBreakers.get(i));
             if (res != 0) {
                 return res;

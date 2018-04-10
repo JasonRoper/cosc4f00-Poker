@@ -183,33 +183,33 @@ export default {
       if (this.data.action.type !== null) {
         switch (this.data.action.type) {
           case 'BET': {
-            alert('YO GON BETS EVERYONE')
+            console.log('YO GON BETS EVERYONE')
             this.BetAction = true
             break
           }
           case 'RAISE': {
-            alert('YO GON RAISE EVERYONE')
+            console.log('YO GON RAISE EVERYONE')
             this.RasieAction = true
             break
           }
           case 'CALL': {
-            alert('Yo GON CALL EVERYONE')
+            console.log('Yo GON CALL EVERYONE')
             this.CallAction = true
             break
           }
           case 'CHECK': {
-            alert('Yo GON CHECK EVERYONE')
+            console.log('Yo GON CHECK EVERYONE')
             this.CheckAction = true
             setTimeout(this.resetActions, 1000)
             break
           }
           case 'FOLD': {
-            alert('Yo GON FOLD EVERYONE')
+            console.log('Yo GON FOLD EVERYONE')
             this.FoldAction = true
             break
           }
           default: {
-            alert('There was no suitable action sent')
+            console.log('There was no suitable action sent')
           }
         }
         if (this.data.action !== '') {
