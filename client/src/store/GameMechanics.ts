@@ -47,7 +47,6 @@ export default class GameMech {
   public leaveGame: boolean = false
   // Defines how many players can be at a table
   public numberOfPlayers: number = 5
-  public winners: string[] = []
   public bigBlind: number = 0
   public hasBet: boolean = false
   public turn: number = 0
@@ -284,7 +283,6 @@ export default class GameMech {
   }
 
   public gameStarted (gameTransport: any) {
-    this.winners = []
     console.log(this.username + ' The game has started GAME_STARTED TRIGGERED')
     this.setPlayers(gameTransport)
     this.multiplePlayers.forEach((player: Player, index: number) => {
@@ -344,7 +342,8 @@ export default class GameMech {
           isPlayer: item.player,
           isDealer: item.dealer,
           isTurn: userTurn,
-          isUser: user
+          isUser: user,
+          isWinner: false
         }
         this.multiplePlayers.push(player)
       })
@@ -353,7 +352,7 @@ export default class GameMech {
 
   public setFinishedPlayer (gameTransport: any) {
     this.multiplePlayers = []
-    this.winners = []
+
     gameTransport.players.forEach((item: any, index: number) => {
       let act: GameAction | null = null
       if (item.action !== null) {
@@ -364,6 +363,7 @@ export default class GameMech {
       // console.log('This is for the is it your turn' + index + ' ' + gameTransport.nextPlayer)
       const userTurn: boolean = (index === gameTransport.nextPlayer)
       const user: boolean = (item.name === this.username)
+      const win: boolean = (item.winnings > 0)
       const player: Player = {
         id: item.id,
         money: item.money,
@@ -376,13 +376,12 @@ export default class GameMech {
         isPlayer: item.player,
         isDealer: item.dealer,
         isTurn: userTurn,
-        isUser: user
-      }
-      if (item.winnings !== 0) {
-        this.winners.push(item.name)
+        isUser: user,
+        isWinner: win
       }
       this.multiplePlayers.push(player)
     })
+    // console.log('The winners are: ' + this.winners)
   }
 
   public setCommunityCards (gameTransport: any) {
