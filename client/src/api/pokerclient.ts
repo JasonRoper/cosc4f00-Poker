@@ -195,7 +195,10 @@ export class PokerClient {
     // fucked
     const errorCallback = () => {
       this.state = WebsocketState.ERROR
-      console.log('failed to connect to websocket at %s', this.websocketPath)
+      const tryAgain = 5000 + Math.floor(Math.random() * 5000)
+      console.log('failed to connect to websocket at %s reconnecting in %.2d seconds',
+       this.websocketPath, tryAgain / 1000.0)
+      setTimeout(() => this.reconnect(), tryAgain)
     }
 
     this.socket.connect({}, connectCallback, errorCallback)
