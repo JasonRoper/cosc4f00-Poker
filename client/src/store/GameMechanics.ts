@@ -262,8 +262,9 @@ export default class GameMech {
   }
 
   public gameFinished (gameTransport: any) {
-    this.setCommunityCards(gameTransport)
-    this.setPlayers(gameTransport)
+    // this.setCommunityCards(gameTransport)
+    // this.setPlayers(gameTransport)
+    console.log('The Game has finished')
   }
 
   public playerJoined (gameTransport: any) {
@@ -296,7 +297,7 @@ export default class GameMech {
   public handFinished (gameTransport: any) {
     this.gameStatus = this.username + ' The HAND_FINISHED  was called'
     this.setPlayers(gameTransport)
-    // this.setCommunityCards(gameTransport)
+    this.setCommunityCards(gameTransport)
     this.hasGameStarted = false
   }
 
@@ -381,7 +382,6 @@ export default class GameMech {
       }
       this.multiplePlayers.push(player)
     })
-    // console.log('The winners are: ' + this.winners)
   }
 
   public setCommunityCards (gameTransport: any) {
