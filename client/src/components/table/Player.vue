@@ -11,11 +11,26 @@
       </div>
     </div>
 
-    <!-- <div class="progress-bar  " role="progressbar" style="width: 15%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"></div> -->
 
+    <div  class='oppenentContainer'>
+<div  v-if ="this.isTurn === true">
+<div  class="progress bg-secondary  theTimeBar">
+<transition name="Action">
+  <progress  id='theBar'  :value= this.progressBar class="progress-bar " role="progressbar" aria-valuenow="15" aria-valuemin="0" max="45"></progress>
+</transition>
+</div>
+</div>
 
-    <div class="showImage " placeholder="asdas">
-      <!-- <div class="showImage2 " placeholder="asdas">  
+  <!-- <div class="progress-bar  " role="progressbar" style="width: 15%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"></div> -->
+   <transition name="theWinner">
+           <div  v-show="this.isWinner" class="WinnerBanner text-dark ">
+
+         <!-- <img src="../assets/PlayerGraphics/winnerBanner2.jpg">  -->
+        </div>
+        </transition>
+      <div class="showImage " placeholder="asdas">
+   
+              <!-- <div class="showImage2 " placeholder="asdas">  
                           </div> -->
 
       <div v-if="this.data.isTurn === true" class="text-dark oppName lead bg-danger">
@@ -113,7 +128,8 @@
         <!-- </div> -->
       </div>
     </div>
-
+    <!-- <button @click="seeWinner()"> Show winner </button> -->
+    <!--Display status big blind small blind  dealer etc   -->
   </div>
   <!--Display status big blind small blind  dealer etc   -->
 </div>
@@ -136,6 +152,7 @@ export default {
       timerDone: false,
       showHand: false,
       justFinished: false,
+      isWinner: false,
       // showMove :false,
       isUser: this.data.isUser
     }
@@ -153,6 +170,9 @@ export default {
     }
   },
   methods: {
+    seeWinner () {
+      this.isWinner = !this.isWinner
+    },
     addBar: function () {
       // this.progressBar = this.progressBar + 0.35
       // console.log(this.progressBar)
@@ -251,6 +271,11 @@ export default {
     playerCards[playerCards.length - 2].classList.toggle('active')
   },
   watch: {
+    isWinner () {
+      if (this.isWinner === true) {
+        // document.getElementById().classList.toggle(active)
+      }
+    },
     isTurn () {
       if (this.isTurn === true) {
         this.justFinished = true

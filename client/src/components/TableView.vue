@@ -29,12 +29,12 @@
                   <button type="button" class="btn btn-default btn-circle bg-warning  tabAction-chip-dealer inner-orange mx-4 ml-5"><strong> D</strong></button>
              </div>
     <form  class=" statsBar form-control bg-transparent ">
-<div class="lead text-white text-left"><label> User Status: </label> </div>
+<div class="lead text-dark text-left"><label> User Status: </label> </div>
 
          <div class="input-group input-group ">
 
 
-<label  class="lead text-white text-left"> User: </label>
+<label  class="lead text-dark text-left"> User: </label>
              </div>
 
               <div class="input-group input-group roundedName">
@@ -53,7 +53,7 @@
          <div class="input-group input-group ">
 
 
-<label class="lead text-white " > Chips: </label>
+<label class="lead text-dark " > Chips: </label>
              </div>
 
               <div class="input-group input-group ">
@@ -363,9 +363,12 @@ export default {
       if (this.roundNumber === 1) {
         setTimeout(this.layCommunity, 1000)
       }
-      // if (this.roundNumber >= 1) {
-      //   this.layCommunity()
-      // }
+      if (this.roundNumber === 2) {
+        setTimeout(this.pumpCard3, 2000)
+      }
+      if (this.roundNumber === 3) {
+        setTimeout(this.pumpCard3, 2000)
+      }
     },
     preivousnumberofPlayers  () {
       // this.mechanics = new GameMech(1, this.userId)
@@ -647,12 +650,7 @@ export default {
     // if (this.roundNumber === 1) {
     //   setTimeout(this.layCommunity, 2000)
     // }
-    if (this.roundNumber === 2) {
-      setTimeout(this.pumpCard3, 2000)
-    }
-    if (this.roundNumber === 3) {
-      setTimeout(this.pumpCard3, 2000)
-    }
+
     // if (this.mechanics.isHandFinished === true) {
     //   setTimeout(this.showDown, 2000)
     // }
