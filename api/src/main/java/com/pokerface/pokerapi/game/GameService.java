@@ -53,6 +53,7 @@ public class GameService {
     public GameStateTransport handleAction(long gameID, GameAction action, int playerID) {
 
         GameState gameState = games.findOne(gameID);
+        gameState.setLastActionTime(System.currentTimeMillis());
         int lastBet=gameState.getLastBet();
         if (gameState.getPresentTurn() == playerID && gameState.isHasStarted()) {
             action.setBet(Math.abs(action.getBet()));
@@ -599,20 +600,38 @@ public class GameService {
     public boolean isGameEnd(long gameID){
         GameState gameState=games.findOne(gameID);
         int inGameCount=0;
-        boolean allAI=true;
         for (Player p:gameState.getPlayers()){
-            if (p.getCashOnHand()>0){
-                inGameCount++;
-            }
+         if (p.getCashOnHand()>0){
+             inGameCount++;
+         }
         }
-        for (Player p:gameState.getPlayers()){
-            if (!p.isAI()&&p.getCashOnHand()>0){
-                allAI=false;
-            }
+        if (inGameCount>1){
+            return false;
         }
-        if (allAI){
-            return true;
-        }
-        return (inGameCount<=1);
+        return true;
     }
+
+    public boolean onlyAIPlayers(GameState gameState){
+        for (Player p:gameState.getPlayers()){
+            if (!p.isAI()){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void clearIdleGames(){
+        long currentTime=System.currentTimeMillis();
+        for (GameState gameState:games.findAll()){
+            if (gameState.getLastActionTime()==0){
+                gameState.setLastActionTime(currentTime);
+                games.save(gameState);
+            } else if (gameState.getLastActionTime()<=currentTime-300000){
+                deleteGame(gameState.getId());
+            } else if (onlyAIPlayers(gameState)){
+                deleteGame(gameState.getId());
+            }
+        }
+    }
+
 }

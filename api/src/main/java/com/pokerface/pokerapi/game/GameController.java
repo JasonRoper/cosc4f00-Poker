@@ -36,6 +36,7 @@ public class GameController {
     private final UserService userService;
     private final AIService aiService;
     private final SimpMessagingTemplate messenger;
+    private List gameHashList = new ArrayList();
 
     public GameController(final GameService gameService,
                           final UserService userService,
@@ -88,6 +89,12 @@ public class GameController {
                 handleAction(gameID, aiAction, nextGameState.getNextPlayer());
         }
     }
+
+//    @Scheduled(fixedRate=30000)
+//    public void cleanUpDatabase(){
+//        gameService.clearIdleGames();
+//    }
+
 //    @MessageMapping("/game/{game_id}/ready")
 //    public void readyUp(@DestinationVariable("game_id") long gameID, Principal principal){
 //        UserInfoTransport user = userService.getUserByUsername(principal.getName());
@@ -108,33 +115,6 @@ public class GameController {
 //    }
 
     /**
-     * Listen for a user to disconnect from the websocket. If a user is participating
-     * in any game, they will be removed, and a new GameState will be broadcast to the
-     * clients of the game they were participating in.
-     *
-     * @param sessionEvent the event that occurred
-     */
-    @EventListener
-    public void listenForWebsocketDisconnect(SessionDisconnectEvent sessionEvent) {
-        Principal principal = sessionEvent.getUser();
-        logger.info("a user disconnected from the websocket: " + principal);
-
-        if (principal == null) {
-            return;
-        }
-
-        UserInfoTransport user = userService.getUserByUsername(principal.getName());
-        List<Long> games = new ArrayList<>(); //gameService.findAllGamesWithUser(user.getId());
-        for (Long gameID : games) {
-            gameService.removePlayer(gameID, user.getId());
-            GameStateTransport newGameState = gameService.getGameStateTransport(gameID);
-            messenger.convertAndSend("/messages/game/" + gameID, newGameState.reason(GameStateTransport.Reason.PLAYER_LEFT,
-                    user.getUsername() + " has left the game"));
-        }
-
-    }
-
-    /**
      * receiveAction tales am action from the user and processes it, ultimately passing it to handleAction which then
      * passed it to its gameService to modify gameState and transport those changes
      *
@@ -148,7 +128,7 @@ public class GameController {
                               Principal principal) {
         UserInfoTransport user = userService.getUserByUsername(principal.getName());
         int playerId = gameService.getPlayerID(gameID, user.getId());
-
+        GameState gameState = gameService.getGameState(gameID);
         GameStateTransport nextGameState = handleAction(gameID, action, playerId);
 
 //        while (gameService.isAITurn(gameID)) {
@@ -168,7 +148,7 @@ public class GameController {
      */
     private GameStateTransport handleAction(long gameID, GameAction action, int playerID) {
         GameStateTransport nextGameState = gameService.handleAction(gameID, action, playerID);
-        nextGameState.reason(GameStateTransport.Reason.PLAYER_ACTION,playerID+" played an action.");
+        nextGameState.reason(GameStateTransport.Reason.PLAYER_ACTION,nextGameState.getPlayers()[playerID].getName()+" performed a "+action.getType());
 
         messenger.convertAndSend("/messages/game/" + gameID, nextGameState);
 
@@ -304,13 +284,15 @@ public class GameController {
         if (user.getId() != userID) {
             throw new UserAccessNotPermittedException(user.getUsername(), gameID, "deletion of user " + userID);
         }
-
+        GameStateTransport gameStateTransport = gameService.getGameStateTransport(gameID);
         if (gameService.removePlayer(gameID, userService.getUserByUsername(principal.getName()).getId())==1){
             closeGame(gameID);
+        } else {
+
+            gameStateTransport.reason(GameStateTransport.Reason.PLAYER_LEFT, principal.getName() + " has left.");
+            messenger.convertAndSend("/messages/games/" + gameID, gameStateTransport);
         }
-        GameStateTransport gameStateTransport = gameService.getGameStateTransport(gameID);
-        gameStateTransport.reason(GameStateTransport.Reason.PLAYER_LEFT, principal.getName() + " has left.");
-        messenger.convertAndSend("/messages/games/" + gameID, gameStateTransport);
+
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
