@@ -247,8 +247,10 @@ export default {
   },
   mounted () {
     var playerCards = document.getElementsByClassName('singleCard')
-    playerCards[playerCards.length - 1].classList.toggle('active')
-    playerCards[playerCards.length - 2].classList.toggle('active')
+    if (playerCards !== undefined && playerCards[playerCards.length - 1] !== undefined && playerCards[playerCards.length - 2] !== undefined) {
+      playerCards[playerCards.length - 1].classList.toggle('active')
+      playerCards[playerCards.length - 2].classList.toggle('active')
+    }
   },
   watch: {
     isTurn () {
@@ -265,8 +267,10 @@ export default {
     showHand () {
       if (this.showHand === true) {
         var playerCards = document.getElementsByClassName('singleCard')
-        playerCards[playerCards.length - 1].classList.toggle('active')
-        playerCards[playerCards.length - 2].classList.toggle('active')
+        if (playerCards !== undefined && playerCards[playerCards.length - 1] !== undefined && playerCards[playerCards.length - 2] !== undefined) {
+          playerCards[playerCards.length - 1].classList.toggle('active')
+          playerCards[playerCards.length - 2].classList.toggle('active')
+        }
       }
     }
   },

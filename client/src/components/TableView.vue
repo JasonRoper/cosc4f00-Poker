@@ -388,9 +388,6 @@ export default {
     }
   },
   computed: {
-    numberofPlayers () {
-      return this.mechanics.getMultiplayers() // Kept this for ashley
-    },
     UserName () {
       return this.$store.state.users.username
     },
@@ -460,9 +457,11 @@ export default {
     pumpCard3 () {
       var card = document.getElementsByClassName('deckCard')
       var max = card.length
-      card[0].style = 'z-index:3'
-      card[0].style.transform = 'translateX(' + this.posX + 'pt) translateY(' + this.posY + 'pt) rotateX(-180deg) translatez(' + this.posZ + 'pt) rotatez(-180deg)'
-      card[0].classList.remove('deckCard')
+      if (card[0] !== undefined) {
+        card[0].style = 'z-index:3'
+        card[0].style.transform = 'translateX(' + this.posX + 'pt) translateY(' + this.posY + 'pt) rotateX(-180deg) translatez(' + this.posZ + 'pt) rotatez(-180deg)'
+        card[0].classList.remove('deckCard')
+      }
       console.log(max)
       this.posX = this.posX + 90
       // this.deckLength = this.deckLength - 1
