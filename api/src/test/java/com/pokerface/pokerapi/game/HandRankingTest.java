@@ -1,10 +1,12 @@
 package com.pokerface.pokerapi.game;
 
 import com.pokerface.pokerapi.util.TestCase;
+import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.data.util.Pair;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -473,6 +475,57 @@ public class HandRankingTest {
     public void testLessThanSevenCards() {
         HandRanking ranking = new HandRanking(Arrays.asList(Card.SPADES_KING));
         assertEquals(HandRanking.Type.HIGH_CARD, ranking.getHandType());
+    }
+
+    @Test
+    public void testHandComparisons() {
+        TestCase[] rankings = new TestCase[]{
+                new TestCase<>(new HandRanking(Arrays.asList(Card.CLUBS_ACE, Card.CLUBS_KING, Card.CLUBS_QUEEN, Card.CLUBS_JACK, Card.CLUBS_TEN, Card.DIAMONDS_TEN, Card.DIAMONDS_SEVEN)),
+                        HandRanking.Type.ROYAL_FLUSH),
+                new TestCase<>(new HandRanking(Arrays.asList(Card.DIAMONDS_NINE, Card.DIAMONDS_EIGHT, Card.DIAMONDS_SIX, Card.CLUBS_JACK, Card.CLUBS_TEN, Card.DIAMONDS_TEN, Card.DIAMONDS_SEVEN)),
+                        HandRanking.Type.STRAIGHT_FLUSH),
+                new TestCase<>(new HandRanking(Arrays.asList(Card.CLUBS_ACE, Card.HEARTS_ACE, Card.SPADES_ACE, Card.DIAMONDS_ACE, Card.CLUBS_TEN, Card.DIAMONDS_TEN, Card.DIAMONDS_SEVEN)),
+                        HandRanking.Type.FOUR_OF_A_KIND),
+                new TestCase<>(new HandRanking(Arrays.asList(Card.CLUBS_ACE, Card.HEARTS_ACE, Card.SPADES_ACE, Card.SPADES_JACK, Card.CLUBS_TEN, Card.DIAMONDS_TEN, Card.DIAMONDS_SEVEN)),
+                        HandRanking.Type.FULL_HOUSE),
+                new TestCase<>(new HandRanking(Arrays.asList(Card.CLUBS_ACE, Card.SPADES_TWO, Card.DIAMONDS_TWO, Card.DIAMONDS_ACE, Card.DIAMONDS_EIGHT, Card.DIAMONDS_TEN, Card.DIAMONDS_SEVEN)),
+                        HandRanking.Type.FLUSH),
+                new TestCase<>(new HandRanking(Arrays.asList(Card.CLUBS_ACE, Card.HEARTS_ACE, Card.HEARTS_JACK, Card.SPADES_NINE, Card.CLUBS_EIGHT, Card.DIAMONDS_TEN, Card.DIAMONDS_SEVEN)),
+                        HandRanking.Type.STRAIGHT),
+                new TestCase<>(new HandRanking(Arrays.asList(Card.CLUBS_ACE, Card.HEARTS_ACE, Card.SPADES_ACE, Card.SPADES_FOUR, Card.CLUBS_TEN, Card.DIAMONDS_FIVE, Card.DIAMONDS_SEVEN)),
+                        HandRanking.Type.THREE_OF_A_KIND),
+                new TestCase<>(new HandRanking(Arrays.asList(Card.CLUBS_ACE, Card.HEARTS_ACE, Card.SPADES_JACK, Card.DIAMONDS_JACK, Card.CLUBS_TEN, Card.DIAMONDS_FIVE, Card.DIAMONDS_SEVEN)),
+                        HandRanking.Type.TWO_PAIR),
+                new TestCase<>(new HandRanking(Arrays.asList(Card.CLUBS_ACE, Card.HEARTS_ACE, Card.DIAMONDS_SIX, Card.DIAMONDS_TWO, Card.CLUBS_TEN, Card.SPADES_FOUR, Card.DIAMONDS_SEVEN)),
+                        HandRanking.Type.ONE_PAIR),
+                new TestCase<>(new HandRanking(Arrays.asList(Card.CLUBS_ACE, Card.HEARTS_SEVEN, Card.SPADES_NINE, Card.DIAMONDS_THREE, Card.CLUBS_TWO, Card.DIAMONDS_TEN, Card.CLUBS_JACK)),
+                        HandRanking.Type.HIGH_CARD),
+        };
+        for (int i = 0; i < rankings.length ; i++) {
+            TestCase<HandRanking, HandRanking.Type> iTest = rankings[i];
+
+            assertEquals("hand " + i + " is not the correct hand type",
+                    iTest.getCorrectResult(),iTest.getInput().getHandType());
+
+            for (int j = 0 ; j < rankings.length ; j++) {
+                TestCase<HandRanking, HandRanking.Type> jTest = rankings[j];
+                boolean i_comparison, j_comparison = false;
+                if (i == j) {
+                    i_comparison = iTest.getCorrectResult().compareTo(jTest.getCorrectResult()) == 0;
+                    j_comparison = jTest.getCorrectResult().compareTo(iTest.getCorrectResult()) == 0;
+                } else if (i < j) {
+                    i_comparison = iTest.getCorrectResult().compareTo(jTest.getCorrectResult()) > 0;
+                    j_comparison = jTest.getCorrectResult().compareTo(iTest.getCorrectResult()) < 0;
+                } else {
+                    i_comparison = iTest.getCorrectResult().compareTo(jTest.getCorrectResult()) < 0;
+                    j_comparison = jTest.getCorrectResult().compareTo(iTest.getCorrectResult()) > 0;
+                }
+
+
+                assertTrue("hand " + i + " is not ranked correctly against hand " + j, i_comparison);
+                assertTrue("hand " + j + " is not ranked correctly against hand " + i, j_comparison);
+            }
+        }
     }
 
 }

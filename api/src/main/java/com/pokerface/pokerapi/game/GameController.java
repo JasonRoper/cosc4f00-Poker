@@ -59,24 +59,28 @@ public class GameController {
 
     @Scheduled(fixedRate = 1000)
     public void checkEvents() {
-        List<Long> startedGames = gameService.startingGameIDs();
-        for (Long gameID :startedGames) {
-            GameStateTransport gameTransport = gameService.gameStart(gameID);
-            gameTransport.reason(GameStateTransport.Reason.GAME_STARTED, "the game has started");
-            messenger.convertAndSend("/messages/game/"+gameID, gameTransport);
-            long[] userIDs=gameService.getUserIDsFromGame(gameID);
-            for(long userID: userIDs) {
-                if (userID<1000000) {
-                    UserInfoTransport user = userService.getUser(userID);
-                    HandTransport userHand = gameService.getHandTransport(gameID, userID);
-                    messenger.convertAndSendToUser(user.getUsername(), "/messages/game/" + gameID, userHand);
+        try {
+            List<Long> startedGames = gameService.startingGameIDs();
+            for (Long gameID : startedGames) {
+                GameStateTransport gameTransport = gameService.gameStart(gameID);
+                gameTransport.reason(GameStateTransport.Reason.GAME_STARTED, "the game has started");
+                messenger.convertAndSend("/messages/game/" + gameID, gameTransport);
+                long[] userIDs = gameService.getUserIDsFromGame(gameID);
+                for (long userID : userIDs) {
+                    if (userID < 1000000) {
+                        UserInfoTransport user = userService.getUser(userID);
+                        HandTransport userHand = gameService.getHandTransport(gameID, userID);
+                        messenger.convertAndSendToUser(user.getUsername(), "/messages/game/" + gameID, userHand);
+                    }
                 }
-            }
 //            GameStateTransport nextGameState=gameService.getGameStateTransport(gameID);
 //            while (gameService.isAITurn(gameID)) {
 //                GameAction aiAction = aiService.playAction(gameService,gameID);
 //                nextGameState = handleAction(gameID, aiAction, nextGameState.getNextPlayer());
 //            }
+            }
+        } catch (Exception e) {
+            logger.debug("Check Events Broken:"+e.getStackTrace().toString());
         }
     }
 
@@ -176,7 +180,7 @@ public class GameController {
                     nextGameState.reason(GameStateTransport.Reason.ROUND_FINISHED, ""));
         }
 
-        return nextGameState;
+            return nextGameState;
     }
 
 

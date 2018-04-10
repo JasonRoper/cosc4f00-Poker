@@ -546,7 +546,9 @@ public class GameState {
 
             p.setCardOne(deck.dealCard());
             p.setCardTwo(deck.dealCard());
-
+            if (p.getCashOnHand()>0){
+                p.setHasFolded(false);
+            }
         }
 
         hasStarted=true;
