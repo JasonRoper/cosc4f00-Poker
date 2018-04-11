@@ -32,7 +32,9 @@ import GameRequest from '@/store/GameRequest'
 import { Action } from 'vuex'
 
 import { Card } from '@/types/cards'
-import state, { setupComplete } from '../store/users'
+import { setupComplete } from '../store'
+import state from '../store/users'
+
 
 /**
  * Axios - Imports axios which is used to send POST and GET requests
