@@ -370,24 +370,41 @@ export default {
   */
   watch: {
     GameOver () {
-      if ((this.GameOver === false) && this.GameNumber >= 1) {
+      if (this.GameOver === true) {
         this.showDown()
+        // this.checkCommiunity()
+        // this.numcardDown = 0
+        //  Make Sure all the comunity cards have shown after this point
+      }
+
+      if ((this.GameOver === false) && (this.GameNumber >= 1)) {
+        this.showDown()
+        this.posX = -191
         this.GameNumber = 0
+        this.numcardDown = 0
+        return
       }
       this.GameNumber = 1
     },
     roundNumber () {
-      if (this.roundNumber === 1) {
-        setTimeout(this.layCommunity, 1000)
+      let timeOut = 0
+      if ((this.roundNumber >= 1) && (this.numcardDown < 1)) {
+        console.log('laying 3 cards')
+        timeOut += 1000
+        setTimeout(this.layCommunity, timeOut)
         this.numcardDown = 3
       }
-      if (this.roundNumber === 2) {
-        setTimeout(this.pumpCard3, 2000)
-        this.numcardDown++
+      if ((this.roundNumber >= 2) && (this.numcardDown < 4)) {
+        console.log('laying fourth card')
+        timeOut += 2000
+        setTimeout(this.pumpCard3, timeOut)
+        this.numcardDown = 4
       }
-      if (this.roundNumber === 3) {
-        setTimeout(this.pumpCard3, 2000)
-        this.numcardDown++
+      if ((this.roundNumber >= 3) && (this.numcardDown < 5)) {
+        console.log('laying fifth card')
+        timeOut += 2000
+        setTimeout(this.pumpCard3, timeOut)
+        this.numcardDown = 5
       }
     },
     preivousnumberofPlayers  () {
@@ -434,15 +451,6 @@ export default {
     }
   },
   methods: {
-    checkCommiunity () {
-      if (this.numcardDown === 3) {
-        this.pumpCard3()
-        this.pumpCard3()
-      }
-      if (this.numcardDown === 4) {
-        this.pumpCard3()
-      }
-    },
     giveRound () {
       console.log('heres your round' + this.roundNumber)
     },
@@ -474,7 +482,7 @@ export default {
       card[0].classList.remove('deckCard')
       console.log(max)
       this.posX = this.posX + 90
-      window.setTimeout(this.pumpCard2, 750)
+      window.setTimeout(this.pumpCard2, 1000)
     },
     pumpCard2 () {
       var card = document.getElementsByClassName('deckCard')
@@ -484,7 +492,7 @@ export default {
       card[0].classList.remove('deckCard')
       console.log(max)
       this.posX = this.posX + 90
-      window.setTimeout(this.pumpCard3, 750)
+      window.setTimeout(this.pumpCard3, 1000)
     },
     pumpCard3 () {
       var card = document.getElementsByClassName('deckCard')
@@ -493,9 +501,11 @@ export default {
         card[0].style = 'z-index:3'
         card[0].style.transform = 'translateX(' + this.posX + 'pt) translateY(' + this.posY + 'pt) rotateX(-180deg) translatez(' + this.posZ + 'pt) rotatez(-180deg)'
         card[0].classList.remove('deckCard')
+        console.log('card was removed while dealing last card')
       }
       console.log(max)
       this.posX = this.posX + 90
+      console.log('dealing final card')
       // this.deckLength = this.deckLength - 1
       // }
     },
@@ -669,14 +679,6 @@ export default {
       theta = theta + degreeIncrument
       // console.log('heres you x: ' + x + 'here your y:' + y + 'at ' + theta)
     }
-    if (this.GameOver === true) {
-      this.posX = -191
-      this.showDown()
-      this.checkCommiunity()
-      this.numcardDown = 0
-      //  Make Sure all the comunity cards have shown after this point
-    }
-
     // if (this.roundNumber === 1) {
     //   setTimeout(this.layCommunity, 2000)
     // }

@@ -336,6 +336,8 @@ export default class GameMech {
   }
 
   public handFinished (gameTransport: any) {
+    this.setCommunityCards(gameTransport)
+    this.roundNumber = 3
     this.gameStatus = this.username + ' The HAND_FINISHED  was called'
     this.setPlayers(gameTransport)
     // this.setCommunityCards(gameTransport)
