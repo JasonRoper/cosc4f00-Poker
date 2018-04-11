@@ -374,8 +374,7 @@ export default {
       checkedRegisterErrors: false,
       iszero: false,
       errorMessage: '',
-      leaderboard: [],
-      loggedIn: false
+      leaderboard: []
     }
   },
   watch: {
@@ -390,7 +389,7 @@ export default {
   },
   computed: {
     loggedIn () {
-      // return this.$store.getters.loggedIn
+      return this.$store.getters.loggedIn
     },
     username () {
       return this.$store.state.users.username
@@ -448,9 +447,6 @@ export default {
           this.clickedLogin = false
           if (this.loggedIn) {
             this.errorMessage = ''
-          }
-          if (this.loginErrorMessage.length === 0) {
-            this.loggedIn = true
           }
         })
         // Servery queries for login
