@@ -13,7 +13,7 @@
 
       <!-- <div class="progress-bar  " role="progressbar" style="width: 15%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"></div> -->
       <transition name="theWinner">
-        <div v-show="this.isWinner" class="WinnerBanner text-dark ">
+        <div v-show="this.data.isWinner" class="WinnerBanner text-dark ">
 
           <!-- <img src="../assets/PlayerGraphics/winnerBanner2.jpg">  -->
         </div>
@@ -161,7 +161,7 @@ export default {
   },
   methods: {
     seeWinner () {
-      this.isWinner = true
+      this.data.isWinner = !this.data.isWinner
     },
     addBar: function () {
       // this.progressBar = this.progressBar + 0.35
