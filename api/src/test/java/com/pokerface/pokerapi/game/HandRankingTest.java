@@ -5,6 +5,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.data.util.Pair;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -528,4 +529,19 @@ public class HandRankingTest {
         }
     }
 
+
+    @Test
+    public void testWeirdCase() {
+        Card[] communityCards = new Card[] {
+              Card.HEARTS_TEN, Card.SPADES_THREE, Card.CLUBS_TEN, Card.SPADES_TEN, Card.DIAMONDS_FIVE
+        };
+        List<Card> adamCards = new ArrayList<>(Arrays.asList(communityCards));
+        adamCards.addAll(Arrays.asList(Card.CLUBS_NINE, Card.CLUBS_FIVE));
+        List<Card> aiCards = new ArrayList<>(Arrays.asList(communityCards));
+        adamCards.addAll(Arrays.asList(Card.DIAMONDS_KING, Card.DIAMONDS_TWO));
+        HandRanking adam = new HandRanking(adamCards);
+        HandRanking ai = new HandRanking(aiCards);
+        assertTrue(adam.compareTo(ai) > 0);
+        assertTrue(ai.compareTo(adam) < 0);
+    }
 }

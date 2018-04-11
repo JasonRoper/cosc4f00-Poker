@@ -57,7 +57,7 @@ public class GameController {
 
     }
 
-    @Scheduled(fixedRate = 1000)
+    @Scheduled(fixedDelay = 1000)
     public void checkEvents() {
         try {
             List<Long> startedGames = gameService.startingGameIDs();
@@ -84,7 +84,7 @@ public class GameController {
         }
     }
 
-    @Scheduled(fixedRate=5000)
+    @Scheduled(fixedDelay = 5000)
     public void AILivelinessFix(){
         List<Long> gamesToCheck=gameService.getPotentialAIGames();
         for (Long gameID:gamesToCheck){
