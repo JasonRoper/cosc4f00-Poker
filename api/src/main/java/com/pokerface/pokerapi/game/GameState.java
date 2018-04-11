@@ -510,6 +510,9 @@ public class GameState {
         }
         players.remove(player);
         playerCount--;
+        for (int i=0;i<playerCount;i++){
+            players.get(i).setPlayerID(i);
+        }
         return true;
     }
 
@@ -736,6 +739,16 @@ public class GameState {
 
     public void setLastActionTime(long lastActionTime) {
         this.lastActionTime = lastActionTime;
+    }
+
+    public int receiveHumanPlayerCount(){
+        int count=0;
+        for (Player p: players){
+            if (!p.isAI()){
+                count++;
+            }
+        }
+        return count;
     }
 
 

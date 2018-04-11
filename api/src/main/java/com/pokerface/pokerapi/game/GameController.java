@@ -295,13 +295,13 @@ public class GameController {
             throw new UserAccessNotPermittedException(user.getUsername(), gameID, "deletion of user " + userID);
         }
         if (gameService.doesGameExist(gameID)) {
-            GameStateTransport gameStateTransport = gameService.getGameStateTransport(gameID);
-            if (gameService.removePlayer(gameID, userService.getUserByUsername(principal.getName()).getId()) == 1) {
+
+            if (gameService.removePlayer(gameID, userService.getUserByUsername(principal.getName()).getId()) == 0) {
                 closeGame(gameID);
             } else {
-
+                GameStateTransport gameStateTransport = gameService.getGameStateTransport(gameID);
                 gameStateTransport.reason(GameStateTransport.Reason.PLAYER_LEFT, principal.getName() + " has left.");
-                messenger.convertAndSend("/messages/games/" + gameID, gameStateTransport);
+                messenger.convertAndSend("/messages/game/" + gameID, gameStateTransport);
             }
         }
 

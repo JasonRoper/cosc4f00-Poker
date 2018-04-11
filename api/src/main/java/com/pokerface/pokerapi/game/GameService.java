@@ -503,7 +503,7 @@ public class GameService {
         GameState gameState=games.findOne(gameID);
         gameState.removePlayer(userID);
         games.save(gameState);
-        return gameState.getPlayerCount();
+        return gameState.receiveHumanPlayerCount();
     }
 
     public void removeGame(long gameID){
