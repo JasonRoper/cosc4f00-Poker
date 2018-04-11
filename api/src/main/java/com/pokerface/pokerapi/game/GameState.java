@@ -520,23 +520,23 @@ public class GameState {
         pot = new Pot(playerCount,this);
 
         minimumBet=0;
-        while(true) {
+        for (int i=0;i<30;i++){
             presentTurn = advanceCounter(dealer);
-            if (!players.get(presentTurn).getHasFolded()){
+            if (!players.get(presentTurn).getHasFolded()&&players.get(presentTurn).getCashOnHand()>0){
                 break;
             }
         }
         placeBet(players.get(presentTurn),bigBlind/2);
-        while(true) {
+        for (int i=0;i<30;i++){
             presentTurn = advanceCounter(presentTurn);
-            if (!players.get(presentTurn).getHasFolded()){
+            if (!players.get(presentTurn).getHasFolded()&&players.get(presentTurn).getCashOnHand()>0){
                 break;
             }
         }
         placeBet(players.get(presentTurn),bigBlind);
-        while(true) {
+        for (int i=0;i<30;i++){
             presentTurn = advanceCounter(presentTurn);
-            if (!players.get(presentTurn).getHasFolded()){
+            if (!players.get(presentTurn).getHasFolded()&&players.get(presentTurn).getCashOnHand()>0){
                 break;
             }
         }
