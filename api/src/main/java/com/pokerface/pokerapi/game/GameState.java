@@ -525,21 +525,21 @@ public class GameState {
         minimumBet=0;
         for (int i=0;i<30;i++){
             presentTurn = advanceCounter(dealer);
-            if (!players.get(presentTurn).getHasFolded()&&players.get(presentTurn).getCashOnHand()>=0){
+            if (!players.get(presentTurn).getHasFolded()&&players.get(presentTurn).getCashOnHand()>0){
                 break;
             }
         }
         placeBet(players.get(presentTurn),bigBlind/2);
         for (int i=0;i<30;i++){
             presentTurn = advanceCounter(presentTurn);
-            if (!players.get(presentTurn).getHasFolded()&&players.get(presentTurn).getCashOnHand()>=0){
+            if (!players.get(presentTurn).getHasFolded()&&players.get(presentTurn).getCashOnHand()>0){
                 break;
             }
         }
         placeBet(players.get(presentTurn),bigBlind);
         for (int i=0;i<30;i++){
             presentTurn = advanceCounter(presentTurn);
-            if (!players.get(presentTurn).getHasFolded()&&players.get(presentTurn).getCashOnHand()>=0){
+            if (!players.get(presentTurn).getHasFolded()&&players.get(presentTurn).getCashOnHand()>0){
                 break;
             }
         }
