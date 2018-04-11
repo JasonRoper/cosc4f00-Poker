@@ -32,7 +32,9 @@ import GameRequest from '@/store/GameRequest'
 import { Action } from 'vuex'
 
 import { Card } from '@/types/cards'
+import { setupComplete } from '../store'
 import state from '../store/users'
+
 
 /**
  * Axios - Imports axios which is used to send POST and GET requests
@@ -90,10 +92,13 @@ export default class GameMech {
     this.gameService.onGameError(this.onGameError.bind(this))
     this.username = username
 
-    axios.get(API_V1 + '/games/' + this.gameId).then((responce) => {
+    Promise.all([axios.get(API_V1 + '/games/' + this.gameId), setupComplete]).then((results) => {
       console.log('GAME MECHANICS CONSTRUCTOR - ASKING TO JOIN GAME')
+      const responce = results[0]
       this.setGameTransport(responce.data)
+      console.log(responce.data)
       if (this.multiplePlayers.length > 0) {
+        console.log('Updated the player location')
         this.multiplePlayers.forEach((player: Player, index: number) => {
           if (player.name === this.username) {
             this.playerId = index
@@ -239,6 +244,7 @@ export default class GameMech {
         }
       }
     } else {
+      console.log('GAMETRANSPORT EVENT is nothing')
       this.defaultGameTransport(gameTransport)
     }
     this.hasSomeoneBet()
@@ -247,10 +253,10 @@ export default class GameMech {
     this.potSum = gameTransport.potSum
     console.log('User: ' + this.multiplePlayers[this.playerId].name)
     console.log('Turn: ' + this.multiplePlayers[this.turn].name)
-    
+
     // If its your turn and you have a premove - it will send it
     this.sendAction()
-    
+
     /*
       HAND_STARTED = 'HAND_STARTED', // USER Joins the GAME
       USER_ACTION = 'PLAYER_ACTION', // This is sent after a player makes an action
