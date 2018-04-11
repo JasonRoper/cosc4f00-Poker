@@ -494,7 +494,7 @@ export default {
     backButton () {
       const backButtonRequest = new GameRequest()
       backButtonRequest.removeCompetitiveGame(this.mechanics.gameId, state.state.userId).then(() => {
-        this.$router.push('/Game')
+        this.$router.go(-1)
       }).catch((error) => { console.log('Failed delete request' + error) })
     },
     force () {
