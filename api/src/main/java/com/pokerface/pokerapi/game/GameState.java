@@ -370,7 +370,7 @@ public class GameState {
      */
     public void nextTurn(){
         previousTurn=presentTurn;
-        while(true) {
+        for (int i=0;i<30;i++) {
             presentTurn=advanceCounter(presentTurn);
             if (!players.get(presentTurn).getHasFolded()&&!players.get(presentTurn).isAllIn()){
                 break;
@@ -408,7 +408,7 @@ public class GameState {
         if (dealer!=-1) {
             players.get(dealer).setDealer(false);
         }
-        while(true) {
+        for (int i=0;i<30;i++) {
             dealer++;
             if (dealer >= players.size()) {
                 dealer = 0;

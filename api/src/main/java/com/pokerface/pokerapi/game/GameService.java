@@ -74,7 +74,7 @@ public class GameService {
                 gameState.nextTurn();
             } else {
                 gameState.setPreviousTurn(gameState.getPresentTurn());
-                while(true) {
+                for (int i=0;i<30;i++) {
                     gameState.setPresentTurn(gameState.advanceCounter(gameState.getPresentTurn()));
                     if (!gameState.getPlayers().get(gameState.getPresentTurn()).getHasFolded()){
                         break;
