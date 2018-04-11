@@ -93,7 +93,9 @@ export default class GameMech {
     axios.get(API_V1 + '/games/' + this.gameId).then((responce) => {
       console.log('GAME MECHANICS CONSTRUCTOR - ASKING TO JOIN GAME')
       this.setGameTransport(responce.data)
+      console.log(responce.data)
       if (this.multiplePlayers.length > 0) {
+        console.log('Updated the player location ')
         this.multiplePlayers.forEach((player: Player, index: number) => {
           if (player.name === this.username) {
             this.playerId = index
@@ -239,6 +241,7 @@ export default class GameMech {
         }
       }
     } else {
+      console.log('GAMETRANSPORT EVENT is nothing')
       this.defaultGameTransport(gameTransport)
     }
     this.hasSomeoneBet()
