@@ -2,14 +2,14 @@
   <div>
 
     <div class='oppenentContainer'>
-      <div v-if="this.isTurn === true">
+      <!-- <div v-if="this.isTurn === true">
         <div class="progress bg-secondary  theTimeBar">
           <transition name="Action">
-            <progress id='theBar' :value=t his.progressBar class="progress-bar " role="progressbar" aria-valuenow="15" aria-valuemin="0"
+            <progress id='theBar' :value=this.progressBar class="progress-bar " role="progressbar" aria-valuenow="15" aria-valuemin="0"
               max="45"></progress>
           </transition>
         </div>
-      </div>
+      </div> -->
 
       <!-- <div class="progress-bar  " role="progressbar" style="width: 15%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"></div> -->
       <transition name="theWinner">
@@ -34,7 +34,7 @@
         </div>
 
         <!-- <p>{{this.data.id}}</p>  -->
-        <div class="text-white oppBalance">
+        <div class="text-light oppBalance">
           $ {{ this.data.money}}
           <!-- Put talbe action made -->
         </div>
@@ -161,7 +161,7 @@ export default {
   },
   methods: {
     seeWinner () {
-      this.isWinner = !this.isWinner
+      this.isWinner = true
     },
     addBar: function () {
       // this.progressBar = this.progressBar + 0.35
@@ -263,11 +263,6 @@ export default {
     }
   },
   watch: {
-    isWinner () {
-      if (this.isWinner === true) {
-        // document.getElementById().classList.toggle(active)
-      }
-    },
     isTurn () {
       if (this.isTurn === true) {
         this.justFinished = true
@@ -292,6 +287,9 @@ export default {
   computed: {
     isTurn () {
       return this.data.isTurn
+    },
+    isWinner () {
+      return this.data.isWinner
     }
   }
 }

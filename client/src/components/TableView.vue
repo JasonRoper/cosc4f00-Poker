@@ -17,6 +17,9 @@
       <span></span>
       <span></span>
     </div>
+
+    <!-- <div v-if="this.mechanics.getUser().isWinner" class="menu-icon display-1">  -->
+  
     
     
         <div class="tabAction-icon" @click="toggleTableAction()" >
@@ -28,6 +31,7 @@
        <div v-if="this.mechanics.getUser().isDealer" class="input-group input-group ">
                   <button type="button" class="btn btn-default btn-circle bg-warning  tabAction-chip-dealer inner-orange mx-4 ml-5"><strong> D</strong></button>
              </div>
+
     <form  class=" statsBar form-control bg-transparent ">
 <div class="lead text-dark text-left"><label> User Status: </label> </div>
 
@@ -92,8 +96,12 @@
     </div>
 
                     <!-- <h2 class="display-2  text-white  mt-2  ">PokerPals!!  <img src="../assets/Webgraphics/poker.png" width="0" height="50"> </h2> -->
-
-
+        <!-- <div v-if="this.mechanics.getUser().isWinner"  class=" display-1 text-white WinnerDisplay"> 
+       YOU WIN !!
+    </div> -->
+    <div v-if="this.mechanics.getUser().isWinner"  class=" display-1 text-white WinnerDisplay"> 
+       YOU WIN !!
+    </div>
 </div>
 
 
@@ -351,7 +359,8 @@ export default {
         card3: '',
         card4: '',
         card5: ''
-      }
+      },
+      numcardDown: 0
       // gameStarted: false
     }
   },
@@ -362,12 +371,15 @@ export default {
     roundNumber () {
       if (this.roundNumber === 1) {
         setTimeout(this.layCommunity, 1000)
+        this.numcardDown = 3
       }
       if (this.roundNumber === 2) {
         setTimeout(this.pumpCard3, 2000)
+        this.numcardDown++
       }
       if (this.roundNumber === 3) {
         setTimeout(this.pumpCard3, 2000)
+        this.numcardDown++
       }
     },
     preivousnumberofPlayers  () {
@@ -414,6 +426,15 @@ export default {
     }
   },
   methods: {
+    checkCommiunity () {
+      if (this.numcardDown === 3) {
+        this.pumpCard3()
+        this.pumpCard3()
+      }
+      if (this.numcardDown === 4) {
+        this.pumpCard3()
+      }
+    },
     giveRound () {
       console.log('heres your round' + this.roundNumber)
     },
@@ -643,6 +664,7 @@ export default {
     if (this.GameOver === true) {
       this.posX = -191
       this.showDown()
+      this.checkCommiunity()
       //  Make Sure all the comunity cards have shown after this point
     }
 
