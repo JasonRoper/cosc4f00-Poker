@@ -84,18 +84,13 @@ public class GameController {
                         messenger.convertAndSendToUser(user.getUsername(), "/messages/game/" + gameID, userHand);
                     }
                 }
-//            GameStateTransport nextGameState=gameService.getGameStateTransport(gameID);
-//            while (gameService.isAITurn(gameID)) {
-//                GameAction aiAction = aiService.playAction(gameService,gameID);
-//                nextGameState = handleAction(gameID, aiAction, nextGameState.getNextPlayer());
-//            }
             }
+            AILivelinessFix();
         } catch (Exception e) {
             logger.debug("Check Events Broken:"+e.getStackTrace().toString());
         }
     }
 
-    @Scheduled(fixedDelay=5000)
     public void AILivelinessFix(){
         List<Long> gamesToCheck=gameService.getPotentialAIGames();
         for (Long gameID:gamesToCheck){
