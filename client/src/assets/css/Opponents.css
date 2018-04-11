@@ -125,14 +125,18 @@ perspective: 700px;
 
 
 .oppName{
-    top: -55%;
-    position: relative;
+    top: -60%;
+    position: absolute;
     background-color: whitesmoke;
+    margin-bottom: 100px;
+    /* width:100%; */
+    /* overflow: hidden; */
     
 }
 .oppBalance{
     position:relative;
-    bottom: -30%;
+    bottom: -55%;
+    /* color:black; */
     
 }
 .oppenentContainer

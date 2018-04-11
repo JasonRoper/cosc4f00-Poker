@@ -247,6 +247,10 @@ export default class GameMech {
     this.potSum = gameTransport.potSum
     console.log('User: ' + this.multiplePlayers[this.playerId].name)
     console.log('Turn: ' + this.multiplePlayers[this.turn].name)
+    
+    // If its your turn and you have a premove - it will send it
+    this.sendAction()
+    
     /*
       HAND_STARTED = 'HAND_STARTED', // USER Joins the GAME
       USER_ACTION = 'PLAYER_ACTION', // This is sent after a player makes an action
@@ -297,7 +301,7 @@ export default class GameMech {
   public handFinished (gameTransport: any) {
     this.gameStatus = this.username + ' The HAND_FINISHED  was called'
     this.setPlayers(gameTransport)
-    this.setCommunityCards(gameTransport)
+    // this.setCommunityCards(gameTransport)
     this.hasGameStarted = false
   }
 

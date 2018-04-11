@@ -55,6 +55,7 @@ public class GameController {
      */
     @MessageMapping("/game/{game_id}/control")
     public void receiveManagementAction() {
+
     }
 
 //    @Scheduled(fixedDelay = 10000)
@@ -97,7 +98,6 @@ public class GameController {
     @Scheduled(fixedDelay=5000)
     public void AILivelinessFix(){
         List<Long> gamesToCheck=gameService.getPotentialAIGames();
-        Iterable gamesTest = gameService.getGameList();
         for (Long gameID:gamesToCheck){
             GameStateTransport nextGameState=gameService.getGameStateTransport(gameID);
                 GameAction aiAction = aiService.playAction(gameService,gameID);

@@ -1,5 +1,13 @@
+ 
+.WinnerDisplay {
+  position: relative;
+  z-index : 3;
+  top:300px;
+  margin:auto;
+  /* right:-20px; */
+  /* margin-left: 360px; */
 
-
+} 
 .opps
 {
   border : 1px solid grey;
