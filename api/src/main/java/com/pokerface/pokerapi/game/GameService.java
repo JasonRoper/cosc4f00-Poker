@@ -81,6 +81,7 @@ public class GameService {
                     }
                 }
             }
+
             gameState = games.save(gameState);
         }
 
