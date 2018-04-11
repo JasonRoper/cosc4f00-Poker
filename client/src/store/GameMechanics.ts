@@ -98,6 +98,30 @@ export default class GameMech {
       console.log(responce.data)
       console.log('the current username:', state.state.username)
       if (this.multiplePlayers.length > 0) {
+        switch (this.communityCards.length) {
+          case 0: {
+            this.roundNumber = 0
+            break
+          }
+          case 1:
+          case 2:
+          case 3: {
+            this.roundNumber = 1
+            break
+          }
+          case 4: {
+            this.roundNumber = 2
+            break
+          }
+          case 5: {
+            this.roundNumber = 3
+            break
+          }
+          default: {
+            console.log('length of community cards exceeds round numbers')
+          }
+        }
+        this.hasGameStarted = true
         console.log('Updated the player location')
         this.multiplePlayers.forEach((player: Player, index: number) => {
           if (player.name === state.state.username) {
