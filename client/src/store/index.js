@@ -57,7 +57,7 @@ const store = new Vuex.Store({
 
 function doInitialSetup () {
   // check to see if the user already has an active session, and if they do, initialize it.
-  return Promise.all([store.dispatch('verifyLoginState')])
+  return Promise.all([store.dispatch('verifyLoginState').then(() => console.log('finished checking if logged in'))])
 }
 
 export const setupComplete = doInitialSetup()

@@ -35,7 +35,6 @@ import { Card } from '@/types/cards'
 import { setupComplete } from '../store'
 import state from '../store/users'
 
-
 /**
  * Axios - Imports axios which is used to send POST and GET requests
  */
@@ -97,10 +96,11 @@ export default class GameMech {
       const responce = results[0]
       this.setGameTransport(responce.data)
       console.log(responce.data)
+      console.log('the current username:', state.state.username)
       if (this.multiplePlayers.length > 0) {
         console.log('Updated the player location')
         this.multiplePlayers.forEach((player: Player, index: number) => {
-          if (player.name === this.username) {
+          if (player.name === state.state.username) {
             this.playerId = index
           }
         })
