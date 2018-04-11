@@ -405,21 +405,20 @@ public class GameService {
         handRanks.sort((a, b) -> a.getSecond().compareTo(b.getSecond()));
         int counter = 1;
 
-        for (int i = 0; i < winners.length-1; i++) {
-            winners[handRanks.get(i).getFirst()] = counter;
-            if (handRanks.get(i).getSecond().compareTo(handRanks.get(i + 1).getSecond()) == 0) {
-                winners[handRanks.get(i + 1).getFirst()] = counter;
+        for (int i=handRanks.size()-1;i>=0;i--){
+            if (gameState.getPlayers().get(handRanks.get(i).getFirst()).getHasFolded()){
+                winners[handRanks.get(i).getFirst()]=10000;
             } else {
-                counter++;
+                winners[handRanks.get(i).getFirst()]=counter;
+                if (i>0){
+                    if (!handRanks.get(i).equals(handRanks.get(i-1))){
+                        counter++;
+                    }
+                }
             }
         }
 
 
-        for (int i=0;i<winners.length;i++){
-            if (gameState.getPlayers().get(i).getHasFolded()){
-                winners[i]=1000;
-            }
-        }
         winnings=gameState.getPot().resolveWinnings(winners);
         gameState.applyWinnings(winnings);
         HandEndTransport handEndTransport = new HandEndTransport(winnings, gameState.getPlayers());
@@ -593,8 +592,8 @@ public class GameService {
 
     public List<GameInfoTransport> getGameList() {
         List<GameInfoTransport> gameList = new ArrayList<>();
-        for (long gameID : games.findOpenCustomGame()) {
-            gameList.add(new GameInfoTransport(games.findOne(gameID)));
+        for (GameState gameState : games.findAll()) {
+            gameList.add(new GameInfoTransport(gameState));
         }
         return gameList;
     }
@@ -649,6 +648,15 @@ public class GameService {
             } else if (onlyAIPlayers(gameState)){
                 deleteGame(gameState.getId());
             }
+        }
+    }
+
+    public boolean doesGameExist(long gameID){
+        GameState gameState=games.findOne(gameID);
+        if (gameState==null){
+            return false;
+        } else {
+            return true;
         }
     }
 
