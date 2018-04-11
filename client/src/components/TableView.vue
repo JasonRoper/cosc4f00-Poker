@@ -665,6 +665,7 @@ export default {
       this.posX = -191
       this.showDown()
       this.checkCommiunity()
+      this.numcardDown = 0
       //  Make Sure all the comunity cards have shown after this point
     }
 
