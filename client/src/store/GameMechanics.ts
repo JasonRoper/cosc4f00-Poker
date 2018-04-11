@@ -56,7 +56,7 @@ export default class GameMech {
   public communityCards: string[] = []
   public playerId: number = 0
   public userAction: GameAction | null = null
-  public roundNumber: number = -1
+  public roundNumber: number = 0
   public gameStatus: string = 'Game Pending....'
   public isHandFinished: boolean = false
   public hasGameStarted: boolean = false
@@ -91,49 +91,57 @@ export default class GameMech {
     this.gameService.onGameError(this.onGameError.bind(this))
     this.username = username
 
-    Promise.all([axios.get(API_V1 + '/games/' + this.gameId), setupComplete]).then((results) => {
-      console.log('GAME MECHANICS CONSTRUCTOR - ASKING TO JOIN GAME')
-      const responce = results[0]
-      this.setGameTransport(responce.data)
-      console.log(responce.data)
-      console.log('the current username:', state.state.username)
-      if (this.multiplePlayers.length > 0) {
-        switch (this.communityCards.length) {
-          case 0: {
-            this.roundNumber = 0
-            break
+    Promise.all([axios.get(API_V1 + '/games/' + this.gameId),
+      setupComplete,
+      axios.get(API_V1 + '/games/' + this.gameId + '/cards')]).then((results) => {
+        console.log('GAME MECHANICS CONSTRUCTOR - ASKING TO JOIN GAME')
+        const responce = results[0]
+        this.setGameTransport(responce.data)
+        console.log(responce.data)
+        console.log('the current username:', state.state.username)
+        if (this.multiplePlayers.length > 0) {
+          switch (this.communityCards.length) {
+            case 0: {
+              this.roundNumber = 0
+              break
+            }
+            case 1:
+            case 2:
+            case 3: {
+              this.roundNumber = 1
+              break
+            }
+            case 4: {
+              this.roundNumber = 2
+              break
+            }
+            case 5: {
+              this.roundNumber = 3
+              break
+            }
+            default: {
+              console.log('length of community cards exceeds round numbers')
+            }
           }
-          case 1:
-          case 2:
-          case 3: {
-            this.roundNumber = 1
-            break
-          }
-          case 4: {
-            this.roundNumber = 2
-            break
-          }
-          case 5: {
-            this.roundNumber = 3
-            break
-          }
-          default: {
-            console.log('length of community cards exceeds round numbers')
+          this.hasGameStarted = true
+          console.log('Updated the player location')
+          this.multiplePlayers.forEach((player: Player, index: number) => {
+            if (player.name === state.state.username) {
+              this.playerId = index
+            }
+          })
+          console.log(results[2])
+          console.log(results[2].data)
+          if (results[2].data.cardOne !== null) {
+            this.cardOne = results[2].data.cardOne
+            this.cardTwo = results[2].data.cardTwo
+            this.setGameCards()
           }
         }
-        this.hasGameStarted = true
-        console.log('Updated the player location')
-        this.multiplePlayers.forEach((player: Player, index: number) => {
-          if (player.name === state.state.username) {
-            this.playerId = index
-          }
-        })
-        this.setGameCards()
-      }
-    }).catch((error) => {
-      console.log('having an error IN JOINING GAME')
-      console.log(error)
-    })
+      }).catch((error) => {
+        console.log('having an error IN JOINING GAME')
+        console.log(error)
+      })
   }
   /**
    * Gets Player location within array
@@ -232,7 +240,6 @@ export default class GameMech {
         }
         case Event.HAND_FINISHED: {
           console.log('HAND_FINISHED event triggered')
-          this.roundNumber++
           this.handFinished(gameTransport)
           this.setGameCards()
           this.gameStatus = 'Hand Finished'
