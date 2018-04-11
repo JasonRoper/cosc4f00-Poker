@@ -360,7 +360,8 @@ export default {
         card4: '',
         card5: ''
       },
-      numcardDown: 0
+      numcardDown: 0,
+      GameNumber: 0
       // gameStarted: false
     }
   },
@@ -368,6 +369,13 @@ export default {
   Below Should really be updated to avoid visual issues
   */
   watch: {
+    GameOver () {
+      if ((this.GameOver === false) && this.GameNumber >= 1) {
+        this.showDown()
+        this.GameNumber = 0
+      }
+      this.GameNumber = 1
+    },
     roundNumber () {
       if (this.roundNumber === 1) {
         setTimeout(this.layCommunity, 1000)
@@ -665,6 +673,7 @@ export default {
       this.posX = -191
       this.showDown()
       this.checkCommiunity()
+      this.numcardDown = 0
       //  Make Sure all the comunity cards have shown after this point
     }
 

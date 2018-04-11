@@ -36,7 +36,8 @@ public class GameController {
     private final UserService userService;
     private final AIService aiService;
     private final SimpMessagingTemplate messenger;
-    private List gameHashList = new ArrayList();
+    private boolean ping=true;
+
 
     public GameController(final GameService gameService,
                           final UserService userService,
@@ -57,9 +58,19 @@ public class GameController {
 
     }
 
+//    @Scheduled(fixedDelay = 10000)
+//    public void checkUp(){
+//        if (ping){
+//            ping=false;
+//        } else {
+//            logger.debug("checkedEventsStopped?");
+//        }
+//    }
+
     @Scheduled(fixedDelay = 1000)
     public void checkEvents() {
         try {
+            ping=true;
             List<Long> startedGames = gameService.startingGameIDs();
             for (Long gameID : startedGames) {
                 GameStateTransport gameTransport = gameService.gameStart(gameID);
@@ -73,18 +84,13 @@ public class GameController {
                         messenger.convertAndSendToUser(user.getUsername(), "/messages/game/" + gameID, userHand);
                     }
                 }
-//            GameStateTransport nextGameState=gameService.getGameStateTransport(gameID);
-//            while (gameService.isAITurn(gameID)) {
-//                GameAction aiAction = aiService.playAction(gameService,gameID);
-//                nextGameState = handleAction(gameID, aiAction, nextGameState.getNextPlayer());
-//            }
             }
+            AILivelinessFix();
         } catch (Exception e) {
             logger.debug("Check Events Broken:"+e.getStackTrace().toString());
         }
     }
 
-    @Scheduled(fixedDelay = 5000)
     public void AILivelinessFix(){
         List<Long> gamesToCheck=gameService.getPotentialAIGames();
         for (Long gameID:gamesToCheck){
@@ -288,13 +294,15 @@ public class GameController {
         if (user.getId() != userID) {
             throw new UserAccessNotPermittedException(user.getUsername(), gameID, "deletion of user " + userID);
         }
-        GameStateTransport gameStateTransport = gameService.getGameStateTransport(gameID);
-        if (gameService.removePlayer(gameID, userService.getUserByUsername(principal.getName()).getId())==1){
-            closeGame(gameID);
-        } else {
+        if (gameService.doesGameExist(gameID)) {
+            GameStateTransport gameStateTransport = gameService.getGameStateTransport(gameID);
+            if (gameService.removePlayer(gameID, userService.getUserByUsername(principal.getName()).getId()) == 1) {
+                closeGame(gameID);
+            } else {
 
-            gameStateTransport.reason(GameStateTransport.Reason.PLAYER_LEFT, principal.getName() + " has left.");
-            messenger.convertAndSend("/messages/games/" + gameID, gameStateTransport);
+                gameStateTransport.reason(GameStateTransport.Reason.PLAYER_LEFT, principal.getName() + " has left.");
+                messenger.convertAndSend("/messages/games/" + gameID, gameStateTransport);
+            }
         }
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
