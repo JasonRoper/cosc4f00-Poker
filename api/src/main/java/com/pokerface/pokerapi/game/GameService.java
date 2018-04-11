@@ -53,6 +53,7 @@ public class GameService {
     public GameStateTransport handleAction(long gameID, GameAction action, int playerID) {
 
         GameState gameState = games.findOne(gameID);
+        gameState.setPreviousTurn(gameState.getPresentTurn());
         gameState.setLastActionTime(System.currentTimeMillis());
         int lastBet=gameState.getLastBet();
         if (gameState.getPresentTurn() == playerID && gameState.isHasStarted()) {
@@ -73,7 +74,7 @@ public class GameService {
             if (playersStillIn(gameState)) {
                 gameState.nextTurn();
             } else {
-                gameState.setPreviousTurn(gameState.getPresentTurn());
+
                 for (int i=0;i<30;i++) {
                     gameState.setPresentTurn(gameState.advanceCounter(gameState.getPresentTurn()));
                     if (!gameState.getPlayers().get(gameState.getPresentTurn()).getHasFolded()){
@@ -81,7 +82,12 @@ public class GameService {
                     }
                 }
             }
-
+            if (gameState.getPlayers().get(gameState.getLastBet()).getHasFolded()||gameState.getPlayers().get(gameState.getLastBet()).isAllIn()){
+            for (int i = 0; i < 30; i++) {
+                gameState.setLastBet(gameState.advanceCounter(gameState.getLastBet()));
+                    break;
+                }
+            }
             gameState = games.save(gameState);
         }
 
@@ -163,6 +169,14 @@ public class GameService {
     private boolean fold(GameState gameState, GameAction action, Player player) {
         if (player.getHasFolded() == false) {
             gameState.getPlayers().get(player.getPlayerID()).setHasFolded(true);
+            if (gameState.getLastBet()==player.getPlayerID()) {
+                for (int i = 0; i < 30; i++) {
+                    gameState.setLastBet(gameState.advanceCounter(gameState.getLastBet()));
+                    if (!gameState.getPlayers().get(gameState.getLastBet()).getHasFolded()||!gameState.getPlayers().get(gameState.getLastBet()).isAllIn()){
+                        break;
+                    }
+                }
+            }
             return true;
         } else {
             return false;
@@ -188,7 +202,9 @@ public class GameService {
      * @param gameState of the game being checked
      * @return boolean representing if the round is ended
      */
-    public boolean isRoundEnd(GameState gameState) {return !gameState.lastActionBet()&&gameState.getPreviousTurn() == gameState.getLastBet();
+    public boolean isRoundEnd(GameState gameState) {
+        boolean truthtest=!gameState.lastActionBet()&&gameState.getPreviousTurn() == gameState.getLastBet();
+        return truthtest;
     }
 
     /**

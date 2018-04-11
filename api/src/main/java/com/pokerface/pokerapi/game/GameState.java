@@ -369,7 +369,6 @@ public class GameState {
      * nextTurn advances to the next players turn
      */
     public void nextTurn(){
-        previousTurn=presentTurn;
         for (int i=0;i<30;i++) {
             presentTurn=advanceCounter(presentTurn);
             if (!players.get(presentTurn).getHasFolded()&&!players.get(presentTurn).isAllIn()){
@@ -428,7 +427,11 @@ public class GameState {
         List<Card> cards = new ArrayList<>();
         if (communityCardOne!=null) {
             cards.add(getCommunityCardOne());
+        }
+        if (communityCardTwo!=null) {
             cards.add(getCommunityCardTwo());
+        }
+        if (communityCardThree!=null){
             cards.add(getCommunityCardThree());
         }
         if (communityCardFour!=null) {
