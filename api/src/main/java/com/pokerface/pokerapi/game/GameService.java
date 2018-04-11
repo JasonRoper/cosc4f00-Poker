@@ -99,7 +99,7 @@ public class GameService {
      */
     public boolean bet(GameState gameState, GameAction action, Player player) {
         int lastBet=player.getPlayerID();
-        if (player.getCashOnHand()<gameState.getMinimumBet()){
+        if (player.getCashOnHand()<(gameState.getMinimumBet()-player.getBet())){
             lastBet=gameState.getLastBet();
         }
         int amountToBet = action.getBet() + gameState.getMinimumBet() - player.getBet();
